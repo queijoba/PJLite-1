@@ -52,6 +52,7 @@
 
         // Dados Iniciais Baseados no Livro de Regras
         const initialData = {
+            id: '', // Identificador único para salvar na pasta
             bio: {
                 jogador: '', nome: '', ancestralidade: '', profissao: '', idade: '', fraqueza: '', aparencia: '', memento: '', imagem: ''
             },
@@ -120,15 +121,78 @@
             Save: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>,
             Upload: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>,
             Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
-            Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
+            ArrowLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>,
+            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        };
+
+        const STORAGE_KEY = 'dragonbane_saved_characters';
+        const getSavedCharacters = () => {
+            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
+            catch { return []; }
         };
 
         function App() {
+            const [view, setView] = useState('dashboard'); // 'dashboard' ou 'editor'
+            const [savedChars, setSavedChars] = useState(getSavedCharacters());
             const [data, setData] = useState(initialData);
+            
+            // UI States
             const [showUrlInput, setShowUrlInput] = useState(false);
             const [tempUrl, setTempUrl] = useState('');
+            const [mobileTab, setMobileTab] = useState('status'); // 'status', 'pericias', 'equipamento'
+            const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+            const [toastMsg, setToastMsg] = useState('');
 
-            // Atualização Genérica
+            const saveToLocal = (charData) => {
+                let chars = getSavedCharacters();
+                let savingData = { ...charData };
+                
+                // Se não tem ID, gera um novo
+                if (!savingData.id) {
+                    savingData.id = Date.now().toString();
+                }
+
+                const index = chars.findIndex(c => c.id === savingData.id);
+                if (index >= 0) {
+                    chars[index] = savingData;
+                } else {
+                    chars.push(savingData);
+                }
+                
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
+                setSavedChars(chars);
+                setData(savingData); // Atualiza os dados atuais com o ID caso seja novo
+                showToast("Ficha salva na sua pasta!");
+            };
+
+            const loadCharacter = (id) => {
+                const char = savedChars.find(c => c.id === id);
+                if (char) {
+                    setData(char);
+                    setView('editor');
+                }
+            };
+
+            const createNewCharacter = () => {
+                setData({ ...initialData, id: Date.now().toString() });
+                setView('editor');
+                setMobileTab('status');
+            };
+
+            const deleteCharacter = (id) => {
+                const chars = savedChars.filter(c => c.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
+                setSavedChars(chars);
+                setDeleteConfirmId(null);
+                showToast("Personagem apagado.");
+            };
+
+            const showToast = (msg) => {
+                setToastMsg(msg);
+                setTimeout(() => setToastMsg(''), 3000);
+            };
+
             const updateField = (path, value) => {
                 const newData = { ...data };
                 let current = newData;
@@ -144,28 +208,20 @@
                 setData(newData);
             };
 
-            // Atualização de Arrays (Perícias, Armas, etc)
             const updateArrayField = (arrayName, index, field, value) => {
                 const newArray = [...data[arrayName]];
                 newArray[index] = { ...newArray[index], [field]: value };
                 setData({ ...data, [arrayName]: newArray });
             };
 
-            const addToArray = (arrayName, emptyObj) => {
-                setData({ ...data, [arrayName]: [...data[arrayName], emptyObj] });
-            };
+            const addToArray = (arrayName, emptyObj) => setData({ ...data, [arrayName]: [...data[arrayName], emptyObj] });
+            const removeFromArray = (arrayName, index) => setData({ ...data, [arrayName]: data[arrayName].filter((_, i) => i !== index) });
 
-            const removeFromArray = (arrayName, index) => {
-                const newArray = data[arrayName].filter((_, i) => i !== index);
-                setData({ ...data, [arrayName]: newArray });
-            };
-
-            // Exportar e Importar
             const handleExport = () => {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
                 const downloadAnchorNode = document.createElement('a');
                 downloadAnchorNode.setAttribute("href", dataStr);
-                downloadAnchorNode.setAttribute("download", `Ficha_${data.bio.nome || 'Dragonbane'}.json`);
+                downloadAnchorNode.setAttribute("download", `Ficha_${data.bio.nome || 'Novo_Personagem'}.json`);
                 document.body.appendChild(downloadAnchorNode);
                 downloadAnchorNode.click();
                 downloadAnchorNode.remove();
@@ -178,10 +234,15 @@
                 reader.onload = (e) => {
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        // Merge simples para evitar quebras se faltar campos
-                        setData({ ...initialData, ...importedData });
+                        // Garante que a ficha importada seja tratada como nova se não tiver ID, ou mantém o ID se existir
+                        const dataToLoad = { ...initialData, ...importedData };
+                        if(!dataToLoad.id) dataToLoad.id = Date.now().toString();
+                        
+                        setData(dataToLoad);
+                        saveToLocal(dataToLoad); // Salva automaticamente ao importar
+                        setView('editor');
                     } catch (error) {
-                        alert("Erro ao ler o arquivo. Formato inválido.");
+                        showToast("Erro: Arquivo inválido.");
                     }
                 };
                 reader.readAsText(file);
@@ -191,9 +252,7 @@
                 const file = event.target.files[0];
                 if (!file) return;
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    updateField('bio.imagem', e.target.result);
-                };
+                reader.onload = (e) => { updateField('bio.imagem', e.target.result); };
                 reader.readAsDataURL(file);
             };
 
@@ -210,28 +269,110 @@
                 int: 'Enraivecido', von: 'Assustado', car: 'Desanimado'
             };
 
+            if (view === 'dashboard') {
+                return (
+                    <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                            <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
+                            <div className="flex gap-3 w-full md:w-auto">
+                                <label className="cursor-pointer flex-1 md:flex-none flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                    <SVGIcons.Upload /> Importar JSON
+                                    <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                </label>
+                                <button onClick={createNewCharacter} className="flex-1 md:flex-none flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                    <SVGIcons.Plus /> Novo Personagem
+                                </button>
+                            </div>
+                        </div>
+
+                        {savedChars.length === 0 ? (
+                            <div className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
+                                <SVGIcons.User />
+                                <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
+                                <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {savedChars.map(char => (
+                                    <div key={char.id} className="bg-white rounded-md shadow-lg border-2 border-dragon-dark overflow-hidden flex flex-col">
+                                        <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
+                                            <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
+                                                {char.bio.imagem ? (
+                                                    <img src={char.bio.imagem} alt={char.bio.nome} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100"><SVGIcons.User /></div>
+                                                )}
+                                            </div>
+                                            <div className="p-3 flex-1 overflow-hidden">
+                                                <h3 className="font-title font-bold text-lg truncate text-red-900">{char.bio.nome || 'Sem Nome'}</h3>
+                                                <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">{char.bio.ancestralidade || '?'} • {char.bio.profissao || '?'}</p>
+                                                <p className="text-[10px] text-gray-500 mt-2 truncate italic">Jogador: {char.bio.jogador || '-'}</p>
+                                            </div>
+                                        </div>
+                                        <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
+                                            <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1">Exportar</button>
+                                            
+                                            {deleteConfirmId === char.id ? (
+                                                <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar Exclusão</button>
+                                            ) : (
+                                                <button onClick={() => setDeleteConfirmId(char.id)} className="text-red-500 hover:text-red-700 px-2 py-1 flex items-center gap-1"><SVGIcons.Trash/> Excluir</button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        
+                        {/* Toast Notification */}
+                        {toastMsg && (
+                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
+                                {toastMsg}
+                            </div>
+                        )}
+                    </div>
+                );
+            }
+
             return (
                 <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-sm border-2 border-dragon-dark">
                     {/* Toolbar de Controle */}
-                    <div className="bg-dragon-dark text-white p-3 flex justify-between items-center no-print rounded-t-sm">
-                        <div className="flex items-center gap-2">
-                            <span className="font-title font-bold text-xl tracking-wider text-red-500">DRAGONBANE</span>
-                            <span className="text-xs text-gray-400 ml-2 hidden sm:inline">Plataforma de Criação de Personagem</span>
+                    <div className="bg-dragon-dark text-white p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2">
+                        <div className="flex items-center gap-4">
+                            <button onClick={() => setView('dashboard')} className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors text-sm">
+                                <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Pastas</span>
+                            </button>
+                            <span className="font-title font-bold text-lg md:text-xl tracking-wider text-red-500">DRAGONBANE</span>
                         </div>
-                        <div className="flex gap-3">
-                            <label className="cursor-pointer flex items-center gap-1 bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-sm transition-colors">
-                                <SVGIcons.Upload /> Carregar
-                                <input type="file" accept=".json" className="hidden" onChange={handleImport} />
-                            </label>
-                            <button onClick={handleExport} className="flex items-center gap-1 bg-red-800 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors">
-                                <SVGIcons.Save /> Salvar Ficha
+                        <div className="flex gap-2 w-full sm:w-auto justify-end">
+                            <button onClick={handleExport} className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-sm transition-colors shadow">
+                                Exportar
+                            </button>
+                            <button onClick={() => saveToLocal(data)} className="flex items-center gap-1 bg-red-800 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors shadow font-bold">
+                                <SVGIcons.Save /> Salvar
                             </button>
                         </div>
                     </div>
 
-                    <div className="p-6 md:p-8 space-y-8">
-                        {/* CABEÇALHO (BIO) */}
-                        <div className="flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start">
+                    {/* Menu de Abas Mobile */}
+                    <div className="md:hidden flex bg-gray-200 border-b border-gray-300 no-print">
+                        {[
+                            { id: 'status', label: 'Perfil & Status' },
+                            { id: 'pericias', label: 'Perícias' },
+                            { id: 'equipamento', label: 'Combate & Equip' }
+                        ].map(tab => (
+                            <button 
+                                key={tab.id}
+                                onClick={() => setMobileTab(tab.id)}
+                                className={`flex-1 py-3 text-xs font-bold uppercase text-center border-b-4 transition-colors ${mobileTab === tab.id ? 'border-red-700 text-red-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}
+                            >
+                                {tab.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="p-4 md:p-8 space-y-8">
+                        {/* CABEÇALHO (BIO) - Visível no PC ou na aba 'status' no mobile */}
+                        <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
                             {/* Avatar Section */}
                             <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
                                 <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
@@ -241,8 +382,7 @@
                                         <span className="text-gray-400 text-sm font-bold uppercase text-center px-4">Retrato</span>
                                     )}
                                     
-                                    {/* Overlay Controls */}
-                                    <div className={`absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-2 no-print transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                    <div className={`absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-2 no-print transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                         {!showUrlInput ? (
                                             <React.Fragment>
                                                 <label className="cursor-pointer bg-white text-black px-3 py-1 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">
@@ -305,12 +445,11 @@
                             </div>
                         </div>
 
-                        {}
-                        {/* CORPO PRINCIPAL - NOVO GRID PROPORCIONAL */}
+                        {/* CORPO PRINCIPAL - GRID */}
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
                             
                             {/* COLUNA 1: ATRIBUTOS E STATUS */}
-                            <div className="lg:col-span-3 space-y-6">
+                            <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
                                     <div className="grid grid-cols-2 gap-4">
@@ -318,7 +457,7 @@
                                             <div key={attr} className="border-2 border-gray-300 p-2 text-center rounded bg-gray-50 relative">
                                                 <div className="font-title font-bold text-xl uppercase text-red-800">{attr}</div>
                                                 <input type="number" value={data.atributos[attr].valor} onChange={e => updateField(`atributos.${attr}.valor`, parseInt(e.target.value)||0)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mb-2" />
-                                                <div className="flex items-center justify-center gap-1 text-xs">
+                                                <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs">
                                                     <input type="checkbox" checked={data.atributos[attr].condicao} onChange={e => updateField(`atributos.${attr}.condicao`, e.target.checked)} className="cursor-pointer" />
                                                     <label className={`uppercase font-bold ${data.atributos[attr].condicao ? 'text-red-600' : 'text-gray-500'}`}>{condicoesNomes[attr]}</label>
                                                 </div>
@@ -397,14 +536,13 @@
                                 </div>
                             </div>
 
-                            {}
-                            {/* COLUNA 2: PERÍCIAS (Agora em um container duplo) */}
-                            <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {/* COLUNA 2: PERÍCIAS */}
+                            <div className={`lg:col-span-5 flex-col sm:grid sm:grid-cols-2 gap-6 ${mobileTab === 'pericias' ? 'flex' : 'hidden md:grid'}`}>
                                 {/* Lado Esquerdo: Perícias Base */}
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
                                         <span>PERÍCIAS</span>
-                                        <span className="text-[10px] font-normal self-center">[] = Avanço</span>
+                                        <span className="text-[10px] font-normal self-center hidden sm:inline">[] = Avanço</span>
                                     </h2>
                                     <div className="space-y-1">
                                         {data.periciasBase.map((pericia, index) => (
@@ -418,7 +556,7 @@
                                 </div>
 
                                 {/* Lado Direito: Armas e Secundárias */}
-                                <div className="space-y-6">
+                                <div className="space-y-6 mt-6 sm:mt-0">
                                     <div>
                                         <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">ARMAS (PERÍCIAS)</h2>
                                         <div className="space-y-1">
@@ -452,13 +590,12 @@
                                 </div>
                             </div>
 
-                            {}
                             {/* COLUNA 3: EQUIPAMENTO E HABILIDADES */}
-                            <div className="lg:col-span-4 space-y-6">
+                            <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
                                 <div>
                                     <div className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm">
                                         <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
-                                        <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1"><SVGIcons.Plus/> Adicionar</button>
+                                        <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
                                     </div>
                                     <div className="space-y-2">
                                         {data.habilidadesFeiticos.length === 0 && <p className="text-xs text-gray-500 italic text-center">Nenhuma habilidade adicionada.</p>}
@@ -468,7 +605,7 @@
                                                     {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase">Habilidade / Magia</label>}
                                                     <input type="text" value={hab.nome} onChange={e => updateArrayField('habilidadesFeiticos', index, 'nome', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm font-bold" />
                                                 </div>
-                                                <div className="w-16">
+                                                <div className="w-12 md:w-16">
                                                     {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center">PD/Nv.</label>}
                                                     <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm" />
                                                 </div>
@@ -512,11 +649,11 @@
                                         {data.armas.map((arma, index) => (
                                             <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 relative print-break">
                                                 <button onClick={() => removeFromArray('armas', index)} className="absolute top-2 right-2 text-red-500 hover:text-red-700 no-print"><SVGIcons.Trash/></button>
-                                                <input type="text" value={arma.nome} placeholder="Nome da Arma" onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-11/12 border-b border-gray-400 outline-none bg-transparent text-sm font-bold mb-2" />
-                                                <div className="flex gap-2 text-xs">
+                                                <input type="text" value={arma.nome} placeholder="Nome da Arma" onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-10/12 border-b border-gray-400 outline-none bg-transparent text-sm font-bold mb-2" />
+                                                <div className="flex gap-1 sm:gap-2 text-xs">
                                                     <div className="w-10"><label className="block text-[10px] text-gray-500 uppercase">Emp</label><input type="text" value={arma.emp} onChange={e => updateArrayField('armas', index, 'emp', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
                                                     <div className="w-12"><label className="block text-[10px] text-gray-500 uppercase">Alc.</label><input type="text" value={arma.alcance} onChange={e => updateArrayField('armas', index, 'alcance', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
-                                                    <div className="w-12"><label className="block text-[10px] text-gray-500 uppercase">Dano</label><input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b outline-none bg-transparent font-bold" /></div>
+                                                    <div className="flex-1"><label className="block text-[10px] text-gray-500 uppercase">Dano</label><input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b outline-none bg-transparent font-bold" /></div>
                                                     <div className="w-10"><label className="block text-[10px] text-gray-500 uppercase">Dur.</label><input type="text" value={arma.dur} onChange={e => updateArrayField('armas', index, 'dur', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
                                                 </div>
                                                 <div className="mt-1">
@@ -528,11 +665,9 @@
                                     </div>
                                 </div>
 
-                                {}
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">INVENTÁRIO</h2>
                                     
-                                    {/* Moedas movidas para cima */}
                                     <div className="flex gap-2 mb-3">
                                         <div className="flex-1 border p-2 text-center rounded bg-yellow-50">
                                             <label className="block text-[10px] font-bold text-yellow-700 uppercase">Ouro</label>
@@ -548,10 +683,9 @@
                                         </div>
                                     </div>
 
-                                    {/* Campo de inventário agora fica abaixo */}
-                                    <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none focus:border-red-600 bg-gray-50" placeholder="Itens, equipamentos, suprimentos de viagem..."></textarea>
+                                    <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none focus:border-red-600 bg-gray-50 resize-y" placeholder="Itens, equipamentos, suprimentos de viagem..."></textarea>
                                     
-                                    <div className="mt-4">
+                                    <div className="mt-4 pb-10 md:pb-0">
                                         <label className="block text-xs font-bold text-gray-500 uppercase">Memento (Item Especial)</label>
                                         <input type="text" value={data.bio.memento} onChange={e => updateField('bio.memento', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" placeholder="Ex: Cachimbo esculpido..." />
                                     </div>
@@ -559,6 +693,13 @@
                             </div>
                         </div>
                     </div>
+                    
+                    {/* Floating Toast inside Editor */}
+                    {toastMsg && (
+                        <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
+                            {toastMsg}
+                        </div>
+                    )}
                 </div>
             );
         }
