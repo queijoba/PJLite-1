@@ -70,7 +70,8 @@
             status: {
                 pv: { atual: 10, max: 10 },
                 pd: { atual: 10, max: 10 },
-                testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] }
+                testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] },
+                manterDerivados: false
             },
             periciasBase: [
                 { nome: 'Acrobatismo', attr: 'AGL', valor: '', avanco: false },
@@ -123,13 +124,48 @@
             Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
             Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
             ArrowLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>,
-            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
+            Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
+            Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
+            Unlock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
         };
 
         const STORAGE_KEY = 'dragonbane_saved_characters';
         const getSavedCharacters = () => {
             try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
             catch { return []; }
+        };
+
+        const getChanceBase = (val) => {
+            if (val >= 16) return 7;
+            if (val >= 13) return 6;
+            if (val >= 9) return 5;
+            if (val >= 6) return 4;
+            return 3;
+        };
+
+        const getDanoBonus = (val) => {
+            if (val >= 17) return '+D6';
+            if (val >= 13) return '+D4';
+            return '-';
+        };
+
+        const getMovimento = (ancestralidade, agl) => {
+            let base = 10;
+            const anc = (ancestralidade || '').toLowerCase();
+            if (anc.includes('halfling') || anc.includes('anão') || anc.includes('anao') || anc.includes('marreco')) {
+                base = 8;
+            } else if (anc.includes('lupino')) {
+                base = 12;
+            } // Humano, Elfo e outros = 10 (padrão)
+            
+            let mod = 0;
+            if (agl <= 6) mod = -4;
+            else if (agl <= 9) mod = -2;
+            else if (agl >= 16) mod = 4;
+            else if (agl >= 13) mod = 2;
+            
+            return base + mod;
         };
 
         function App() {
@@ -143,6 +179,7 @@
             const [mobileTab, setMobileTab] = useState('status'); // 'status', 'pericias', 'equipamento'
             const [deleteConfirmId, setDeleteConfirmId] = useState(null);
             const [toastMsg, setToastMsg] = useState('');
+            const [showSystemModal, setShowSystemModal] = useState(false); // NOVO: Controle do modal de sistemas
 
             const saveToLocal = (charData) => {
                 let chars = getSavedCharacters();
@@ -193,8 +230,9 @@
                 setTimeout(() => setToastMsg(''), 3000);
             };
 
+            // Nova mecânica de Clone Profundo para evitar travamento visual no React
             const updateField = (path, value) => {
-                const newData = { ...data };
+                const newData = JSON.parse(JSON.stringify(data));
                 let current = newData;
                 const keys = path.split('.');
                 const lastKey = keys.pop();
@@ -209,13 +247,90 @@
             };
 
             const updateArrayField = (arrayName, index, field, value) => {
-                const newArray = [...data[arrayName]];
-                newArray[index] = { ...newArray[index], [field]: value };
-                setData({ ...data, [arrayName]: newArray });
+                const newData = JSON.parse(JSON.stringify(data));
+                newData[arrayName][index][field] = value;
+                setData(newData);
             };
 
-            const addToArray = (arrayName, emptyObj) => setData({ ...data, [arrayName]: [...data[arrayName], emptyObj] });
-            const removeFromArray = (arrayName, index) => setData({ ...data, [arrayName]: data[arrayName].filter((_, i) => i !== index) });
+            const toggleTreinada = (arrayName, index) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const skill = newData[arrayName][index];
+                skill.treinada = !skill.treinada;
+                
+                const attrKey = skill.attr.toLowerCase();
+                const attrValue = newData.atributos[attrKey]?.valor || 10;
+                const base = getChanceBase(attrValue);
+                
+                skill.valor = skill.treinada ? base * 2 : base;
+                setData(newData);
+            };
+
+            const addToArray = (arrayName, emptyObj) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                newData[arrayName].push(emptyObj);
+                setData(newData);
+            };
+            
+            const removeFromArray = (arrayName, index) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                newData[arrayName] = newData[arrayName].filter((_, i) => i !== index);
+                setData(newData);
+            };
+
+            const handleAttributeChange = (attr, value) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                newData.atributos[attr].valor = value;
+                
+                // Auto-calcula derivados sempre que o atributo muda (SE NÃO ESTIVER TRAVADO)
+                if (!newData.status?.manterDerivados) {
+                    if (attr === 'for') {
+                        newData.derivados.danoBonusFor = getDanoBonus(value);
+                        newData.derivados.limiteSobrecarga = Math.ceil(value / 2);
+                    }
+                    if (attr === 'agl') {
+                        newData.derivados.danoBonusAgl = getDanoBonus(value);
+                        newData.derivados.movimento = getMovimento(newData.bio.ancestralidade, value);
+                    }
+                    if (attr === 'con') {
+                        newData.status.pv.max = value;
+                    }
+                    if (attr === 'von') {
+                        newData.status.pd.max = value;
+                    }
+                }
+                
+                setData(newData);
+            };
+
+            const handleAncestryChange = (value) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                newData.bio.ancestralidade = value;
+                if (!newData.status?.manterDerivados) {
+                    newData.derivados.movimento = getMovimento(value, newData.atributos.agl.valor);
+                }
+                setData(newData);
+            };
+
+            const syncDerivados = () => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const f = newData.atributos.for.valor || 10;
+                const a = newData.atributos.agl.valor || 10;
+                const c = newData.atributos.con.valor || 10;
+                const v = newData.atributos.von.valor || 10;
+                const anc = newData.bio.ancestralidade;
+
+                newData.derivados.danoBonusFor = getDanoBonus(f);
+                newData.derivados.limiteSobrecarga = Math.ceil(f / 2);
+                newData.derivados.danoBonusAgl = getDanoBonus(a);
+                newData.derivados.movimento = getMovimento(anc, a);
+                
+                // Sincroniza o Máximo e também enche o Atual para o topo como conveniência
+                newData.status.pv.max = c;
+                newData.status.pd.max = v;
+
+                setData(newData);
+                showToast("Valores Derivados, PV e PD atualizados!");
+            };
 
             const handleExport = () => {
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
@@ -279,7 +394,7 @@
                                     <SVGIcons.Upload /> Importar JSON
                                     <input type="file" accept=".json" className="hidden" onChange={handleImport} />
                                 </label>
-                                <button onClick={createNewCharacter} className="flex-1 md:flex-none flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                <button onClick={() => setShowSystemModal(true)} className="flex-1 md:flex-none flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.Plus /> Novo Personagem
                                 </button>
                             </div>
@@ -320,6 +435,86 @@
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+                        
+                        {/* SEÇÃO: Sobre o Projeto, Changelog e Link */}
+                        <div className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
+                            <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                <h2 className="font-title font-bold text-lg flex items-center gap-2">
+                                    Sobre o Projeto & Atualizações
+                                </h2>
+                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">Alpha 0.1.6v</span>
+                            </div>
+                            <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                {/* Coluna 1: Changelog */}
+                                <div>
+                                    <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
+                                    <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.6v:</strong> Dashboard com seleção de modelos de ficha, inclusão de aviso de Open Source, Log de versão e link para plataforma parceira.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.5v:</strong> Correção Deep Clone em tempo real (PV, PD e Bônus não travam mais ao digitar). Adicionado cadeado de "Manter/Travar" atributos derivados.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.4v:</strong> Automação completa de Chance Base e botão (T) Perícias Treinadas. Sobrecarga e PV/PD calculam sozinhos baseados na Força e Ancestralidade.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.3v:</strong> Textareas redimensionáveis e suporte a quebras de linha múltiplas no combate (traços) e habilidades mágicas.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.2v:</strong> Modo Mobile-first com abas inferiores de navegação rápida. Dashboard com sistema de pastas e proteção de dupla etapa para excluir ficha.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.1v:</strong> Novo Grid visual dividindo perícias base das secundárias/armas lado a lado. Moedas organizadas com prioridade em cima do loot principal.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.0v:</strong> Framework inicial, salvamento em JSON local, sistema dinâmico de adicionar/remover atributos e avatar por imagem local ou URL.</p>
+                                    </div>
+                                </div>
+
+                                {/* Coluna 2: Open Source e DMLite */}
+                                <div className="space-y-6 flex flex-col justify-between">
+                                    <div className="bg-gray-50 border-2 border-dashed border-gray-300 p-4 rounded-lg relative">
+                                        <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-gray-600 text-sm">Projeto de Código Aberto 🔓</div>
+                                        <p className="text-sm text-gray-800 leading-relaxed mt-2 mb-3">
+                                            Esta ferramenta é 100% gratuita, sem servidores ou banco de dados ocultos, rodando inteiramente no seu navegador por meio de um único arquivo HTML. 
+                                        </p>
+                                        <div className="bg-blue-50 border-l-4 border-blue-500 p-3 text-xs text-blue-900 rounded">
+                                            <strong className="block text-sm mb-1">Como pegar o código para você:</strong>
+                                            Clique com o botão direito do mouse em qualquer espaço vazio desta página e selecione <b>"Exibir código-fonte da página"</b>. Copie todo o texto, cole em um arquivo vazio terminando em <code>.html</code> e pronto! Você pode usar, estudar, e criar suas próprias ferramentas de RPG à vontade.
+                                        </div>
+                                    </div>
+                                    
+                                    <a href="https://dmliterpg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-dragon-dark hover:bg-gray-900 text-white font-title font-bold text-lg py-4 px-4 rounded shadow-lg transition-transform transform hover:scale-[1.02]">
+                                        Visite a Plataforma DMLite 🐉
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* NOVO: Modal de Seleção de Modelo de Ficha */}
+                        {showSystemModal && (
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
+                                    <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                        <h2 className="font-title font-bold text-lg">Selecionar Modelo</h2>
+                                        <button onClick={() => setShowSystemModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="p-6 bg-gray-100">
+                                        <p className="text-xs text-gray-500 mb-4 font-bold uppercase tracking-wider">Modelos Disponíveis:</p>
+                                        
+                                        <div 
+                                            onClick={() => { setShowSystemModal(false); createNewCharacter(); }}
+                                            className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group mb-4"
+                                        >
+                                            <div className="w-14 h-14 bg-dragon-dark group-hover:bg-red-800 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">DB</div>
+                                            <div className="flex-1">
+                                                <h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">Dragonbane</h3>
+                                                <p className="text-xs text-gray-500">Mitos, Magia e Aventuras Clássicas</p>
+                                            </div>
+                                            <div className="text-gray-300 group-hover:text-red-800 transition-colors">
+                                                <SVGIcons.Plus />
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="opacity-60 bg-gray-200 border-2 border-dashed border-gray-300 rounded p-4 flex items-center gap-4 cursor-not-allowed">
+                                            <div className="w-14 h-14 bg-gray-300 text-gray-500 rounded flex items-center justify-center font-bold font-title text-xl">?</div>
+                                            <div>
+                                                <h3 className="font-title font-bold text-gray-600 text-lg">Em breve...</h3>
+                                                <p className="text-xs text-gray-500">Mais sistemas no futuro</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
                         
@@ -424,7 +619,7 @@
                                 
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase">Ancestralidade</label>
-                                    <input type="text" value={data.bio.ancestralidade} onChange={e => updateField('bio.ancestralidade', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent" />
+                                    <input type="text" value={data.bio.ancestralidade} onChange={e => handleAncestryChange(e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent" />
                                 </div>
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase">Profissão</label>
@@ -456,7 +651,7 @@
                                         {Object.keys(data.atributos).map(attr => (
                                             <div key={attr} className="border-2 border-gray-300 p-2 text-center rounded bg-gray-50 relative">
                                                 <div className="font-title font-bold text-xl uppercase text-red-800">{attr}</div>
-                                                <input type="number" value={data.atributos[attr].valor} onChange={e => updateField(`atributos.${attr}.valor`, parseInt(e.target.value)||0)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mb-2" />
+                                                <input type="number" value={data.atributos[attr].valor} onChange={e => handleAttributeChange(attr, parseInt(e.target.value)||0)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mb-2" />
                                                 <div className="flex items-center justify-center gap-1 text-[10px] sm:text-xs">
                                                     <input type="checkbox" checked={data.atributos[attr].condicao} onChange={e => updateField(`atributos.${attr}.condicao`, e.target.checked)} className="cursor-pointer" />
                                                     <label className={`uppercase font-bold ${data.atributos[attr].condicao ? 'text-red-600' : 'text-gray-500'}`}>{condicoesNomes[attr]}</label>
@@ -467,7 +662,24 @@
                                 </div>
 
                                 <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">VALORES DERIVADOS</h2>
+                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white py-1 mb-3 rounded-sm flex items-center px-3 relative">
+                                        <span className="w-full text-center">VALORES DERIVADOS</span>
+                                        <div className="absolute right-2 flex gap-1 no-print">
+                                            {(!data.status?.manterDerivados) && (
+                                                <button onClick={syncDerivados} className="text-[10px] bg-red-700 hover:bg-red-600 px-2 py-1 rounded flex items-center gap-1 transition-colors shadow" title="Sincronizar cálculos com Atributos Base">
+                                                    <SVGIcons.Refresh /> Auto
+                                                </button>
+                                            )}
+                                            <button 
+                                                onClick={() => updateField('status.manterDerivados', !data.status?.manterDerivados)} 
+                                                className={`text-[10px] px-2 py-1 rounded flex items-center gap-1 transition-colors shadow ${data.status?.manterDerivados ? 'bg-green-700 hover:bg-green-600' : 'bg-gray-600 hover:bg-gray-500'}`}
+                                                title="Travar valores (impede atualização automática de PV, PD e Bônus)"
+                                            >
+                                                {data.status?.manterDerivados ? <SVGIcons.Lock /> : <SVGIcons.Unlock />} 
+                                                <span className="hidden sm:inline">{data.status?.manterDerivados ? 'Mantendo' : 'Manter'}</span>
+                                            </button>
+                                        </div>
+                                    </h2>
                                     <div className="grid grid-cols-2 gap-2 text-sm font-bold uppercase">
                                         <div className="border border-gray-300 p-2 flex flex-col justify-between">
                                             <span className="text-gray-500 text-[10px] leading-tight mb-1">Dano Bônus FOR</span>
@@ -538,35 +750,71 @@
 
                             {/* COLUNA 2: PERÍCIAS */}
                             <div className={`lg:col-span-5 flex-col sm:grid sm:grid-cols-2 gap-6 ${mobileTab === 'pericias' ? 'flex' : 'hidden md:grid'}`}>
-                                {/* Lado Esquerdo: Perícias Base */}
+                                {}
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
                                         <span>PERÍCIAS</span>
-                                        <span className="text-[10px] font-normal self-center hidden sm:inline">[] = Avanço</span>
+                                        <span className="text-[10px] font-normal self-center hidden sm:inline" title="T: Treinada (Dobro da Base) | Av: Avanço">T: Treinar | Av: Avanço</span>
                                     </h2>
                                     <div className="space-y-1">
-                                        {data.periciasBase.map((pericia, index) => (
-                                            <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded">
-                                                <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="mr-2 cursor-pointer" />
-                                                <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
-                                                <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                            </div>
-                                        ))}
+                                        {data.periciasBase.map((pericia, index) => {
+                                            const attrValue = data.atributos[pericia.attr.toLowerCase()]?.valor || 10;
+                                            const baseChance = getChanceBase(attrValue);
+                                            return (
+                                                <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
+                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer" title="Marcação de Avanço" />
+                                                    <button 
+                                                        onClick={() => toggleTreinada('periciasBase', index)}
+                                                        className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
+                                                        title="Perícia Treinada (Calcula 2x a Base)"
+                                                    >
+                                                        T
+                                                    </button>
+                                                    <span className="flex-1 font-bold text-sm text-gray-800">
+                                                        {pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span>
+                                                    </span>
+                                                    <div className="flex flex-col items-center">
+                                                        <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                        <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
                                 {/* Lado Direito: Armas e Secundárias */}
                                 <div className="space-y-6 mt-6 sm:mt-0">
+                                    {}
                                     <div>
-                                        <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">ARMAS (PERÍCIAS)</h2>
+                                        <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
+                                            <span>ARMAS (PERÍCIAS)</span>
+                                            <span className="text-[10px] font-normal self-center hidden sm:inline" title="T: Treinada (Dobro da Base) | Av: Avanço">T: Treinar | Av: Avanço</span>
+                                        </h2>
                                         <div className="space-y-1">
-                                            {data.periciasArmas.map((pericia, index) => (
-                                                <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded">
-                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="mr-2 cursor-pointer" />
-                                                    <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
-                                                    <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                </div>
-                                            ))}
+                                            {data.periciasArmas.map((pericia, index) => {
+                                                const attrValue = data.atributos[pericia.attr.toLowerCase()]?.valor || 10;
+                                                const baseChance = getChanceBase(attrValue);
+                                                return (
+                                                    <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
+                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer" title="Marcação de Avanço" />
+                                                        <button 
+                                                            onClick={() => toggleTreinada('periciasArmas', index)}
+                                                            className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
+                                                            title="Perícia Treinada (Calcula 2x a Base)"
+                                                        >
+                                                            T
+                                                        </button>
+                                                        <span className="flex-1 font-bold text-sm text-gray-800">
+                                                            {pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span>
+                                                        </span>
+                                                        <div className="flex flex-col items-center">
+                                                            <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                            <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
 
