@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha PJ</title>
+    <title>Gerador de Fichas - Dragonbane</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -600,16 +600,16 @@
                                     <div className="space-y-2">
                                         {data.habilidadesFeiticos.length === 0 && <p className="text-xs text-gray-500 italic text-center">Nenhuma habilidade adicionada.</p>}
                                         {data.habilidadesFeiticos.map((hab, index) => (
-                                            <div key={index} className="flex gap-2 items-end">
+                                            <div key={index} className="flex gap-2 items-start mt-2">
                                                 <div className="flex-1">
-                                                    {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase">Habilidade / Magia</label>}
-                                                    <input type="text" value={hab.nome} onChange={e => updateArrayField('habilidadesFeiticos', index, 'nome', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm font-bold" />
+                                                    {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Habilidade / Magia</label>}
+                                                    <textarea rows="2" value={hab.nome} onChange={e => updateArrayField('habilidadesFeiticos', index, 'nome', e.target.value)} className="w-full border border-gray-300 rounded bg-gray-50 outline-none text-sm p-1 resize-y" placeholder="Nome e descrição..."></textarea>
                                                 </div>
                                                 <div className="w-12 md:w-16">
-                                                    {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center">PD/Nv.</label>}
-                                                    <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm" />
+                                                    {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center mb-1">PD/Nv.</label>}
+                                                    <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm mt-1" />
                                                 </div>
-                                                <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 no-print mb-1"><SVGIcons.Trash/></button>
+                                                <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 no-print mt-2"><SVGIcons.Trash/></button>
                                             </div>
                                         ))}
                                     </div>
@@ -656,9 +656,9 @@
                                                     <div className="flex-1"><label className="block text-[10px] text-gray-500 uppercase">Dano</label><input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b outline-none bg-transparent font-bold" /></div>
                                                     <div className="w-10"><label className="block text-[10px] text-gray-500 uppercase">Dur.</label><input type="text" value={arma.dur} onChange={e => updateArrayField('armas', index, 'dur', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
                                                 </div>
-                                                <div className="mt-1">
-                                                    <label className="block text-[10px] text-gray-500 uppercase">Traços</label>
-                                                    <input type="text" value={arma.tracos} onChange={e => updateArrayField('armas', index, 'tracos', e.target.value)} className="w-full border-b outline-none bg-transparent text-xs" />
+                                                <div className="mt-2">
+                                                    <label className="block text-[10px] text-gray-500 uppercase">Traços / Efeitos</label>
+                                                    <textarea rows="2" value={arma.tracos} onChange={e => updateArrayField('armas', index, 'tracos', e.target.value)} className="w-full border border-gray-300 rounded bg-white outline-none p-1 text-xs resize-y" placeholder="Propriedades especiais..."></textarea>
                                                 </div>
                                             </div>
                                         ))}
