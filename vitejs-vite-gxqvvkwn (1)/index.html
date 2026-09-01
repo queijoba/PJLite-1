@@ -11,6 +11,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- JSZip for exporting ZIP files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- html2pdf.js for generating PDF files on mobile and desktop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
@@ -42,6 +46,47 @@
             .no-print { display: none; }
             input, textarea { border: none !important; background: transparent !important; resize: none; }
         }
+        
+        /* CSS para o Modelo de Impressão (Tela e Físico) */
+        .print-mode-active {
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .print-mode-active .bg-dragon-dark {
+            background-color: transparent !important;
+            color: #4b5563 !important; /* gray-600 */
+            border-bottom: 1px solid #9ca3af !important;
+            font-weight: 700 !important;
+        }
+        .print-mode-active h2.bg-dragon-dark {
+            border-bottom: 1px solid #9ca3af !important;
+            color: #111827 !important;
+        }
+        .print-mode-active .top-bar-container {
+            background-color: #ffffff !important;
+            border-bottom: 2px solid #e5e7eb !important;
+            color: #374151 !important;
+        }
+        .print-mode-active .top-bar-title-text { color: #111827 !important; }
+        .print-mode-active .top-bar-btn {
+            background-color: transparent !important;
+            border: 1px solid #d1d5db;
+            color: #4b5563 !important;
+            box-shadow: none;
+        }
+        .print-mode-active .bg-gray-200, .print-mode-active .bg-gray-50, .print-mode-active .bg-red-50, .print-mode-active .bg-blue-50 {
+            background-color: transparent !important;
+        }
+        .print-mode-active .sub-header-print {
+            border: none !important;
+            border-bottom: 1px solid #9ca3af !important;
+            color: #4b5563 !important;
+        }
+        .print-mode-active input, .print-mode-active textarea { 
+            border-color: #d1d5db !important; 
+            border-bottom: 1px solid #9ca3af !important;
+        }
+        .print-mode-active .hide-in-print-mode { display: none !important; }
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -50,19 +95,18 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Dados Iniciais Baseados no Livro de Regras
         const initialData = {
-            id: '', // Identificador único para salvar na pasta
+            id: '',
             bio: {
                 jogador: '', nome: '', ancestralidade: '', profissao: '', idade: '', fraqueza: '', aparencia: '', memento: '', imagem: ''
             },
             atributos: {
-                for: { valor: 10, condicao: false }, // Exausto
-                con: { valor: 10, condicao: false }, // Adoecido
-                agl: { valor: 10, condicao: false }, // Aturdido
-                int: { valor: 10, condicao: false }, // Enraivecido
-                von: { valor: 10, condicao: false }, // Assustado
-                car: { valor: 10, condicao: false }  // Desanimado
+                for: { valor: 10, condicao: false },
+                con: { valor: 10, condicao: false },
+                agl: { valor: 10, condicao: false },
+                int: { valor: 10, condicao: false },
+                von: { valor: 10, condicao: false },
+                car: { valor: 10, condicao: false }
             },
             derivados: {
                 danoBonusFor: '', danoBonusAgl: '', movimento: '', limiteSobrecarga: ''
@@ -71,7 +115,8 @@
                 pv: { atual: 10, max: 10 },
                 pd: { atual: 10, max: 10 },
                 testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] },
-                manterDerivados: false
+                manterDerivados: false,
+                armasPrimeiro: false
             },
             periciasBase: [
                 { nome: 'Acrobatismo', attr: 'AGL', valor: '', avanco: false },
@@ -115,6 +160,7 @@
                 elmo: { nome: '', valor: '', reves: '' }
             },
             inventario: '',
+            itensMiudos: '',
             moedas: { ouro: 0, prata: 0, cobre: 0 }
         };
 
@@ -125,9 +171,12 @@
             Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
             ArrowLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>,
             User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
-            Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
+            Unlock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>,
             Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
-            Unlock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+            Printer: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>,
+            FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
+            HelpCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>,
+            Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
         };
 
         const STORAGE_KEY = 'dragonbane_saved_characters';
@@ -157,7 +206,7 @@
                 base = 8;
             } else if (anc.includes('lupino')) {
                 base = 12;
-            } // Humano, Elfo e outros = 10 (padrão)
+            }
             
             let mod = 0;
             if (agl <= 6) mod = -4;
@@ -169,23 +218,23 @@
         };
 
         function App() {
-            const [view, setView] = useState('dashboard'); // 'dashboard' ou 'editor'
+            const [view, setView] = useState('dashboard');
             const [savedChars, setSavedChars] = useState(getSavedCharacters());
             const [data, setData] = useState(initialData);
             
-            // UI States
             const [showUrlInput, setShowUrlInput] = useState(false);
             const [tempUrl, setTempUrl] = useState('');
-            const [mobileTab, setMobileTab] = useState('status'); // 'status', 'pericias', 'equipamento'
+            const [mobileTab, setMobileTab] = useState('status');
             const [deleteConfirmId, setDeleteConfirmId] = useState(null);
             const [toastMsg, setToastMsg] = useState('');
-            const [showSystemModal, setShowSystemModal] = useState(false); // NOVO: Controle do modal de sistemas
+            const [showSystemModal, setShowSystemModal] = useState(false);
+            const [showGuideModal, setShowGuideModal] = useState(false);
+            const [guideTab, setGuideTab] = useState('import');
+            const [isPrintMode, setIsPrintMode] = useState(false);
 
             const saveToLocal = (charData) => {
                 let chars = getSavedCharacters();
                 let savingData = { ...charData };
-                
-                // Se não tem ID, gera um novo
                 if (!savingData.id) {
                     savingData.id = Date.now().toString();
                 }
@@ -199,7 +248,7 @@
                 
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
                 setSavedChars(chars);
-                setData(savingData); // Atualiza os dados atuais com o ID caso seja novo
+                setData(savingData);
                 showToast("Ficha salva na sua pasta!");
             };
 
@@ -230,7 +279,6 @@
                 setTimeout(() => setToastMsg(''), 3000);
             };
 
-            // Nova mecânica de Clone Profundo para evitar travamento visual no React
             const updateField = (path, value) => {
                 const newData = JSON.parse(JSON.stringify(data));
                 let current = newData;
@@ -281,7 +329,6 @@
                 const newData = JSON.parse(JSON.stringify(data));
                 newData.atributos[attr].valor = value;
                 
-                // Auto-calcula derivados sempre que o atributo muda (SE NÃO ESTIVER TRAVADO)
                 if (!newData.status?.manterDerivados) {
                     if (attr === 'for') {
                         newData.derivados.danoBonusFor = getDanoBonus(value);
@@ -324,7 +371,6 @@
                 newData.derivados.danoBonusAgl = getDanoBonus(a);
                 newData.derivados.movimento = getMovimento(anc, a);
                 
-                // Sincroniza o Máximo e também enche o Atual para o topo como conveniência
                 newData.status.pv.max = c;
                 newData.status.pd.max = v;
 
@@ -332,14 +378,53 @@
                 showToast("Valores Derivados, PV e PD atualizados!");
             };
 
-            const handleExport = () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-                const downloadAnchorNode = document.createElement('a');
-                downloadAnchorNode.setAttribute("href", dataStr);
-                downloadAnchorNode.setAttribute("download", `Ficha_${data.bio.nome || 'Novo_Personagem'}.json`);
-                document.body.appendChild(downloadAnchorNode);
-                downloadAnchorNode.click();
-                downloadAnchorNode.remove();
+            const handleExport = async (charDataOrEvent) => {
+                const charToExport = (charDataOrEvent && charDataOrEvent.id) ? charDataOrEvent : data;
+                
+                try {
+                    const zip = new JSZip();
+                    const jsonData = JSON.stringify(charToExport, null, 2);
+                    const fileName = `Ficha_${charToExport.bio.nome || 'Novo_Personagem'}.json`;
+                    
+                    zip.file(fileName, jsonData);
+                    
+                    const content = await zip.generateAsync({ type: "blob" });
+                    const url = URL.createObjectURL(content);
+                    
+                    const downloadAnchorNode = document.createElement('a');
+                    downloadAnchorNode.href = url;
+                    downloadAnchorNode.download = `Dragonbane_${charToExport.bio.nome || 'Ficha'}.zip`;
+                    document.body.appendChild(downloadAnchorNode);
+                    downloadAnchorNode.click();
+                    downloadAnchorNode.remove();
+                    URL.revokeObjectURL(url);
+                    
+                    showToast("Ficha exportada em .ZIP! Extraia para pegar o arquivo .json.");
+                } catch (error) {
+                    showToast("Erro ao exportar o arquivo ZIP.");
+                    console.error(error);
+                }
+            };
+
+            const handleExportPDF = () => {
+                const wasPrintMode = isPrintMode;
+                if (!wasPrintMode) setIsPrintMode(true);
+
+                setTimeout(() => {
+                    const element = document.getElementById('ficha-print-area');
+                    const opt = {
+                        margin:       10,
+                        filename:     `Dragonbane_${data.bio.nome || 'Personagem'}.pdf`,
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { scale: 2, useCORS: true },
+                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+
+                    html2pdf().from(element).set(opt).save().then(() => {
+                        if (!wasPrintMode) setIsPrintMode(false);
+                        showToast("PDF gerado com sucesso!");
+                    });
+                }, 300);
             };
 
             const handleImport = (event) => {
@@ -349,15 +434,14 @@
                 reader.onload = (e) => {
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        // Garante que a ficha importada seja tratada como nova se não tiver ID, ou mantém o ID se existir
                         const dataToLoad = { ...initialData, ...importedData };
                         if(!dataToLoad.id) dataToLoad.id = Date.now().toString();
                         
                         setData(dataToLoad);
-                        saveToLocal(dataToLoad); // Salva automaticamente ao importar
+                        saveToLocal(dataToLoad);
                         setView('editor');
                     } catch (error) {
-                        showToast("Erro: Arquivo inválido.");
+                        showToast("Erro: Arquivo inválido. Certifique-se de extrair o .ZIP e selecionar o .json.");
                     }
                 };
                 reader.readAsText(file);
@@ -389,12 +473,15 @@
                     <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4">
                         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                             <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
-                            <div className="flex gap-3 w-full md:w-auto">
-                                <label className="cursor-pointer flex-1 md:flex-none flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.Upload /> Importar JSON
+                            <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center">
+                                <button onClick={() => setShowGuideModal(true)} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                    <SVGIcons.HelpCircle /> Guias & Tutoriais
+                                </button>
+                                <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                    <SVGIcons.Upload /> Importar Ficha (JSON)
                                     <input type="file" accept=".json" className="hidden" onChange={handleImport} />
                                 </label>
-                                <button onClick={() => setShowSystemModal(true)} className="flex-1 md:flex-none flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                <button onClick={() => setShowSystemModal(true)} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.Plus /> Novo Personagem
                                 </button>
                             </div>
@@ -404,7 +491,7 @@
                             <div className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
                                 <SVGIcons.User />
                                 <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
-                                <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON.</p>
+                                <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON extraída de um arquivo ZIP.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -425,7 +512,7 @@
                                             </div>
                                         </div>
                                         <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
-                                            <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1">Exportar</button>
+                                            <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1">Exportar (ZIP)</button>
                                             
                                             {deleteConfirmId === char.id ? (
                                                 <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar Exclusão</button>
@@ -438,30 +525,24 @@
                             </div>
                         )}
                         
-                        {/* SEÇÃO: Sobre o Projeto, Changelog e Link */}
                         <div className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
                             <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                 <h2 className="font-title font-bold text-lg flex items-center gap-2">
                                     Sobre o Projeto & Atualizações
                                 </h2>
-                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">Alpha 0.1.6v</span>
+                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">Alpha 0.2.0v</span>
                             </div>
                             <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* Coluna 1: Changelog */}
                                 <div>
                                     <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
                                     <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.2.0v:</strong> Adição de exportação direta em PDF otimizada para celular/PC e guias explicativos detalhados no menu principal.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.8v:</strong> Exportação de fichas alterada para arquivo .ZIP garantindo maior compatibilidade mobile, e retorno do quadro de moedas no inventário.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.7v:</strong> Adição de campo para Itens Miúdos no inventário e botão para inverter ordem de visualização das Perícias (Base x Armas).</p>
                                         <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.6v:</strong> Dashboard com seleção de modelos de ficha, inclusão de aviso de Open Source, Log de versão e link para plataforma parceira.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.5v:</strong> Correção Deep Clone em tempo real (PV, PD e Bônus não travam mais ao digitar). Adicionado cadeado de "Manter/Travar" atributos derivados.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.4v:</strong> Automação completa de Chance Base e botão (T) Perícias Treinadas. Sobrecarga e PV/PD calculam sozinhos baseados na Força e Ancestralidade.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.3v:</strong> Textareas redimensionáveis e suporte a quebras de linha múltiplas no combate (traços) e habilidades mágicas.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.2v:</strong> Modo Mobile-first com abas inferiores de navegação rápida. Dashboard com sistema de pastas e proteção de dupla etapa para excluir ficha.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.1v:</strong> Novo Grid visual dividindo perícias base das secundárias/armas lado a lado. Moedas organizadas com prioridade em cima do loot principal.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.0v:</strong> Framework inicial, salvamento em JSON local, sistema dinâmico de adicionar/remover atributos e avatar por imagem local ou URL.</p>
                                     </div>
                                 </div>
 
-                                {/* Coluna 2: Open Source e DMLite */}
                                 <div className="space-y-6 flex flex-col justify-between">
                                     <div className="bg-gray-50 border-2 border-dashed border-gray-300 p-4 rounded-lg relative">
                                         <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-gray-600 text-sm">Projeto de Código Aberto 🔓</div>
@@ -481,7 +562,6 @@
                             </div>
                         </div>
 
-                        {/* NOVO: Modal de Seleção de Modelo de Ficha */}
                         {showSystemModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
                                 <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
@@ -517,10 +597,83 @@
                                 </div>
                             </div>
                         )}
+
+                        {showGuideModal && (
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                        <h2 className="font-title font-bold text-lg flex items-center gap-2"><SVGIcons.HelpCircle /> Guias e Tutoriais</h2>
+                                        <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="flex border-b border-gray-300 bg-gray-100 overflow-x-auto">
+                                        <button onClick={() => setGuideTab('import')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'import' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Importar/Exportar</button>
+                                        <button onClick={() => setGuideTab('dragonbane')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'dragonbane' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Criar Ficha</button>
+                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão e PDF</button>
+                                    </div>
+                                    <div className="p-4 md:p-6 overflow-y-auto bg-white flex-1">
+                                        {guideTab === 'import' && (
+                                            <div className="space-y-4 text-sm text-gray-700">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Como Extrair, Exportar e Importar Fichas</h3>
+                                                <p>Para garantir que suas fichas fiquem salvas com segurança e possam ser compartilhadas, utilizamos arquivos compactados em formato <b>.ZIP</b>.</p>
+                                                
+                                                <div className="bg-gray-50 p-4 rounded border-l-4 border-gray-500 shadow-sm mt-4">
+                                                    <strong className="flex items-center gap-2 text-base text-gray-800 mb-2"><SVGIcons.Save /> 1. Exportando (Salvando)</strong>
+                                                    <p>Ao clicar em "Exportar (ZIP)", o sistema baixa um arquivo compactado contendo sua ficha. Isso evita bloqueios de download em navegadores móveis (Android e iOS).</p>
+                                                </div>
+                                                
+                                                <div className="bg-gray-50 p-4 rounded border-l-4 border-dragon-dark shadow-sm mt-4">
+                                                    <strong className="flex items-center gap-2 text-base text-gray-800 mb-2"><SVGIcons.Upload /> 2. Importando (Carregando o arquivo .json)</strong>
+                                                    <ol className="list-decimal ml-5 space-y-2 mt-2">
+                                                        <li>Vá até o seu gerenciador de arquivos e <b>descompacte (extraia)</b> o arquivo `.zip` baixado.</li>
+                                                        <li>Dentro da pasta extraída, você encontrará o arquivo com final <b>.json</b>.</li>
+                                                        <li>No menu principal da plataforma, clique em <b>"Importar Ficha (JSON)"</b> e selecione o arquivo JSON descompactado. Pronto!</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {guideTab === 'dragonbane' && (
+                                            <div className="space-y-4 text-sm text-gray-700">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Passo a Passo: Sistema Dragonbane</h3>
+                                                <p>Nossa plataforma possui automações para facilitar sua mesa de jogo:</p>
+                                                <ul className="space-y-4 mt-4">
+                                                    <li className="bg-gray-50 p-3 rounded border border-gray-200">
+                                                        <b className="text-red-800 block mb-1">1. Atributos e Automação:</b> 
+                                                        Insira os valores base dos seus Atributos (FOR, CON, AGL, etc.). Os PVs, PDs, Limite de Sobrecarga e Dano Bônus serão calculados instantaneamente.
+                                                    </li>
+                                                    <li className="bg-gray-50 p-3 rounded border border-gray-200">
+                                                        <b className="text-red-800 block mb-1">2. Perícias Treinadas (T):</b> 
+                                                        Clique no botão **[ T ]** ao lado das perícias que seu personagem treinou para dobrar automaticamente a Chance Base do atributo relacionado.
+                                                    </li>
+                                                    <li className="bg-gray-50 p-3 rounded border border-gray-200">
+                                                        <b className="text-red-800 block mb-1">3. Botão "Manter" (Cadeado):</b> 
+                                                        Caso possua alguma Habilidade Heroica (como <i>Robusto</i>) que altere seus valores fixos, clique no botão <b>Manter</b> para travar os cálculos e evitar substituições acidentais.
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                        {guideTab === 'imprimir' && (
+                                            <div className="space-y-4 text-sm text-gray-700">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Como Imprimir e Gerar PDF</h3>
+                                                <p>Você pode ter sua ficha em papel físico ou guardada em PDF de alta qualidade com poucos cliques:</p>
+                                                
+                                                <div className="bg-gray-50 p-4 rounded border-l-4 border-blue-500 shadow-sm mt-4">
+                                                    <strong className="flex items-center gap-2 text-base text-gray-800 mb-2"><SVGIcons.Printer /> Modelo Impressão</strong>
+                                                    <p>Na tela de edição, clique no botão <b>Modelo Impressão</b> na barra superior. Isso transformará a interface em um visual minimalista, escondendo botões e transformando caixas em linhas simples para economizar tinta.</p>
+                                                </div>
+
+                                                <div className="bg-gray-50 p-4 rounded border-l-4 border-red-800 shadow-sm mt-4">
+                                                    <strong className="flex items-center gap-2 text-base text-gray-800 mb-2"><SVGIcons.FileText /> Gerar PDF (Celular ou PC)</strong>
+                                                    <p>Clique diretamente no botão azul <b>Gerar PDF</b>. O sistema ativará o formato limpo automaticamente, capturará a ficha inteira em formato A4 e fará o download instantâneo de um documento `.pdf` pronto para impressão física.</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                         
-                        {/* Toast Notification */}
                         {toastMsg && (
-                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
+                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
                                 {toastMsg}
                             </div>
                         )}
@@ -529,26 +682,30 @@
             }
 
             return (
-                <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-sm border-2 border-dragon-dark">
-                    {/* Toolbar de Controle */}
-                    <div className="bg-dragon-dark text-white p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2">
+                <div className={`max-w-6xl mx-auto bg-white rounded-sm transition-all duration-300 ${isPrintMode ? 'print-mode-active border border-gray-200' : 'shadow-xl border-2 border-dragon-dark'}`}>
+                    <div className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : 'bg-dragon-dark text-white'}`}>
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setView('dashboard')} className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors text-sm">
+                            <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Pastas</span>
                             </button>
-                            <span className="font-title font-bold text-lg md:text-xl tracking-wider text-red-500">DRAGONBANE</span>
+                            <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text ${isPrintMode ? '' : 'text-red-500'}`}>DRAGONBANE</span>
                         </div>
-                        <div className="flex gap-2 w-full sm:w-auto justify-end">
-                            <button onClick={handleExport} className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-sm transition-colors shadow">
-                                Exportar
+                        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+                            <button onClick={() => setIsPrintMode(!isPrintMode)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
+                                <SVGIcons.Printer /> {isPrintMode ? 'Modo Padrão' : 'Modelo Impressão'}
                             </button>
-                            <button onClick={() => saveToLocal(data)} className="flex items-center gap-1 bg-red-800 hover:bg-red-700 px-3 py-1 rounded text-sm transition-colors shadow font-bold">
+                            <button onClick={handleExportPDF} className="flex items-center gap-1 bg-blue-700 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold">
+                                <SVGIcons.FileText /> Gerar PDF
+                            </button>
+                            <button onClick={handleExport} className={`px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? '' : 'bg-gray-700 hover:bg-gray-600'}`}>
+                                Exportar (ZIP)
+                            </button>
+                            <button onClick={() => saveToLocal(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold top-bar-btn ${isPrintMode ? 'border-red-800 text-red-800' : 'bg-red-800 hover:bg-red-700 text-white'}`}>
                                 <SVGIcons.Save /> Salvar
                             </button>
                         </div>
                     </div>
 
-                    {/* Menu de Abas Mobile */}
                     <div className="md:hidden flex bg-gray-200 border-b border-gray-300 no-print">
                         {[
                             { id: 'status', label: 'Perfil & Status' },
@@ -565,10 +722,8 @@
                         ))}
                     </div>
 
-                    <div className="p-4 md:p-8 space-y-8">
-                        {/* CABEÇALHO (BIO) - Visível no PC ou na aba 'status' no mobile */}
+                    <div id="ficha-print-area" className="p-4 md:p-8 space-y-8 bg-white">
                         <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
-                            {/* Avatar Section */}
                             <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
                                 <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
                                     {data.bio.imagem ? (
@@ -577,28 +732,28 @@
                                         <span className="text-gray-400 text-sm font-bold uppercase text-center px-4">Retrato</span>
                                     )}
                                     
-                                    <div className={`absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-2 no-print transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
+                                    <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 no-print transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                         {!showUrlInput ? (
                                             <React.Fragment>
-                                                <label className="cursor-pointer bg-white text-black px-3 py-1 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">
+                                                <label className="cursor-pointer bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg transition-transform hover:scale-105">
                                                     Upload
                                                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                                                 </label>
-                                                <button onClick={() => setShowUrlInput(true)} className="bg-white text-black px-3 py-1 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">
+                                                <button onClick={() => setShowUrlInput(true)} className="bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg transition-transform hover:scale-105">
                                                     Usar URL
                                                 </button>
                                                 {data.bio.imagem && (
-                                                    <button onClick={() => updateField('bio.imagem', '')} className="bg-red-600 text-white px-3 py-1 rounded text-xs font-bold hover:bg-red-700 w-24 text-center mt-2 shadow">
+                                                    <button onClick={() => updateField('bio.imagem', '')} className="bg-red-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-red-700 w-28 text-center mt-2 shadow-lg transition-transform hover:scale-105">
                                                         Remover
                                                     </button>
                                                 )}
                                             </React.Fragment>
                                         ) : (
                                             <div className="flex flex-col gap-2 w-full px-4 items-center">
-                                                <input type="text" placeholder="Cole a URL aqui" value={tempUrl} onChange={e => setTempUrl(e.target.value)} className="w-full p-1 text-xs outline-none rounded text-black border border-gray-300" />
-                                                <div className="flex gap-2">
-                                                    <button onClick={applyImageUrl} className="bg-green-600 text-white px-3 py-1 text-xs rounded font-bold hover:bg-green-700 shadow">OK</button>
-                                                    <button onClick={() => { setShowUrlInput(false); setTempUrl(''); }} className="bg-gray-500 text-white px-3 py-1 text-xs rounded font-bold hover:bg-gray-600 shadow">Voltar</button>
+                                                <input type="text" placeholder="Cole a URL aqui" value={tempUrl} onChange={e => setTempUrl(e.target.value)} className="w-full p-2 text-sm outline-none rounded text-black border-2 border-white shadow-inner" />
+                                                <div className="flex gap-2 mt-1">
+                                                    <button onClick={applyImageUrl} className="bg-green-600 text-white px-4 py-1.5 text-sm rounded font-bold hover:bg-green-700 shadow-lg">OK</button>
+                                                    <button onClick={() => { setShowUrlInput(false); setTempUrl(''); }} className="bg-gray-500 text-white px-4 py-1.5 text-sm rounded font-bold hover:bg-gray-600 shadow-lg">Voltar</button>
                                                 </div>
                                             </div>
                                         )}
@@ -606,7 +761,6 @@
                                 </div>
                             </div>
                             
-                            {/* Informações da Bio */}
                             <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div className="sm:col-span-2">
                                     <label className="block text-xs font-bold text-gray-500 uppercase">Nome do Personagem</label>
@@ -640,10 +794,8 @@
                             </div>
                         </div>
 
-                        {/* CORPO PRINCIPAL - GRID */}
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
                             
-                            {/* COLUNA 1: ATRIBUTOS E STATUS */}
                             <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
@@ -662,23 +814,26 @@
                                 </div>
 
                                 <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white py-1 mb-3 rounded-sm flex items-center px-3 relative">
-                                        <span className="w-full text-center">VALORES DERIVADOS</span>
-                                        <div className="absolute right-2 flex gap-1 no-print">
+                                    <div className="flex justify-between items-center mb-2 no-print gap-1">
+                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Automação:</span>
+                                        <div className="flex gap-1">
                                             {(!data.status?.manterDerivados) && (
-                                                <button onClick={syncDerivados} className="text-[10px] bg-red-700 hover:bg-red-600 px-2 py-1 rounded flex items-center gap-1 transition-colors shadow" title="Sincronizar cálculos com Atributos Base">
+                                                <button onClick={syncDerivados} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors" title="Sincronizar cálculos com Atributos Base">
                                                     <SVGIcons.Refresh /> Auto
                                                 </button>
                                             )}
                                             <button 
                                                 onClick={() => updateField('status.manterDerivados', !data.status?.manterDerivados)} 
-                                                className={`text-[10px] px-2 py-1 rounded flex items-center gap-1 transition-colors shadow ${data.status?.manterDerivados ? 'bg-green-700 hover:bg-green-600' : 'bg-gray-600 hover:bg-gray-500'}`}
+                                                className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors ${data.status?.manterDerivados ? 'bg-green-100 hover:bg-green-200 text-green-800' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
                                                 title="Travar valores (impede atualização automática de PV, PD e Bônus)"
                                             >
                                                 {data.status?.manterDerivados ? <SVGIcons.Lock /> : <SVGIcons.Unlock />} 
-                                                <span className="hidden sm:inline">{data.status?.manterDerivados ? 'Mantendo' : 'Manter'}</span>
+                                                {data.status?.manterDerivados ? 'Mantendo' : 'Manter'}
                                             </button>
                                         </div>
+                                    </div>
+                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">
+                                        VALORES DERIVADOS
                                     </h2>
                                     <div className="grid grid-cols-2 gap-2 text-sm font-bold uppercase">
                                         <div className="border border-gray-300 p-2 flex flex-col justify-between">
@@ -748,69 +903,44 @@
                                 </div>
                             </div>
 
-                            {/* COLUNA 2: PERÍCIAS */}
-                            <div className={`lg:col-span-5 flex-col sm:grid sm:grid-cols-2 gap-6 ${mobileTab === 'pericias' ? 'flex' : 'hidden md:grid'}`}>
-                                {}
-                                <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
-                                        <span>PERÍCIAS</span>
-                                        <span className="text-[10px] font-normal self-center hidden sm:inline" title="T: Treinada (Dobro da Base) | Av: Avanço">T: Treinar | Av: Avanço</span>
-                                    </h2>
-                                    <div className="space-y-1">
-                                        {data.periciasBase.map((pericia, index) => {
-                                            const attrValue = data.atributos[pericia.attr.toLowerCase()]?.valor || 10;
-                                            const baseChance = getChanceBase(attrValue);
-                                            return (
-                                                <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer" title="Marcação de Avanço" />
-                                                    <button 
-                                                        onClick={() => toggleTreinada('periciasBase', index)}
-                                                        className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
-                                                        title="Perícia Treinada (Calcula 2x a Base)"
-                                                    >
-                                                        T
-                                                    </button>
-                                                    <span className="flex-1 font-bold text-sm text-gray-800">
-                                                        {pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span>
-                                                    </span>
-                                                    <div className="flex flex-col items-center">
-                                                        <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                        <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                            <div className={`lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
+                                <div className="flex justify-end mb-3 no-print">
+                                    <button 
+                                        onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)}
+                                        className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors"
+                                        title="Inverter lados ou posições (Armas vs Base)"
+                                    >
+                                        <SVGIcons.Refresh /> Alternar Ordem das Perícias
+                                    </button>
                                 </div>
-
-                                {/* Lado Direito: Armas e Secundárias */}
-                                <div className="space-y-6 mt-6 sm:mt-0">
-                                    {}
-                                    <div>
+                                <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6">
+                                    
+                                    <div className={`flex flex-col ${data.status?.armasPrimeiro ? 'order-2' : 'order-1'}`}>
                                         <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
-                                            <span>ARMAS (PERÍCIAS)</span>
-                                            <span className="text-[10px] font-normal self-center hidden sm:inline" title="T: Treinada (Dobro da Base) | Av: Avanço">T: Treinar | Av: Avanço</span>
+                                            <span>PERÍCIAS</span>
+                                            <span className="text-[10px] font-normal self-center hidden sm:inline">T: Treinar | Av: Avanço</span>
                                         </h2>
                                         <div className="space-y-1">
-                                            {data.periciasArmas.map((pericia, index) => {
+                                            {data.periciasBase.map((pericia, index) => {
                                                 const attrValue = data.atributos[pericia.attr.toLowerCase()]?.valor || 10;
                                                 const baseChance = getChanceBase(attrValue);
                                                 return (
                                                     <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer" title="Marcação de Avanço" />
+                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Marcação de Avanço" />
                                                         <button 
-                                                            onClick={() => toggleTreinada('periciasArmas', index)}
-                                                            className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
+                                                            onClick={() => toggleTreinada('periciasBase', index)}
+                                                            className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
                                                             title="Perícia Treinada (Calcula 2x a Base)"
                                                         >
                                                             T
                                                         </button>
+                                                        {isPrintMode && <span className="text-[10px] text-gray-400 mr-1 border border-gray-300 px-1 rounded">{pericia.treinada ? 'T' : '\u00A0\u00A0'}</span>}
                                                         <span className="flex-1 font-bold text-sm text-gray-800">
                                                             {pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span>
                                                         </span>
                                                         <div className="flex flex-col items-center">
-                                                            <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                            <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
+                                                            <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                            {!isPrintMode && <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>}
                                                         </div>
                                                     </div>
                                                 );
@@ -818,32 +948,67 @@
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <div className="flex justify-between items-center bg-gray-300 px-2 py-1 mb-2 rounded-sm">
-                                            <h3 className="font-title font-bold text-[10px] sm:text-[11px]">SECUNDÁRIAS (Magia, etc)</h3>
-                                            <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: 'INT', valor: '', avanco: false })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                    <div className={`space-y-6 flex flex-col ${data.status?.armasPrimeiro ? 'order-1' : 'order-2'}`}>
+                                        
+                                        <div>
+                                            <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
+                                                <span>ARMAS <span className="text-[10px] font-normal uppercase">(Perícias)</span></span>
+                                            </h2>
+                                            <div className="space-y-1">
+                                                {data.periciasArmas.map((pericia, index) => {
+                                                    const attrValue = data.atributos[pericia.attr.toLowerCase()]?.valor || 10;
+                                                    const baseChance = getChanceBase(attrValue);
+                                                    return (
+                                                        <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
+                                                            <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Marcação de Avanço" />
+                                                            <button 
+                                                                onClick={() => toggleTreinada('periciasArmas', index)}
+                                                                className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
+                                                                title="Perícia Treinada (Calcula 2x a Base)"
+                                                            >
+                                                                T
+                                                            </button>
+                                                            {isPrintMode && <span className="text-[10px] text-gray-400 mr-1 border border-gray-300 px-1 rounded">{pericia.treinada ? 'T' : '\u00A0\u00A0'}</span>}
+                                                            <span className="flex-1 font-bold text-sm text-gray-800">
+                                                                {pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span>
+                                                            </span>
+                                                            <div className="flex flex-col items-center">
+                                                                <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 md:w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                                {!isPrintMode && <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
-                                        <div className="space-y-1">
-                                            {data.periciasSecundarias.map((pericia, index) => (
-                                                <div key={index} className="flex items-center gap-1 p-1 rounded">
-                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasSecundarias', index, 'avanco', e.target.checked)} className="cursor-pointer" />
-                                                    <input type="text" value={pericia.nome} placeholder="Nome" onChange={e => updateArrayField('periciasSecundarias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
-                                                    <input type="text" value={pericia.attr} placeholder="At" onChange={e => updateArrayField('periciasSecundarias', index, 'attr', e.target.value)} className="w-6 md:w-8 text-center border-b border-gray-400 outline-none bg-transparent text-[10px]" />
-                                                    <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasSecundarias', index, 'valor', e.target.value)} className="w-8 md:w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                    <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 no-print ml-1"><SVGIcons.Trash/></button>
-                                                </div>
-                                            ))}
+
+                                        <div>
+                                            <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
+                                                <h3 className="font-title font-bold text-sm text-gray-700 sub-title-text">SECUNDÁRIAS <span className="text-[10px] font-normal">(MAGIA, ETC)</span></h3>
+                                                <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: '', valor: '', avanco: false })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {data.periciasSecundarias.length === 0 && <p className="text-[10px] text-gray-400 text-center italic">Nenhuma perícia adicionada.</p>}
+                                                {data.periciasSecundarias.map((pericia, index) => (
+                                                    <div key={index} className="flex items-center gap-1 p-1 rounded hover:bg-gray-100">
+                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasSecundarias', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                        <input type="text" value={pericia.nome} placeholder="Nome" onChange={e => updateArrayField('periciasSecundarias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
+                                                        <input type="text" value={pericia.attr} placeholder="At" onChange={e => updateArrayField('periciasSecundarias', index, 'attr', e.target.value)} className="w-6 md:w-8 text-center border-b border-gray-400 outline-none bg-transparent text-[10px]" />
+                                                        <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasSecundarias', index, 'valor', e.target.value)} className="w-8 md:w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                        <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 no-print ml-1"><SVGIcons.Trash/></button>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* COLUNA 3: EQUIPAMENTO E HABILIDADES */}
                             <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
                                 <div>
-                                    <div className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm">
+                                    <div className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm header-print">
                                         <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
-                                        <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                        <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
                                     </div>
                                     <div className="space-y-2">
                                         {data.habilidadesFeiticos.length === 0 && <p className="text-xs text-gray-500 italic text-center">Nenhuma habilidade adicionada.</p>}
@@ -888,51 +1053,68 @@
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center bg-gray-300 px-2 py-1 mb-2 rounded-sm">
-                                        <h3 className="font-title font-bold text-sm">ARMAS E ESCUDOS</h3>
-                                        <button onClick={() => addToArray('armas', { nome: '', emp: '', alcance: '', dano: '', dur: '', tracos: '' })} className="text-xs bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1"><SVGIcons.Plus/> Adicionar</button>
-                                    </div>
-                                    <div className="space-y-4">
-                                        {data.armas.length === 0 && <p className="text-xs text-gray-500 italic text-center">Nenhuma arma adicionada.</p>}
-                                        {data.armas.map((arma, index) => (
-                                            <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 relative print-break">
-                                                <button onClick={() => removeFromArray('armas', index)} className="absolute top-2 right-2 text-red-500 hover:text-red-700 no-print"><SVGIcons.Trash/></button>
-                                                <input type="text" value={arma.nome} placeholder="Nome da Arma" onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-10/12 border-b border-gray-400 outline-none bg-transparent text-sm font-bold mb-2" />
-                                                <div className="flex gap-1 sm:gap-2 text-xs">
-                                                    <div className="w-10"><label className="block text-[10px] text-gray-500 uppercase">Emp</label><input type="text" value={arma.emp} onChange={e => updateArrayField('armas', index, 'emp', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
-                                                    <div className="w-12"><label className="block text-[10px] text-gray-500 uppercase">Alc.</label><input type="text" value={arma.alcance} onChange={e => updateArrayField('armas', index, 'alcance', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
-                                                    <div className="flex-1"><label className="block text-[10px] text-gray-500 uppercase">Dano</label><input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b outline-none bg-transparent font-bold" /></div>
-                                                    <div className="w-10"><label className="block text-[10px] text-gray-500 uppercase">Dur.</label><input type="text" value={arma.dur} onChange={e => updateArrayField('armas', index, 'dur', e.target.value)} className="w-full border-b outline-none bg-transparent" /></div>
-                                                </div>
-                                                <div className="mt-2">
-                                                    <label className="block text-[10px] text-gray-500 uppercase">Traços / Efeitos</label>
-                                                    <textarea rows="2" value={arma.tracos} onChange={e => updateArrayField('armas', index, 'tracos', e.target.value)} className="w-full border border-gray-300 rounded bg-white outline-none p-1 text-xs resize-y" placeholder="Propriedades especiais..."></textarea>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">INVENTÁRIO</h2>
-                                    
-                                    <div className="flex gap-2 mb-3">
-                                        <div className="flex-1 border p-2 text-center rounded bg-yellow-50">
-                                            <label className="block text-[10px] font-bold text-yellow-700 uppercase">Ouro</label>
-                                            <input type="number" value={data.moedas.ouro} onChange={e => updateField('moedas.ouro', e.target.value)} className="w-full text-center bg-transparent outline-none font-bold text-lg" />
+                                    <div className="mb-6">
+                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
+                                            <h3 className="font-title font-bold text-sm text-gray-700 sub-title-text">ARMAS E ESCUDOS</h3>
+                                            <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm uppercase font-bold hide-in-print-mode"><SVGIcons.Plus/> Adicionar</button>
                                         </div>
-                                        <div className="flex-1 border p-2 text-center rounded bg-gray-100">
-                                            <label className="block text-[10px] font-bold text-gray-500 uppercase">Prata</label>
-                                            <input type="number" value={data.moedas.prata} onChange={e => updateField('moedas.prata', e.target.value)} className="w-full text-center bg-transparent outline-none font-bold text-lg" />
-                                        </div>
-                                        <div className="flex-1 border p-2 text-center rounded bg-orange-50">
-                                            <label className="block text-[10px] font-bold text-orange-700 uppercase">Cobre</label>
-                                            <input type="number" value={data.moedas.cobre} onChange={e => updateField('moedas.cobre', e.target.value)} className="w-full text-center bg-transparent outline-none font-bold text-lg" />
+                                        <div className="space-y-3">
+                                            {data.armas.length === 0 && <p className="text-[10px] text-gray-500 italic text-center">Nenhuma arma adicionada.</p>}
+                                            {data.armas.map((arma, index) => (
+                                                <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 shadow-sm flex flex-col gap-2">
+                                                    <div className="flex gap-2 items-end">
+                                                        <div className="flex-1">
+                                                            <label className="block text-[9px] font-bold text-gray-500 uppercase">Arma / Escudo</label>
+                                                            <input type="text" value={arma.nome} onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} placeholder="Nome..." className="w-full border-b border-gray-400 outline-none text-sm font-bold bg-transparent"/>
+                                                        </div>
+                                                        <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 no-print mb-1"><SVGIcons.Trash/></button>
+                                                    </div>
+                                                    <div className="grid grid-cols-3 gap-2">
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase">Empunh.</label>
+                                                            <input type="text" value={arma.empunhadura} onChange={e => updateArrayField('armas', index, 'empunhadura', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent"/>
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase">Alcance</label>
+                                                            <input type="text" value={arma.alcance} onChange={e => updateArrayField('armas', index, 'alcance', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent"/>
+                                                        </div>
+                                                        <div>
+                                                            <label className="text-[9px] font-bold text-gray-500 uppercase">Dano</label>
+                                                            <input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent font-bold"/>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-[9px] font-bold text-gray-500 uppercase">Traços</label>
+                                                        <textarea rows="1" value={arma.tracos} onChange={e => updateArrayField('armas', index, 'tracos', e.target.value)} className="w-full border border-gray-200 rounded outline-none text-xs bg-white p-1 resize-y" placeholder="Corte, Perfurante..."></textarea>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
 
-                                    <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none focus:border-red-600 bg-gray-50 resize-y" placeholder="Itens, equipamentos, suprimentos de viagem..."></textarea>
+                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm mt-6">INVENTÁRIO</h2>
                                     
+                                    <div className="grid grid-cols-3 gap-2 mb-3">
+                                        <div className="border-2 border-yellow-200 bg-yellow-50 rounded flex flex-col items-center justify-center p-2 shadow-sm">
+                                            <label className="text-[10px] font-bold text-yellow-700 uppercase mb-1">Ouro</label>
+                                            <input type="number" value={data.moedas.ouro} onChange={e => updateField('moedas.ouro', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-yellow-900" />
+                                        </div>
+                                        <div className="border-2 border-gray-200 bg-gray-50 rounded flex flex-col items-center justify-center p-2 shadow-sm">
+                                            <label className="text-[10px] font-bold text-gray-500 uppercase mb-1">Prata</label>
+                                            <input type="number" value={data.moedas.prata} onChange={e => updateField('moedas.prata', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-gray-800" />
+                                        </div>
+                                        <div className="border-2 border-orange-200 bg-orange-50 rounded flex flex-col items-center justify-center p-2 shadow-sm">
+                                            <label className="text-[10px] font-bold text-orange-800 uppercase mb-1">Cobre</label>
+                                            <input type="number" value={data.moedas.cobre} onChange={e => updateField('moedas.cobre', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-orange-900" />
+                                        </div>
+                                    </div>
+
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1 mt-2">Equipamento e Suprimentos</label>
+                                    <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none focus:border-red-600 bg-gray-50 resize-y mb-3" placeholder="Itens, equipamentos, suprimentos de viagem..."></textarea>
+                                    
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Itens Miúdos</label>
+                                    <textarea rows="3" value={data.itensMiudos || ''} onChange={e => updateField('itensMiudos', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none focus:border-red-600 bg-gray-50 resize-y" placeholder="Objetos minúsculos que não afetam a sobrecarga (ex: chaves, joias, relíquias)..."></textarea>
+
                                     <div className="mt-4 pb-10 md:pb-0">
                                         <label className="block text-xs font-bold text-gray-500 uppercase">Memento (Item Especial)</label>
                                         <input type="text" value={data.bio.memento} onChange={e => updateField('bio.memento', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" placeholder="Ex: Cachimbo esculpido..." />
@@ -942,7 +1124,6 @@
                         </div>
                     </div>
                     
-                    {/* Floating Toast inside Editor */}
                     {toastMsg && (
                         <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
                             {toastMsg}
