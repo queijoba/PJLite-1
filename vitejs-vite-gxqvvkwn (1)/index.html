@@ -234,7 +234,7 @@
 
             const saveToLocal = (charData) => {
                 let chars = getSavedCharacters();
-                let savingData = { ...charData };
+                let savingData = JSON.parse(JSON.stringify(charData));
                 if (!savingData.id) {
                     savingData.id = Date.now().toString();
                 }
@@ -255,13 +255,13 @@
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
                 if (char) {
-                    setData(char);
+                    setData(JSON.parse(JSON.stringify(char)));
                     setView('editor');
                 }
             };
 
             const createNewCharacter = () => {
-                setData({ ...initialData, id: Date.now().toString() });
+                setData(JSON.parse(JSON.stringify({ ...initialData, id: Date.now().toString() })));
                 setView('editor');
                 setMobileTab('status');
             };
@@ -399,32 +399,11 @@
                     downloadAnchorNode.remove();
                     URL.revokeObjectURL(url);
                     
-                    showToast("Ficha exportada em .ZIP! Extraia para pegar o arquivo .json.");
+                    showToast("Ficha exportada em .ZIP! Extraia o arquivo para importar o .json.");
                 } catch (error) {
                     showToast("Erro ao exportar o arquivo ZIP.");
                     console.error(error);
                 }
-            };
-
-            const handleExportPDF = () => {
-                const wasPrintMode = isPrintMode;
-                if (!wasPrintMode) setIsPrintMode(true);
-
-                setTimeout(() => {
-                    const element = document.getElementById('ficha-print-area');
-                    const opt = {
-                        margin:       10,
-                        filename:     `Dragonbane_${data.bio.nome || 'Personagem'}.pdf`,
-                        image:        { type: 'jpeg', quality: 0.98 },
-                        html2canvas:  { scale: 2, useCORS: true },
-                        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-
-                    html2pdf().from(element).set(opt).save().then(() => {
-                        if (!wasPrintMode) setIsPrintMode(false);
-                        showToast("PDF gerado com sucesso!");
-                    });
-                }, 300);
             };
 
             const handleImport = (event) => {
@@ -536,10 +515,10 @@
                                 <div>
                                     <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
                                     <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.2.0v:</strong> Adição de exportação direta em PDF otimizada para celular/PC e guias explicativos detalhados no menu principal.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.8v:</strong> Exportação de fichas alterada para arquivo .ZIP garantindo maior compatibilidade mobile, e retorno do quadro de moedas no inventário.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.7v:</strong> Adição de campo para Itens Miúdos no inventário e botão para inverter ordem de visualização das Perícias (Base x Armas).</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.6v:</strong> Dashboard com seleção de modelos de ficha, inclusão de aviso de Open Source, Log de versão e link para plataforma parceira.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.2.0v:</strong> Adição de Modelo de Impressão minimalista, guias detalhados sobre exportação/importação e dicas de escala de impressão.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.8v:</strong> Exportação de fichas em arquivo .ZIP e reestilização completa do inventário e moedas.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.7v:</strong> Adição de campo para Itens Miúdos e botão para alternar a ordem de exibição das Perícias.</p>
+                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.6v:</strong> Dashboard de gerenciamento de pastas, aviso Open Source e link para a DMLite.</p>
                                     </div>
                                 </div>
 
@@ -634,7 +613,7 @@
                                         {guideTab === 'dragonbane' && (
                                             <div className="space-y-4 text-sm text-gray-700">
                                                 <h3 className="font-title font-bold text-xl text-black border-b pb-2">Passo a Passo: Sistema Dragonbane</h3>
-                                                <p>Nossa plataforma possui automações para facilitar sua mesa de jogo:</p>
+                                                <p>Nossa plataforma possui automações específicas para facilitar a sua mesa de jogo neste sistema:</p>
                                                 <ul className="space-y-4 mt-4">
                                                     <li className="bg-gray-50 p-3 rounded border border-gray-200">
                                                         <b className="text-red-800 block mb-1">1. Atributos e Automação:</b> 
@@ -663,7 +642,7 @@
 
                                                 <div className="bg-gray-50 p-4 rounded border-l-4 border-red-800 shadow-sm mt-4">
                                                     <strong className="flex items-center gap-2 text-base text-gray-800 mb-2"><SVGIcons.FileText /> Gerar PDF / Impressão Física (Em desenvolvimento ainda)</strong>
-                                                    <p>O recurso de exportação direta por botão de PDF está <b>em desenvolvimento ainda</b>. Para imprimir ou salvar em PDF agora, ative o <b>Modelo Impressão</b> e utilize o método nativo do seu dispositivo: no computador utilize o atalho de impressão <b>Ctrl + P</b> (ou Cmd + P no Mac), ou utilize a opção de imprimir / salvar como PDF pelo menu do navegador ou de compartilhamento do seu celular.</p>
+                                                    <p>O recurso de exportação direta por botão de PDF está <b>em desenvolvimento ainda</b>. Para imprimir ou salvar em PDF agora, ative o <b>Modelo Impressão</b> e utilize o método nativo do seu dispositivo: no computador utilize o atalho de impressão <b>Ctrl + P</b> (ou Cmd + P no Mac), ou utilize a opção de imprimir / salvar como PDF pelo menu do navegador ou de compartilhamento do seu celular. <span className="block mt-2 font-bold text-gray-900">💡 Dica de Visualização: Defina a escala como <b>80%</b> nas configurações de impressão para melhor encaixe e visualização perfeita na página!</span></p>
                                                 </div>
                                             </div>
                                         )}
@@ -811,18 +790,18 @@
                                 </div>
 
                                 <div>
-                                    <div className="flex justify-between items-center mb-2 no-print gap-1">
-                                        <span className="text-[10px] font-bold text-gray-500 uppercase">Automação:</span>
+                                    <div className="flex justify-between items-center mb-1 no-print">
+                                        <h2 className="font-title font-bold text-lg">VALORES DERIVADOS</h2>
                                         <div className="flex gap-1">
                                             {(!data.status?.manterDerivados) && (
-                                                <button onClick={syncDerivados} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors" title="Sincronizar cálculos com Atributos Base">
+                                                <button onClick={syncDerivados} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors" title="Sincronizar cálculos">
                                                     <SVGIcons.Refresh /> Auto
                                                 </button>
                                             )}
                                             <button 
                                                 onClick={() => updateField('status.manterDerivados', !data.status?.manterDerivados)} 
-                                                className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors ${data.status?.manterDerivados ? 'bg-green-100 hover:bg-green-200 text-green-800' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
-                                                title="Travar valores (impede atualização automática de PV, PD e Bônus)"
+                                                className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors ${data.status?.manterDerivados ? 'bg-green-100 hover:bg-green-200 text-green-800 border border-green-300' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
+                                                title="Travar valores"
                                             >
                                                 {data.status?.manterDerivados ? <SVGIcons.Lock /> : <SVGIcons.Unlock />} 
                                                 {data.status?.manterDerivados ? 'Mantendo' : 'Manter'}
@@ -905,7 +884,7 @@
                                     <button 
                                         onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)}
                                         className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors"
-                                        title="Inverter lados ou posições (Armas vs Base)"
+                                        title="Inverter Ordem"
                                     >
                                         <SVGIcons.Refresh /> Alternar Ordem das Perícias
                                     </button>
@@ -923,11 +902,11 @@
                                                 const baseChance = getChanceBase(attrValue);
                                                 return (
                                                     <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Marcação de Avanço" />
+                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Avanço" />
                                                         <button 
                                                             onClick={() => toggleTreinada('periciasBase', index)}
                                                             className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
-                                                            title="Perícia Treinada (Calcula 2x a Base)"
+                                                            title="Treinada"
                                                         >
                                                             T
                                                         </button>
@@ -957,11 +936,11 @@
                                                     const baseChance = getChanceBase(attrValue);
                                                     return (
                                                         <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                            <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Marcação de Avanço" />
+                                                            <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" title="Avanço" />
                                                             <button 
                                                                 onClick={() => toggleTreinada('periciasArmas', index)}
                                                                 className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border transition-colors shadow-sm ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400 hover:bg-gray-300'}`}
-                                                                title="Perícia Treinada (Calcula 2x a Base)"
+                                                                title="Treinada"
                                                             >
                                                                 T
                                                             </button>
