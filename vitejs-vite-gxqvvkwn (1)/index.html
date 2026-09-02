@@ -7,8 +7,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- JSZip for exporting ZIP files -->
@@ -43,7 +43,7 @@
         .print-break { page-break-inside: avoid; }
         @media print {
             body { background-color: white; }
-            .no-print { display: none; }
+            .no-print { display: none !important; }
             input, textarea { border: none !important; background: transparent !important; resize: none; }
         }
         
@@ -1006,25 +1006,36 @@
 
                                 <div>
                                     <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">COMBATE</h2>
-                                    <div className="space-y-2 mb-4">
-                                        <div className="flex gap-2 items-end">
-                                            <div className="flex-1 border p-1 rounded bg-gray-50">
-                                                <label className="block text-[10px] font-bold text-gray-500 uppercase">Armadura</label>
-                                                <input type="text" value={data.defesa.armadura.nome} onChange={e => updateField('defesa.armadura.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold" placeholder="Tipo..." />
+                                    <div className="space-y-3 mb-4">
+                                        <div className="border p-1.5 rounded bg-gray-50 space-y-1">
+                                            <div className="flex gap-2 items-end">
+                                                <div className="flex-1">
+                                                    <label className="block text-[10px] font-bold text-gray-500 uppercase">Armadura</label>
+                                                    <input type="text" value={data.defesa.armadura.nome} onChange={e => updateField('defesa.armadura.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" placeholder="Tipo..." />
+                                                </div>
+                                                <div className="w-12">
+                                                    <label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label>
+                                                    <input type="text" value={data.defesa.armadura.valor} onChange={e => updateField('defesa.armadura.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" />
+                                                </div>
                                             </div>
-                                            <div className="w-12 border p-1 rounded bg-gray-50">
-                                                <label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label>
-                                                <input type="text" value={data.defesa.armadura.valor} onChange={e => updateField('defesa.armadura.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold" />
+                                            <div>
+                                                <input type="text" value={data.defesa.armadura.reves} onChange={e => updateField('defesa.armadura.reves', e.target.value)} className="w-full bg-transparent outline-none text-[11px] text-gray-600 italic border-b border-gray-200" placeholder="Revés (ex: - revés em acrobatismo, furtividade)..." />
                                             </div>
                                         </div>
-                                        <div className="flex gap-2 items-end">
-                                            <div className="flex-1 border p-1 rounded bg-gray-50">
-                                                <label className="block text-[10px] font-bold text-gray-500 uppercase">Elmo</label>
-                                                <input type="text" value={data.defesa.elmo.nome} onChange={e => updateField('defesa.elmo.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold" placeholder="Tipo..." />
+
+                                        <div className="border p-1.5 rounded bg-gray-50 space-y-1">
+                                            <div className="flex gap-2 items-end">
+                                                <div className="flex-1">
+                                                    <label className="block text-[10px] font-bold text-gray-500 uppercase">Elmo</label>
+                                                    <input type="text" value={data.defesa.elmo.nome} onChange={e => updateField('defesa.elmo.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" placeholder="Tipo..." />
+                                                </div>
+                                                <div className="w-12">
+                                                    <label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label>
+                                                    <input type="text" value={data.defesa.elmo.valor} onChange={e => updateField('defesa.elmo.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" />
+                                                </div>
                                             </div>
-                                            <div className="w-12 border p-1 rounded bg-gray-50">
-                                                <label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label>
-                                                <input type="text" value={data.defesa.elmo.valor} onChange={e => updateField('defesa.elmo.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold" />
+                                            <div>
+                                                <input type="text" value={data.defesa.elmo.reves} onChange={e => updateField('defesa.elmo.reves', e.target.value)} className="w-full bg-transparent outline-none text-[11px] text-gray-600 italic border-b border-gray-200" placeholder="Revés (ex: - revés em percepção à distância)..." />
                                             </div>
                                         </div>
                                     </div>
