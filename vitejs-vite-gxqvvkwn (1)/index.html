@@ -13,8 +13,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- JSZip for exporting ZIP files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- html2pdf.js for generating PDF files on mobile and desktop -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
@@ -54,7 +52,7 @@
         }
         .print-mode-active .bg-dragon-dark {
             background-color: transparent !important;
-            color: #4b5563 !important; /* gray-600 */
+            color: #4b5563 !important;
             border-bottom: 1px solid #9ca3af !important;
             font-weight: 700 !important;
         }
@@ -87,6 +85,35 @@
             border-bottom: 1px solid #9ca3af !important;
         }
         .print-mode-active .hide-in-print-mode { display: none !important; }
+
+        /* --- TEMA CLÁSSICO DRAGONBANE --- */
+        body.theme-classic {
+            background-color: #dcd4be !important;
+        }
+        body.theme-classic .max-w-6xl, body.theme-classic .max-w-5xl {
+            background-color: #f7f3e8 !important;
+            border-color: #4a3b32 !important;
+        }
+        body.theme-classic .bg-dragon-dark {
+            background-color: #1b3b34 !important; /* Verde petróleo clássico */
+            color: #f9f6ef !important;
+        }
+        body.theme-classic .border-dragon-dark {
+            border-color: #5c4a3d !important;
+        }
+        body.theme-classic input, body.theme-classic textarea {
+            border-color: #b39f83 !important;
+        }
+        body.theme-classic .bg-gray-50, body.theme-classic .bg-gray-100 {
+            background-color: #f2ece1 !important;
+        }
+
+        /* --- TEMA PERSONALIZADO --- */
+        body.theme-custom {
+            background-size: cover !important;
+            background-position: center !important;
+            background-attachment: fixed !important;
+        }
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -94,6 +121,20 @@
 
     <script type="text/babel">
         const { useState, useEffect } = React;
+
+        const STORAGE_KEY = 'dragonbane_saved_characters';
+        const THEME_PREF_KEY = 'dragonbane_theme_prefs';
+        const CUSTOM_BG_KEY = 'dragonbane_custom_bg';
+        const CUSTOM_WIN_COLOR_KEY = 'dragonbane_custom_win_color';
+        const CUSTOM_BAR_COLOR_KEY = 'dragonbane_custom_bar_color';
+        const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
+
+        const UPDATE_LOG = [
+            { versao: '0.2.2v', descricao: 'Adição de personalização avançada para o tema personalizado (cor de janelas, cor de barras e opacidade) e log de atualizações rotativo.' },
+            { versao: '0.2.1v', descricao: 'Adição de Seletor de Tema Visual (Padrão, Clássico Dragonbane com estilo pergaminho e verde petróleo, e Tema Personalizado com fundo de imagem).' },
+            { versao: '0.2.0v', descricao: 'Adição de Modelo de Impressão minimalista, guias detalhados sobre exportação/importação e dicas de escala de impressão.' },
+            { versao: '0.1.8v', descricao: 'Exportação de fichas em arquivo .ZIP e reestilização completa do inventário e moedas.' }
+        ];
 
         const initialData = {
             id: '',
@@ -176,10 +217,10 @@
             Printer: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>,
             FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
             HelpCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>,
-            Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
+            Palette: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.504 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
         };
 
-        const STORAGE_KEY = 'dragonbane_saved_characters';
         const getSavedCharacters = () => {
             try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
             catch { return []; }
@@ -217,11 +258,37 @@
             return base + mod;
         };
 
+        const hexToRgb = (hex) => {
+            let cleaned = hex.replace('#', '');
+            if (cleaned.length === 3) {
+                cleaned = cleaned.split('').map(c => c + c).join('');
+            }
+            const num = parseInt(cleaned, 16);
+            return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+        };
+
         function App() {
             const [view, setView] = useState('dashboard');
             const [savedChars, setSavedChars] = useState(getSavedCharacters());
             const [data, setData] = useState(initialData);
             
+            const [theme, setTheme] = useState(() => {
+                try { return localStorage.getItem(THEME_PREF_KEY) || 'default'; } catch { return 'default'; }
+            });
+            const [customBgUrl, setCustomBgUrl] = useState(() => {
+                try { return localStorage.getItem(CUSTOM_BG_KEY) || ''; } catch { return ''; }
+            });
+            const [customWinColor, setCustomWinColor] = useState(() => {
+                try { return localStorage.getItem(CUSTOM_WIN_COLOR_KEY) || '#ffffff'; } catch { return '#ffffff'; }
+            });
+            const [customBarColor, setCustomBarColor] = useState(() => {
+                try { return localStorage.getItem(CUSTOM_BAR_COLOR_KEY) || '#1a1a1a'; } catch { return '#1a1a1a'; }
+            });
+            const [customOpacity, setCustomOpacity] = useState(() => {
+                try { return localStorage.getItem(CUSTOM_OPACITY_KEY) || '0.93'; } catch { return '0.93'; }
+            });
+
+            const [showCustomBgModal, setShowCustomBgModal] = useState(false);
             const [showUrlInput, setShowUrlInput] = useState(false);
             const [tempUrl, setTempUrl] = useState('');
             const [mobileTab, setMobileTab] = useState('status');
@@ -231,6 +298,36 @@
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
             const [isPrintMode, setIsPrintMode] = useState(false);
+
+            useEffect(() => {
+                try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'custom' ? 'theme-custom' : ''}`;
+            }, [theme]);
+
+            useEffect(() => {
+                if (theme === 'custom' && customBgUrl) {
+                    document.body.style.backgroundImage = `url(${customBgUrl})`;
+                } else {
+                    document.body.style.backgroundImage = '';
+                }
+            }, [theme, customBgUrl]);
+
+            const getWindowStyle = () => {
+                if (theme !== 'custom') return {};
+                const [r, g, b] = hexToRgb(customWinColor);
+                return {
+                    backgroundColor: `rgba(${r}, ${g}, ${b}, ${customOpacity})`,
+                    backdropFilter: 'blur(5px)'
+                };
+            };
+
+            const getBarStyle = () => {
+                if (theme !== 'custom') return {};
+                return {
+                    backgroundColor: customBarColor,
+                    color: '#ffffff'
+                };
+            };
 
             const saveToLocal = (charData) => {
                 let chars = getSavedCharacters();
@@ -450,9 +547,28 @@
             if (view === 'dashboard') {
                 return (
                     <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4">
-                        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
                             <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
-                            <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center">
+                            <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
+                                {/* Seletor de Tema Visual */}
+                                <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
+                                    <SVGIcons.Palette />
+                                    <select 
+                                        value={theme} 
+                                        onChange={(e) => {
+                                            if (e.target.value === 'custom') {
+                                                setShowCustomBgModal(true);
+                                            } else {
+                                                setTheme(e.target.value);
+                                            }
+                                        }} 
+                                        className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer"
+                                    >
+                                        <option value="default">Tema: Padrão</option>
+                                        <option value="classic">Tema: Clássico Dragonbane</option>
+                                        <option value="custom">Tema: Personalizado...</option>
+                                    </select>
+                                </div>
                                 <button onClick={() => setShowGuideModal(true)} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.HelpCircle /> Guias & Tutoriais
                                 </button>
@@ -467,7 +583,7 @@
                         </div>
 
                         {savedChars.length === 0 ? (
-                            <div className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
+                            <div style={getWindowStyle()} className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
                                 <SVGIcons.User />
                                 <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
                                 <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON extraída de um arquivo ZIP.</p>
@@ -475,7 +591,7 @@
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {savedChars.map(char => (
-                                    <div key={char.id} className="bg-white rounded-md shadow-lg border-2 border-dragon-dark overflow-hidden flex flex-col">
+                                    <div key={char.id} style={getWindowStyle()} className="bg-white rounded-md shadow-lg border-2 border-dragon-dark overflow-hidden flex flex-col">
                                         <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
                                             <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
                                                 {char.bio.imagem ? (
@@ -504,21 +620,21 @@
                             </div>
                         )}
                         
-                        <div className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
-                            <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                        {}
+                        <div style={getWindowStyle()} className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden no-print">
+                            <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                 <h2 className="font-title font-bold text-lg flex items-center gap-2">
                                     Sobre o Projeto & Atualizações
                                 </h2>
-                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">Alpha 0.2.0v</span>
+                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">{UPDATE_LOG[0].versao}</span>
                             </div>
                             <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 <div>
                                     <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
                                     <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.2.0v:</strong> Adição de Modelo de Impressão minimalista, guias detalhados sobre exportação/importação e dicas de escala de impressão.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.8v:</strong> Exportação de fichas em arquivo .ZIP e reestilização completa do inventário e moedas.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.7v:</strong> Adição de campo para Itens Miúdos e botão para alternar a ordem de exibição das Perícias.</p>
-                                        <p><strong className="text-black bg-gray-200 px-1 rounded">v0.1.6v:</strong> Dashboard de gerenciamento de pastas, aviso Open Source e link para a DMLite.</p>
+                                        {UPDATE_LOG.slice(0, 6).map((log, idx) => (
+                                            <p key={idx}><strong className="text-black bg-gray-200 px-1 rounded">{log.versao}:</strong> {log.descricao}</p>
+                                        ))}
                                     </div>
                                 </div>
 
@@ -534,17 +650,128 @@
                                         </div>
                                     </div>
                                     
-                                    <a href="https://dmliterpg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-dragon-dark hover:bg-gray-900 text-white font-title font-bold text-lg py-4 px-4 rounded shadow-lg transition-transform transform hover:scale-[1.02]">
+                                    <a style={getBarStyle()} href="https://dmliterpg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-dragon-dark hover:bg-gray-900 text-white font-title font-bold text-lg py-4 px-4 rounded shadow-lg transition-transform transform hover:scale-[1.02]">
                                         Visite a Plataforma DMLite 🐉
                                     </a>
                                 </div>
                             </div>
                         </div>
 
+                        {}
+                        {showCustomBgModal && (
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
+                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
+                                    <div className="flex justify-between items-center border-b pb-2">
+                                        <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
+                                        <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
+                                    </div>
+                                    <p className="text-xs text-gray-600">Personalize a imagem de fundo, cores das janelas, barras e opacidade:</p>
+                                    
+                                    <div className="space-y-3 pt-2">
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-700 mb-1">Imagem de Fundo</label>
+                                            <div className="flex gap-2">
+                                                <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark hover:bg-black text-white py-2 px-3 rounded text-center font-bold text-xs shadow flex-1">
+                                                    Carregar Imagem
+                                                    <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                                                        const file = e.target.files[0];
+                                                        if (file) {
+                                                            const reader = new FileReader();
+                                                            reader.onload = (ev) => {
+                                                                setCustomBgUrl(ev.target.result);
+                                                                localStorage.setItem(CUSTOM_BG_KEY, ev.target.result);
+                                                                setTheme('custom');
+                                                                showToast("Fundo personalizado aplicado!");
+                                                            };
+                                                            reader.readAsDataURL(file);
+                                                        }
+                                                    }} />
+                                                </label>
+                                                <button onClick={() => {
+                                                    const url = prompt('Cole a URL da imagem de fundo:');
+                                                    if (url) {
+                                                        setCustomBgUrl(url);
+                                                        localStorage.setItem(CUSTOM_BG_KEY, url);
+                                                        setTheme('custom');
+                                                        showToast("Fundo personalizado aplicado!");
+                                                    }
+                                                }} className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-3 rounded font-bold text-xs shadow flex-1">
+                                                    Colar URL
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center justify-between border-t pt-3">
+                                            <label className="text-xs font-bold text-gray-700">Cor das Janelas</label>
+                                            <input 
+                                                type="color" 
+                                                value={customWinColor} 
+                                                onChange={(e) => {
+                                                    setCustomWinColor(e.target.value);
+                                                    localStorage.setItem(CUSTOM_WIN_COLOR_KEY, e.target.value);
+                                                    setTheme('custom');
+                                                }} 
+                                                className="w-10 h-8 rounded cursor-pointer border border-gray-300"
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center justify-between border-t pt-3">
+                                            <label className="text-xs font-bold text-gray-700">Cor das Barras & Cabeçalhos</label>
+                                            <input 
+                                                type="color" 
+                                                value={customBarColor} 
+                                                onChange={(e) => {
+                                                    setCustomBarColor(e.target.value);
+                                                    localStorage.setItem(CUSTOM_BAR_COLOR_KEY, e.target.value);
+                                                    setTheme('custom');
+                                                }} 
+                                                className="w-10 h-8 rounded cursor-pointer border border-gray-300"
+                                            />
+                                        </div>
+
+                                        <div className="border-t pt-3">
+                                            <div className="flex justify-between items-center mb-1">
+                                                <label className="text-xs font-bold text-gray-700">Opacidade do Fundo das Janelas</label>
+                                                <span className="text-xs font-bold text-gray-500">{Math.round(parseFloat(customOpacity) * 100)}%</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="0.2" 
+                                                max="1" 
+                                                step="0.05" 
+                                                value={customOpacity} 
+                                                onChange={(e) => {
+                                                    setCustomOpacity(e.target.value);
+                                                    localStorage.setItem(CUSTOM_OPACITY_KEY, e.target.value);
+                                                    setTheme('custom');
+                                                }} 
+                                                className="w-full cursor-pointer"
+                                            />
+                                        </div>
+
+                                        {customBgUrl && (
+                                            <button onClick={() => {
+                                                setCustomBgUrl('');
+                                                localStorage.removeItem(CUSTOM_BG_KEY);
+                                                setTheme('default');
+                                                showToast("Fundo personalizado removido.");
+                                            }} className="w-full bg-red-50 hover:bg-red-100 text-red-800 py-2 px-4 rounded font-bold text-sm border border-red-200 mt-2">
+                                                Remover Fundo Personalizado
+                                            </button>
+                                        )}
+                                        
+                                        <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">
+                                            Concluir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {showSystemModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
-                                    <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
+                                    <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                         <h2 className="font-title font-bold text-lg">Selecionar Modelo</h2>
                                         <button onClick={() => setShowSystemModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
@@ -555,7 +782,7 @@
                                             onClick={() => { setShowSystemModal(false); createNewCharacter(); }}
                                             className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group mb-4"
                                         >
-                                            <div className="w-14 h-14 bg-dragon-dark group-hover:bg-red-800 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">DB</div>
+                                            <div style={getBarStyle()} className="w-14 h-14 bg-dragon-dark group-hover:bg-red-800 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">DB</div>
                                             <div className="flex-1">
                                                 <h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">Dragonbane</h3>
                                                 <p className="text-xs text-gray-500">Mitos, Magia e Aventuras Clássicas</p>
@@ -579,8 +806,8 @@
 
                         {showGuideModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
-                                    <div className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                         <h2 className="font-title font-bold text-lg flex items-center gap-2"><SVGIcons.HelpCircle /> Guias e Tutoriais</h2>
                                         <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
@@ -661,15 +888,34 @@
             }
 
             return (
-                <div className={`max-w-6xl mx-auto bg-white rounded-sm transition-all duration-300 ${isPrintMode ? 'print-mode-active border border-gray-200' : 'shadow-xl border-2 border-dragon-dark'}`}>
-                    <div className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : 'bg-dragon-dark text-white'}`}>
+                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm transition-all duration-300 ${isPrintMode ? 'print-mode-active border border-gray-200' : 'shadow-xl border-2 border-dragon-dark'}`}>
+                    <div style={getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : 'bg-dragon-dark text-white'}`}>
                         <div className="flex items-center gap-4">
                             <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Pastas</span>
                             </button>
                             <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text ${isPrintMode ? '' : 'text-red-500'}`}>DRAGONBANE</span>
                         </div>
-                        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+                        <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
+                            {/* Seletor de Tema no Editor */}
+                            <div className={`flex items-center gap-1 border rounded px-2 py-1 shadow-sm ${isPrintMode ? 'border-gray-300 text-gray-700' : 'border-gray-600 bg-gray-800 text-white'}`}>
+                                <SVGIcons.Palette />
+                                <select 
+                                    value={theme} 
+                                    onChange={(e) => {
+                                        if (e.target.value === 'custom') {
+                                            setShowCustomBgModal(true);
+                                        } else {
+                                            setTheme(e.target.value);
+                                        }
+                                    }} 
+                                    className="bg-transparent font-bold text-xs outline-none cursor-pointer"
+                                >
+                                    <option value="default" className="text-black">Tema: Padrão</option>
+                                    <option value="classic" className="text-black">Tema: Clássico</option>
+                                    <option value="custom" className="text-black">Tema: Personalizado...</option>
+                                </select>
+                            </div>
                             <button onClick={() => setIsPrintMode(!isPrintMode)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
                                 <SVGIcons.Printer /> {isPrintMode ? 'Modo Padrão' : 'Modelo Impressão'}
                             </button>
@@ -698,7 +944,7 @@
                         ))}
                     </div>
 
-                    <div id="ficha-print-area" className="p-4 md:p-8 space-y-8 bg-white">
+                    <div id="ficha-print-area" className="p-4 md:p-8 space-y-8 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                         <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
                             <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
                                 <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
@@ -774,7 +1020,7 @@
                             
                             <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
                                 <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
+                                    <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
                                     <div className="grid grid-cols-2 gap-4">
                                         {Object.keys(data.atributos).map(attr => (
                                             <div key={attr} className="border-2 border-gray-300 p-2 text-center rounded bg-gray-50 relative">
@@ -808,7 +1054,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">
+                                    <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">
                                         VALORES DERIVADOS
                                     </h2>
                                     <div className="grid grid-cols-2 gap-2 text-sm font-bold uppercase">
@@ -892,7 +1138,7 @@
                                 <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6">
                                     
                                     <div className={`flex flex-col ${data.status?.armasPrimeiro ? 'order-2' : 'order-1'}`}>
-                                        <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
+                                        <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
                                             <span>PERÍCIAS</span>
                                             <span className="text-[10px] font-normal self-center hidden sm:inline">T: Treinar | Av: Avanço</span>
                                         </h2>
@@ -927,7 +1173,7 @@
                                     <div className={`space-y-6 flex flex-col ${data.status?.armasPrimeiro ? 'order-1' : 'order-2'}`}>
                                         
                                         <div>
-                                            <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
+                                            <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3">
                                                 <span>ARMAS <span className="text-[10px] font-normal uppercase">(Perícias)</span></span>
                                             </h2>
                                             <div className="space-y-1">
@@ -982,7 +1228,7 @@
 
                             <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
                                 <div>
-                                    <div className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm header-print">
+                                    <div style={getBarStyle()} className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm header-print">
                                         <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
                                         <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
                                     </div>
@@ -1005,7 +1251,7 @@
                                 </div>
 
                                 <div>
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">COMBATE</h2>
+                                    <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">COMBATE</h2>
                                     <div className="space-y-3 mb-4">
                                         <div className="border p-1.5 rounded bg-gray-50 space-y-1">
                                             <div className="flex gap-2 items-end">
@@ -1079,7 +1325,7 @@
                                         </div>
                                     </div>
 
-                                    <h2 className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm mt-6">INVENTÁRIO</h2>
+                                    <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm mt-6">INVENTÁRIO</h2>
                                     
                                     <div className="grid grid-cols-3 gap-2 mb-3">
                                         <div className="border-2 border-yellow-200 bg-yellow-50 rounded flex flex-col items-center justify-center p-2 shadow-sm">
@@ -1111,6 +1357,116 @@
                         </div>
                     </div>
                     
+                    {/* Modal de Configuração de Fundo Personalizado no Editor */}
+                    {showCustomBgModal && (
+                        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity no-print">
+                            <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
+                                <div className="flex justify-between items-center border-b pb-2">
+                                    <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
+                                    <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
+                                </div>
+                                <p className="text-xs text-gray-600">Personalize a imagem de fundo, cores das janelas, barras e opacidade:</p>
+                                <div className="space-y-3 pt-2">
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Imagem de Fundo</label>
+                                        <div className="flex gap-2">
+                                            <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark hover:bg-black text-white py-2 px-3 rounded text-center font-bold text-xs shadow flex-1">
+                                                Carregar Imagem
+                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                                                    const file = e.target.files[0];
+                                                    if (file) {
+                                                        const reader = new FileReader();
+                                                        reader.onload = (ev) => {
+                                                            setCustomBgUrl(ev.target.result);
+                                                            localStorage.setItem(CUSTOM_BG_KEY, ev.target.result);
+                                                            setTheme('custom');
+                                                            showToast("Fundo personalizado aplicado!");
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }} />
+                                            </label>
+                                            <button onClick={() => {
+                                                const url = prompt('Cole a URL da imagem de fundo:');
+                                                if (url) {
+                                                    setCustomBgUrl(url);
+                                                    localStorage.setItem(CUSTOM_BG_KEY, url);
+                                                    setTheme('custom');
+                                                    showToast("Fundo personalizado aplicado!");
+                                                }
+                                            }} className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-3 rounded font-bold text-xs shadow flex-1">
+                                                Colar URL
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-between border-t pt-3">
+                                        <label className="text-xs font-bold text-gray-700">Cor das Janelas</label>
+                                        <input 
+                                            type="color" 
+                                            value={customWinColor} 
+                                            onChange={(e) => {
+                                                setCustomWinColor(e.target.value);
+                                                localStorage.setItem(CUSTOM_WIN_COLOR_KEY, e.target.value);
+                                                setTheme('custom');
+                                            }} 
+                                            className="w-10 h-8 rounded cursor-pointer border border-gray-300"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center justify-between border-t pt-3">
+                                        <label className="text-xs font-bold text-gray-700">Cor das Barras & Cabeçalhos</label>
+                                        <input 
+                                            type="color" 
+                                            value={customBarColor} 
+                                            onChange={(e) => {
+                                                setCustomBarColor(e.target.value);
+                                                localStorage.setItem(CUSTOM_BAR_COLOR_KEY, e.target.value);
+                                                setTheme('custom');
+                                            }} 
+                                            className="w-10 h-8 rounded cursor-pointer border border-gray-300"
+                                        />
+                                    </div>
+
+                                    <div className="border-t pt-3">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <label className="text-xs font-bold text-gray-700">Opacidade do Fundo das Janelas</label>
+                                            <span className="text-xs font-bold text-gray-500">{Math.round(parseFloat(customOpacity) * 100)}%</span>
+                                        </div>
+                                        <input 
+                                            type="range" 
+                                            min="0.2" 
+                                            max="1" 
+                                            step="0.05" 
+                                            value={customOpacity} 
+                                            onChange={(e) => {
+                                                setCustomOpacity(e.target.value);
+                                                localStorage.setItem(CUSTOM_OPACITY_KEY, e.target.value);
+                                                setTheme('custom');
+                                            }} 
+                                            className="w-full cursor-pointer"
+                                        />
+                                    </div>
+
+                                    {customBgUrl && (
+                                        <button onClick={() => {
+                                            setCustomBgUrl('');
+                                            localStorage.removeItem(CUSTOM_BG_KEY);
+                                            setTheme('default');
+                                            showToast("Fundo personalizado removido.");
+                                        }} className="w-full bg-red-50 hover:bg-red-100 text-red-800 py-2 px-4 rounded font-bold text-sm border border-red-200 mt-2">
+                                            Remover Fundo Personalizado
+                                        </button>
+                                    )}
+                                    
+                                    <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">
+                                        Concluir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {toastMsg && (
                         <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
                             {toastMsg}
