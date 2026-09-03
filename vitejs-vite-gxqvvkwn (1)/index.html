@@ -39,26 +39,40 @@
     <style>
         body { background-color: #e5e7eb; }
         .print-break { page-break-inside: avoid; }
+        
         @media print {
-            body { background-color: white; }
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+            body { background-color: white !important; }
             .no-print { display: none !important; }
+            
+            /* Removemos bordas dos inputs em impressão para ficar mais limpo */
             input, textarea { border: none !important; background: transparent !important; resize: none; }
             select { appearance: none; border: none !important; background: transparent !important; }
+            
+            /* Ajuste de grid para paisagem na impressão */
+            .print-landscape-grid {
+                display: grid !important;
+                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+            }
         }
         
         /* CSS para o Modelo de Impressão (Tela e Físico) */
         .print-mode-active {
             border: none !important;
             box-shadow: none !important;
+            background: white !important;
         }
         .print-mode-active .bg-dragon-dark {
             background-color: transparent !important;
             color: #4b5563 !important;
-            border-bottom: 1px solid #9ca3af !important;
+            border-bottom: 2px solid #9ca3af !important;
             font-weight: 700 !important;
         }
         .print-mode-active h2.bg-dragon-dark {
-            border-bottom: 1px solid #9ca3af !important;
+            border-bottom: 2px solid #9ca3af !important;
             color: #111827 !important;
         }
         .print-mode-active .top-bar-container {
@@ -80,6 +94,8 @@
             border: none !important;
             border-bottom: 1px solid #9ca3af !important;
             color: #4b5563 !important;
+            background: transparent !important;
+            padding-left: 0 !important;
         }
         .print-mode-active input, .print-mode-active textarea, .print-mode-active select { 
             border-color: #d1d5db !important; 
@@ -115,6 +131,15 @@
             background-position: center !important;
             background-attachment: fixed !important;
         }
+        
+        /* Animações */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -124,7 +149,7 @@
         const { useState, useEffect } = React;
 
         const STORAGE_KEY = 'dragonbane_saved_characters';
-        const THREAT_STORAGE_KEY = 'dragonbane_saved_threats'; // Nova chave de storage para Ameaças/PNJs
+        const THREAT_STORAGE_KEY = 'dragonbane_saved_threats'; 
         const THEME_PREF_KEY = 'dragonbane_theme_prefs';
         const CUSTOM_BG_KEY = 'dragonbane_custom_bg';
         const CUSTOM_WIN_COLOR_KEY = 'dragonbane_custom_win_color';
@@ -132,16 +157,97 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
+            { versao: '0.3.7 Alpha', descricao: 'Modelos genéricos rápidos para Monstros/PNJs, impressão nativa em 1 clique (A4 Paisagem) e guias completos de regras.' },
             { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs, e fichas de Ameaça/Monstro baseadas no sistema de tabelas do Bestiário.' },
             { versao: '0.2.2v', descricao: 'Adição de personalização avançada para o tema personalizado (cor de janelas, cor de barras e opacidade) e log de atualizações rotativo.' },
-            { versao: '0.2.1v', descricao: 'Adição de Seletor de Tema Visual (Padrão, Clássico Dragonbane com estilo pergaminho e verde petróleo, e Tema Personalizado com fundo de imagem).' },
-            { versao: '0.2.0v', descricao: 'Adição de Modelo de Impressão minimalista, guias detalhados sobre exportação/importação e dicas de escala de impressão.' }
+            { versao: '0.2.1v', descricao: 'Adição de Seletor de Tema Visual (Padrão, Clássico Dragonbane com estilo pergaminho e verde petróleo, e Tema Personalizado com fundo de imagem).' }
+        ];
+
+        // Modelos Prontos (Genéricos) de Ameaças/PNJs (Pedido 1)
+        const MODELOS_AMEACAS_GENERICOS = [
+            // --- PNJs ---
+            {
+                type: 'pnj', tipoPnj: 'lacaio', nome: 'Bandoleiro da Estrada',
+                ancestralidade: 'Humano', profissao: 'Bandido', movimento: '10', danoBonus: '-',
+                armaduraTipica: { nome: 'Couro Fervido', valor: '2' },
+                status: { pv: { atual: 10, max: 10 }, pd: { atual: 0, max: 0 } },
+                pericias: [{ nome: 'Briga', valor: '12' }, { nome: 'Furtividade', valor: '12' }, { nome: 'Sobrevivência', valor: '10' }],
+                feiticos: [],
+                armas: [{ nome: 'Espada Curta', pericia: '12', dano: '1D8' }, { nome: 'Arco Curto', pericia: '10', dano: '1D10' }],
+                equipamento: '1D6 moedas de cobre, corda gasta.',
+                atitude: 'Hostil e Agressivo', motivacao: 'Roubar moedas', tracoMarcante: 'Cheiro muito forte de bebida'
+            },
+            {
+                type: 'pnj', tipoPnj: 'chefe', nome: 'Capitão da Guarda',
+                ancestralidade: 'Humano', profissao: 'Guarda/Milícia', movimento: '10', danoBonus: '+D4',
+                armaduraTipica: { nome: 'Cota de Malha', valor: '4' },
+                status: { pv: { atual: 14, max: 14 }, pd: { atual: 4, max: 4 } },
+                pericias: [{ nome: 'Percepção', valor: '14' }, { nome: 'Liderança', valor: '12' }],
+                feiticos: [],
+                armas: [{ nome: 'Espada Larga', pericia: '14', dano: '2D6+D4' }, { nome: 'Besta', pericia: '12', dano: '2D8' }],
+                equipamento: 'Manto do destacamento, chaves da prisão, 2D6 moedas de prata.',
+                atitude: 'Desconfiado/Na defensiva', motivacao: 'Cumprir ordens superiores', tracoMarcante: 'Cicatriz bem visível'
+            },
+            {
+                type: 'pnj', tipoPnj: 'lacaio', nome: 'Acólito Sombrio',
+                ancestralidade: 'Humano', profissao: 'Cultista/Fanático', movimento: '10', danoBonus: '-',
+                armaduraTipica: { nome: 'Manto Pesado', valor: '1' },
+                status: { pv: { atual: 8, max: 8 }, pd: { atual: 0, max: 0 } },
+                pericias: [{ nome: 'Mitos e Lendas', valor: '12' }],
+                feiticos: [{ nome: 'Mão Congelante', desc: 'Toque mágico causando 1D6 de dano de frio.' }],
+                armas: [{ nome: 'Adaga de Sacrifício', pericia: '10', dano: '1D6' }],
+                equipamento: 'Símbolo profano, livro de cânticos.',
+                atitude: 'Indiferente e Distante', motivacao: 'Busca cega por conhecimento', tracoMarcante: 'Olhar fixo e perturbador'
+            },
+            // --- AMEAÇAS / MONSTROS ---
+            {
+                type: 'ameaca', nome: 'Lobo Selvagem', ferocidade: 1, tamanho: 'Normal',
+                movimento: '14', armadura: '1 (Pele grossa)',
+                status: { pv: { atual: 12, max: 12 } },
+                habilidades: [{ nome: 'Faro de Caçador', desc: 'Vantagem em testes de Percepção envolvendo cheiro.' }],
+                ataques: [
+                    { id: 1, descricao: 'Investida Selvagem: O lobo avança e morde. Dano 1D8 de perfuração.' },
+                    { id: 2, descricao: 'Investida Selvagem: O lobo avança e morde. Dano 1D8 de perfuração.' },
+                    { id: 3, descricao: 'Puxão Pelo Calcanhar: Morde a perna do alvo (Dano 1D6) e tenta Derrubar.' },
+                    { id: 4, descricao: 'Puxão Pelo Calcanhar: Morde a perna do alvo (Dano 1D6) e tenta Derrubar.' },
+                    { id: 5, descricao: 'Mordida na Garganta: Ataque letal. Dano 2D6 de perfuração.' },
+                    { id: 6, descricao: 'Uivo Assustador: Uiva de forma horripilante. Todos os alvos em 10m fazem teste de Força de Vontade ou ficam Assustados.' }
+                ]
+            },
+            {
+                type: 'ameaca', nome: 'Esqueleto Animado', ferocidade: 1, tamanho: 'Normal',
+                movimento: '10', armadura: '2 (Ossos Antigos)',
+                status: { pv: { atual: 10, max: 10 } },
+                habilidades: [{ nome: 'Resistência Morta-Viva', desc: 'Toma apenas metade do dano de armas de Perfuração. Imune a venenos.' }],
+                ataques: [
+                    { id: 1, descricao: 'Garra Óssea: Arranha com ossos pontudos. Dano 1D6.' },
+                    { id: 2, descricao: 'Garra Óssea: Arranha com ossos pontudos. Dano 1D6.' },
+                    { id: 3, descricao: 'Garra Óssea: Arranha com ossos pontudos. Dano 1D6.' },
+                    { id: 4, descricao: 'Espada Enferrujada: Balanço desajeitado, mas forte. Dano 1D8 de corte.' },
+                    { id: 5, descricao: 'Espada Enferrujada: Balanço desajeitado, mas forte. Dano 1D8 de corte.' },
+                    { id: 6, descricao: 'Estocada Cega: Perfura o alvo. Dano 2D6 e chance de causar Doença se ferir.' }
+                ]
+            },
+            {
+                type: 'ameaca', nome: 'Aranha Gigante', ferocidade: 2, tamanho: 'Grande',
+                movimento: '12', armadura: '3 (Carapaça Chitinosa)',
+                status: { pv: { atual: 24, max: 24 } },
+                habilidades: [{ nome: 'Escalar Paredes', desc: 'Move-se livremente por tetos e paredes sem penalidade.' }],
+                ataques: [
+                    { id: 1, descricao: 'Patada Ágil: Corta o alvo com as garras dianteiras. Dano 1D8 de corte.' },
+                    { id: 2, descricao: 'Patada Ágil: Corta o alvo com as garras dianteiras. Dano 1D8 de corte.' },
+                    { id: 3, descricao: 'Picada Venenosa: Morde o alvo (Dano 1D6) e injeta Veneno Paralisante (Teste de CON resiste).' },
+                    { id: 4, descricao: 'Picada Venenosa: Morde o alvo (Dano 1D6) e injeta Veneno Paralisante (Teste de CON resiste).' },
+                    { id: 5, descricao: 'Teia Imobilizadora: Cospe teia pegajosa até 10m. Se atingir, alvo fica Preso (Ação para soltar).' },
+                    { id: 6, descricao: 'Frenesi Aracnídeo: Ataca rapidamente dois alvos diferentes com Patada Ágil (Dano 1D8 cada).' }
+                ]
+            }
         ];
 
         // Modelo de Personagem Jogador (PC)
         const initialData = {
             id: '',
-            type: 'pc', // Identificador de tipo
+            type: 'pc', 
             bio: {
                 jogador: '', nome: '', ancestralidade: '', profissao: '', idade: '', fraqueza: '', aparencia: '', memento: '', imagem: ''
             },
@@ -213,7 +319,7 @@
         const initialPnjData = {
             id: '',
             type: 'pnj',
-            tipoPnj: 'lacaio', // 'lacaio' (Minion) ou 'chefe' (Boss)
+            tipoPnj: 'lacaio', 
             nome: '',
             ancestralidade: '',
             profissao: '',
@@ -225,7 +331,6 @@
             feiticos: [],
             armas: [],
             equipamento: '',
-            // Campos de Criação Rápida
             atitude: '',
             motivacao: '',
             tracoMarcante: ''
@@ -237,7 +342,7 @@
             type: 'ameaca',
             nome: '',
             ferocidade: 1,
-            tamanho: 'Normal', // Pequeno, Normal, Grande, Enorme, Enxame
+            tamanho: 'Normal',
             movimento: '10',
             armadura: '',
             status: { pv: { atual: 20, max: 20 } },
@@ -349,7 +454,10 @@
             const [mobileTab, setMobileTab] = useState('status');
             const [deleteConfirmId, setDeleteConfirmId] = useState(null);
             const [toastMsg, setToastMsg] = useState('');
+            
             const [showSystemModal, setShowSystemModal] = useState(false);
+            const [createTarget, setCreateTarget] = useState(null); // 'pc' or 'threat'
+            
             const [showThreatModal, setShowThreatModal] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
@@ -372,7 +480,7 @@
                 if (theme !== 'custom') return {};
                 const [r, g, b] = hexToRgb(customWinColor);
                 return {
-                    backgroundColor: `rgba(${r}, ${g}, ${b}, ${customOpacity})`,
+                    backgroundColor: `rgba(${r}, ${g}, b, ${customOpacity})`,
                     backdropFilter: 'blur(5px)'
                 };
             };
@@ -430,6 +538,14 @@
                     setView('editor');
                 }
             };
+            
+            const loadTemplate = (modelo) => {
+                const templateData = JSON.parse(JSON.stringify(modelo));
+                templateData.id = Date.now().toString();
+                setData(templateData);
+                setShowThreatModal(false);
+                setView('editor');
+            };
 
             const createNewCharacter = () => {
                 setData(JSON.parse(JSON.stringify({ ...initialData, id: Date.now().toString() })));
@@ -456,6 +572,14 @@
             const showToast = (msg) => {
                 setToastMsg(msg);
                 setTimeout(() => setToastMsg(''), 3000);
+            };
+
+            const handlePrintClick = () => {
+                setIsPrintMode(true);
+                // Aguarda o React renderizar o modo de impressão (limpeza de estilos/cores)
+                setTimeout(() => {
+                    window.print();
+                }, 300);
             };
 
             const updateField = (path, value) => {
@@ -613,7 +737,7 @@
                 reader.onload = (e) => {
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        const type = importedData.type || 'pc'; // Compatibilidade retroativa
+                        const type = importedData.type || 'pc'; 
                         
                         let dataToLoad;
                         if (type === 'pc') {
@@ -634,7 +758,7 @@
                     }
                 };
                 reader.readAsText(file);
-                event.target.value = ''; // Reset input
+                event.target.value = ''; 
             };
 
             const handleImageUpload = (event) => {
@@ -660,7 +784,8 @@
 
             if (view === 'dashboard') {
                 return (
-                    <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4">
+                    <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up">
+                        {/* Seção Personagens */}
                         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
                             <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
                             <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
@@ -690,7 +815,7 @@
                                     <SVGIcons.Upload /> Importar Ficha (JSON)
                                     <input type="file" accept=".json" className="hidden" onChange={handleImport} />
                                 </label>
-                                <button onClick={() => setShowSystemModal(true)} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.Plus /> Novo Personagem
                                 </button>
                             </div>
@@ -699,7 +824,7 @@
                         {/* Personagens Grid */}
                         {savedChars.length === 0 ? (
                             <div style={getWindowStyle()} className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
-                                <SVGIcons.User />
+                                <div className="flex justify-center text-gray-400"><SVGIcons.User /></div>
                                 <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
                                 <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON extraída de um arquivo ZIP.</p>
                             </div>
@@ -743,7 +868,7 @@
                                     <SVGIcons.Upload /> Importar Ficha
                                     <input type="file" accept=".json" className="hidden" onChange={handleImport} />
                                 </label>
-                                <button onClick={() => setShowThreatModal(true)} className="flex justify-center items-center gap-1 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                <button onClick={() => { setCreateTarget('threat'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.Plus /> Criar Ameaça/PNJ
                                 </button>
                             </div>
@@ -820,7 +945,7 @@
                             </div>
                         </div>
 
-                        {}
+                        {/* Modal: Tema Personalizado */}
                         {showCustomBgModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
                                 <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
@@ -892,15 +1017,22 @@
                             </div>
                         )}
 
+                        {/* Modal: Sistema de Seleção (Unificado) */}
                         {showSystemModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
                                 <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
                                     <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
-                                        <h2 className="font-title font-bold text-lg">Selecionar Modelo</h2>
-                                        <button onClick={() => setShowSystemModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                        <h2 className="font-title font-bold text-lg uppercase tracking-wide">Selecionar Sistema</h2>
+                                        <button onClick={() => { setShowSystemModal(false); setCreateTarget(null); }} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
-                                    <div className="p-6 bg-gray-100">
-                                        <div onClick={() => { setShowSystemModal(false); createNewCharacter(); }} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group mb-4">
+                                    <div className="p-6 bg-gray-100 flex flex-col gap-4">
+                                        {/* Dragonbane (Clicável) */}
+                                        <div onClick={() => { 
+                                            setShowSystemModal(false); 
+                                            if (createTarget === 'pc') createNewCharacter();
+                                            else if (createTarget === 'threat') setShowThreatModal(true);
+                                            setCreateTarget(null);
+                                        }} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
                                             <div style={getBarStyle()} className="w-14 h-14 bg-dragon-dark group-hover:bg-red-800 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">DB</div>
                                             <div className="flex-1">
                                                 <h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">Dragonbane</h3>
@@ -908,90 +1040,181 @@
                                             </div>
                                             <div className="text-gray-300 group-hover:text-red-800 transition-colors"><SVGIcons.Plus /></div>
                                         </div>
+
+                                        {/* Em breve... (Desabilitado) */}
+                                        <div className="bg-gray-200 border-2 border-dashed border-gray-300 rounded p-4 flex items-center gap-4 opacity-60 cursor-not-allowed">
+                                            <div className="w-14 h-14 bg-gray-400 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner">?</div>
+                                            <div className="flex-1">
+                                                <h3 className="font-title font-bold text-gray-600 text-lg">Em breve...</h3>
+                                                <p className="text-xs text-gray-500">Mais sistemas de RPG no futuro</p>
+                                            </div>
+                                            <div className="text-gray-400"><SVGIcons.Lock /></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* Modal de Criação de Ameaças */}
+                        {/* Modal: Criação de Ameaças / Templates Genéricos */}
                         {showThreatModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-gray-600 overflow-hidden animate-fade-in-up">
-                                    <div style={getBarStyle()} className="bg-gray-800 text-white p-3 flex justify-between items-center">
+                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-gray-600 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div style={getBarStyle()} className="bg-gray-800 text-white p-3 flex justify-between items-center shrink-0">
                                         <h2 className="font-title font-bold text-lg">Nova Ameaça / PNJ</h2>
                                         <button onClick={() => setShowThreatModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
-                                    <div className="p-6 bg-gray-100 flex flex-col gap-4">
-                                        <div onClick={() => { setShowThreatModal(false); setData({...initialPnjData, id: Date.now().toString()}); setView('editor'); }} className="bg-white border-2 border-gray-300 hover:border-blue-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
-                                            <div className="w-14 h-14 bg-blue-900 group-hover:bg-blue-700 text-white rounded flex items-center justify-center font-bold shadow-inner transition-colors"><SVGIcons.User /></div>
-                                            <div className="flex-1">
-                                                <h3 className="font-title font-bold text-gray-900 group-hover:text-blue-900 text-lg transition-colors">PNJ (NPC)</h3>
-                                                <p className="text-xs text-gray-500">Humanoides comuns, capangas, guardas ou chefes de bando.</p>
-                                            </div>
-                                        </div>
+                                    <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
                                         
-                                        <div onClick={() => { setShowThreatModal(false); setData({...initialAmeacaData, id: Date.now().toString()}); setView('editor'); }} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
-                                            <div className="w-14 h-14 bg-red-900 group-hover:bg-red-700 text-white rounded flex items-center justify-center font-bold shadow-inner transition-colors"><SVGIcons.Skull /></div>
-                                            <div className="flex-1">
-                                                <h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">Ameaça / Monstro</h3>
-                                                <p className="text-xs text-gray-500">Criaturas ferozes usando a Tabela de Ataque de Monstro (1 a 6).</p>
+                                        <div>
+                                            <h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Criar Ficha em Branco</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div onClick={() => { setShowThreatModal(false); setData({...initialPnjData, id: Date.now().toString()}); setView('editor'); }} className="bg-white border-2 border-gray-300 hover:border-blue-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
+                                                    <div className="w-14 h-14 bg-blue-900 group-hover:bg-blue-700 text-white rounded flex items-center justify-center font-bold shadow-inner transition-colors shrink-0"><SVGIcons.User /></div>
+                                                    <div className="flex-1">
+                                                        <h3 className="font-title font-bold text-gray-900 group-hover:text-blue-900 text-sm transition-colors">Ficha de PNJ (NPC)</h3>
+                                                        <p className="text-[10px] text-gray-500 leading-tight mt-1">Humanoides, guardas, vilões. Baseado em PV e Perícias.</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div onClick={() => { setShowThreatModal(false); setData({...initialAmeacaData, id: Date.now().toString()}); setView('editor'); }} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
+                                                    <div className="w-14 h-14 bg-red-900 group-hover:bg-red-700 text-white rounded flex items-center justify-center font-bold shadow-inner transition-colors shrink-0"><SVGIcons.Skull /></div>
+                                                    <div className="flex-1">
+                                                        <h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-sm transition-colors">Ficha de Monstro</h3>
+                                                        <p className="text-[10px] text-gray-500 leading-tight mt-1">Criaturas bestiais usando a Tabela Fixa (D6) de Ataque.</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <div>
+                                            <h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Modelos Rápidos (Genéricos e Editáveis)</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {MODELOS_AMEACAS_GENERICOS.map((modelo, idx) => (
+                                                    <div key={idx} onClick={() => loadTemplate(modelo)} className={`border rounded p-3 cursor-pointer hover:shadow-md transition-all flex justify-between items-center bg-white ${modelo.type === 'pnj' ? 'border-blue-200 hover:border-blue-600' : 'border-red-200 hover:border-red-600'}`}>
+                                                        <div className="flex flex-col">
+                                                            <span className={`text-[10px] font-bold uppercase ${modelo.type === 'pnj' ? 'text-blue-800' : 'text-red-800'}`}>{modelo.type === 'pnj' ? 'PNJ' : 'Monstro'}</span>
+                                                            <span className="font-bold text-sm text-gray-900">{modelo.nome}</span>
+                                                        </div>
+                                                        <div className="text-[10px] text-gray-500 font-bold bg-gray-100 px-2 py-1 rounded">
+                                                            {modelo.type === 'pnj' ? `PV ${modelo.status.pv.max} • Mov ${modelo.movimento}` : `PV ${modelo.status.pv.max} • Fer. ${modelo.ferocidade}`}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <p className="text-[10px] text-gray-400 mt-2 italic text-center">* Esses modelos são arquétipos originais independentes para agilizar a criação, e não copiam estatísticas de livros licenciados.</p>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         )}
 
+                        {/* Modal: Guias Expandidos */}
                         {showGuideModal && (
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-3xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
                                     <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
-                                        <h2 className="font-title font-bold text-lg flex items-center gap-2"><SVGIcons.HelpCircle /> Guias e Tutoriais</h2>
+                                        <h2 className="font-title font-bold text-lg flex items-center gap-2"><SVGIcons.HelpCircle /> Guias e Tutoriais Completos</h2>
                                         <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
                                     <div className="flex border-b border-gray-300 bg-gray-100 overflow-x-auto">
                                         <button onClick={() => setGuideTab('import')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'import' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Importar/Exportar</button>
                                         <button onClick={() => setGuideTab('dragonbane')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'dragonbane' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Fichas DB</button>
-                                        <button onClick={() => setGuideTab('mestre')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'mestre' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Guia do Mestre</button>
-                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão/PDF</button>
+                                        <button onClick={() => setGuideTab('mestre')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'mestre' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Ameaças e PNJs</button>
+                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão (A4)</button>
                                     </div>
-                                    <div className="p-4 md:p-6 overflow-y-auto bg-white flex-1 text-sm text-gray-700">
-                                        {/* Conteúdo de Guias - Simplificado para economizar espaço */}
+                                    <div className="p-4 md:p-6 overflow-y-auto bg-white flex-1 text-sm text-gray-700 leading-relaxed space-y-4">
+                                        
                                         {guideTab === 'import' && (
-                                            <div className="space-y-4">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Exportar e Importar (.ZIP)</h3>
-                                                <p>Suas fichas são exportadas como arquivos compactados em formato <b>.ZIP</b> para evitar bloqueios de download. Descompacte o arquivo `.zip` baixado para encontrar o arquivo <b>.json</b> interno e use-o no botão Importar.</p>
+                                            <div className="space-y-4 animate-fade-in-up">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Exportar e Importar Fichas (.ZIP e .JSON)</h3>
+                                                <p>Este aplicativo não usa banco de dados online (o que garante que ele seja rápido, seguro e nunca saia do ar). Tudo é salvo apenas no seu próprio navegador (LocalStorage).</p>
+                                                
+                                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
+                                                    <h4 className="font-bold text-blue-900 mb-2">Como Exportar (Fazer Backup / Enviar pro Mestre)</h4>
+                                                    <p className="mb-2">Ao clicar no botão <strong>Exportar (ZIP)</strong>, o sistema compacta sua ficha em um arquivo <code>.zip</code>. Nós usamos o formato ZIP para evitar que celulares e navegadores bloqueiem o download automático de arquivos <code>.json</code> puros.</p>
+                                                </div>
+
+                                                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded mt-4">
+                                                    <h4 className="font-bold text-red-900 mb-2">Como Importar (Carregar a ficha de volta)</h4>
+                                                    <ul className="list-decimal ml-5 space-y-1 font-bold text-red-800">
+                                                        <li>Faça o download do arquivo <code>.zip</code> no seu computador ou celular.</li>
+                                                        <li><strong>Muito Importante:</strong> Você DEVE extrair/descompactar o arquivo <code>.zip</code> primeiro! Não tente importar o arquivo ZIP diretamente.</li>
+                                                        <li>Após extrair, você verá um arquivo de texto terminando em <code>.json</code>.</li>
+                                                        <li>No app, clique em <strong>Importar Ficha (JSON)</strong> e selecione este arquivo extraído. A ficha aparecerá no seu painel.</li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         )}
+
                                         {guideTab === 'dragonbane' && (
-                                            <div className="space-y-4">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Personagens Jogadores</h3>
-                                                <p>Insira os valores base dos Atributos. PVs, PDs, Sobrecarga e Dano Bônus calculam automaticamente. Clique em <b>[ T ]</b> nas perícias para marcar como Treinada (dobra a chance base). O cadeado trava o recálculo.</p>
-                                            </div>
-                                        )}
-                                        {guideTab === 'mestre' && (
-                                            <div className="space-y-4">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Ameaças e PNJs</h3>
-                                                <p>O módulo de Mestre suporta 2 moldes de ficha baseados nas regras oficiais:</p>
-                                                <ul className="list-disc ml-5 space-y-2 mt-2">
-                                                    <li><b>Fichas de PNJ:</b> Para humanoides. Inclui um Gerador Rápido (botões de 🎲) de personalidade para improvisar personagens na mesa. Podem ser sinalizados como Lacaios (sem PD) ou Chefes (com PD e habilidades).</li>
-                                                    <li><b>Fichas de Ameaça:</b> O molde oficial do Bestiário. Monstros não rolam ataques normais, eles compram iniciativa pela <i>Ferocidade</i> e rolam D6 em uma tabela fixa de 6 ataques. Preencha a tabela de acordo com as criaturas que você criar ou as que constam no seu livro!</li>
+                                            <div className="space-y-4 animate-fade-in-up">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Regras de Personagem Jogador (Dragonbane)</h3>
+                                                <p>A ficha possui automatização de atributos base, mas permite que você trave as opções (usando o botão de cadeado) caso tenha regras da casa ou itens mágicos que alterem os derivados.</p>
+                                                
+                                                <ul className="space-y-3">
+                                                    <li><strong className="text-black">1. Valores Derivados Automáticos:</strong> Ao preencher a Ancestralidade e os Atributos Básicos (FOR, AGL, CON, VON), o sistema calcula o Movimento (Base da raça + modificador de AGL), PV Máximo (igual a CON) e PD Máximo (igual a VON). O Dano Bônus é ativado para atributos 13+ (D4) ou 17+ (D6). Sobrecarga é metade da FOR, arredondado para cima.</li>
+                                                    
+                                                    <li><strong className="text-black">2. Perícias e Treinamento [T]:</strong> A Base de toda perícia deriva do atributo atrelado a ela (ex: 5, 6, 7...). Se você clicar no botão <strong>[ T ]</strong>, você está marcando a perícia como Treinada, o que <strong>dobra a chance base</strong> automaticamente.</li>
+                                                    
+                                                    <li><strong className="text-black">3. Pontos de Determinação (PD) e Condições:</strong> Usados para usar habilidades heróicas ou mágicas, e para Forçar rolagens quando você falha. Quando você "Força" uma rolagem de atributo ou perícia, deve assumir a <strong>Condição</strong> respectiva daquele atributo, marcando a caixinha vermelha no painel de Atributos.</li>
+                                                    
+                                                    <li><strong className="text-black">4. Testes de Morte:</strong> Quando seu PV chega a 0, a cada turno você faz um teste de CON (sem usar perícias). 3 Sucessos você estabiliza; 3 Falhas o personagem morre. </li>
+                                                    
+                                                    <li><strong className="text-black">5. Revés (Armaduras e Elmos):</strong> Algumas proteções pesadas impõem um "Revés" (rolar dois D20 e ficar com o pior resultado) em perícias específicas. Anote esse revés na linha em itálico logo abaixo da sua armadura para não esquecer na hora de realizar acrobacias ou furtividade!</li>
                                                 </ul>
                                             </div>
                                         )}
-                                        {guideTab === 'imprimir' && (
-                                            <div className="space-y-4">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Como Imprimir</h3>
-                                                <p>Ative o <b>Modelo Impressão</b> na barra superior para o layout ficar minimalista (sem cores/fundos). Use o atalho <b>Ctrl + P</b> e defina a <b>Escala para 80%</b> nas configurações da impressora para o encaixe perfeito na folha A4.</p>
+
+                                        {guideTab === 'mestre' && (
+                                            <div className="space-y-4 animate-fade-in-up">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Ameaças e PNJs (Para o Mestre)</h3>
+                                                <p>Diferente de sistemas baseados na "classe de desafio universal", Dragonbane divide os oponentes em dois blocos de estatísticas radicalmente diferentes. Nosso painel suporta ambos, além de fornecer modelos pré-fabricados originais.</p>
+                                                
+                                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
+                                                    <h4 className="font-title font-bold text-blue-900 mb-2">Ficha de PNJ (Personagem Não Jogador)</h4>
+                                                    <p className="text-sm">Humanoides (bandidos, guardas, magos inimigos). Funcionam como personagens jogadores, rolando D20 para atacar e esquivar.</p>
+                                                    <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
+                                                        <li><strong>Lacaio vs Chefe:</strong> Lacaios (minions) são todos os capangas comuns da cena, rolando numa mesma iniciativa e geralmente sem Pontos de Determinação. Chefes agem com iniciativa própria, podem ter habilidades e gastam PD. O app permite classificar a ficha entre os dois.</li>
+                                                        <li><strong>Criação Rápida de PNJs:</strong> Ao abrir uma ficha de PNJ em branco, clique nos botões de dado azuis 🎲 no topo. Eles sortearão Nome, Profissão, Atitude, Motivação e um Traço Marcante usando as tabelas integradas do sistema para você improvisar rapidamente numa taverna.</li>
+                                                    </ul>
+                                                </div>
+
+                                                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded mt-4">
+                                                    <h4 className="font-title font-bold text-red-900 mb-2">Ficha de Ameaça / Monstro</h4>
+                                                    <p className="text-sm">Usado para criaturas bestiais (Trolls, Demônios, Lobos, Aranha-Gigante). Monstros <strong>não rolam dados para atacar ou testar perícia</strong>.</p>
+                                                    <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
+                                                        <li><strong>Ferocidade (Importante!):</strong> Determina quantas ações (ou seja, quantas Cartas de Iniciativa) o monstro recebe no início do turno. Um monstro Ferocidade 3 age três vezes completas antes da rodada acabar!</li>
+                                                        <li><strong>Tabela D6 Fixa:</strong> No turno do monstro, em vez de testar perícia, você como mestre apenas rola 1D6 e consulta as linhas 1 a 6 da ficha. O ataque listado acontece automaticamente (e só pode ser Esquivado, e raramente Aparado, pelos jogadores). O app traz essa tabela pronta para você preencher.</li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         )}
+
+                                        {guideTab === 'imprimir' && (
+                                            <div className="space-y-4 animate-fade-in-up">
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Impressão Otimizada (1 Clique)</h3>
+                                                <p>Nós desenhamos a ficha para que você possa imprimi-la fisicamente para jogar de forma analógica, sem gastar tinta atoa com fundos escuros.</p>
+                                                
+                                                <div className="bg-gray-100 p-4 rounded border border-gray-300">
+                                                    <ul className="list-decimal ml-5 space-y-2 font-bold text-gray-800">
+                                                        <li>Na página da ficha do Personagem (ou Ameaça), localize o botão <strong>Impressão</strong> na barra superior.</li>
+                                                        <li>Ao clicar, o sistema fará duas coisas automaticamente: removerá todos os fundos, painéis pretos e botões desnecessários, <strong>e em seguida, abrirá a janela de impressão do seu navegador</strong>.</li>
+                                                        <li>O CSS do app já informa à sua impressora para usar o formato <strong>A4 Paisagem (Landscape)</strong> automaticamente.</li>
+                                                        <li><strong>DICA PRO:</strong> Na tela de impressão do Chrome/Edge/Safari, procure as configurações de <em>Escala</em> (Scale) e altere de "Padrão" para <strong>Personalizado: 80%</strong>. Isso garante que a ficha inteira caiba perfeitamente no centro de 1 a 2 páginas A4 deitadas, sem cortar colunas pela metade.</li>
+                                                    </ul>
+                                                </div>
+                                                <p className="text-xs text-gray-500 italic mt-2">Após imprimir ou fechar a janela da impressora, caso a ficha continue branca e sem botões, basta clicar no botão "Modo Padrão" no topo da tela para restaurar o visual original e poder editar a ficha novamente.</p>
+                                            </div>
+                                        )}
+
                                     </div>
                                 </div>
                             </div>
                         )}
                         
                         {toastMsg && (
-                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
+                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50 animate-fade-in-up">
                                 {toastMsg}
                             </div>
                         )}
@@ -1001,13 +1224,14 @@
 
             return (
                 <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm transition-all duration-300 ${isPrintMode ? 'print-mode-active border border-gray-200' : 'shadow-xl border-2 border-gray-500'}`}>
+                    
                     {/* Top Bar Compartilhada */}
                     <div style={getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : (data.type === 'pnj' ? 'bg-blue-900 text-white' : data.type === 'ameaca' ? 'bg-red-900 text-white' : 'bg-dragon-dark text-white')}`}>
                         <div className="flex items-center gap-4">
                             <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Painel</span>
                             </button>
-                            <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text uppercase ${isPrintMode ? '' : 'text-red-400'}`}>
+                            <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text uppercase ${isPrintMode ? '' : (data.type === 'pc' ? 'text-red-400' : 'text-gray-200')}`}>
                                 {data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (HUMANOIDE)' : 'AMEAÇA (MONSTRO)'}
                             </span>
                         </div>
@@ -1021,10 +1245,11 @@
                                     <option value="custom" className="text-black">Personalizado</option>
                                 </select>
                             </div>
-                            <button onClick={() => setIsPrintMode(!isPrintMode)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
-                                <SVGIcons.Printer /> {isPrintMode ? 'Modo Padrão' : 'Impressão'}
+                            {/* Impressão 1 Click (Pedido 3) */}
+                            <button onClick={isPrintMode ? () => setIsPrintMode(false) : handlePrintClick} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold border-gray-400 border-2' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
+                                <SVGIcons.Printer /> {isPrintMode ? 'Voltar (Modo Padrão)' : 'Impressão'}
                             </button>
-                            <button onClick={() => handleExport(data)} className={`px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? '' : 'bg-gray-700 hover:bg-gray-600'}`}>
+                            <button onClick={() => handleExport(data)} className={`px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? '' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
                                 ZIP
                             </button>
                             <button onClick={() => saveToLocal(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold top-bar-btn ${isPrintMode ? 'border-green-800 text-green-800' : 'bg-green-700 hover:bg-green-600 text-white'}`}>
@@ -1035,7 +1260,6 @@
 
                     {/* Conteúdo Dinâmico Baseado no Tipo (PC, PNJ, AMEAÇA) */}
                     
-                    {}
                     {data.type === 'pc' && (
                         <React.Fragment>
                             {/* Mobile Tabs for PC */}
@@ -1057,7 +1281,7 @@
 
                             <div id="ficha-print-area" className="p-4 md:p-8 space-y-8 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                                 {/* Biografia PC */}
-                                <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
+                                <div className={`print-break flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
                                     <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
                                         <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
                                             {data.bio?.imagem ? (
@@ -1129,8 +1353,8 @@
                                 </div>
 
                                 {/* Grades e Blocos PC */}
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                                    <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 print-landscape-grid">
+                                    <div className={`print-break lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
                                         <div>
                                             <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
                                             <div className="grid grid-cols-2 gap-4">
@@ -1230,7 +1454,7 @@
                                         </div>
                                     </div>
 
-                                    <div className={`lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
+                                    <div className={`print-break lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
                                         <div className="flex justify-end mb-3 no-print">
                                             <button onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors">
                                                 <SVGIcons.Refresh /> Alternar Ordem
@@ -1307,7 +1531,7 @@
                                         </div>
                                     </div>
 
-                                    <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
+                                    <div className={`print-break lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
                                         <div>
                                             <div style={getBarStyle()} className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm header-print">
                                                 <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
@@ -1431,11 +1655,10 @@
                         </React.Fragment>
                     )}
 
-                    {}
                     {data.type === 'pnj' && (
                         <div id="ficha-print-area" className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                             {/* Header PNJ */}
-                            <div className="flex flex-col md:flex-row gap-6 pb-4 border-b-2 border-blue-900 items-end">
+                            <div className="print-break flex flex-col md:flex-row gap-6 pb-4 border-b-2 border-blue-900 items-end">
                                 <div className="flex-1 w-full">
                                     <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest mb-1">Nome do PNJ / Ameaça Humanoide</label>
                                     <input type="text" value={data.nome} onChange={e => updateField('nome', e.target.value)} className="w-full text-3xl font-title font-bold border-b-2 border-gray-400 focus:border-blue-600 outline-none bg-transparent" placeholder="Nome do Personagem" />
@@ -1450,7 +1673,7 @@
                             </div>
 
                             {/* Criação Rápida de PNJs */}
-                            <div className="bg-gray-100 p-4 border border-gray-300 rounded relative">
+                            <div className="print-break bg-gray-100 p-4 border border-gray-300 rounded relative">
                                 <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-blue-900 text-xs uppercase shadow-sm border border-gray-200">Gerador Rápido de PNJ (Improviso)</div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2">
                                     <div>
@@ -1476,9 +1699,9 @@
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 print-landscape-grid">
                                 {/* Coluna Esquerda PNJ */}
-                                <div className="md:col-span-5 space-y-6">
+                                <div className="print-break md:col-span-5 space-y-6">
                                     <div className="flex flex-col gap-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
@@ -1547,7 +1770,7 @@
                                 </div>
 
                                 {/* Coluna Direita PNJ */}
-                                <div className="md:col-span-7 space-y-6">
+                                <div className="print-break md:col-span-7 space-y-6">
                                     <div className="mb-6">
                                         <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
                                             <h3 className="font-title font-bold text-sm text-gray-700">ARMAS E ATAQUES</h3>
@@ -1605,11 +1828,10 @@
                         </div>
                     )}
 
-                    {}
                     {data.type === 'ameaca' && (
                         <div id="ficha-print-area" className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                             {/* Header Monstro */}
-                            <div className="flex flex-col md:flex-row gap-6 pb-4 border-b-4 border-red-900 items-end">
+                            <div className="print-break flex flex-col md:flex-row gap-6 pb-4 border-b-4 border-red-900 items-end">
                                 <div className="flex-1 w-full">
                                     <label className="block text-xs font-bold text-red-900 uppercase tracking-widest mb-1">Nome da Ameaça / Monstro</label>
                                     <input type="text" value={data.nome} onChange={e => updateField('nome', e.target.value)} className="w-full text-3xl font-title font-bold border-b-2 border-gray-400 focus:border-red-600 outline-none bg-transparent" placeholder="Ex: Troll Antigo, Demônio..." />
@@ -1620,9 +1842,9 @@
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-2">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-2 print-landscape-grid">
                                 {/* Coluna Esquerda Monstro */}
-                                <div className="md:col-span-4 space-y-6">
+                                <div className="print-break md:col-span-4 space-y-6">
                                     <div className="border border-gray-300 p-4 bg-gray-50 rounded shadow-sm space-y-4">
                                         <div>
                                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tamanho</label>
@@ -1676,14 +1898,13 @@
                                 </div>
 
                                 {/* Coluna Direita Monstro - Tabela Fixa 1 a 6 */}
-                                <div className="md:col-span-8">
+                                <div className="print-break md:col-span-8">
                                     <div className="bg-red-900 text-white py-2 px-4 rounded-t-sm shadow-sm flex items-center gap-2 header-print">
                                         <SVGIcons.Dice />
                                         <h2 className="font-title font-bold text-lg tracking-widest uppercase">ATAQUES DO MONSTRO (Role D6)</h2>
                                     </div>
                                     <div className="border-x border-b border-red-900 bg-white rounded-b-sm shadow-sm overflow-hidden">
                                         {[1, 2, 3, 4, 5, 6].map((num, idx) => {
-                                            // Ensure array has 6 items safely
                                             const ataque = (data.ataques && data.ataques[idx]) || { id: num, descricao: '' };
                                             return (
                                                 <div key={num} className={`flex border-b border-gray-200 last:border-0 ${num % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}>
@@ -1711,77 +1932,6 @@
                                         <b className="flex items-center gap-1 mb-1"><SVGIcons.HelpCircle /> Como funciona a Tabela de Ataque?</b>
                                         Em Dragonbane, Monstros não fazem testes de perícia normais para atacar. No turno do Monstro, você rola um D6 e consulta esta tabela para ver qual ataque ele usará automaticamente. Esses ataques não costumam poder ser aparados (apenas esquivados).
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Modal de Configuração de Fundo Personalizado no Editor */}
-                    {showCustomBgModal && (
-                        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity no-print">
-                            <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
-                                <div className="flex justify-between items-center border-b pb-2">
-                                    <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
-                                    <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
-                                </div>
-                                <p className="text-xs text-gray-600">Personalize a imagem de fundo, cores das janelas, barras e opacidade:</p>
-                                <div className="space-y-3 pt-2">
-                                    <div>
-                                        <label className="block text-xs font-bold text-gray-700 mb-1">Imagem de Fundo</label>
-                                        <div className="flex gap-2">
-                                            <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark hover:bg-black text-white py-2 px-3 rounded text-center font-bold text-xs shadow flex-1">
-                                                Carregar Imagem
-                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => {
-                                                    const file = e.target.files[0];
-                                                    if (file) {
-                                                        const reader = new FileReader();
-                                                        reader.onload = (ev) => {
-                                                            setCustomBgUrl(ev.target.result);
-                                                            localStorage.setItem(CUSTOM_BG_KEY, ev.target.result);
-                                                            setTheme('custom');
-                                                            showToast("Fundo personalizado aplicado!");
-                                                        };
-                                                        reader.readAsDataURL(file);
-                                                    }
-                                                }} />
-                                            </label>
-                                            <button onClick={() => {
-                                                const url = prompt('Cole a URL da imagem de fundo:');
-                                                if (url) {
-                                                    setCustomBgUrl(url);
-                                                    localStorage.setItem(CUSTOM_BG_KEY, url);
-                                                    setTheme('custom');
-                                                    showToast("Fundo personalizado aplicado!");
-                                                }
-                                            }} className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-3 rounded font-bold text-xs shadow flex-1">
-                                                Colar URL
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center justify-between border-t pt-3">
-                                        <label className="text-xs font-bold text-gray-700">Cor das Janelas</label>
-                                        <input type="color" value={customWinColor} onChange={(e) => { setCustomWinColor(e.target.value); localStorage.setItem(CUSTOM_WIN_COLOR_KEY, e.target.value); setTheme('custom'); }} className="w-10 h-8 rounded cursor-pointer border border-gray-300" />
-                                    </div>
-
-                                    <div className="flex items-center justify-between border-t pt-3">
-                                        <label className="text-xs font-bold text-gray-700">Cor das Barras & Cabeçalhos</label>
-                                        <input type="color" value={customBarColor} onChange={(e) => { setCustomBarColor(e.target.value); localStorage.setItem(CUSTOM_BAR_COLOR_KEY, e.target.value); setTheme('custom'); }} className="w-10 h-8 rounded cursor-pointer border border-gray-300" />
-                                    </div>
-
-                                    <div className="border-t pt-3">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <label className="text-xs font-bold text-gray-700">Opacidade do Fundo das Janelas</label>
-                                            <span className="text-xs font-bold text-gray-500">{Math.round(parseFloat(customOpacity) * 100)}%</span>
-                                        </div>
-                                        <input type="range" min="0.2" max="1" step="0.05" value={customOpacity} onChange={(e) => { setCustomOpacity(e.target.value); localStorage.setItem(CUSTOM_OPACITY_KEY, e.target.value); setTheme('custom'); }} className="w-full cursor-pointer" />
-                                    </div>
-
-                                    {customBgUrl && (
-                                        <button onClick={() => { setCustomBgUrl(''); localStorage.removeItem(CUSTOM_BG_KEY); setTheme('default'); showToast("Fundo personalizado removido."); }} className="w-full bg-red-50 hover:bg-red-100 text-red-800 py-2 px-4 rounded font-bold text-sm border border-red-200 mt-2">Remover Fundo Personalizado</button>
-                                    )}
-                                    
-                                    <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">Concluir</button>
                                 </div>
                             </div>
                         </div>
