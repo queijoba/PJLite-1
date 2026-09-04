@@ -13,6 +13,8 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- JSZip for exporting ZIP files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- LZ-String for text code compression -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     
@@ -157,13 +159,12 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
+            { versao: '0.3.8 Alpha', descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente. Modais movidos para a raiz via portal para centralização perfeita e correção de posicionamento. Impressão otimizada em 1 clique.' },
             { versao: '0.3.7 Alpha', descricao: 'Modelos genéricos rápidos para Monstros/PNJs, impressão nativa em 1 clique (A4 Paisagem) e guias completos de regras.' },
             { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs, e fichas de Ameaça/Monstro baseadas no sistema de tabelas do Bestiário.' },
-            { versao: '0.2.2v', descricao: 'Adição de personalização avançada para o tema personalizado (cor de janelas, cor de barras e opacidade) e log de atualizações rotativo.' },
             { versao: '0.2.1v', descricao: 'Adição de Seletor de Tema Visual (Padrão, Clássico Dragonbane com estilo pergaminho e verde petróleo, e Tema Personalizado com fundo de imagem).' }
         ];
 
-        // Modelos Prontos (Genéricos) de Ameaças/PNJs (Pedido 1)
         const MODELOS_AMEACAS_GENERICOS = [
             // --- PNJs ---
             {
@@ -244,122 +245,54 @@
             }
         ];
 
-        // Modelo de Personagem Jogador (PC)
         const initialData = {
-            id: '',
-            type: 'pc', 
-            bio: {
-                jogador: '', nome: '', ancestralidade: '', profissao: '', idade: '', fraqueza: '', aparencia: '', memento: '', imagem: ''
-            },
+            id: '', type: 'pc', 
+            bio: { jogador: '', nome: '', ancestralidade: '', profissao: '', idade: '', fraqueza: '', aparencia: '', memento: '', imagem: '' },
             atributos: {
-                for: { valor: 10, condicao: false },
-                con: { valor: 10, condicao: false },
-                agl: { valor: 10, condicao: false },
-                int: { valor: 10, condicao: false },
-                von: { valor: 10, condicao: false },
-                car: { valor: 10, condicao: false }
+                for: { valor: 10, condicao: false }, con: { valor: 10, condicao: false }, agl: { valor: 10, condicao: false },
+                int: { valor: 10, condicao: false }, von: { valor: 10, condicao: false }, car: { valor: 10, condicao: false }
             },
-            derivados: {
-                danoBonusFor: '', danoBonusAgl: '', movimento: '', limiteSobrecarga: ''
-            },
-            status: {
-                pv: { atual: 10, max: 10 },
-                pd: { atual: 10, max: 10 },
-                testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] },
-                manterDerivados: false,
-                armasPrimeiro: false
-            },
+            derivados: { danoBonusFor: '', danoBonusAgl: '', movimento: '', limiteSobrecarga: '' },
+            status: { pv: { atual: 10, max: 10 }, pd: { atual: 10, max: 10 }, testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] }, manterDerivados: false, armasPrimeiro: false },
             periciasBase: [
-                { nome: 'Acrobatismo', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Blefe', attr: 'CAR', valor: '', avanco: false, treinada: false },
-                { nome: 'Caça e Pesca', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Cura', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Encontrar', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Equitação', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Evasão', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Furtividade', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Idiomas', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Manufatura', attr: 'FOR', valor: '', avanco: false, treinada: false },
-                { nome: 'Marinharia', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Mitos e Lendas', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Natação', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Percepção', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Performance', attr: 'CAR', valor: '', avanco: false, treinada: false },
-                { nome: 'Permuta', attr: 'CAR', valor: '', avanco: false, treinada: false },
-                { nome: 'Persuasão', attr: 'CAR', valor: '', avanco: false, treinada: false },
-                { nome: 'Prestidigitação', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Saber de Feras', attr: 'INT', valor: '', avanco: false, treinada: false },
-                { nome: 'Sobrevivência', attr: 'INT', valor: '', avanco: false, treinada: false }
+                { nome: 'Acrobatismo', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Blefe', attr: 'CAR', valor: '', avanco: false, treinada: false },
+                { nome: 'Caça e Pesca', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Cura', attr: 'INT', valor: '', avanco: false, treinada: false },
+                { nome: 'Encontrar', attr: 'INT', valor: '', avanco: false, treinada: false }, { nome: 'Equitação', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Evasão', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Furtividade', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Idiomas', attr: 'INT', valor: '', avanco: false, treinada: false }, { nome: 'Manufatura', attr: 'FOR', valor: '', avanco: false, treinada: false },
+                { nome: 'Marinharia', attr: 'INT', valor: '', avanco: false, treinada: false }, { nome: 'Mitos e Lendas', attr: 'INT', valor: '', avanco: false, treinada: false },
+                { nome: 'Natação', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Percepção', attr: 'INT', valor: '', avanco: false, treinada: false },
+                { nome: 'Performance', attr: 'CAR', valor: '', avanco: false, treinada: false }, { nome: 'Permuta', attr: 'CAR', valor: '', avanco: false, treinada: false },
+                { nome: 'Persuasão', attr: 'CAR', valor: '', avanco: false, treinada: false }, { nome: 'Prestidigitação', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Saber de Feras', attr: 'INT', valor: '', avanco: false, treinada: false }, { nome: 'Sobrevivência', attr: 'INT', valor: '', avanco: false, treinada: false }
             ],
             periciasArmas: [
-                { nome: 'Arcos', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Bestas', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Briga', attr: 'FOR', valor: '', avanco: false, treinada: false },
-                { nome: 'Cajados', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Espadas', attr: 'FOR', valor: '', avanco: false, treinada: false },
-                { nome: 'Estilingues', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Facas', attr: 'AGL', valor: '', avanco: false, treinada: false },
-                { nome: 'Lanças', attr: 'FOR', valor: '', avanco: false, treinada: false },
-                { nome: 'Machados', attr: 'FOR', valor: '', avanco: false, treinada: false },
-                { nome: 'Martelos', attr: 'FOR', valor: '', avanco: false, treinada: false }
+                { nome: 'Arcos', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Bestas', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Briga', attr: 'FOR', valor: '', avanco: false, treinada: false }, { nome: 'Cajados', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Espadas', attr: 'FOR', valor: '', avanco: false, treinada: false }, { nome: 'Estilingues', attr: 'AGL', valor: '', avanco: false, treinada: false },
+                { nome: 'Facas', attr: 'AGL', valor: '', avanco: false, treinada: false }, { nome: 'Lanças', attr: 'FOR', valor: '', avanco: false, treinada: false },
+                { nome: 'Machados', attr: 'FOR', valor: '', avanco: false, treinada: false }, { nome: 'Martelos', attr: 'FOR', valor: '', avanco: false, treinada: false }
             ],
-            periciasSecundarias: [],
-            habilidadesFeiticos: [],
-            armas: [],
-            defesa: {
-                armadura: { nome: '', valor: '', reves: '' },
-                elmo: { nome: '', valor: '', reves: '' }
-            },
-            inventario: '',
-            itensMiudos: '',
-            moedas: { ouro: 0, prata: 0, cobre: 0 }
+            periciasSecundarias: [], habilidadesFeiticos: [], armas: [],
+            defesa: { armadura: { nome: '', valor: '', reves: '' }, elmo: { nome: '', valor: '', reves: '' } },
+            inventario: '', itensMiudos: '', moedas: { ouro: 0, prata: 0, cobre: 0 }
         };
 
-        // Modelo de Personagem Não Jogador (PNJ)
         const initialPnjData = {
-            id: '',
-            type: 'pnj',
-            tipoPnj: 'lacaio', 
-            nome: '',
-            ancestralidade: '',
-            profissao: '',
-            movimento: '10',
-            danoBonus: '',
-            armaduraTipica: { nome: '', valor: '' },
-            status: { pv: { atual: 10, max: 10 }, pd: { atual: 0, max: 0 } },
-            pericias: [],
-            feiticos: [],
-            armas: [],
-            equipamento: '',
-            atitude: '',
-            motivacao: '',
-            tracoMarcante: ''
+            id: '', type: 'pnj', tipoPnj: 'lacaio', nome: '', ancestralidade: '', profissao: '', movimento: '10', danoBonus: '',
+            armaduraTipica: { nome: '', valor: '' }, status: { pv: { atual: 10, max: 10 }, pd: { atual: 0, max: 0 } },
+            pericias: [], feiticos: [], armas: [], equipamento: '', atitude: '', motivacao: '', tracoMarcante: ''
         };
 
-        // Modelo de Ameaça/Monstro
         const initialAmeacaData = {
-            id: '',
-            type: 'ameaca',
-            nome: '',
-            ferocidade: 1,
-            tamanho: 'Normal',
-            movimento: '10',
-            armadura: '',
-            status: { pv: { atual: 20, max: 20 } },
-            habilidades: [],
-            ataques: [
-                { id: 1, descricao: '' },
-                { id: 2, descricao: '' },
-                { id: 3, descricao: '' },
-                { id: 4, descricao: '' },
-                { id: 5, descricao: '' },
-                { id: 6, descricao: '' }
-            ]
+            id: '', type: 'ameaca', nome: '', ferocidade: 1, tamanho: 'Normal', movimento: '10', armadura: '', status: { pv: { atual: 20, max: 20 } },
+            habilidades: [], ataques: [{ id: 1, descricao: '' }, { id: 2, descricao: '' }, { id: 3, descricao: '' }, { id: 4, descricao: '' }, { id: 5, descricao: '' }, { id: 6, descricao: '' }]
         };
 
         const SVGIcons = {
             Save: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>,
             Upload: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>,
+            Download: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>,
             Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
             Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>,
             ArrowLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>,
@@ -372,18 +305,13 @@
             Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
             Palette: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.504 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>,
             Skull: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M8 20v2h8v-2"></path><path d="m12.5 17-.5-1-.5 1h1z"></path><path d="M16 20a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20"></path></svg>,
-            Dice: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>
+            Dice: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle><circle cx="8.5" cy="15.5" r="1.5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>,
+            Copy: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>,
+            Code: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
         };
 
-        const getSavedCharacters = () => {
-            try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } 
-            catch { return []; }
-        };
-        
-        const getSavedThreats = () => {
-            try { return JSON.parse(localStorage.getItem(THREAT_STORAGE_KEY)) || []; } 
-            catch { return []; }
-        };
+        const getSavedCharacters = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } };
+        const getSavedThreats = () => { try { return JSON.parse(localStorage.getItem(THREAT_STORAGE_KEY)) || []; } catch { return []; } };
 
         const getChanceBase = (val) => {
             if (val >= 16) return 7;
@@ -402,26 +330,19 @@
         const getMovimento = (ancestralidade, agl) => {
             let base = 10;
             const anc = (ancestralidade || '').toLowerCase();
-            if (anc.includes('halfling') || anc.includes('anão') || anc.includes('anao') || anc.includes('marreco')) {
-                base = 8;
-            } else if (anc.includes('lupino')) {
-                base = 12;
-            }
-            
+            if (anc.includes('halfling') || anc.includes('anão') || anc.includes('anao') || anc.includes('marreco')) base = 8;
+            else if (anc.includes('lupino')) base = 12;
             let mod = 0;
             if (agl <= 6) mod = -4;
             else if (agl <= 9) mod = -2;
             else if (agl >= 16) mod = 4;
             else if (agl >= 13) mod = 2;
-            
             return base + mod;
         };
 
         const hexToRgb = (hex) => {
             let cleaned = hex.replace('#', '');
-            if (cleaned.length === 3) {
-                cleaned = cleaned.split('').map(c => c + c).join('');
-            }
+            if (cleaned.length === 3) cleaned = cleaned.split('').map(c => c + c).join('');
             const num = parseInt(cleaned, 16);
             return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
         };
@@ -432,21 +353,11 @@
             const [savedThreats, setSavedThreats] = useState(getSavedThreats());
             const [data, setData] = useState(initialData);
             
-            const [theme, setTheme] = useState(() => {
-                try { return localStorage.getItem(THEME_PREF_KEY) || 'default'; } catch { return 'default'; }
-            });
-            const [customBgUrl, setCustomBgUrl] = useState(() => {
-                try { return localStorage.getItem(CUSTOM_BG_KEY) || ''; } catch { return ''; }
-            });
-            const [customWinColor, setCustomWinColor] = useState(() => {
-                try { return localStorage.getItem(CUSTOM_WIN_COLOR_KEY) || '#ffffff'; } catch { return '#ffffff'; }
-            });
-            const [customBarColor, setCustomBarColor] = useState(() => {
-                try { return localStorage.getItem(CUSTOM_BAR_COLOR_KEY) || '#1a1a1a'; } catch { return '#1a1a1a'; }
-            });
-            const [customOpacity, setCustomOpacity] = useState(() => {
-                try { return localStorage.getItem(CUSTOM_OPACITY_KEY) || '0.93'; } catch { return '0.93'; }
-            });
+            const [theme, setTheme] = useState(() => { try { return localStorage.getItem(THEME_PREF_KEY) || 'default'; } catch { return 'default'; } });
+            const [customBgUrl, setCustomBgUrl] = useState(() => { try { return localStorage.getItem(CUSTOM_BG_KEY) || ''; } catch { return ''; } });
+            const [customWinColor, setCustomWinColor] = useState(() => { try { return localStorage.getItem(CUSTOM_WIN_COLOR_KEY) || '#ffffff'; } catch { return '#ffffff'; } });
+            const [customBarColor, setCustomBarColor] = useState(() => { try { return localStorage.getItem(CUSTOM_BAR_COLOR_KEY) || '#1a1a1a'; } catch { return '#1a1a1a'; } });
+            const [customOpacity, setCustomOpacity] = useState(() => { try { return localStorage.getItem(CUSTOM_OPACITY_KEY) || '0.93'; } catch { return '0.93'; } });
 
             const [showCustomBgModal, setShowCustomBgModal] = useState(false);
             const [showUrlInput, setShowUrlInput] = useState(false);
@@ -456,12 +367,15 @@
             const [toastMsg, setToastMsg] = useState('');
             
             const [showSystemModal, setShowSystemModal] = useState(false);
-            const [createTarget, setCreateTarget] = useState(null); // 'pc' or 'threat'
+            const [createTarget, setCreateTarget] = useState(null); 
             
             const [showThreatModal, setShowThreatModal] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
             const [isPrintMode, setIsPrintMode] = useState(false);
+
+            // Controle do Modal de Código da Ficha
+            const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
@@ -469,35 +383,31 @@
             }, [theme]);
 
             useEffect(() => {
-                if (theme === 'custom' && customBgUrl) {
-                    document.body.style.backgroundImage = `url(${customBgUrl})`;
-                } else {
-                    document.body.style.backgroundImage = '';
-                }
+                if (theme === 'custom' && customBgUrl) document.body.style.backgroundImage = `url(${customBgUrl})`;
+                else document.body.style.backgroundImage = '';
             }, [theme, customBgUrl]);
+
+            // Escuta o evento afterprint para sair automaticamente do modo impressão
+            useEffect(() => {
+                const handleAfterPrint = () => setIsPrintMode(false);
+                window.addEventListener('afterprint', handleAfterPrint);
+                return () => window.removeEventListener('afterprint', handleAfterPrint);
+            }, []);
 
             const getWindowStyle = () => {
                 if (theme !== 'custom') return {};
                 const [r, g, b] = hexToRgb(customWinColor);
-                return {
-                    backgroundColor: `rgba(${r}, ${g}, b, ${customOpacity})`,
-                    backdropFilter: 'blur(5px)'
-                };
+                return { backgroundColor: `rgba(${r}, ${g}, ${b}, ${customOpacity})`, backdropFilter: 'blur(5px)' };
             };
 
             const getBarStyle = () => {
                 if (theme !== 'custom') return {};
-                return {
-                    backgroundColor: customBarColor,
-                    color: '#ffffff'
-                };
+                return { backgroundColor: customBarColor, color: '#ffffff' };
             };
 
             const saveToLocal = (itemData) => {
                 let savingData = JSON.parse(JSON.stringify(itemData));
-                if (!savingData.id) {
-                    savingData.id = Date.now().toString();
-                }
+                if (!savingData.id) savingData.id = Date.now().toString();
                 
                 const type = savingData.type || 'pc';
                 savingData.type = type;
@@ -520,23 +430,20 @@
                     showToast(type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
                 }
                 
-                setData(savingData);
+                // Se a ficha salva for a atual do editor, atualiza o state
+                if (!data.id || data.id === savingData.id) {
+                    setData(savingData);
+                }
             };
 
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
-                if (char) {
-                    setData(JSON.parse(JSON.stringify(char)));
-                    setView('editor');
-                }
+                if (char) { setData(JSON.parse(JSON.stringify(char))); setView('editor'); }
             };
             
             const loadThreat = (id) => {
                 const threat = savedThreats.find(t => t.id === id);
-                if (threat) {
-                    setData(JSON.parse(JSON.stringify(threat)));
-                    setView('editor');
-                }
+                if (threat) { setData(JSON.parse(JSON.stringify(threat))); setView('editor'); }
             };
             
             const loadTemplate = (modelo) => {
@@ -576,7 +483,6 @@
 
             const handlePrintClick = () => {
                 setIsPrintMode(true);
-                // Aguarda o React renderizar o modo de impressão (limpeza de estilos/cores)
                 setTimeout(() => {
                     window.print();
                 }, 300);
@@ -588,11 +494,7 @@
                 const keys = path.split('.');
                 const lastKey = keys.pop();
                 
-                keys.forEach(key => {
-                    if (!current[key]) current[key] = {};
-                    current = current[key];
-                });
-                
+                keys.forEach(key => { if (!current[key]) current[key] = {}; current = current[key]; });
                 current[lastKey] = value;
                 setData(newData);
             };
@@ -637,9 +539,7 @@
                     profissao: ['Guarda/Milícia', 'Mercador/Caixeiro', 'Bandido/Mercenário', 'Fazendeiro/Aldeão', 'Cultista/Fanático', 'Nobre/Aristocrata', 'Caçador/Guia', 'Artesão/Ferreiro', 'Estalajadeiro', 'Ladrão de rua'],
                     nome: ['Thorek', 'Elara', 'Bram', 'Kaelen', 'Mira', 'Rurik', 'Sila', 'Varn', 'Ylva', 'Gorbag', 'Alden', 'Lyra', 'Fendrel', 'Nyx', 'Orik']
                 };
-                if(lists[field]) {
-                    updateField(field, getRandom(lists[field]));
-                }
+                if(lists[field]) updateField(field, getRandom(lists[field]));
             };
 
             const handleAttributeChange = (attr, value) => {
@@ -647,31 +547,18 @@
                 newData.atributos[attr].valor = value;
                 
                 if (!newData.status?.manterDerivados) {
-                    if (attr === 'for') {
-                        newData.derivados.danoBonusFor = getDanoBonus(value);
-                        newData.derivados.limiteSobrecarga = Math.ceil(value / 2);
-                    }
-                    if (attr === 'agl') {
-                        newData.derivados.danoBonusAgl = getDanoBonus(value);
-                        newData.derivados.movimento = getMovimento(newData.bio.ancestralidade, value);
-                    }
-                    if (attr === 'con') {
-                        newData.status.pv.max = value;
-                    }
-                    if (attr === 'von') {
-                        newData.status.pd.max = value;
-                    }
+                    if (attr === 'for') { newData.derivados.danoBonusFor = getDanoBonus(value); newData.derivados.limiteSobrecarga = Math.ceil(value / 2); }
+                    if (attr === 'agl') { newData.derivados.danoBonusAgl = getDanoBonus(value); newData.derivados.movimento = getMovimento(newData.bio.ancestralidade, value); }
+                    if (attr === 'con') { newData.status.pv.max = value; }
+                    if (attr === 'von') { newData.status.pd.max = value; }
                 }
-                
                 setData(newData);
             };
 
             const handleAncestryChange = (value) => {
                 const newData = JSON.parse(JSON.stringify(data));
                 newData.bio.ancestralidade = value;
-                if (!newData.status?.manterDerivados) {
-                    newData.derivados.movimento = getMovimento(value, newData.atributos.agl.valor);
-                }
+                if (!newData.status?.manterDerivados) newData.derivados.movimento = getMovimento(value, newData.atributos.agl.valor);
                 setData(newData);
             };
 
@@ -681,13 +568,11 @@
                 const a = newData.atributos.agl.valor || 10;
                 const c = newData.atributos.con.valor || 10;
                 const v = newData.atributos.von.valor || 10;
-                const anc = newData.bio.ancestralidade;
-
+                
                 newData.derivados.danoBonusFor = getDanoBonus(f);
                 newData.derivados.limiteSobrecarga = Math.ceil(f / 2);
                 newData.derivados.danoBonusAgl = getDanoBonus(a);
-                newData.derivados.movimento = getMovimento(anc, a);
-                
+                newData.derivados.movimento = getMovimento(newData.bio.ancestralidade, a);
                 newData.status.pv.max = c;
                 newData.status.pd.max = v;
 
@@ -697,23 +582,19 @@
 
             const handleExport = async (charDataOrEvent) => {
                 const charToExport = (charDataOrEvent && charDataOrEvent.id) ? charDataOrEvent : data;
-                
                 try {
                     const zip = new JSZip();
                     const jsonData = JSON.stringify(charToExport, null, 2);
-                    
                     let fileName = `Ficha_${charToExport.bio?.nome || charToExport.nome || 'Novo_Personagem'}.json`;
                     if (charToExport.type === 'pnj') fileName = `PNJ_${charToExport.nome || 'Lacaio'}.json`;
                     if (charToExport.type === 'ameaca') fileName = `Ameaca_${charToExport.nome || 'Monstro'}.json`;
 
                     zip.file(fileName, jsonData);
-                    
                     const content = await zip.generateAsync({ type: "blob" });
                     const url = URL.createObjectURL(content);
                     
                     const downloadAnchorNode = document.createElement('a');
                     downloadAnchorNode.href = url;
-                    
                     let zipName = `Dragonbane_Ficha.zip`;
                     if (charToExport.type === 'pnj' || charToExport.type === 'ameaca') zipName = `Dragonbane_${charToExport.type === 'pnj' ? 'PNJ' : 'Ameaca'}.zip`;
                     
@@ -724,10 +605,7 @@
                     URL.revokeObjectURL(url);
                     
                     showToast("Ficha exportada em .ZIP! Extraia o arquivo para importar o .json.");
-                } catch (error) {
-                    showToast("Erro ao exportar o arquivo ZIP.");
-                    console.error(error);
-                }
+                } catch (error) { showToast("Erro ao exportar o arquivo ZIP."); console.error(error); }
             };
 
             const handleImport = (event) => {
@@ -740,25 +618,60 @@
                         const type = importedData.type || 'pc'; 
                         
                         let dataToLoad;
-                        if (type === 'pc') {
-                            dataToLoad = { ...initialData, ...importedData };
-                        } else if (type === 'pnj') {
-                            dataToLoad = { ...initialPnjData, ...importedData };
-                        } else if (type === 'ameaca') {
-                            dataToLoad = { ...initialAmeacaData, ...importedData };
-                        }
+                        if (type === 'pc') dataToLoad = { ...initialData, ...importedData };
+                        else if (type === 'pnj') dataToLoad = { ...initialPnjData, ...importedData };
+                        else if (type === 'ameaca') dataToLoad = { ...initialAmeacaData, ...importedData };
 
                         if(!dataToLoad.id) dataToLoad.id = Date.now().toString();
                         
-                        setData(dataToLoad);
                         saveToLocal(dataToLoad);
                         setView('editor');
-                    } catch (error) {
-                        showToast("Erro: Arquivo inválido. Certifique-se de extrair o .ZIP e selecionar o .json.");
-                    }
+                    } catch (error) { showToast("Erro: Arquivo inválido. Certifique-se de extrair o .ZIP e selecionar o .json."); }
                 };
                 reader.readAsText(file);
                 event.target.value = ''; 
+            };
+
+            const openCodeExport = (itemToExport) => {
+                const clone = JSON.parse(JSON.stringify(itemToExport));
+                if (clone.bio && clone.bio.imagem) clone.bio.imagem = ''; 
+                if (clone.imagem) clone.imagem = '';
+                
+                const compressed = LZString.compressToBase64(JSON.stringify(clone));
+                setCodeModal({ isOpen: true, mode: 'export', code: compressed });
+            };
+
+            const openCodeImport = () => setCodeModal({ isOpen: true, mode: 'import', code: '' });
+
+            const handleCodeImport = () => {
+                try {
+                    const decompressed = LZString.decompressFromBase64(codeModal.code.trim());
+                    if (!decompressed) throw new Error("Código inválido");
+                    const importedData = JSON.parse(decompressed);
+                    
+                    if(!importedData.id) importedData.id = Date.now().toString();
+                    
+                    saveToLocal(importedData);
+                    setView('editor');
+                    setCodeModal({ isOpen: false, mode: 'import', code: '' });
+                    showToast("Ficha importada com sucesso via código!");
+                } catch (err) {
+                    showToast("Erro: Código de ficha inválido ou corrompido.");
+                }
+            };
+
+            const copyToClipboard = () => {
+                navigator.clipboard.writeText(codeModal.code).then(() => {
+                    showToast("Código copiado para a área de transferência!");
+                }).catch(() => {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = codeModal.code;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    textArea.remove();
+                    showToast("Código copiado para a área de transferência!");
+                });
             };
 
             const handleImageUpload = (event) => {
@@ -770,185 +683,190 @@
             };
 
             const applyImageUrl = () => {
-                if (tempUrl) {
-                    updateField('bio.imagem', tempUrl);
-                    setTempUrl('');
-                    setShowUrlInput(false);
-                }
+                if (tempUrl) { updateField('bio.imagem', tempUrl); setTempUrl(''); setShowUrlInput(false); }
             };
 
-            const condicoesNomes = {
-                for: 'Exausto', con: 'Adoecido', agl: 'Aturdido',
-                int: 'Enraivecido', von: 'Assustado', car: 'Desanimado'
-            };
+            const condicoesNomes = { for: 'Exausto', con: 'Adoecido', agl: 'Aturdido', int: 'Enraivecido', von: 'Assustado', car: 'Desanimado' };
 
             if (view === 'dashboard') {
                 return (
-                    <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up">
-                        {/* Seção Personagens */}
-                        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
-                            <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
-                            <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
-                                {/* Seletor de Tema Visual */}
-                                <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
-                                    <SVGIcons.Palette />
-                                    <select 
-                                        value={theme} 
-                                        onChange={(e) => {
-                                            if (e.target.value === 'custom') {
-                                                setShowCustomBgModal(true);
-                                            } else {
-                                                setTheme(e.target.value);
-                                            }
-                                        }} 
-                                        className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer"
-                                    >
-                                        <option value="default">Tema: Padrão</option>
-                                        <option value="classic">Tema: Clássico Dragonbane</option>
-                                        <option value="custom">Tema: Personalizado...</option>
-                                    </select>
+                    <React.Fragment>
+                        <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up">
+                            {/* Seção Personagens */}
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
+                                <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
+                                <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
+                                    <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
+                                        <SVGIcons.Palette />
+                                        <select 
+                                            value={theme} 
+                                            onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} 
+                                            className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer"
+                                        >
+                                            <option value="default">Tema: Padrão</option>
+                                            <option value="classic">Tema: Clássico Dragonbane</option>
+                                            <option value="custom">Tema: Personalizado...</option>
+                                        </select>
+                                    </div>
+                                    <button onClick={() => setShowGuideModal(true)} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.HelpCircle /> Guias & Tutoriais
+                                    </button>
+                                    <button onClick={openCodeImport} className="flex justify-center items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm" title="Colar código em texto da ficha">
+                                        <SVGIcons.Code /> Colar Código
+                                    </button>
+                                    <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Upload /> ZIP/JSON
+                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                    </label>
+                                    <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Plus /> Novo Personagem
+                                    </button>
                                 </div>
-                                <button onClick={() => setShowGuideModal(true)} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.HelpCircle /> Guias & Tutoriais
-                                </button>
-                                <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.Upload /> Importar Ficha (JSON)
-                                    <input type="file" accept=".json" className="hidden" onChange={handleImport} />
-                                </label>
-                                <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.Plus /> Novo Personagem
-                                </button>
                             </div>
-                        </div>
 
-                        {/* Personagens Grid */}
-                        {savedChars.length === 0 ? (
-                            <div style={getWindowStyle()} className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
-                                <div className="flex justify-center text-gray-400"><SVGIcons.User /></div>
-                                <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
-                                <p className="text-gray-400 text-sm">Crie um novo ou importe uma ficha JSON extraída de um arquivo ZIP.</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {savedChars.map(char => (
-                                    <div key={char.id} style={getWindowStyle()} className="bg-white rounded-md shadow-lg border-2 border-dragon-dark overflow-hidden flex flex-col">
-                                        <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
-                                            <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
-                                                {char.bio?.imagem ? (
-                                                    <img src={char.bio.imagem} alt={char.bio.nome} className="w-full h-full object-cover" />
+                            {/* Personagens Grid */}
+                            {savedChars.length === 0 ? (
+                                <div style={getWindowStyle()} className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
+                                    <div className="flex justify-center text-gray-400"><SVGIcons.User /></div>
+                                    <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
+                                    <p className="text-gray-400 text-sm">Crie um novo, cole um Código ou importe um arquivo .ZIP</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {savedChars.map(char => (
+                                        <div key={char.id} style={getWindowStyle()} className="bg-white rounded-md shadow-lg border-2 border-dragon-dark overflow-hidden flex flex-col">
+                                            <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
+                                                <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
+                                                    {char.bio?.imagem ? (
+                                                        <img src={char.bio.imagem} alt={char.bio.nome} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100"><SVGIcons.User /></div>
+                                                    )}
+                                                </div>
+                                                <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
+                                                    <h3 className="font-title font-bold text-lg truncate text-red-900">{char.bio?.nome || 'Sem Nome'}</h3>
+                                                    <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">{char.bio?.ancestralidade || '?'} • {char.bio?.profissao || '?'}</p>
+                                                    <p className="text-[10px] text-gray-500 mt-2 truncate italic">Jogador: {char.bio?.jogador || '-'}</p>
+                                                </div>
+                                            </div>
+                                            <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
+                                                <div className="flex gap-1">
+                                                    <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Exportar completo (ZIP)"><SVGIcons.Save/> ZIP</button>
+                                                    <button onClick={() => openCodeExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar código texto (Sem foto)"><SVGIcons.Code/> Código</button>
+                                                </div>
+                                                {deleteConfirmId === char.id ? (
+                                                    <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
                                                 ) : (
-                                                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100"><SVGIcons.User /></div>
+                                                    <button onClick={() => setDeleteConfirmId(char.id)} className="text-red-500 hover:text-red-700 px-2 py-1 flex items-center gap-1"><SVGIcons.Trash/></button>
                                                 )}
                                             </div>
-                                            <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                <h3 className="font-title font-bold text-lg truncate text-red-900">{char.bio?.nome || 'Sem Nome'}</h3>
-                                                <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">{char.bio?.ancestralidade || '?'} • {char.bio?.profissao || '?'}</p>
-                                                <p className="text-[10px] text-gray-500 mt-2 truncate italic">Jogador: {char.bio?.jogador || '-'}</p>
-                                            </div>
                                         </div>
-                                        <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
-                                            <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1">Exportar (ZIP)</button>
-                                            
-                                            {deleteConfirmId === char.id ? (
-                                                <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar Exclusão</button>
-                                            ) : (
-                                                <button onClick={() => setDeleteConfirmId(char.id)} className="text-red-500 hover:text-red-700 px-2 py-1 flex items-center gap-1"><SVGIcons.Trash/> Excluir</button>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        
-                        {/* Seção de Ameaças e PNJs */}
-                        <div className="flex flex-col md:flex-row justify-between items-center mt-12 mb-8 gap-4 no-print">
-                            <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-gray-700 pb-2">Ameaças e PNJs</h1>
-                            <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
-                                <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.Upload /> Importar Ficha
-                                    <input type="file" accept=".json" className="hidden" onChange={handleImport} />
-                                </label>
-                                <button onClick={() => { setCreateTarget('threat'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                    <SVGIcons.Plus /> Criar Ameaça/PNJ
-                                </button>
-                            </div>
-                        </div>
-
-                        {savedThreats.length === 0 ? (
-                            <div style={getWindowStyle()} className="text-center py-16 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
-                                <div className="flex justify-center text-gray-400 mb-4"><SVGIcons.Skull /></div>
-                                <p className="text-gray-500 text-lg">Nenhuma ameaça ou PNJ encontrado.</p>
-                                <p className="text-gray-400 text-sm">Crie novos oponentes para sua mesa ou importe fichas JSON.</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {savedThreats.map(threat => (
-                                    <div key={threat.id} style={getWindowStyle()} className="bg-white rounded-md shadow-lg border-2 border-gray-500 overflow-hidden flex flex-col relative">
-                                        <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
-                                            {threat.type === 'pnj' ? 'PNJ' : 'Monstro'}
-                                        </div>
-                                        <div className="flex h-24 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadThreat(threat.id)}>
-                                            <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                <h3 className="font-title font-bold text-lg truncate text-gray-900">{threat.nome || 'Sem Nome'}</h3>
-                                                <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
-                                                    {threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
-                                            <button onClick={() => handleExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1">Exportar (ZIP)</button>
-                                            {deleteConfirmId === threat.id ? (
-                                                <button onClick={() => deleteThreat(threat.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar Exclusão</button>
-                                            ) : (
-                                                <button onClick={() => setDeleteConfirmId(threat.id)} className="text-red-500 hover:text-red-700 px-2 py-1 flex items-center gap-1"><SVGIcons.Trash/> Excluir</button>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        
-                        {/* Sobre o Projeto */}
-                        <div style={getWindowStyle()} className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden no-print">
-                            <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
-                                <h2 className="font-title font-bold text-lg flex items-center gap-2">
-                                    Sobre o Projeto & Atualizações
-                                </h2>
-                                <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">{UPDATE_LOG[0].versao}</span>
-                            </div>
-                            <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                <div>
-                                    <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
-                                    <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
-                                        {UPDATE_LOG.slice(0, 6).map((log, idx) => (
-                                            <p key={idx}><strong className="text-black bg-gray-200 px-1 rounded">{log.versao}:</strong> {log.descricao}</p>
-                                        ))}
-                                    </div>
+                                    ))}
                                 </div>
-
-                                <div className="space-y-6 flex flex-col justify-between">
-                                    <div className="bg-gray-50 border-2 border-dashed border-gray-300 p-4 rounded-lg relative">
-                                        <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-gray-600 text-sm">Projeto de Código Aberto 🔓</div>
-                                        <p className="text-sm text-gray-800 leading-relaxed mt-2 mb-3">
-                                            Esta ferramenta é 100% gratuita, sem servidores ou banco de dados ocultos, rodando inteiramente no seu navegador por meio de um único arquivo HTML. 
-                                        </p>
-                                        <div className="bg-blue-50 border-l-4 border-blue-500 p-3 text-xs text-blue-900 rounded">
-                                            <strong className="block text-sm mb-1">Como pegar o código para você:</strong>
-                                            Clique com o botão direito do mouse em qualquer espaço vazio desta página e selecione <b>"Exibir código-fonte da página"</b>. Copie todo o texto, cole em um arquivo vazio terminando em <code>.html</code> e pronto!
-                                        </div>
-                                    </div>
-                                    
-                                    <a style={getBarStyle()} href="https://dmliterpg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-dragon-dark hover:bg-gray-900 text-white font-title font-bold text-lg py-4 px-4 rounded shadow-lg transition-transform transform hover:scale-[1.02]">
-                                        Visite a Plataforma DMLite 🐉
-                                    </a>
+                            )}
+                            
+                            {/* Seção de Ameaças e PNJs */}
+                            <div className="flex flex-col md:flex-row justify-between items-center mt-12 mb-8 gap-4 no-print">
+                                <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-gray-700 pb-2">Ameaças e PNJs</h1>
+                                <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
+                                    <button onClick={openCodeImport} className="flex justify-center items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Code /> Colar Código
+                                    </button>
+                                    <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Upload /> ZIP/JSON
+                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                    </label>
+                                    <button onClick={() => { setCreateTarget('threat'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Plus /> Criar Ameaça/PNJ
+                                    </button>
                                 </div>
                             </div>
+
+                            {savedThreats.length === 0 ? (
+                                <div style={getWindowStyle()} className="text-center py-16 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
+                                    <div className="flex justify-center text-gray-400 mb-4"><SVGIcons.Skull /></div>
+                                    <p className="text-gray-500 text-lg">Nenhuma ameaça ou PNJ encontrado.</p>
+                                    <p className="text-gray-400 text-sm">Crie novos oponentes para sua mesa ou importe fichas JSON.</p>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {savedThreats.map(threat => (
+                                        <div key={threat.id} style={getWindowStyle()} className="bg-white rounded-md shadow-lg border-2 border-gray-500 overflow-hidden flex flex-col relative">
+                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
+                                                {threat.type === 'pnj' ? 'PNJ' : 'Monstro'}
+                                            </div>
+                                            <div className="flex h-24 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadThreat(threat.id)}>
+                                                <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
+                                                    <h3 className="font-title font-bold text-lg truncate text-gray-900">{threat.nome || 'Sem Nome'}</h3>
+                                                    <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
+                                                        {threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
+                                                <div className="flex gap-1">
+                                                    <button onClick={() => handleExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Exportar completo (ZIP)"><SVGIcons.Save/> ZIP</button>
+                                                    <button onClick={() => openCodeExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar código texto"><SVGIcons.Code/> Código</button>
+                                                </div>
+                                                {deleteConfirmId === threat.id ? (
+                                                    <button onClick={() => deleteThreat(threat.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
+                                                ) : (
+                                                    <button onClick={() => setDeleteConfirmId(threat.id)} className="text-red-500 hover:text-red-700 px-2 py-1 flex items-center gap-1"><SVGIcons.Trash/></button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            
+                            {/* Sobre o Projeto */}
+                            <div style={getWindowStyle()} className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden no-print">
+                                <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
+                                    <h2 className="font-title font-bold text-lg flex items-center gap-2">
+                                        Sobre o Projeto & Atualizações
+                                    </h2>
+                                    <span className="bg-red-800 px-3 py-1 rounded-sm text-xs font-bold tracking-widest uppercase shadow">{UPDATE_LOG[0].versao}</span>
+                                </div>
+                                <div className="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    <div>
+                                        <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
+                                        <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
+                                            {UPDATE_LOG.slice(0, 6).map((log, idx) => (
+                                                <p key={idx}><strong className="text-black bg-gray-200 px-1 rounded">{log.versao}:</strong> {log.descricao}</p>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-6 flex flex-col justify-between">
+                                        <div className="bg-gray-50 border-2 border-dashed border-gray-300 p-4 rounded-lg relative">
+                                            <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-gray-600 text-sm">Projeto de Código Aberto 🔓</div>
+                                            <p className="text-sm text-gray-800 leading-relaxed mt-2 mb-3">
+                                                Esta ferramenta é 100% gratuita, sem servidores ou banco de dados ocultos, rodando inteiramente no seu navegador por meio de um único arquivo HTML. 
+                                            </p>
+                                            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 text-xs text-blue-900 rounded">
+                                                <strong className="block text-sm mb-1">Como pegar o código para você:</strong>
+                                                Clique com o botão direito do mouse em qualquer espaço vazio desta página e selecione <b>"Exibir código-fonte da página"</b>. Copie todo o texto, cole em um arquivo vazio terminando em <code>.html</code> e pronto!
+                                            </div>
+                                        </div>
+                                        
+                                        <a style={getBarStyle()} href="https://dmliterpg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-dragon-dark hover:bg-gray-900 text-white font-title font-bold text-lg py-4 px-4 rounded shadow-lg transition-transform transform hover:scale-[1.02]">
+                                            Visite a Plataforma DMLite 🐉
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {toastMsg && (
+                                <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-[200] animate-fade-in-up">
+                                    {toastMsg}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Modal: Tema Personalizado */}
-                        {showCustomBgModal && (
-                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
+                        {/* MODAIS RENDERIZADOS VIA PORTAL DIRETAMENTE NA RAIZ (BODY) PARA ISOLAMENTO DE POSICIONAMENTO */}
+                        {showCustomBgModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
                                     <div className="flex justify-between items-center border-b pb-2">
                                         <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
                                         <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
@@ -1001,7 +919,7 @@
 
                                         <div className="border-t pt-3">
                                             <div className="flex justify-between items-center mb-1">
-                                                <label className="text-xs font-bold text-gray-700">Opacidade do Fundo das Janelas</label>
+                                                <label className="text-xs font-bold text-gray-700">Opacidade das Janelas</label>
                                                 <span className="text-xs font-bold text-gray-500">{Math.round(parseFloat(customOpacity) * 100)}%</span>
                                             </div>
                                             <input type="range" min="0.2" max="1" step="0.05" value={customOpacity} onChange={(e) => { setCustomOpacity(e.target.value); localStorage.setItem(CUSTOM_OPACITY_KEY, e.target.value); setTheme('custom'); }} className="w-full cursor-pointer" />
@@ -1014,19 +932,18 @@
                                         <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">Concluir</button>
                                     </div>
                                 </div>
-                            </div>
+                            </div>,
+                            document.body
                         )}
 
-                        {/* Modal: Sistema de Seleção (Unificado) */}
-                        {showSystemModal && (
-                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
+                        {showSystemModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
                                     <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                         <h2 className="font-title font-bold text-lg uppercase tracking-wide">Selecionar Sistema</h2>
                                         <button onClick={() => { setShowSystemModal(false); setCreateTarget(null); }} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
                                     <div className="p-6 bg-gray-100 flex flex-col gap-4">
-                                        {/* Dragonbane (Clicável) */}
                                         <div onClick={() => { 
                                             setShowSystemModal(false); 
                                             if (createTarget === 'pc') createNewCharacter();
@@ -1041,7 +958,6 @@
                                             <div className="text-gray-300 group-hover:text-red-800 transition-colors"><SVGIcons.Plus /></div>
                                         </div>
 
-                                        {/* Em breve... (Desabilitado) */}
                                         <div className="bg-gray-200 border-2 border-dashed border-gray-300 rounded p-4 flex items-center gap-4 opacity-60 cursor-not-allowed">
                                             <div className="w-14 h-14 bg-gray-400 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner">?</div>
                                             <div className="flex-1">
@@ -1052,19 +968,18 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>,
+                            document.body
                         )}
 
-                        {/* Modal: Criação de Ameaças / Templates Genéricos */}
-                        {showThreatModal && (
-                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-gray-600 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                        {showThreatModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-gray-600 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
                                     <div style={getBarStyle()} className="bg-gray-800 text-white p-3 flex justify-between items-center shrink-0">
                                         <h2 className="font-title font-bold text-lg">Nova Ameaça / PNJ</h2>
                                         <button onClick={() => setShowThreatModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
                                     <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
-                                        
                                         <div>
                                             <h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Criar Ficha em Branco</h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1103,16 +1018,15 @@
                                             </div>
                                             <p className="text-[10px] text-gray-400 mt-2 italic text-center">* Esses modelos são arquétipos originais independentes para agilizar a criação, e não copiam estatísticas de livros licenciados.</p>
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
+                            </div>,
+                            document.body
                         )}
 
-                        {/* Modal: Guias Expandidos */}
-                        {showGuideModal && (
-                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 transition-opacity">
-                                <div style={getWindowStyle()} className="bg-white rounded-sm shadow-2xl w-full max-w-3xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                        {showGuideModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-3xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
                                     <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                         <h2 className="font-title font-bold text-lg flex items-center gap-2"><SVGIcons.HelpCircle /> Guias e Tutoriais Completos</h2>
                                         <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
@@ -1121,27 +1035,33 @@
                                         <button onClick={() => setGuideTab('import')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'import' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Importar/Exportar</button>
                                         <button onClick={() => setGuideTab('dragonbane')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'dragonbane' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Fichas DB</button>
                                         <button onClick={() => setGuideTab('mestre')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'mestre' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Ameaças e PNJs</button>
-                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão (A4)</button>
+                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão</button>
                                     </div>
                                     <div className="p-4 md:p-6 overflow-y-auto bg-white flex-1 text-sm text-gray-700 leading-relaxed space-y-4">
                                         
                                         {guideTab === 'import' && (
                                             <div className="space-y-4 animate-fade-in-up">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Exportar e Importar Fichas (.ZIP e .JSON)</h3>
-                                                <p>Este aplicativo não usa banco de dados online (o que garante que ele seja rápido, seguro e nunca saia do ar). Tudo é salvo apenas no seu próprio navegador (LocalStorage).</p>
+                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Exportar, Importar e Código de Ficha</h3>
+                                                <p>Este aplicativo permite salvar fichas de três formas diferentes:</p>
                                                 
-                                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
-                                                    <h4 className="font-bold text-blue-900 mb-2">Como Exportar (Fazer Backup / Enviar pro Mestre)</h4>
-                                                    <p className="mb-2">Ao clicar no botão <strong>Exportar (ZIP)</strong>, o sistema compacta sua ficha em um arquivo <code>.zip</code>. Nós usamos o formato ZIP para evitar que celulares e navegadores bloqueiem o download automático de arquivos <code>.json</code> puros.</p>
+                                                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mt-4">
+                                                    <h4 className="font-bold text-yellow-900 mb-2">Método 1: Código de Ficha (Seed Texto) ⚡ MAIS RÁPIDO</h4>
+                                                    <p className="mb-2 text-xs">Ideal para compartilhar rapidamente no Discord, WhatsApp ou chat da sessão.</p>
+                                                    <ul className="list-decimal ml-5 space-y-1 font-bold text-yellow-800 text-xs">
+                                                        <li>Clique no botão <SVGIcons.Code/> <strong>Código</strong> na sua ficha.</li>
+                                                        <li>Copie a string longa gerada.</li>
+                                                        <li>No Dashboard, clique em <SVGIcons.Code/> <strong>Colar Código</strong> e insira o texto.</li>
+                                                        <li className="text-red-700">Atenção: A foto/imagem do personagem é omitida do código para mantê-lo leve.</li>
+                                                    </ul>
                                                 </div>
 
-                                                <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded mt-4">
-                                                    <h4 className="font-bold text-red-900 mb-2">Como Importar (Carregar a ficha de volta)</h4>
-                                                    <ul className="list-decimal ml-5 space-y-1 font-bold text-red-800">
-                                                        <li>Faça o download do arquivo <code>.zip</code> no seu computador ou celular.</li>
-                                                        <li><strong>Muito Importante:</strong> Você DEVE extrair/descompactar o arquivo <code>.zip</code> primeiro! Não tente importar o arquivo ZIP diretamente.</li>
-                                                        <li>Após extrair, você verá um arquivo de texto terminando em <code>.json</code>.</li>
-                                                        <li>No app, clique em <strong>Importar Ficha (JSON)</strong> e selecione este arquivo extraído. A ficha aparecerá no seu painel.</li>
+                                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
+                                                    <h4 className="font-bold text-blue-900 mb-2">Método 2: Exportar ZIP / JSON 📁 COMPLETO</h4>
+                                                    <p className="mb-2 text-xs">Ideal para backups completos (incluindo imagens) no seu dispositivo.</p>
+                                                    <ul className="list-decimal ml-5 space-y-1 font-bold text-blue-800 text-xs">
+                                                        <li>Clique no botão <strong>ZIP</strong> para baixar o pacote.</li>
+                                                        <li><strong>Muito Importante:</strong> Extraia o arquivo <code>.zip</code> no seu computador ou celular antes de importar.</li>
+                                                        <li>Clique em <strong>ZIP/JSON</strong> (upload) e selecione o arquivo <code>.json</code> extraído.</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1150,18 +1070,13 @@
                                         {guideTab === 'dragonbane' && (
                                             <div className="space-y-4 animate-fade-in-up">
                                                 <h3 className="font-title font-bold text-xl text-black border-b pb-2">Regras de Personagem Jogador (Dragonbane)</h3>
-                                                <p>A ficha possui automatização de atributos base, mas permite que você trave as opções (usando o botão de cadeado) caso tenha regras da casa ou itens mágicos que alterem os derivados.</p>
+                                                <p>A ficha possui automação avançada de atributos, mas permite trava manual (cadeado) para regras da casa ou itens mágicos.</p>
                                                 
                                                 <ul className="space-y-3">
-                                                    <li><strong className="text-black">1. Valores Derivados Automáticos:</strong> Ao preencher a Ancestralidade e os Atributos Básicos (FOR, AGL, CON, VON), o sistema calcula o Movimento (Base da raça + modificador de AGL), PV Máximo (igual a CON) e PD Máximo (igual a VON). O Dano Bônus é ativado para atributos 13+ (D4) ou 17+ (D6). Sobrecarga é metade da FOR, arredondado para cima.</li>
-                                                    
-                                                    <li><strong className="text-black">2. Perícias e Treinamento [T]:</strong> A Base de toda perícia deriva do atributo atrelado a ela (ex: 5, 6, 7...). Se você clicar no botão <strong>[ T ]</strong>, você está marcando a perícia como Treinada, o que <strong>dobra a chance base</strong> automaticamente.</li>
-                                                    
-                                                    <li><strong className="text-black">3. Pontos de Determinação (PD) e Condições:</strong> Usados para usar habilidades heróicas ou mágicas, e para Forçar rolagens quando você falha. Quando você "Força" uma rolagem de atributo ou perícia, deve assumir a <strong>Condição</strong> respectiva daquele atributo, marcando a caixinha vermelha no painel de Atributos.</li>
-                                                    
-                                                    <li><strong className="text-black">4. Testes de Morte:</strong> Quando seu PV chega a 0, a cada turno você faz um teste de CON (sem usar perícias). 3 Sucessos você estabiliza; 3 Falhas o personagem morre. </li>
-                                                    
-                                                    <li><strong className="text-black">5. Revés (Armaduras e Elmos):</strong> Algumas proteções pesadas impõem um "Revés" (rolar dois D20 e ficar com o pior resultado) em perícias específicas. Anote esse revés na linha em itálico logo abaixo da sua armadura para não esquecer na hora de realizar acrobacias ou furtividade!</li>
+                                                    <li><strong className="text-black">1. Valores Derivados Automáticos:</strong> Preenchendo Ancestralidade e Atributos Básicos, o sistema calcula o Movimento, PV Máximo (CON), PD Máximo (VON) e Danos Bônus.</li>
+                                                    <li><strong className="text-black">2. Perícias e Treinamento [T]:</strong> Clicar no botão <strong>[ T ]</strong> marca a perícia como Treinada, <strong>dobrando a chance base</strong> automaticamente com base no atributo atrelado.</li>
+                                                    <li><strong className="text-black">3. Pontos de Determinação (PD) e Condições:</strong> Forçar uma rolagem de atributo exige assumir a <strong>Condição</strong> respectiva daquele atributo, marcada nas caixas vermelhas.</li>
+                                                    <li><strong className="text-black">4. Testes de Morte:</strong> Com PV zerado, cada turno exige teste de CON. 3 Sucessos estabilizam; 3 Falhas resultam em morte.</li>
                                                 </ul>
                                             </div>
                                         )}
@@ -1169,23 +1084,24 @@
                                         {guideTab === 'mestre' && (
                                             <div className="space-y-4 animate-fade-in-up">
                                                 <h3 className="font-title font-bold text-xl text-black border-b pb-2">Ameaças e PNJs (Para o Mestre)</h3>
-                                                <p>Diferente de sistemas baseados na "classe de desafio universal", Dragonbane divide os oponentes em dois blocos de estatísticas radicalmente diferentes. Nosso painel suporta ambos, além de fornecer modelos pré-fabricados originais.</p>
+                                                <p>Dragonbane divide os oponentes em dois blocos estatísticos distintos:</p>
                                                 
                                                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
                                                     <h4 className="font-title font-bold text-blue-900 mb-2">Ficha de PNJ (Personagem Não Jogador)</h4>
-                                                    <p className="text-sm">Humanoides (bandidos, guardas, magos inimigos). Funcionam como personagens jogadores, rolando D20 para atacar e esquivar.</p>
+                                                    <p className="text-sm">Humanoides (guardas, bandidos). Funcionam como personagens, rolando perícias e armas normais.</p>
                                                     <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
-                                                        <li><strong>Lacaio vs Chefe:</strong> Lacaios (minions) são todos os capangas comuns da cena, rolando numa mesma iniciativa e geralmente sem Pontos de Determinação. Chefes agem com iniciativa própria, podem ter habilidades e gastam PD. O app permite classificar a ficha entre os dois.</li>
-                                                        <li><strong>Criação Rápida de PNJs:</strong> Ao abrir uma ficha de PNJ em branco, clique nos botões de dado azuis 🎲 no topo. Eles sortearão Nome, Profissão, Atitude, Motivação e um Traço Marcante usando as tabelas integradas do sistema para você improvisar rapidamente numa taverna.</li>
+                                                        <li><strong>Lacaio vs Chefe:</strong> Lacaios agem coletivamente e sem PD; Chefes agem com iniciativa própria e gastam Pontos de Determinação.</li>
+                                                        <li><strong>Criação Rápida:</strong> A ficha de PNJ possui botões de dado azuis 🎲 para sortear traços de improviso na hora.</li>
                                                     </ul>
                                                 </div>
 
                                                 <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded mt-4">
                                                     <h4 className="font-title font-bold text-red-900 mb-2">Ficha de Ameaça / Monstro</h4>
-                                                    <p className="text-sm">Usado para criaturas bestiais (Trolls, Demônios, Lobos, Aranha-Gigante). Monstros <strong>não rolam dados para atacar ou testar perícia</strong>.</p>
+                                                    <p className="text-sm">Monstros (Trolls, Aranhas) <strong>não rolam dados de perícia para atacar</strong>.</p>
                                                     <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
-                                                        <li><strong>Ferocidade (Importante!):</strong> Determina quantas ações (ou seja, quantas Cartas de Iniciativa) o monstro recebe no início do turno. Um monstro Ferocidade 3 age três vezes completas antes da rodada acabar!</li>
-                                                        <li><strong>Tabela D6 Fixa:</strong> No turno do monstro, em vez de testar perícia, você como mestre apenas rola 1D6 e consulta as linhas 1 a 6 da ficha. O ataque listado acontece automaticamente (e só pode ser Esquivado, e raramente Aparado, pelos jogadores). O app traz essa tabela pronta para você preencher.</li>
+                                                        <li><strong>Ferocidade:</strong> Indica quantas cartas de iniciativa o monstro compra por rodada (quantas vezes age).</li>
+                                                        <li><strong>Tabela de Ataque (D6):</strong> Na sua vez, o mestre rola 1D6 e aplica o ataque correspondente de 1 a 6.</li>
+                                                        <li><strong>Modelos Prontos:</strong> Use os modelos genéricos no criador para agilizar sessões.</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1194,31 +1110,74 @@
                                         {guideTab === 'imprimir' && (
                                             <div className="space-y-4 animate-fade-in-up">
                                                 <h3 className="font-title font-bold text-xl text-black border-b pb-2">Impressão Otimizada (1 Clique)</h3>
-                                                <p>Nós desenhamos a ficha para que você possa imprimi-la fisicamente para jogar de forma analógica, sem gastar tinta atoa com fundos escuros.</p>
+                                                <p>Desenvolvemos a impressão inteligente para economizar tinta e papel:</p>
                                                 
                                                 <div className="bg-gray-100 p-4 rounded border border-gray-300">
                                                     <ul className="list-decimal ml-5 space-y-2 font-bold text-gray-800">
-                                                        <li>Na página da ficha do Personagem (ou Ameaça), localize o botão <strong>Impressão</strong> na barra superior.</li>
-                                                        <li>Ao clicar, o sistema fará duas coisas automaticamente: removerá todos os fundos, painéis pretos e botões desnecessários, <strong>e em seguida, abrirá a janela de impressão do seu navegador</strong>.</li>
-                                                        <li>O CSS do app já informa à sua impressora para usar o formato <strong>A4 Paisagem (Landscape)</strong> automaticamente.</li>
-                                                        <li><strong>DICA PRO:</strong> Na tela de impressão do Chrome/Edge/Safari, procure as configurações de <em>Escala</em> (Scale) e altere de "Padrão" para <strong>Personalizado: 80%</strong>. Isso garante que a ficha inteira caiba perfeitamente no centro de 1 a 2 páginas A4 deitadas, sem cortar colunas pela metade.</li>
+                                                        <li>No editor, clique no botão <strong>Impressão</strong> na barra superior.</li>
+                                                        <li>O app ativa o formato limpo, aciona a janela de impressão automaticamente e <strong>restaura sua tela ao fechar</strong>.</li>
+                                                        <li>O layout força o padrão <strong>A4 Paisagem (Landscape)</strong>, cabendo perfeitamente em até 2 páginas.</li>
+                                                        <li><strong>DICA PRO:</strong> Se necessário, defina a escala de impressão no navegador para <strong>80%</strong>.</li>
                                                     </ul>
                                                 </div>
-                                                <p className="text-xs text-gray-500 italic mt-2">Após imprimir ou fechar a janela da impressora, caso a ficha continue branca e sem botões, basta clicar no botão "Modo Padrão" no topo da tela para restaurar o visual original e poder editar a ficha novamente.</p>
                                             </div>
                                         )}
 
                                     </div>
                                 </div>
-                            </div>
+                            </div>,
+                            document.body
                         )}
-                        
-                        {toastMsg && (
-                            <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50 animate-fade-in-up">
-                                {toastMsg}
-                            </div>
+
+                        {codeModal.isOpen && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-lg border-2 border-dragon-dark overflow-hidden animate-fade-in-up">
+                                    <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center border-b border-gray-700">
+                                        <h2 className="font-title font-bold text-lg uppercase tracking-wide">
+                                            {codeModal.mode === 'export' ? 'Código da Ficha (Exportar)' : 'Importar Ficha via Código'}
+                                        </h2>
+                                        <button onClick={() => setCodeModal({ isOpen: false, mode: 'export', code: '' })} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="p-6 bg-gray-100 flex flex-col gap-4">
+                                        {codeModal.mode === 'export' ? (
+                                            <>
+                                                <p className="text-xs text-gray-600 font-bold">Copie o código abaixo e envie para seu grupo ou mestre para importação instantânea.</p>
+                                                <div className="bg-yellow-50 border-l-4 border-yellow-500 p-2 text-xs text-yellow-800">
+                                                    <strong>Aviso:</strong> Para manter o código leve, a imagem/foto é omitida. Para transferir com foto, utilize o formato [ZIP].
+                                                </div>
+                                                <textarea readOnly value={codeModal.code} className="w-full h-32 border-2 border-gray-300 rounded p-2 text-xs font-mono bg-white outline-none resize-none break-all" onFocus={(e) => e.target.select()}></textarea>
+                                                <div className="flex justify-end gap-2">
+                                                    <button onClick={copyToClipboard} className="bg-dragon-dark hover:bg-black text-white px-4 py-2 rounded font-bold shadow transition-colors flex items-center gap-1">
+                                                        <SVGIcons.Copy /> Copiar Código
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p className="text-xs text-gray-600 font-bold">Cole abaixo o código de texto compactado da ficha.</p>
+                                                <textarea 
+                                                    value={codeModal.code} 
+                                                    onChange={e => setCodeModal({...codeModal, code: e.target.value})} 
+                                                    placeholder="Cole a string longa aqui..." 
+                                                    className="w-full h-32 border-2 border-gray-300 rounded p-2 text-xs font-mono bg-white outline-none resize-none break-all"
+                                                ></textarea>
+                                                <div className="flex justify-end gap-2">
+                                                    <button onClick={() => setCodeModal({ isOpen: false, mode: 'export', code: '' })} className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded font-bold shadow transition-colors">
+                                                        Cancelar
+                                                    </button>
+                                                    <button onClick={handleCodeImport} className="bg-dragon-dark hover:bg-black text-white px-4 py-2 rounded font-bold shadow transition-colors flex items-center gap-1">
+                                                        <SVGIcons.Download /> Importar
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>,
+                            document.body
                         )}
-                    </div>
+
+                    </React.Fragment>
                 );
             }
 
@@ -1228,15 +1187,14 @@
                     {/* Top Bar Compartilhada */}
                     <div style={getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : (data.type === 'pnj' ? 'bg-blue-900 text-white' : data.type === 'ameaca' ? 'bg-red-900 text-white' : 'bg-dragon-dark text-white')}`}>
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
-                                <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Painel</span>
+                            <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm font-bold ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
+                                <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text uppercase ${isPrintMode ? '' : (data.type === 'pc' ? 'text-red-400' : 'text-gray-200')}`}>
                                 {data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (HUMANOIDE)' : 'AMEAÇA (MONSTRO)'}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
-                            {/* Seletor de Tema no Editor */}
                             <div className={`flex items-center gap-1 border rounded px-2 py-1 shadow-sm ${isPrintMode ? 'border-gray-300 text-gray-700' : 'border-gray-500 bg-gray-800 text-white'}`}>
                                 <SVGIcons.Palette />
                                 <select value={theme} onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} className="bg-transparent font-bold text-xs outline-none cursor-pointer">
@@ -1245,14 +1203,16 @@
                                     <option value="custom" className="text-black">Personalizado</option>
                                 </select>
                             </div>
-                            {/* Impressão 1 Click (Pedido 3) */}
-                            <button onClick={isPrintMode ? () => setIsPrintMode(false) : handlePrintClick} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold border-gray-400 border-2' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
-                                <SVGIcons.Printer /> {isPrintMode ? 'Voltar (Modo Padrão)' : 'Impressão'}
+                            <button onClick={handlePrintClick} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-400 border-2' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
+                                <SVGIcons.Printer /> {isPrintMode ? 'Imprimindo...' : 'Impressão'}
                             </button>
-                            <button onClick={() => handleExport(data)} className={`px-3 py-1 rounded text-xs md:text-sm transition-colors shadow top-bar-btn ${isPrintMode ? '' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
+                            <button onClick={() => openCodeExport(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'hide-in-print-mode' : 'bg-gray-600 hover:bg-gray-500 text-white'}`} title="Copiar código (Seed)">
+                                <SVGIcons.Code />
+                            </button>
+                            <button onClick={() => handleExport(data)} className={`px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'hide-in-print-mode' : 'bg-gray-700 hover:bg-gray-600 text-white'}`} title="Baixar ZIP completo">
                                 ZIP
                             </button>
-                            <button onClick={() => saveToLocal(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold top-bar-btn ${isPrintMode ? 'border-green-800 text-green-800' : 'bg-green-700 hover:bg-green-600 text-white'}`}>
+                            <button onClick={() => saveToLocal(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'border-green-800 text-green-800' : 'bg-green-700 hover:bg-green-600 text-white'}`}>
                                 <SVGIcons.Save /> Salvar
                             </button>
                         </div>
