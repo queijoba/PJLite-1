@@ -1718,11 +1718,22 @@
 
                                     <div>
                                         <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">PERÍCIAS PRINCIPAIS</h3>
-                                            <button onClick={() => addToArray('pericias', { nome: '', valor: '' })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                            <h3 className="font-title font-bold text-sm text-gray-700">
+                                                PERÍCIAS PRINCIPAIS
+                                            </h3>
+                                            <button 
+                                                onClick={() => addToArray('pericias', { nome: '', valor: '' })} 
+                                                className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm hide-in-print-mode"
+                                            >
+                                                <SVGIcons.Plus/> Adic.
+                                            </button>
                                         </div>
                                         <div className="space-y-1">
-                                            {data.pericias?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma perícia adicionada.</p>}
+                                            {data.pericias?.length === 0 && (
+                                                <p className="text-[10px] text-gray-400 italic">
+                                                    Nenhuma perícia adicionada.
+                                                </p>
+                                            )}
                                             {(data.pericias || []).map((pericia, index) => (
                                                 <div key={index} className="flex items-center gap-2 p-1 rounded hover:bg-gray-100">
                                                     <input type="text" value={pericia.nome} placeholder="Perícia..." onChange={e => updateArrayField('pericias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
@@ -1738,11 +1749,22 @@
                                 <div className="print-break md:col-span-7 space-y-6">
                                     <div className="mb-6">
                                         <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">ARMAS E ATAQUES</h3>
-                                            <button onClick={() => addToArray('armas', { nome: '', pericia: '', dano: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                            <h3 className="font-title font-bold text-sm text-gray-700">
+                                                ARMAS E ATAQUES
+                                            </h3>
+                                            <button 
+                                                onClick={() => addToArray('armas', { nome: '', pericia: '', dano: '' })} 
+                                                className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
+                                            >
+                                                <SVGIcons.Plus/> Adic.
+                                            </button>
                                         </div>
                                         <div className="space-y-3">
-                                            {data.armas?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma arma adicionada.</p>}
+                                            {data.armas?.length === 0 && (
+                                                <p className="text-[10px] text-gray-400 italic">
+                                                    Nenhuma arma adicionada.
+                                                </p>
+                                            )}
                                             {(data.armas || []).map((arma, index) => (
                                                 <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 shadow-sm flex flex-col gap-2">
                                                     <div className="flex gap-2 items-end">
@@ -1767,11 +1789,22 @@
 
                                     <div>
                                         <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">HABILIDADES E FEITIÇOS</h3>
-                                            <button onClick={() => addToArray('feiticos', { nome: '', desc: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                            <h3 className="font-title font-bold text-sm text-gray-700">
+                                                HABILIDADES E FEITIÇOS
+                                            </h3>
+                                            <button 
+                                                onClick={() => addToArray('feiticos', { nome: '', desc: '' })} 
+                                                className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
+                                            >
+                                                <SVGIcons.Plus/> Adic.
+                                            </button>
                                         </div>
                                         <div className="space-y-2">
-                                            {data.feiticos?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma habilidade listada.</p>}
+                                            {data.feiticos?.length === 0 && (
+                                                <p className="text-[10px] text-gray-400 italic">
+                                                    Nenhuma habilidade listada.
+                                                </p>
+                                            )}
                                             {(data.feiticos || []).map((hab, index) => (
                                                 <div key={index} className="flex gap-2 items-start p-2 border border-gray-200 rounded bg-gray-50">
                                                     <div className="flex-1 space-y-1">
@@ -1844,11 +1877,22 @@
 
                                     <div>
                                         <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">HABILIDADES ESPECIAIS</h3>
-                                            <button onClick={() => addToArray('habilidades', { nome: '', desc: '' })} className="text-[10px] bg-red-900 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                            <h3 className="font-title font-bold text-sm text-gray-700">
+                                                HABILIDADES ESPECIAIS
+                                            </h3>
+                                            <button 
+                                                onClick={() => addToArray('habilidades', { nome: '', desc: '' })} 
+                                                className="text-[10px] bg-red-900 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
+                                            >
+                                                <SVGIcons.Plus/> Adic.
+                                            </button>
                                         </div>
                                         <div className="space-y-3">
-                                            {data.habilidades?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma habilidade (ex: Imunidades, Magia).</p>}
+                                            {data.habilidades?.length === 0 && (
+                                                <p className="text-[10px] text-gray-400 italic">
+                                                    Nenhuma habilidade (ex: Imunidades, Magia).
+                                                </p>
+                                            )}
                                             {(data.habilidades || []).map((hab, index) => (
                                                 <div key={index} className="flex gap-2 items-start p-2 border border-red-200 rounded bg-red-50/50">
                                                     <div className="flex-1 space-y-1">
