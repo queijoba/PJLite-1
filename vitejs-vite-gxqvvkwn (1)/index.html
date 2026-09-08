@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Fichas - Dragonbane</title>
+    <title>Criador de Fichas - Lite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- JSZip for exporting ZIP files -->
@@ -40,71 +40,7 @@
     </script>
     <style>
         body { background-color: #e5e7eb; }
-        .print-break { page-break-inside: avoid; }
         
-        @media print {
-            @page {
-                size: A4 landscape;
-                margin: 10mm;
-            }
-            body { background-color: white !important; }
-            .no-print { display: none !important; }
-            
-            /* Removemos bordas dos inputs em impressão para ficar mais limpo */
-            input, textarea { border: none !important; background: transparent !important; resize: none; }
-            select { appearance: none; border: none !important; background: transparent !important; }
-            
-            /* Ajuste de grid para paisagem na impressão */
-            .print-landscape-grid {
-                display: grid !important;
-                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-            }
-        }
-        
-        /* CSS para o Modelo de Impressão (Tela e Físico) */
-        .print-mode-active {
-            border: none !important;
-            box-shadow: none !important;
-            background: white !important;
-        }
-        .print-mode-active .bg-dragon-dark {
-            background-color: transparent !important;
-            color: #4b5563 !important;
-            border-bottom: 2px solid #9ca3af !important;
-            font-weight: 700 !important;
-        }
-        .print-mode-active h2.bg-dragon-dark {
-            border-bottom: 2px solid #9ca3af !important;
-            color: #111827 !important;
-        }
-        .print-mode-active .top-bar-container {
-            background-color: #ffffff !important;
-            border-bottom: 2px solid #e5e7eb !important;
-            color: #374151 !important;
-        }
-        .print-mode-active .top-bar-title-text { color: #111827 !important; }
-        .print-mode-active .top-bar-btn {
-            background-color: transparent !important;
-            border: 1px solid #d1d5db;
-            color: #4b5563 !important;
-            box-shadow: none;
-        }
-        .print-mode-active .bg-gray-200, .print-mode-active .bg-gray-50, .print-mode-active .bg-red-50, .print-mode-active .bg-blue-50 {
-            background-color: transparent !important;
-        }
-        .print-mode-active .sub-header-print {
-            border: none !important;
-            border-bottom: 1px solid #9ca3af !important;
-            color: #4b5563 !important;
-            background: transparent !important;
-            padding-left: 0 !important;
-        }
-        .print-mode-active input, .print-mode-active textarea, .print-mode-active select { 
-            border-color: #d1d5db !important; 
-            border-bottom: 1px solid #9ca3af !important;
-        }
-        .print-mode-active .hide-in-print-mode { display: none !important; }
-
         /* --- TEMA CLÁSSICO DRAGONBANE --- */
         body.theme-classic {
             background-color: #dcd4be !important;
@@ -159,10 +95,10 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
-            { versao: '0.3.8 Alpha', descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente. Modais movidos para a raiz via portal para centralização perfeita e correção de posicionamento. Impressão otimizada em 1 clique.' },
-            { versao: '0.3.7 Alpha', descricao: 'Modelos genéricos rápidos para Monstros/PNJs, impressão nativa em 1 clique (A4 Paisagem) e guias completos de regras.' },
-            { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs, e fichas de Ameaça/Monstro baseadas no sistema de tabelas do Bestiário.' },
-            { versao: '0.2.1v', descricao: 'Adição de Seletor de Tema Visual (Padrão, Clássico Dragonbane com estilo pergaminho e verde petróleo, e Tema Personalizado com fundo de imagem).' }
+            { versao: '0.4.0 Alpha', descricao: 'Remoção do modo de impressão (instável) e adição da cópia da Ficha Completa como Texto para envio no WhatsApp/Discord. Renomeação do App.' },
+            { versao: '0.3.8 Alpha', descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente.' },
+            { versao: '0.3.7 Alpha', descricao: 'Modelos genéricos rápidos para Monstros/PNJs e guias completos de regras.' },
+            { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs e Ameaças.' }
         ];
 
         const MODELOS_AMEACAS_GENERICOS = [
@@ -299,8 +235,7 @@
             User: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
             Unlock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>,
             Lock: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
-            Printer: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>,
-            FileText: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
+            MessageCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>,
             HelpCircle: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>,
             Refresh: () => <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>,
             Palette: () => <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.504 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>,
@@ -347,6 +282,125 @@
             return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
         };
 
+        const generateChatText = (item) => {
+            let text = "";
+            if (item.type === 'pc') {
+                text += `👤 PERSONAGEM: ${item.bio?.nome || 'Sem Nome'}\n`;
+                if (item.bio?.jogador) text += `Jogador: ${item.bio?.jogador}\n`;
+                text += `Ancestralidade: ${item.bio?.ancestralidade || '?'} | Profissão: ${item.bio?.profissao || '?'}\n`;
+                if (item.bio?.idade) text += `Idade: ${item.bio?.idade}`;
+                if (item.bio?.fraqueza) text += ` | Fraqueza: ${item.bio?.fraqueza}`;
+                text += `\n`;
+                if (item.bio?.aparencia) text += `Aparência: ${item.bio?.aparencia}\n`;
+                if (item.bio?.memento) text += `Memento: ${item.bio?.memento}\n`;
+                text += `\n`;
+
+                const attrs = item.atributos || {};
+                const conds = { for: 'Exausto', con: 'Adoecido', agl: 'Aturdido', int: 'Enraivecido', von: 'Assustado', car: 'Desanimado' };
+                text += `📊 ATRIBUTOS E CONDIÇÕES\n`;
+                text += `FOR: ${attrs.for?.valor || 10} ${attrs.for?.condicao ? '['+conds.for+']' : ''} | CON: ${attrs.con?.valor || 10} ${attrs.con?.condicao ? '['+conds.con+']' : ''} | AGL: ${attrs.agl?.valor || 10} ${attrs.agl?.condicao ? '['+conds.agl+']' : ''}\n`;
+                text += `INT: ${attrs.int?.valor || 10} ${attrs.int?.condicao ? '['+conds.int+']' : ''} | VON: ${attrs.von?.valor || 10} ${attrs.von?.condicao ? '['+conds.von+']' : ''} | CAR: ${attrs.car?.valor || 10} ${attrs.car?.condicao ? '['+conds.car+']' : ''}\n\n`;
+
+                text += `⚙️ DERIVADOS E STATUS\n`;
+                text += `Movimento: ${item.derivados?.movimento || 10} | Sobrecarga: ${item.derivados?.limiteSobrecarga || '-'}\n`;
+                text += `Dano Bônus: FOR (${item.derivados?.danoBonusFor || '-'}) / AGL (${item.derivados?.danoBonusAgl || '-'})\n`;
+                text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0} | 🛡️ PD: ${item.status?.pd?.atual || 0}/${item.status?.pd?.max || 0}\n\n`;
+
+                text += `⚔️ COMBATE E DEFESA\n`;
+                text += `Armadura: ${item.defesa?.armadura?.nome || 'Nenhuma'} (Val: ${item.defesa?.armadura?.valor || 0})`;
+                if (item.defesa?.armadura?.reves) text += ` [Revés: ${item.defesa?.armadura?.reves}]`;
+                text += `\nElmo: ${item.defesa?.elmo?.nome || 'Nenhum'} (Val: ${item.defesa?.elmo?.valor || 0})`;
+                if (item.defesa?.elmo?.reves) text += ` [Revés: ${item.defesa?.elmo?.reves}]`;
+                text += `\n\n`;
+
+                if (item.armas && item.armas.length > 0) {
+                    text += `🗡️ ARMAS\n`;
+                    item.armas.forEach(a => {
+                        text += `- ${a.nome} [${a.empunhadura || '-'} | ${a.alcance || '-'}] | Dano: ${a.dano} ${a.tracos ? `| Traços: ${a.tracos}` : ''}\n`;
+                    });
+                    text += `\n`;
+                }
+
+                if (item.habilidadesFeiticos && item.habilidadesFeiticos.length > 0) {
+                    text += `✨ HABILIDADES E MAGIAS\n`;
+                    item.habilidadesFeiticos.forEach(h => {
+                        text += `- ${h.nome} ${h.fv_nvl ? `(Custo/Nv: ${h.fv_nvl})` : ''}\n`;
+                    });
+                    text += `\n`;
+                }
+
+                text += `🎯 PERÍCIAS (Valores Atuais)\n`;
+                let allSkills = [];
+                (item.periciasBase || []).forEach(p => { if (p.valor) allSkills.push(`${p.treinada ? '[T] ' : ''}${p.nome} ${p.valor}`); });
+                (item.periciasArmas || []).forEach(p => { if (p.valor) allSkills.push(`${p.treinada ? '[T] ' : ''}${p.nome} ${p.valor}`); });
+                (item.periciasSecundarias || []).forEach(p => { if (p.nome && p.valor) allSkills.push(`[Sec] ${p.nome} ${p.valor}`); });
+                
+                if (allSkills.length > 0) text += allSkills.join(' | ') + '\n\n';
+                else text += `Nenhuma\n\n`;
+
+                text += `🎒 INVENTÁRIO\n`;
+                text += `Moedas: ${item.moedas?.ouro || 0} PO, ${item.moedas?.prata || 0} PP, ${item.moedas?.cobre || 0} PC\n`;
+                if (item.inventario) text += `\nEquipamento:\n${item.inventario}\n`;
+                if (item.itensMiudos) text += `\nItens Miúdos:\n${item.itensMiudos}\n`;
+
+            } else if (item.type === 'pnj') {
+                text += `👥 PNJ: ${item.nome || 'Sem Nome'} (${item.tipoPnj === 'chefe' ? 'Chefe' : 'Lacaio'})\n`;
+                text += `Ancestralidade: ${item.ancestralidade || '?'} | Profissão: ${item.profissao || '?'}\n`;
+                text += `Atitude: ${item.atitude || '?'} | Motivação: ${item.motivacao || '?'}\n`;
+                text += `Traço Marcante: ${item.tracoMarcante || '?'}\n\n`;
+                
+                text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0}`;
+                if (item.tipoPnj === 'chefe') text += ` | 🛡️ PD: ${item.status?.pd?.atual || 0}/${item.status?.pd?.max || 0}`;
+                text += `\nMovimento: ${item.movimento || 10} | Dano Bônus: ${item.danoBonus || '-'}\n`;
+                text += `Armadura: ${item.armaduraTipica?.nome || 'Nenhuma'} (Val: ${item.armaduraTipica?.valor || 0})\n\n`;
+
+                if (item.pericias && item.pericias.length > 0) {
+                    text += `🎯 PERÍCIAS\n`;
+                    let pnjSkills = [];
+                    item.pericias.forEach(p => { if (p.nome) pnjSkills.push(`${p.nome} ${p.valor}`); });
+                    text += pnjSkills.join(' | ') + '\n\n';
+                }
+
+                if (item.armas && item.armas.length > 0) {
+                    text += `🗡️ ARMAS\n`;
+                    item.armas.forEach(a => {
+                        text += `- ${a.nome} (Perícia: ${a.pericia || 0}) | Dano: ${a.dano}\n`;
+                    });
+                    text += `\n`;
+                }
+
+                if (item.feiticos && item.feiticos.length > 0) {
+                    text += `✨ HABILIDADES / FEITIÇOS\n`;
+                    item.feiticos.forEach(f => {
+                        text += `- ${f.nome}: ${f.desc}\n`;
+                    });
+                    text += `\n`;
+                }
+
+                if (item.equipamento) text += `🎒 EQUIPAMENTO:\n${item.equipamento}\n`;
+
+            } else if (item.type === 'ameaca') {
+                text += `🐉 AMEAÇA: ${item.nome || 'Sem Nome'}\n`;
+                text += `Ferocidade: ${item.ferocidade || 1} | Tamanho: ${item.tamanho || 'Normal'}\n`;
+                text += `Movimento: ${item.movimento || 10} | Armadura: ${item.armadura || 0}\n`;
+                text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0}\n\n`;
+
+                if (item.habilidades && item.habilidades.length > 0) {
+                    text += `✨ HABILIDADES ESPECIAIS\n`;
+                    item.habilidades.forEach(h => {
+                        text += `- ${h.nome}: ${h.desc}\n`;
+                    });
+                    text += `\n`;
+                }
+
+                text += `⚔️ ATAQUES DO MONSTRO (Role 1D6)\n`;
+                (item.ataques || []).forEach(a => {
+                    text += `[ ${a.id} ] ${a.descricao || '-'}\n`;
+                });
+            }
+            return text;
+        };
+
         function App() {
             const [view, setView] = useState('dashboard');
             const [savedChars, setSavedChars] = useState(getSavedCharacters());
@@ -372,9 +426,7 @@
             const [showThreatModal, setShowThreatModal] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
-            const [isPrintMode, setIsPrintMode] = useState(false);
 
-            // Controle do Modal de Código da Ficha
             const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
 
             useEffect(() => {
@@ -386,13 +438,6 @@
                 if (theme === 'custom' && customBgUrl) document.body.style.backgroundImage = `url(${customBgUrl})`;
                 else document.body.style.backgroundImage = '';
             }, [theme, customBgUrl]);
-
-            // Escuta o evento afterprint para sair automaticamente do modo impressão
-            useEffect(() => {
-                const handleAfterPrint = () => setIsPrintMode(false);
-                window.addEventListener('afterprint', handleAfterPrint);
-                return () => window.removeEventListener('afterprint', handleAfterPrint);
-            }, []);
 
             const getWindowStyle = () => {
                 if (theme !== 'custom') return {};
@@ -430,7 +475,6 @@
                     showToast(type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
                 }
                 
-                // Se a ficha salva for a atual do editor, atualiza o state
                 if (!data.id || data.id === savingData.id) {
                     setData(savingData);
                 }
@@ -479,18 +523,6 @@
             const showToast = (msg) => {
                 setToastMsg(msg);
                 setTimeout(() => setToastMsg(''), 3000);
-            };
-
-            const handlePrintClick = () => {
-                setIsPrintMode(true);
-                setTimeout(() => {
-                    try {
-                        window.print();
-                    } catch (err) {
-                        console.error('Erro ao abrir a impressão:', err);
-                        showToast("Não foi possível abrir a impressão automaticamente. Use Ctrl+P (ou Cmd+P no Mac).");
-                    }
-                }, 300);
             };
 
             const updateField = (path, value) => {
@@ -679,6 +711,21 @@
                 });
             };
 
+            const copySheetToChat = (item) => {
+                const text = generateChatText(item);
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("Ficha copiada para o chat!");
+                }).catch(() => {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    textArea.remove();
+                    showToast("Ficha copiada para o chat!");
+                });
+            };
+
             const handleImageUpload = (event) => {
                 const file = event.target.files[0];
                 if (!file) return;
@@ -698,7 +745,7 @@
                     <React.Fragment>
                         <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up">
                             {/* Seção Personagens */}
-                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 no-print">
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                                 <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
                                 <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
                                     <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
@@ -755,9 +802,10 @@
                                                 </div>
                                             </div>
                                             <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
-                                                <div className="flex gap-1">
+                                                <div className="flex gap-1 flex-wrap">
                                                     <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Exportar completo (ZIP)"><SVGIcons.Save/> ZIP</button>
                                                     <button onClick={() => openCodeExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar código texto (Sem foto)"><SVGIcons.Code/> Código</button>
+                                                    <button onClick={() => copySheetToChat(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar ficha como texto"><SVGIcons.MessageCircle/> Chat</button>
                                                 </div>
                                                 {deleteConfirmId === char.id ? (
                                                     <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
@@ -771,7 +819,7 @@
                             )}
                             
                             {/* Seção de Ameaças e PNJs */}
-                            <div className="flex flex-col md:flex-row justify-between items-center mt-12 mb-8 gap-4 no-print">
+                            <div className="flex flex-col md:flex-row justify-between items-center mt-12 mb-8 gap-4">
                                 <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-gray-700 pb-2">Ameaças e PNJs</h1>
                                 <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
                                     <button onClick={openCodeImport} className="flex justify-center items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
@@ -809,9 +857,10 @@
                                                 </div>
                                             </div>
                                             <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
-                                                <div className="flex gap-1">
+                                                <div className="flex gap-1 flex-wrap">
                                                     <button onClick={() => handleExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Exportar completo (ZIP)"><SVGIcons.Save/> ZIP</button>
                                                     <button onClick={() => openCodeExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar código texto"><SVGIcons.Code/> Código</button>
+                                                    <button onClick={() => copySheetToChat(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm flex items-center gap-1" title="Copiar ficha como texto"><SVGIcons.MessageCircle/> Chat</button>
                                                 </div>
                                                 {deleteConfirmId === threat.id ? (
                                                     <button onClick={() => deleteThreat(threat.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
@@ -825,7 +874,7 @@
                             )}
                             
                             {/* Sobre o Projeto */}
-                            <div style={getWindowStyle()} className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden no-print">
+                            <div style={getWindowStyle()} className="mt-12 bg-white rounded-lg shadow-lg border-2 border-gray-300 overflow-hidden">
                                 <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center">
                                     <h2 className="font-title font-bold text-lg flex items-center gap-2">
                                         Sobre o Projeto & Atualizações
@@ -836,7 +885,7 @@
                                     <div>
                                         <h3 className="font-title font-bold text-red-900 border-b-2 border-red-100 pb-2 mb-4 text-lg">Log de Atualizações</h3>
                                         <div className="text-sm text-gray-700 space-y-3 h-52 overflow-y-auto pr-2">
-                                            {UPDATE_LOG.slice(0, 6).map((log, idx) => (
+                                            {UPDATE_LOG.map((log, idx) => (
                                                 <p key={idx}><strong className="text-black bg-gray-200 px-1 rounded">{log.versao}:</strong> {log.descricao}</p>
                                             ))}
                                         </div>
@@ -1040,7 +1089,6 @@
                                         <button onClick={() => setGuideTab('import')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'import' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Importar/Exportar</button>
                                         <button onClick={() => setGuideTab('dragonbane')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'dragonbane' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Fichas DB</button>
                                         <button onClick={() => setGuideTab('mestre')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'mestre' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Ameaças e PNJs</button>
-                                        <button onClick={() => setGuideTab('imprimir')} className={`shrink-0 px-4 py-3 text-xs md:text-sm font-bold uppercase transition-colors ${guideTab === 'imprimir' ? 'bg-white border-b-2 border-red-800 text-red-900' : 'text-gray-500 hover:bg-gray-200'}`}>Impressão</button>
                                     </div>
                                     <div className="p-4 md:p-6 overflow-y-auto bg-white flex-1 text-sm text-gray-700 leading-relaxed space-y-4">
                                         
@@ -1048,10 +1096,20 @@
                                             <div className="space-y-4 animate-fade-in-up">
                                                 <h3 className="font-title font-bold text-xl text-black border-b pb-2">Exportar, Importar e Código de Ficha</h3>
                                                 <p>Este aplicativo permite salvar fichas de três formas diferentes:</p>
+
+                                                <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded mt-4">
+                                                    <h4 className="font-bold text-green-900 mb-2">Método 1: Copiar para Chat (WhatsApp/Discord) 💬</h4>
+                                                    <p className="mb-2 text-xs">A forma mais fácil de compartilhar os detalhes do seu personagem com o mestre antes do jogo.</p>
+                                                    <ul className="list-decimal ml-5 space-y-1 font-bold text-green-800 text-xs">
+                                                        <li>No editor ou no Dashboard, clique em <SVGIcons.MessageCircle/> <strong>Copiar Ficha / Chat</strong>.</li>
+                                                        <li>Todo o conteúdo será formatado em texto puro com emojis.</li>
+                                                        <li>Basta colar direto no Discord ou WhatsApp. Todos conseguem ler!</li>
+                                                    </ul>
+                                                </div>
                                                 
                                                 <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mt-4">
-                                                    <h4 className="font-bold text-yellow-900 mb-2">Método 1: Código de Ficha (Seed Texto) ⚡ MAIS RÁPIDO</h4>
-                                                    <p className="mb-2 text-xs">Ideal para compartilhar rapidamente no Discord, WhatsApp ou chat da sessão.</p>
+                                                    <h4 className="font-bold text-yellow-900 mb-2">Método 2: Código de Ficha (Seed Texto) ⚡ RÁPIDO</h4>
+                                                    <p className="mb-2 text-xs">Ideal para transferir a ficha completa e editável sem baixar arquivos.</p>
                                                     <ul className="list-decimal ml-5 space-y-1 font-bold text-yellow-800 text-xs">
                                                         <li>Clique no botão <SVGIcons.Code/> <strong>Código</strong> na sua ficha.</li>
                                                         <li>Copie a string longa gerada.</li>
@@ -1061,7 +1119,7 @@
                                                 </div>
 
                                                 <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-4">
-                                                    <h4 className="font-bold text-blue-900 mb-2">Método 2: Exportar ZIP / JSON 📁 COMPLETO</h4>
+                                                    <h4 className="font-bold text-blue-900 mb-2">Método 3: Exportar ZIP / JSON 📁 COMPLETO</h4>
                                                     <p className="mb-2 text-xs">Ideal para backups completos (incluindo imagens) no seu dispositivo.</p>
                                                     <ul className="list-decimal ml-5 space-y-1 font-bold text-blue-800 text-xs">
                                                         <li>Clique no botão <strong>ZIP</strong> para baixar o pacote.</li>
@@ -1107,22 +1165,6 @@
                                                         <li><strong>Ferocidade:</strong> Indica quantas cartas de iniciativa o monstro compra por rodada (quantas vezes age).</li>
                                                         <li><strong>Tabela de Ataque (D6):</strong> Na sua vez, o mestre rola 1D6 e aplica o ataque correspondente de 1 a 6.</li>
                                                         <li><strong>Modelos Prontos:</strong> Use os modelos genéricos no criador para agilizar sessões.</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {guideTab === 'imprimir' && (
-                                            <div className="space-y-4 animate-fade-in-up">
-                                                <h3 className="font-title font-bold text-xl text-black border-b pb-2">Impressão Otimizada (1 Clique)</h3>
-                                                <p>Desenvolvemos a impressão inteligente para economizar tinta e papel:</p>
-                                                
-                                                <div className="bg-gray-100 p-4 rounded border border-gray-300">
-                                                    <ul className="list-decimal ml-5 space-y-2 font-bold text-gray-800">
-                                                        <li>No editor, clique no botão <strong>Impressão</strong> na barra superior.</li>
-                                                        <li>O app ativa o formato limpo, aciona a janela de impressão automaticamente e <strong>restaura sua tela ao fechar</strong>.</li>
-                                                        <li>O layout força o padrão <strong>A4 Paisagem (Landscape)</strong>, cabendo perfeitamente em até 2 páginas.</li>
-                                                        <li><strong>DICA PRO:</strong> Se necessário, defina a escala de impressão no navegador para <strong>80%</strong>.</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -1187,20 +1229,20 @@
             }
 
             return (
-                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm transition-all duration-300 ${isPrintMode ? 'print-mode-active border border-gray-200' : 'shadow-xl border-2 border-gray-500'}`}>
+                <div style={getWindowStyle()} className="max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 border-gray-500 transition-all duration-300">
                     
                     {/* Top Bar Compartilhada */}
-                    <div style={getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center no-print rounded-t-sm gap-2 top-bar-container ${isPrintMode ? '' : (data.type === 'pnj' ? 'bg-blue-900 text-white' : data.type === 'ameaca' ? 'bg-red-900 text-white' : 'bg-dragon-dark text-white')}`}>
+                    <div style={getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 ${data.type === 'pnj' ? 'bg-blue-900 text-white' : data.type === 'ameaca' ? 'bg-red-900 text-white' : 'bg-dragon-dark text-white'}`}>
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setView('dashboard')} className={`flex items-center gap-1 transition-colors text-sm font-bold ${isPrintMode ? 'text-gray-500 hover:text-black' : 'text-gray-300 hover:text-white'}`}>
+                            <button onClick={() => setView('dashboard')} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
-                            <span className={`font-title font-bold text-lg md:text-xl tracking-wider top-bar-title-text uppercase ${isPrintMode ? '' : (data.type === 'pc' ? 'text-red-400' : 'text-gray-200')}`}>
+                            <span className={`font-title font-bold text-lg md:text-xl tracking-wider uppercase ${data.type === 'pc' ? 'text-red-400' : 'text-gray-200'}`}>
                                 {data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (HUMANOIDE)' : 'AMEAÇA (MONSTRO)'}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
-                            <div className={`flex items-center gap-1 border rounded px-2 py-1 shadow-sm ${isPrintMode ? 'border-gray-300 text-gray-700' : 'border-gray-500 bg-gray-800 text-white'}`}>
+                            <div className="flex items-center gap-1 border rounded px-2 py-1 shadow-sm border-gray-500 bg-gray-800 text-white">
                                 <SVGIcons.Palette />
                                 <select value={theme} onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} className="bg-transparent font-bold text-xs outline-none cursor-pointer">
                                     <option value="default" className="text-black">Padrão</option>
@@ -1208,16 +1250,16 @@
                                     <option value="custom" className="text-black">Personalizado</option>
                                 </select>
                             </div>
-                            <button onClick={handlePrintClick} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm transition-colors shadow font-bold top-bar-btn ${isPrintMode ? 'bg-gray-100 hover:bg-gray-200 text-gray-700 border-gray-400 border-2' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}>
-                                <SVGIcons.Printer /> {isPrintMode ? 'Imprimindo...' : 'Impressão'}
+                            <button onClick={() => copySheetToChat(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-gray-700 hover:bg-gray-600 text-white" title="Copiar como texto para WhatsApp/Discord">
+                                <SVGIcons.MessageCircle /> Copiar Ficha
                             </button>
-                            <button onClick={() => openCodeExport(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'hide-in-print-mode' : 'bg-gray-600 hover:bg-gray-500 text-white'}`} title="Copiar código (Seed)">
+                            <button onClick={() => openCodeExport(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-gray-600 hover:bg-gray-500 text-white" title="Copiar código (Seed)">
                                 <SVGIcons.Code />
                             </button>
-                            <button onClick={() => handleExport(data)} className={`px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'hide-in-print-mode' : 'bg-gray-700 hover:bg-gray-600 text-white'}`} title="Baixar ZIP completo">
+                            <button onClick={() => handleExport(data)} className="px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-gray-700 hover:bg-gray-600 text-white" title="Baixar ZIP completo">
                                 ZIP
                             </button>
-                            <button onClick={() => saveToLocal(data)} className={`flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow top-bar-btn ${isPrintMode ? 'border-green-800 text-green-800' : 'bg-green-700 hover:bg-green-600 text-white'}`}>
+                            <button onClick={() => saveToLocal(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-green-700 hover:bg-green-600 text-white">
                                 <SVGIcons.Save /> Salvar
                             </button>
                         </div>
@@ -1228,7 +1270,7 @@
                     {data.type === 'pc' && (
                         <React.Fragment>
                             {/* Mobile Tabs for PC */}
-                            <div className="md:hidden flex bg-gray-200 border-b border-gray-300 no-print">
+                            <div className="md:hidden flex bg-gray-200 border-b border-gray-300">
                                 {[
                                     { id: 'status', label: 'Perfil & Status' },
                                     { id: 'pericias', label: 'Perícias' },
@@ -1244,9 +1286,9 @@
                                 ))}
                             </div>
 
-                            <div id="ficha-print-area" className="p-4 md:p-8 space-y-8 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
+                            <div className="p-4 md:p-8 space-y-8 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                                 {/* Biografia PC */}
-                                <div className={`print-break flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
+                                <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
                                     <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
                                         <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
                                             {data.bio?.imagem ? (
@@ -1255,7 +1297,7 @@
                                                 <span className="text-gray-400 text-sm font-bold uppercase text-center px-4">Retrato</span>
                                             )}
                                             
-                                            <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 no-print transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
+                                            <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                                 {!showUrlInput ? (
                                                     <React.Fragment>
                                                         <label className="cursor-pointer bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg">
@@ -1318,8 +1360,8 @@
                                 </div>
 
                                 {/* Grades e Blocos PC */}
-                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 print-landscape-grid">
-                                    <div className={`print-break lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
+                                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                                    <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
                                         <div>
                                             <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
                                             <div className="grid grid-cols-2 gap-4">
@@ -1337,7 +1379,7 @@
                                         </div>
 
                                         <div>
-                                            <div className="flex justify-between items-center mb-1 no-print">
+                                            <div className="flex justify-between items-center mb-1">
                                                 <h2 className="font-title font-bold text-lg">VALORES DERIVADOS</h2>
                                                 <div className="flex gap-1">
                                                     {(!data.status?.manterDerivados) && (
@@ -1350,7 +1392,6 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm hide-in-print-mode">VALORES DERIVADOS</h2>
                                             <div className="grid grid-cols-2 gap-2 text-sm font-bold uppercase">
                                                 <div className="border border-gray-300 p-2 flex flex-col justify-between">
                                                     <span className="text-gray-500 text-[10px] leading-tight mb-1">Dano Bônus FOR</span>
@@ -1419,8 +1460,8 @@
                                         </div>
                                     </div>
 
-                                    <div className={`print-break lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
-                                        <div className="flex justify-end mb-3 no-print">
+                                    <div className={`lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
+                                        <div className="flex justify-end mb-3">
                                             <button onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors">
                                                 <SVGIcons.Refresh /> Alternar Ordem
                                             </button>
@@ -1436,13 +1477,12 @@
                                                         const baseChance = getChanceBase(attrValue);
                                                         return (
                                                             <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                                <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" />
-                                                                <button onClick={() => toggleTreinada('periciasBase', index)} className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
-                                                                {isPrintMode && <span className="text-[10px] text-gray-400 mr-1 border border-gray-300 px-1 rounded">{pericia.treinada ? 'T' : '\u00A0\u00A0'}</span>}
+                                                                <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                                <button onClick={() => toggleTreinada('periciasBase', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
                                                                 <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
                                                                 <div className="flex flex-col items-center">
                                                                     <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                                    {!isPrintMode && <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>}
+                                                                    <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
                                                                 </div>
                                                             </div>
                                                         );
@@ -1461,13 +1501,12 @@
                                                             const baseChance = getChanceBase(attrValue);
                                                             return (
                                                                 <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer hide-in-print-mode" />
-                                                                    <button onClick={() => toggleTreinada('periciasArmas', index)} className={`hide-in-print-mode w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
-                                                                    {isPrintMode && <span className="text-[10px] text-gray-400 mr-1 border border-gray-300 px-1 rounded">{pericia.treinada ? 'T' : '\u00A0\u00A0'}</span>}
+                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                                    <button onClick={() => toggleTreinada('periciasArmas', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
                                                                     <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
                                                                     <div className="flex flex-col items-center">
                                                                         <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                                        {!isPrintMode && <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>}
+                                                                        <span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span>
                                                                     </div>
                                                                 </div>
                                                             );
@@ -1476,9 +1515,9 @@
                                                 </div>
                                                 
                                                 <div>
-                                                    <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
+                                                    <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
                                                         <h3 className="font-title font-bold text-sm text-gray-700">SECUNDÁRIAS</h3>
-                                                        <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: '', valor: '', avanco: false })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                                        <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: '', valor: '', avanco: false })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
                                                     </div>
                                                     <div className="space-y-1">
                                                         {(data.periciasSecundarias || []).map((pericia, index) => (
@@ -1487,7 +1526,7 @@
                                                                 <input type="text" value={pericia.nome} placeholder="Nome" onChange={e => updateArrayField('periciasSecundarias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
                                                                 <input type="text" value={pericia.attr} placeholder="At" onChange={e => updateArrayField('periciasSecundarias', index, 'attr', e.target.value)} className="w-8 text-center border-b border-gray-400 outline-none bg-transparent text-[10px]" />
                                                                 <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasSecundarias', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                                <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 no-print ml-1"><SVGIcons.Trash/></button>
+                                                                <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 ml-1"><SVGIcons.Trash/></button>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -1496,11 +1535,11 @@
                                         </div>
                                     </div>
 
-                                    <div className={`print-break lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
+                                    <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
                                         <div>
-                                            <div style={getBarStyle()} className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm header-print">
+                                            <div style={getBarStyle()} className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm">
                                                 <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
-                                                <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                                <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
                                             </div>
                                             <div className="space-y-2">
                                                 {(data.habilidadesFeiticos || []).map((hab, index) => (
@@ -1513,7 +1552,7 @@
                                                             {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center mb-1">PD/Nv.</label>}
                                                             <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm mt-1" />
                                                         </div>
-                                                        <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 no-print mt-2"><SVGIcons.Trash/></button>
+                                                        <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 mt-2"><SVGIcons.Trash/></button>
                                                     </div>
                                                 ))}
                                             </div>
@@ -1552,9 +1591,9 @@
                                             </div>
 
                                             <div className="mb-6">
-                                                <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
+                                                <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
                                                     <h3 className="font-title font-bold text-sm text-gray-700">ARMAS</h3>
-                                                    <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"><SVGIcons.Plus/> Adic.</button>
+                                                    <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold"><SVGIcons.Plus/> Adic.</button>
                                                 </div>
                                                 <div className="space-y-3">
                                                     {(data.armas || []).map((arma, index) => (
@@ -1564,7 +1603,7 @@
                                                                     <label className="block text-[9px] font-bold text-gray-500 uppercase">Arma / Escudo</label>
                                                                     <input type="text" value={arma.nome} onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-full border-b border-gray-400 outline-none text-sm font-bold bg-transparent"/>
                                                                 </div>
-                                                                <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 no-print mb-1"><SVGIcons.Trash/></button>
+                                                                <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 mb-1"><SVGIcons.Trash/></button>
                                                             </div>
                                                             <div className="grid grid-cols-3 gap-2">
                                                                 <div>
@@ -1621,9 +1660,9 @@
                     )}
 
                     {data.type === 'pnj' && (
-                        <div id="ficha-print-area" className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
+                        <div className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                             {/* Header PNJ */}
-                            <div className="print-break flex flex-col md:flex-row gap-6 pb-4 border-b-2 border-blue-900 items-end">
+                            <div className="flex flex-col md:flex-row gap-6 pb-4 border-b-2 border-blue-900 items-end">
                                 <div className="flex-1 w-full">
                                     <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest mb-1">Nome do PNJ / Ameaça Humanoide</label>
                                     <input type="text" value={data.nome} onChange={e => updateField('nome', e.target.value)} className="w-full text-3xl font-title font-bold border-b-2 border-gray-400 focus:border-blue-600 outline-none bg-transparent" placeholder="Nome do Personagem" />
@@ -1638,35 +1677,35 @@
                             </div>
 
                             {/* Criação Rápida de PNJs */}
-                            <div className="print-break bg-gray-100 p-4 border border-gray-300 rounded relative">
+                            <div className="bg-gray-100 p-4 border border-gray-300 rounded relative">
                                 <div className="absolute -top-3 left-4 bg-white px-2 font-title font-bold text-blue-900 text-xs uppercase shadow-sm border border-gray-200">Gerador Rápido de PNJ (Improviso)</div>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-2">
                                     <div>
-                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Nome <button onClick={() => generatePnjAspect('nome')} className="text-blue-600 hover:text-blue-800 hide-in-print-mode" title="Sortear"><SVGIcons.Dice/></button></label>
+                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Nome <button onClick={() => generatePnjAspect('nome')} className="text-blue-600 hover:text-blue-800" title="Sortear"><SVGIcons.Dice/></button></label>
                                         <input type="text" value={data.nome} onChange={e => updateField('nome', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm font-bold" />
                                     </div>
                                     <div>
-                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Profissão/Tipo <button onClick={() => generatePnjAspect('profissao')} className="text-blue-600 hover:text-blue-800 hide-in-print-mode" title="Sortear"><SVGIcons.Dice/></button></label>
+                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Profissão/Tipo <button onClick={() => generatePnjAspect('profissao')} className="text-blue-600 hover:text-blue-800" title="Sortear"><SVGIcons.Dice/></button></label>
                                         <input type="text" value={data.profissao} onChange={e => updateField('profissao', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm font-bold" />
                                     </div>
                                     <div>
-                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Atitude <button onClick={() => generatePnjAspect('atitude')} className="text-blue-600 hover:text-blue-800 hide-in-print-mode" title="Sortear"><SVGIcons.Dice/></button></label>
+                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Atitude <button onClick={() => generatePnjAspect('atitude')} className="text-blue-600 hover:text-blue-800" title="Sortear"><SVGIcons.Dice/></button></label>
                                         <input type="text" value={data.atitude} onChange={e => updateField('atitude', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" />
                                     </div>
                                     <div>
-                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Motivação <button onClick={() => generatePnjAspect('motivacao')} className="text-blue-600 hover:text-blue-800 hide-in-print-mode" title="Sortear"><SVGIcons.Dice/></button></label>
+                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Motivação <button onClick={() => generatePnjAspect('motivacao')} className="text-blue-600 hover:text-blue-800" title="Sortear"><SVGIcons.Dice/></button></label>
                                         <input type="text" value={data.motivacao} onChange={e => updateField('motivacao', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" />
                                     </div>
                                     <div>
-                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Traço Marcante <button onClick={() => generatePnjAspect('tracoMarcante')} className="text-blue-600 hover:text-blue-800 hide-in-print-mode" title="Sortear"><SVGIcons.Dice/></button></label>
+                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 uppercase mb-1">Traço Marcante <button onClick={() => generatePnjAspect('tracoMarcante')} className="text-blue-600 hover:text-blue-800" title="Sortear"><SVGIcons.Dice/></button></label>
                                         <input type="text" value={data.tracoMarcante} onChange={e => updateField('tracoMarcante', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4 print-landscape-grid">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-4">
                                 {/* Coluna Esquerda PNJ */}
-                                <div className="print-break md:col-span-5 space-y-6">
+                                <div className="md:col-span-5 space-y-6">
                                     <div className="flex flex-col gap-4">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
@@ -1717,28 +1756,17 @@
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">
-                                                PERÍCIAS PRINCIPAIS
-                                            </h3>
-                                            <button 
-                                                onClick={() => addToArray('pericias', { nome: '', valor: '' })} 
-                                                className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm hide-in-print-mode"
-                                            >
-                                                <SVGIcons.Plus/> Adic.
-                                            </button>
+                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                            <h3 className="font-title font-bold text-sm text-gray-700">PERÍCIAS PRINCIPAIS</h3>
+                                            <button onClick={() => addToArray('pericias', { nome: '', valor: '' })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-1">
-                                            {data.pericias?.length === 0 && (
-                                                <p className="text-[10px] text-gray-400 italic">
-                                                    Nenhuma perícia adicionada.
-                                                </p>
-                                            )}
+                                            {data.pericias?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma perícia adicionada.</p>}
                                             {(data.pericias || []).map((pericia, index) => (
                                                 <div key={index} className="flex items-center gap-2 p-1 rounded hover:bg-gray-100">
                                                     <input type="text" value={pericia.nome} placeholder="Perícia..." onChange={e => updateArrayField('pericias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
                                                     <input type="number" value={pericia.valor} onChange={e => updateArrayField('pericias', index, 'valor', e.target.value)} className="w-12 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                    <button onClick={() => removeFromArray('pericias', index)} className="text-red-500 hover:text-red-700 no-print"><SVGIcons.Trash/></button>
+                                                    <button onClick={() => removeFromArray('pericias', index)} className="text-red-500 hover:text-red-700"><SVGIcons.Trash/></button>
                                                 </div>
                                             ))}
                                         </div>
@@ -1746,25 +1774,14 @@
                                 </div>
 
                                 {/* Coluna Direita PNJ */}
-                                <div className="print-break md:col-span-7 space-y-6">
+                                <div className="md:col-span-7 space-y-6">
                                     <div className="mb-6">
-                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">
-                                                ARMAS E ATAQUES
-                                            </h3>
-                                            <button 
-                                                onClick={() => addToArray('armas', { nome: '', pericia: '', dano: '' })} 
-                                                className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
-                                            >
-                                                <SVGIcons.Plus/> Adic.
-                                            </button>
+                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                            <h3 className="font-title font-bold text-sm text-gray-700">ARMAS E ATAQUES</h3>
+                                            <button onClick={() => addToArray('armas', { nome: '', pericia: '', dano: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-3">
-                                            {data.armas?.length === 0 && (
-                                                <p className="text-[10px] text-gray-400 italic">
-                                                    Nenhuma arma adicionada.
-                                                </p>
-                                            )}
+                                            {data.armas?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma arma adicionada.</p>}
                                             {(data.armas || []).map((arma, index) => (
                                                 <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 shadow-sm flex flex-col gap-2">
                                                     <div className="flex gap-2 items-end">
@@ -1780,7 +1797,7 @@
                                                             <label className="block text-[9px] font-bold text-gray-500 uppercase text-center">Dano</label>
                                                             <input type="text" value={arma.dano} placeholder="Ex: 2d6+d4" onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b border-gray-400 outline-none text-sm font-bold bg-transparent text-center text-red-800"/>
                                                         </div>
-                                                        <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 no-print mb-1 ml-2"><SVGIcons.Trash/></button>
+                                                        <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 mb-1 ml-2"><SVGIcons.Trash/></button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -1788,30 +1805,19 @@
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">
-                                                HABILIDADES E FEITIÇOS
-                                            </h3>
-                                            <button 
-                                                onClick={() => addToArray('feiticos', { nome: '', desc: '' })} 
-                                                className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
-                                            >
-                                                <SVGIcons.Plus/> Adic.
-                                            </button>
+                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                            <h3 className="font-title font-bold text-sm text-gray-700">HABILIDADES E FEITIÇOS</h3>
+                                            <button onClick={() => addToArray('feiticos', { nome: '', desc: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-2">
-                                            {data.feiticos?.length === 0 && (
-                                                <p className="text-[10px] text-gray-400 italic">
-                                                    Nenhuma habilidade listada.
-                                                </p>
-                                            )}
+                                            {data.feiticos?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma habilidade listada.</p>}
                                             {(data.feiticos || []).map((hab, index) => (
                                                 <div key={index} className="flex gap-2 items-start p-2 border border-gray-200 rounded bg-gray-50">
                                                     <div className="flex-1 space-y-1">
                                                         <input type="text" value={hab.nome} onChange={e => updateArrayField('feiticos', index, 'nome', e.target.value)} className="w-full border-b border-gray-300 bg-transparent font-bold text-sm outline-none" placeholder="Nome do Feitiço/Habilidade..." />
                                                         <textarea rows="2" value={hab.desc} onChange={e => updateArrayField('feiticos', index, 'desc', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Descrição do efeito..."></textarea>
                                                     </div>
-                                                    <button onClick={() => removeFromArray('feiticos', index)} className="text-red-500 hover:text-red-700 no-print mt-1"><SVGIcons.Trash/></button>
+                                                    <button onClick={() => removeFromArray('feiticos', index)} className="text-red-500 hover:text-red-700 mt-1"><SVGIcons.Trash/></button>
                                                 </div>
                                             ))}
                                         </div>
@@ -1827,9 +1833,9 @@
                     )}
 
                     {data.type === 'ameaca' && (
-                        <div id="ficha-print-area" className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
+                        <div className="p-4 md:p-8 space-y-6 bg-white" style={theme === 'custom' ? { background: 'transparent' } : {}}>
                             {/* Header Monstro */}
-                            <div className="print-break flex flex-col md:flex-row gap-6 pb-4 border-b-4 border-red-900 items-end">
+                            <div className="flex flex-col md:flex-row gap-6 pb-4 border-b-4 border-red-900 items-end">
                                 <div className="flex-1 w-full">
                                     <label className="block text-xs font-bold text-red-900 uppercase tracking-widest mb-1">Nome da Ameaça / Monstro</label>
                                     <input type="text" value={data.nome} onChange={e => updateField('nome', e.target.value)} className="w-full text-3xl font-title font-bold border-b-2 border-gray-400 focus:border-red-600 outline-none bg-transparent" placeholder="Ex: Troll Antigo, Demônio..." />
@@ -1840,9 +1846,9 @@
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-2 print-landscape-grid">
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 pt-2">
                                 {/* Coluna Esquerda Monstro */}
-                                <div className="print-break md:col-span-4 space-y-6">
+                                <div className="md:col-span-4 space-y-6">
                                     <div className="border border-gray-300 p-4 bg-gray-50 rounded shadow-sm space-y-4">
                                         <div>
                                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tamanho</label>
@@ -1876,30 +1882,19 @@
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300 sub-header-print">
-                                            <h3 className="font-title font-bold text-sm text-gray-700">
-                                                HABILIDADES ESPECIAIS
-                                            </h3>
-                                            <button 
-                                                onClick={() => addToArray('habilidades', { nome: '', desc: '' })} 
-                                                className="text-[10px] bg-red-900 text-white px-2 py-1 rounded no-print flex items-center gap-1 shadow-sm font-bold hide-in-print-mode"
-                                            >
-                                                <SVGIcons.Plus/> Adic.
-                                            </button>
+                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                            <h3 className="font-title font-bold text-sm text-gray-700">HABILIDADES ESPECIAIS</h3>
+                                            <button onClick={() => addToArray('habilidades', { nome: '', desc: '' })} className="text-[10px] bg-red-900 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-3">
-                                            {data.habilidades?.length === 0 && (
-                                                <p className="text-[10px] text-gray-400 italic">
-                                                    Nenhuma habilidade (ex: Imunidades, Magia).
-                                                </p>
-                                            )}
+                                            {data.habilidades?.length === 0 && <p className="text-[10px] text-gray-400 italic">Nenhuma habilidade (ex: Imunidades, Magia).</p>}
                                             {(data.habilidades || []).map((hab, index) => (
                                                 <div key={index} className="flex gap-2 items-start p-2 border border-red-200 rounded bg-red-50/50">
                                                     <div className="flex-1 space-y-1">
                                                         <input type="text" value={hab.nome} onChange={e => updateArrayField('habilidades', index, 'nome', e.target.value)} className="w-full border-b border-red-300 bg-transparent font-bold text-sm outline-none text-red-900" placeholder="Ex: Imunidade a Fogo..." />
                                                         <textarea rows="3" value={hab.desc} onChange={e => updateArrayField('habilidades', index, 'desc', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Detalhes..."></textarea>
                                                     </div>
-                                                    <button onClick={() => removeFromArray('habilidades', index)} className="text-red-500 hover:text-red-700 no-print mt-1"><SVGIcons.Trash/></button>
+                                                    <button onClick={() => removeFromArray('habilidades', index)} className="text-red-500 hover:text-red-700 mt-1"><SVGIcons.Trash/></button>
                                                 </div>
                                             ))}
                                         </div>
@@ -1907,8 +1902,8 @@
                                 </div>
 
                                 {/* Coluna Direita Monstro - Tabela Fixa 1 a 6 */}
-                                <div className="print-break md:col-span-8">
-                                    <div className="bg-red-900 text-white py-2 px-4 rounded-t-sm shadow-sm flex items-center gap-2 header-print">
+                                <div className="md:col-span-8">
+                                    <div className="bg-red-900 text-white py-2 px-4 rounded-t-sm shadow-sm flex items-center gap-2">
                                         <SVGIcons.Dice />
                                         <h2 className="font-title font-bold text-lg tracking-widest uppercase">ATAQUES DO MONSTRO (Role D6)</h2>
                                     </div>
@@ -1937,7 +1932,7 @@
                                             );
                                         })}
                                     </div>
-                                    <div className="mt-4 p-4 border border-blue-200 bg-blue-50 text-blue-900 text-xs rounded hide-in-print-mode">
+                                    <div className="mt-4 p-4 border border-blue-200 bg-blue-50 text-blue-900 text-xs rounded">
                                         <b className="flex items-center gap-1 mb-1"><SVGIcons.HelpCircle /> Como funciona a Tabela de Ataque?</b>
                                         Em Dragonbane, Monstros não fazem testes de perícia normais para atacar. No turno do Monstro, você rola um D6 e consulta esta tabela para ver qual ataque ele usará automaticamente. Esses ataques não costumam poder ser aparados (apenas esquivados).
                                     </div>
@@ -1949,49 +1944,8 @@
             );
         }
 
-        class ErrorBoundary extends React.Component {
-            constructor(props) {
-                super(props);
-                this.state = { hasError: false };
-            }
-
-            static getDerivedStateFromError(error) {
-                return { hasError: true };
-            }
-
-            componentDidCatch(error, errorInfo) {
-                console.error("Erro capturado pelo ErrorBoundary:", error, errorInfo);
-            }
-
-            render() {
-                if (this.state.hasError) {
-                    return (
-                        <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-                            <div className="bg-white p-8 rounded-lg shadow-xl max-w-md border-2 border-red-800 animate-fade-in-up">
-                                <h2 className="text-2xl font-bold text-red-700 mb-4 font-title">Ops! Algo deu errado.</h2>
-                                <p className="text-gray-600 mb-6 text-sm">
-                                    Ocorreu um erro inesperado na renderização. Isso pode acontecer devido a bloqueios de segurança do navegador (sandboxing) em áreas de preview ou falha de leitura dos dados.
-                                </p>
-                                <button 
-                                    onClick={() => window.location.reload()} 
-                                    className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-6 rounded shadow-lg transition-colors"
-                                >
-                                    Recarregar Página
-                                </button>
-                            </div>
-                        </div>
-                    );
-                }
-                return this.props.children;
-            }
-        }
-
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(
-            <ErrorBoundary>
-                <App />
-            </ErrorBoundary>
-        );
+        root.render(<App />);
     </script>
 </body>
 </html>
