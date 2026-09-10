@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Fichas - Lite</title>
+    <title>Criador de Fichas - Lite v0.5.4 Alpha</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -76,6 +76,23 @@
             background-position: center !important;
             background-attachment: fixed !important;
         }
+
+        /* --- TEMA DUNGEONS & DRAGONS --- */
+        body.theme-dnd {
+            background-color: #d8c7a6 !important;
+            background-image: radial-gradient(circle at top, rgba(146,38,16,0.10), transparent 42%), linear-gradient(135deg, rgba(255,255,255,0.18), transparent 45%);
+        }
+        body.theme-dnd .max-w-6xl, body.theme-dnd .max-w-5xl {
+            background-color: #fdf1dc !important;
+            border-color: #922610 !important;
+        }
+        body.theme-dnd .bg-dragon-dark {
+            background-color: #922610 !important;
+            color: #fff7ed !important;
+        }
+        body.theme-dnd .border-dragon-dark { border-color: #922610 !important; }
+        body.theme-dnd input, body.theme-dnd textarea, body.theme-dnd select { border-color: #c9a98f; }
+        body.theme-dnd .bg-gray-50, body.theme-dnd .bg-gray-100 { background-color: #fffaf2 !important; }
         
         /* Animações */
         @keyframes fadeInUp {
@@ -112,6 +129,8 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
+            { versao: '0.5.4v Alpha', descricao: 'Expansão da adaptação de D&D 5e (2024): correção do modelo de Mago, novo organizador em abas para Características/Talentos e Magias, listas dinâmicas com adicionar/remover, melhorias em Ataques, novo Tema Dungeons & Dragons, modelos prontos de personagens Dragonbane, guias revisados e créditos do projeto.' },
+            { versao: '0.5.3 Alpha', descricao: 'Aprimoramentos internos de compatibilidade das fichas D&D e preparação da interface para novos recursos do sistema em adaptação.' },
             { versao: '0.5.2 Alpha', descricao: 'Adição de retrato na Ficha de Personagem D&D 5e com Upload, URL e Remover, seguindo a mesma experiência de avatar do Dragonbane. O retrato permanece salvo na ficha e nos arquivos ZIP, mas continua fora dos Códigos LZ-String para manter o compartilhamento leve.' },
             { versao: '0.5.1 Alpha', descricao: 'Ajustes no layout "Sobre o Projeto", restauração da caixa DMLite e reorganização completa das abas de Guias e Tutoriais.' },
             { versao: '0.5.0 Alpha', descricao: 'Integração completa de Fichas de Personagem (PC) e Blocos de Estatística (Bestiário) de D&D 5e (2024). Automação total de modificadores de habilidade e perícias. Suporte ao formato nativo do SRD 5.2.' },
@@ -144,6 +163,14 @@
             inventario: '', itensMiudos: '', moedas: { ouro: 0, prata: 0, cobre: 0 }
         };
 
+        const MODELOS_DRAGONBANE_PC = [
+            { ...initialData, bio: { ...initialData.bio, nome: 'Arquimestre Aodhan', ancestralidade: 'Humano', profissao: 'Mago – Elementalista', idade: 'Idoso', fraqueza: 'Covarde. Você sempre fica na parte de trás do grupo.', aparencia: 'Magro e delgado. Longa barba branca e sobrancelhas cheias. Olhos questionadores.', memento: 'Diário gasto, repleto de experiências e descobertas.' }, atributos: { for: { valor: 8, condicao: false }, con: { valor: 11, condicao: false }, agl: { valor: 9, condicao: false }, int: { valor: 16, condicao: false }, von: { valor: 18, condicao: false }, car: { valor: 14, condicao: false } }, derivados: { ...initialData.derivados, movimento: 8 }, status: { ...initialData.status, pv: { atual: 11, max: 11 }, pd: { atual: 18, max: 18 } }, habilidadesFeiticos: [{ nome: 'Adaptativo', fv_nvl: '3 PD' }, { nome: 'Bola de Fogo', fv_nvl: '' }, { nome: 'Pilar', fv_nvl: '' }, { nome: 'Lufada de Vento', fv_nvl: '' }, { nome: 'Calor/Frio', fv_nvl: '' }, { nome: 'Nuvem de Fumaça', fv_nvl: '' }, { nome: 'Ignição', fv_nvl: '' }], periciasSecundarias: [{ nome: 'Elementalismo', attr: 'INT', valor: 14, avanco: false }], armas: [{ nome: 'Cajado', empunhadura: '2M', alcance: '2', dano: 'D8', tracos: 'Contundente' }], inventario: 'Grimório\nTocha' },
+            { ...initialData, bio: { ...initialData.bio, nome: 'Orla Lua-de-Prata', ancestralidade: 'Elfa', profissao: 'Caçadora', idade: 'Adulta', fraqueza: 'Intolerante. Notívagos como orcs e goblins são malignos e precisam ser combatidos.', aparencia: 'Andar suave e confiante. Olhos atentos que examinam todos com desconfiança.', memento: 'Presa do troll que matou sua irmã.' }, atributos: { for: { valor: 13, condicao: false }, con: { valor: 15, condicao: false }, agl: { valor: 17, condicao: false }, int: { valor: 13, condicao: false }, von: { valor: 10, condicao: false }, car: { valor: 9, condicao: false } }, derivados: { ...initialData.derivados, danoBonusFor: '+D4', danoBonusAgl: '+D6', movimento: 14 }, status: { ...initialData.status, pv: { atual: 15, max: 15 }, pd: { atual: 10, max: 10 } }, habilidadesFeiticos: [{ nome: 'Paz Interior', fv_nvl: '—' }, { nome: 'Tiro Duplo', fv_nvl: '3 PD' }], armas: [{ nome: 'Arco Longo', empunhadura: '2M', alcance: '100', dano: 'D12', tracos: 'Perfurante' }, { nome: 'Faca', empunhadura: '1M', alcance: '13', dano: 'D8', tracos: 'Perfurante, Sutil' }], inventario: 'Aljava\nTocha\nCorda' },
+            { ...initialData, bio: { ...initialData.bio, nome: 'Bastonn Mandíbula-de-Sangue', ancestralidade: 'Lupino', profissao: 'Guerreiro', idade: 'Jovem', fraqueza: 'Glutão. Você aproveita todas as chances que tem para comer algo saboroso.', aparencia: 'Músculos marcados e salientes. Leal para amigos e ameaçador para adversários.', memento: 'Garrafa de perfume azul.' }, atributos: { for: { valor: 18, condicao: false }, con: { valor: 17, condicao: false }, agl: { valor: 14, condicao: false }, int: { valor: 11, condicao: false }, von: { valor: 13, condicao: false }, car: { valor: 7, condicao: false } }, derivados: { ...initialData.derivados, danoBonusFor: '+D6', danoBonusAgl: '+D4', movimento: 14 }, status: { ...initialData.status, pv: { atual: 17, max: 17 }, pd: { atual: 13, max: 13 } }, habilidadesFeiticos: [{ nome: 'Instintos de Caça', fv_nvl: '' }, { nome: 'Veterano', fv_nvl: '' }], armas: [{ nome: 'Lança Longa', empunhadura: '2M', alcance: '4', dano: '2D8', tracos: 'Longa, Perfurante' }, { nome: 'Lança Curta', empunhadura: '1M', alcance: '36', dano: 'D10', tracos: 'Perfurante' }], defesa: { ...initialData.defesa, armadura: { nome: 'Couro Batido', valor: '2', reves: '' } }, inventario: 'Tocha\nPederneira e Isqueiro' },
+            { ...initialData, bio: { ...initialData.bio, nome: 'Krisanna, A Ousada', ancestralidade: 'Halfling', profissao: 'Ladra', idade: 'Jovem', fraqueza: 'Temerária. Você sempre assume grandes riscos sem pensar nas consequências.', aparencia: 'Semblante inocente, olhos perspicazes e passos leves e silenciosos.', memento: 'Um mapa do tesouro que você “encontrou”.' }, atributos: { for: { valor: 8, condicao: false }, con: { valor: 13, condicao: false }, agl: { valor: 18, condicao: false }, int: { valor: 14, condicao: false }, von: { valor: 15, condicao: false }, car: { valor: 10, condicao: false } }, derivados: { ...initialData.derivados, danoBonusAgl: '+D6', movimento: 12 }, status: { ...initialData.status, pv: { atual: 13, max: 13 }, pd: { atual: 15, max: 15 } }, habilidadesFeiticos: [{ nome: 'Difícil de Pegar', fv_nvl: '3 PD' }, { nome: 'Apunhalar pelas Costas', fv_nvl: '' }], armas: [{ nome: 'Adaga', empunhadura: '1M', alcance: '8', dano: 'D8', tracos: 'Cortante, Perfurante, Sutil' }, { nome: 'Faca', empunhadura: '1M', alcance: '8', dano: 'D8', tracos: 'Perfurante, Sutil' }], defesa: { ...initialData.defesa, armadura: { nome: 'Couro', valor: '1', reves: '' } }, inventario: 'Gazuas Simples\nTocha\nCorda\nPederneira e Isqueiro' },
+            { ...initialData, bio: { ...initialData.bio, nome: 'Capitã Betrix Navegalém', ancestralidade: 'Humano', profissao: 'Marinheira', idade: 'Adulta', fraqueza: 'Autoritária. Você sempre diz aos outros o que fazer.', aparencia: 'Bronzeada, rosto severo e olhos atentos. Veste roupas práticas e resistentes.', memento: 'Desenho do navio perfeito em um estojo impermeável.' }, atributos: { for: { valor: 14, condicao: false }, con: { valor: 12, condicao: false }, agl: { valor: 15, condicao: false }, int: { valor: 12, condicao: false }, von: { valor: 16, condicao: false }, car: { valor: 11, condicao: false } }, derivados: { ...initialData.derivados, danoBonusFor: '+D4', danoBonusAgl: '+D4', movimento: 12 }, status: { ...initialData.status, pv: { atual: 12, max: 12 }, pd: { atual: 16, max: 16 } }, habilidadesFeiticos: [{ nome: 'Adaptativo', fv_nvl: '3 PD' }, { nome: 'Pernas do Mar', fv_nvl: '' }], armas: [{ nome: 'Cimitarra', empunhadura: '1M', alcance: '2', dano: '2D6', tracos: 'Cortante' }], inventario: 'Corda (cânhamo)\nArpéu\nLuneta' }
+        ];
+
         const initialPnjData = { id: '', type: 'pnj', system: 'dragonbane', tipoPnj: 'lacaio', nome: '', ancestralidade: '', profissao: '', movimento: '10', danoBonus: '', armaduraTipica: { nome: '', valor: '' }, status: { pv: { atual: 10, max: 10 }, pd: { atual: 0, max: 0 } }, pericias: [], feiticos: [], armas: [], equipamento: '', atitude: '', motivacao: '', tracoMarcante: '' };
         const initialAmeacaData = { id: '', type: 'ameaca', system: 'dragonbane', nome: '', ferocidade: 1, tamanho: 'Normal', movimento: '10', armadura: '', status: { pv: { atual: 20, max: 20 } }, habilidades: [], ataques: [{ id: 1, descricao: '' }, { id: 2, descricao: '' }, { id: 3, descricao: '' }, { id: 4, descricao: '' }, { id: 5, descricao: '' }, { id: 6, descricao: '' }] };
 
@@ -171,8 +198,8 @@
             proficienciasResistencia: { for: false, des: false, con: false, int: false, sab: false, car: false },
             pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: 0 })), // 0: Nenhuma, 1: Proficiência, 2: Expertise (Dobro)
             ataques: [{ nome: 'Arma Simples', bonus: '+2', dano: '1d6', tipo: 'Cortante' }],
-            magias: { slots: { 1: { atual: 0, max: 0 }, 2: { atual: 0, max: 0 }, 3: { atual: 0, max: 0 }, 4: { atual: 0, max: 0 }, 5: { atual: 0, max: 0 }, 6: { atual: 0, max: 0 }, 7: { atual: 0, max: 0 }, 8: { atual: 0, max: 0 }, 9: { atual: 0, max: 0 } }, lista: '' },
-            caracteristicas: '',
+            magias: { slots: { 1: { atual: 0, max: 0 }, 2: { atual: 0, max: 0 }, 3: { atual: 0, max: 0 }, 4: { atual: 0, max: 0 }, 5: { atual: 0, max: 0 }, 6: { atual: 0, max: 0 }, 7: { atual: 0, max: 0 }, 8: { atual: 0, max: 0 }, 9: { atual: 0, max: 0 } }, lista: [] },
+            caracteristicas: [],
             tracosPersonalidade: '', ideais: '', vinculos: '', defeitos: '',
             outrasProficiencias: '',
             inventario: '', moedas: { pc: 0, pp: 0, pe: 0, po: 0, pl: 0 }
@@ -191,9 +218,9 @@
         };
 
         const MODELOS_DND_PC = [
-            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Guerreiro Humano', classe: 'Guerreiro', linhagem: 'Humano', antecedente: 'Soldado', alinhamento: 'Leal e Neutro', nivel: 1 }, atributos: { for: 16, des: 14, con: 14, int: 9, sab: 11, car: 13 }, status: { ...initialDndPcData.status, pvAtual: 12, pvMax: 12, dadosVida: '1d10', ca: 16, deslocamento: '9 m' }, proficienciasResistencia: { for: true, des: false, con: true, int: false, sab: false, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['atletismo', 'percepcao', 'sobrevivencia', 'intimidacao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Espada Longa', bonus: '+5', dano: '1d8+3', tipo: 'Cortante' }], caracteristicas: 'Estilo de Combate (Defesa)\nRetomar o Fôlego (1d10+1)', outrasProficiencias: 'Todas as armaduras, escudos. Armas simples e marciais. Veículos (terrestres).', inventario: 'Cota de malha, Espada longa, Escudo, Pacote de Aventureiro.' },
-            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Mago Alto Elfo', classe: 'Mago', linhagem: 'Elfo (Alto)', antecedente: 'Sábio', alinhamento: 'Neutro e Bom', nivel: 1 }, atributos: { for: 8, des: 14, con: 12, int: 16, sab: 12, car: 10 }, status: { ...initialDndPcData.status, pvAtual: 7, pvMax: 7, dadosVida: '1d6', ca: 12, deslocamento: '9 m' }, proficienciasResistencia: { for: false, des: false, con: false, int: true, sab: true, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['arcanismo', 'historia', 'investigacao', 'percepcao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Raio de Fogo', bonus: '+5', dano: '1d10', tipo: 'Fogo' }], magias: { slots: { 1: { atual: 2, max: 2 } }, lista: 'Truques: Raio de Fogo, Luz, Mãos Mágicas\n1º Nível (Preparo: 4): Armadura Mágica, Mísseis Mágicos, Escudo Arcano, Sono.' }, caracteristicas: 'Recuperação Arcana\nVisão no Escuro (18m)\nAncestralidade Feérica', outrasProficiencias: 'Adagas, dardos, fundas, bastões, bestas leves. Idiomas: Comum, Élfico, Dracônico.', inventario: 'Grimório, Foco Arcano, Adaga, Pacote de Estudioso.' },
-            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Ladino Halfling', classe: 'Ladino', linhagem: 'Halfling (Pés-Leves)', antecedente: 'Criminoso', alinhamento: 'Caótico e Neutro', nivel: 1 }, atributos: { for: 8, des: 16, con: 14, int: 12, sab: 10, car: 14 }, status: { ...initialDndPcData.status, pvAtual: 10, pvMax: 10, dadosVida: '1d8', ca: 14, deslocamento: '7.5 m' }, proficienciasResistencia: { for: false, des: true, con: false, int: true, sab: false, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['furtividade', 'prestidigitacao'].includes(sk.id) ? 2 : ['acrobacia', 'enganacao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Arco Curto', bonus: '+5', dano: '1d6+3', tipo: 'Perfurante' }, { nome: 'Adaga', bonus: '+5', dano: '1d4+3', tipo: 'Perfurante' }], caracteristicas: 'Ataque Furtivo (1d6)\nGíria de Ladrão\nSortudo\nBravura', outrasProficiencias: 'Armaduras leves. Armas simples, bestas de mão, espadas longas, rapieiras, espadas curtas. Ferramentas de Ladrão.', inventario: 'Armadura de Couro, Arco Curto (20 flechas), 2 Adagas, Ferramentas de Ladrão.' }
+            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Guerreiro Humano', classe: 'Guerreiro', linhagem: 'Humano', antecedente: 'Soldado', alinhamento: 'Leal e Neutro', nivel: 1 }, atributos: { for: 16, des: 14, con: 14, int: 9, sab: 11, car: 13 }, status: { ...initialDndPcData.status, pvAtual: 12, pvMax: 12, dadosVida: '1d10', ca: 16, deslocamento: '9 m' }, proficienciasResistencia: { for: true, des: false, con: true, int: false, sab: false, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['atletismo', 'percepcao', 'sobrevivencia', 'intimidacao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Espada Longa', bonus: '+5', dano: '1d8+3', tipo: 'Cortante' }], caracteristicas: [{ nome: 'Estilo de Combate: Defesa', desc: 'Treinamento marcial focado em proteção.' }, { nome: 'Retomar o Fôlego', desc: 'Recurso de recuperação do guerreiro.' }], outrasProficiencias: 'Todas as armaduras, escudos. Armas simples e marciais. Veículos (terrestres).', inventario: 'Cota de malha, Espada longa, Escudo, Pacote de Aventureiro.' },
+            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Mago Alto Elfo', classe: 'Mago', linhagem: 'Elfo (Alto)', antecedente: 'Sábio', alinhamento: 'Neutro e Bom', nivel: 1 }, atributos: { for: 8, des: 14, con: 12, int: 16, sab: 12, car: 10 }, status: { ...initialDndPcData.status, pvAtual: 7, pvMax: 7, dadosVida: '1d6', ca: 12, deslocamento: '9 m' }, proficienciasResistencia: { for: false, des: false, con: false, int: true, sab: true, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['arcanismo', 'historia', 'investigacao', 'percepcao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Raio de Fogo', bonus: '+5', dano: '1d10', tipo: 'Fogo' }], magias: { ...initialDndPcData.magias, slots: { ...initialDndPcData.magias.slots, 1: { atual: 2, max: 2 } }, lista: [{ nome: 'Raio de Fogo', nivel: 'Truque', desc: '' }, { nome: 'Luz', nivel: 'Truque', desc: '' }, { nome: 'Mãos Mágicas', nivel: 'Truque', desc: '' }, { nome: 'Armadura Mágica', nivel: '1', desc: '' }, { nome: 'Mísseis Mágicos', nivel: '1', desc: '' }, { nome: 'Escudo Arcano', nivel: '1', desc: '' }, { nome: 'Sono', nivel: '1', desc: '' }] }, caracteristicas: [{ nome: 'Recuperação Arcana', desc: 'Recurso de classe do mago.' }, { nome: 'Visão no Escuro', desc: '18 m.' }, { nome: 'Ancestralidade Feérica', desc: 'Traço de linhagem.' }], outrasProficiencias: 'Adagas, dardos, fundas, bastões, bestas leves. Idiomas: Comum, Élfico, Dracônico.', inventario: 'Grimório, Foco Arcano, Adaga, Pacote de Estudioso.' },
+            { ...initialDndPcData, bio: { ...initialDndPcData.bio, nome: 'Ladino Halfling', classe: 'Ladino', linhagem: 'Halfling (Pés-Leves)', antecedente: 'Criminoso', alinhamento: 'Caótico e Neutro', nivel: 1 }, atributos: { for: 8, des: 16, con: 14, int: 12, sab: 10, car: 14 }, status: { ...initialDndPcData.status, pvAtual: 10, pvMax: 10, dadosVida: '1d8', ca: 14, deslocamento: '7.5 m' }, proficienciasResistencia: { for: false, des: true, con: false, int: true, sab: false, car: false }, pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: ['furtividade', 'prestidigitacao'].includes(sk.id) ? 2 : ['acrobacia', 'enganacao'].includes(sk.id) ? 1 : 0 })), ataques: [{ nome: 'Arco Curto', bonus: '+5', dano: '1d6+3', tipo: 'Perfurante' }, { nome: 'Adaga', bonus: '+5', dano: '1d4+3', tipo: 'Perfurante' }], caracteristicas: [{ nome: 'Ataque Furtivo', desc: 'Dano adicional quando as condições do recurso são atendidas.' }, { nome: 'Gíria de Ladrão', desc: '' }, { nome: 'Sortudo', desc: '' }, { nome: 'Bravura', desc: '' }], outrasProficiencias: 'Armaduras leves. Armas simples, bestas de mão, espadas longas, rapieiras, espadas curtas. Ferramentas de Ladrão.', inventario: 'Armadura de Couro, Arco Curto (20 flechas), 2 Adagas, Ferramentas de Ladrão.' }
         ];
 
         const MODELOS_DND_AMEACA = [
@@ -206,6 +233,28 @@
         const getDndAbilityMod = (score) => Math.floor((score - 10) / 2);
         const formatDndMod = (mod) => mod >= 0 ? `+${mod}` : `${mod}`;
         const getProficiencyBonus = (level) => Math.ceil(level / 4) + 1;
+
+        const normalizeDndPcData = (item) => {
+            const clone = JSON.parse(JSON.stringify(item));
+            if (clone.system !== 'dnd5e' || clone.type !== 'pc') return clone;
+            clone.bio = { ...initialDndPcData.bio, ...(clone.bio || {}) };
+            clone.status = { ...initialDndPcData.status, ...(clone.status || {}) };
+            clone.atributos = { ...initialDndPcData.atributos, ...(clone.atributos || {}) };
+            clone.proficienciasResistencia = { ...initialDndPcData.proficienciasResistencia, ...(clone.proficienciasResistencia || {}) };
+            clone.pericias = Array.isArray(clone.pericias) ? clone.pericias : JSON.parse(JSON.stringify(initialDndPcData.pericias));
+            clone.ataques = Array.isArray(clone.ataques) ? clone.ataques : [];
+            clone.caracteristicas = Array.isArray(clone.caracteristicas)
+                ? clone.caracteristicas
+                : (clone.caracteristicas ? String(clone.caracteristicas).split('\n').filter(Boolean).map(nome => ({ nome, desc: '' })) : []);
+            const oldMagias = clone.magias || {};
+            clone.magias = { slots: {}, lista: [] };
+            for (let lvl = 1; lvl <= 9; lvl++) clone.magias.slots[lvl] = { ...initialDndPcData.magias.slots[lvl], ...(oldMagias.slots?.[lvl] || {}) };
+            clone.magias.lista = Array.isArray(oldMagias.lista)
+                ? oldMagias.lista
+                : (oldMagias.lista ? String(oldMagias.lista).split('\n').filter(Boolean).map(nome => ({ nome, nivel: '', desc: '' })) : []);
+            clone.moedas = { ...initialDndPcData.moedas, ...(clone.moedas || {}) };
+            return clone;
+        };
 
         const SVGIcons = {
             Save: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>,
@@ -267,7 +316,7 @@
                         item.ataques.forEach(a => text += `- ${a.nome}: ${a.bonus} (Dano: ${a.dano} ${a.tipo})\n`);
                         text += `\n`;
                     }
-                    if (item.caracteristicas) text += `✨ CARACTERÍSTICAS:\n${item.caracteristicas}\n`;
+                    if (Array.isArray(item.caracteristicas) && item.caracteristicas.length) { text += `✨ CARACTERÍSTICAS E TALENTOS:\n`; item.caracteristicas.forEach(c => text += `- ${c.nome}${c.desc ? ': ' + c.desc : ''}\n`); } else if (item.caracteristicas) text += `✨ CARACTERÍSTICAS:\n${item.caracteristicas}\n`;
                 } else {
                     text += `🐉 BESTIÁRIO: ${item.nome || 'Sem Nome'} (D&D 5e)\n`;
                     text += `${item.tamanho} ${item.tipo}, ${item.alinhamento}\n`;
@@ -338,6 +387,8 @@
             
             const [showThreatModal, setShowThreatModal] = useState(false);
             const [showDndModelModal, setShowDndModelModal] = useState(false);
+            const [showDbModelModal, setShowDbModelModal] = useState(false);
+            const [dndPcTab, setDndPcTab] = useState('caracteristicas');
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
 
@@ -345,7 +396,7 @@
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
-                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'custom' ? 'theme-custom' : ''}`;
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'custom' ? 'theme-custom' : ''}`;
             }, [theme]);
 
             useEffect(() => {
@@ -401,7 +452,7 @@
 
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
-                if (char) { setData(JSON.parse(JSON.stringify(char))); setView('editor'); }
+                if (char) { setData(normalizeDndPcData(char)); setDndPcTab('caracteristicas'); setView('editor'); }
             };
             
             const loadThreat = (id) => {
@@ -410,11 +461,14 @@
             };
             
             const loadTemplate = (modelo) => {
-                const templateData = JSON.parse(JSON.stringify(modelo));
+                const templateData = normalizeDndPcData(modelo);
                 templateData.id = Date.now().toString();
                 setData(templateData);
                 setShowThreatModal(false);
                 setShowDndModelModal(false);
+                setShowDbModelModal(false);
+                setCreateTarget(null);
+                setDndPcTab('caracteristicas');
                 setView('editor');
             };
 
@@ -541,7 +595,9 @@
                         const importedData = JSON.parse(e.target.result);
                         if(!importedData.id) importedData.id = Date.now().toString();
                         if(!importedData.system) importedData.system = 'dragonbane';
-                        saveToLocal(importedData);
+                        const normalizedData = normalizeDndPcData(importedData);
+                        saveToLocal(normalizedData);
+                        setData(normalizedData);
                         setView('editor');
                     } catch (error) { showToast("Erro: Arquivo inválido. Certifique-se de extrair o .ZIP."); }
                 };
@@ -565,7 +621,9 @@
                     if (!decompressed) throw new Error("Código inválido");
                     const importedData = JSON.parse(decompressed);
                     if(!importedData.id) importedData.id = Date.now().toString();
-                    saveToLocal(importedData);
+                    const normalizedData = normalizeDndPcData(importedData);
+                    saveToLocal(normalizedData);
+                    setData(normalizedData);
                     setView('editor');
                     setCodeModal({ isOpen: false, mode: 'import', code: '' });
                     showToast("Ficha importada com sucesso via código!");
@@ -596,6 +654,7 @@
                                         <select value={theme} onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer">
                                             <option value="default">Tema: Padrão</option>
                                             <option value="classic">Tema: Clássico DB</option>
+                                            <option value="dnd">Tema: Dungeons & Dragons</option>
                                             <option value="custom">Tema: Custom...</option>
                                         </select>
                                     </div>
@@ -613,6 +672,14 @@
                                         <SVGIcons.Plus /> Novo Personagem
                                     </button>
                                 </div>
+                            </div>
+
+                            <div className="mb-6 rounded border-2 border-[#922610] bg-[#fdf1dc] px-4 py-3 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                                <div>
+                                    <div className="font-title font-bold text-[#922610]">🐉 D&D 5e (2024) chegou ao projeto</div>
+                                    <p className="text-xs text-gray-700 mt-1">Novo sistema em adaptação contínua. A ficha de personagem e o bestiário já estão disponíveis e continuarão recebendo melhorias.</p>
+                                </div>
+                                <span className="shrink-0 bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Novo • Em adaptação</span>
                             </div>
 
                             {savedChars.length === 0 ? (
@@ -728,6 +795,12 @@
                                                 <p key={idx}><strong className="text-black bg-gray-200 px-1 rounded">{log.versao}:</strong> {log.descricao}</p>
                                             ))}
                                         </div>
+                                        <div className="mt-4 border-t border-gray-200 pt-3 text-xs text-gray-600">
+                                            <div className="font-title font-bold text-gray-800 mb-1">Créditos de Desenvolvimento</div>
+                                            <p><strong>Desenvolvido por Nick Queijo</strong></p>
+                                            <p className="mt-1">Telegram: <strong>@ralseibaiano</strong> &nbsp;•&nbsp; Discord: <strong>inabakaoru</strong></p>
+                                            <p className="mt-1 text-[10px] text-gray-500">Projeto comunitário e gratuito, desenvolvido para facilitar a criação e organização de fichas de RPG.</p>
+                                        </div>
                                     </div>
                                     <div className="space-y-4">
                                         <div className="bg-gray-50 border border-gray-200 rounded p-4">
@@ -759,9 +832,8 @@
                                     <div className="p-6 bg-gray-100 flex flex-col gap-4">
                                         <div onClick={() => { 
                                             setShowSystemModal(false); 
-                                            if (createTarget === 'pc') { setData({...initialData, id: Date.now().toString()}); setView('editor'); }
+                                            if (createTarget === 'pc') { setShowDbModelModal(true); }
                                             else { setShowThreatModal(true); }
-                                            setCreateTarget(null);
                                         }} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
                                             <div style={getBarStyle()} className="w-14 h-14 bg-dragon-dark group-hover:bg-red-800 text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">DB</div>
                                             <div className="flex-1">
@@ -777,8 +849,39 @@
                                             <div className="w-14 h-14 bg-orange-600 group-hover:bg-[#922610] text-white rounded flex items-center justify-center font-bold font-title text-2xl shadow-inner transition-colors">D&D</div>
                                             <div className="flex-1">
                                                 <h3 className="font-title font-bold text-gray-900 group-hover:text-[#922610] text-lg transition-colors">D&D 5e (2024)</h3>
-                                                <p className="text-xs text-gray-500">Regras do SRD 5.2</p>
+                                                <p className="text-xs text-gray-500">Regras do SRD 5.2 • novo sistema em adaptação</p>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>, document.body
+                        )}
+
+                        {showDbModelModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-dragon-dark overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div style={getBarStyle()} className="bg-dragon-dark text-white p-3 flex justify-between items-center shrink-0">
+                                        <h2 className="font-title font-bold text-lg">Criar em Dragonbane</h2>
+                                        <button onClick={() => { setShowDbModelModal(false); setCreateTarget(null); }} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
+                                        <div>
+                                            <h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Ficha de Personagem (Em Branco)</h3>
+                                            <div onClick={() => loadTemplate(initialData)} className="bg-white border-2 border-gray-300 hover:border-red-800 rounded p-4 cursor-pointer flex items-center gap-4">
+                                                <div className="w-12 h-12 bg-dragon-dark text-white rounded flex items-center justify-center shrink-0"><SVGIcons.User /></div>
+                                                <div><h3 className="font-bold text-sm">PC Dragonbane</h3><p className="text-xs text-gray-500">Comece uma ficha do zero</p></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Modelos Prontos (Personagens Oficiais de Referência)</h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {MODELOS_DRAGONBANE_PC.map((modelo, idx) => (
+                                                    <div key={idx} onClick={() => loadTemplate(modelo)} className="border rounded p-3 cursor-pointer hover:shadow-md flex justify-between items-center bg-white border-emerald-200 hover:border-emerald-700">
+                                                        <div className="flex flex-col"><span className="text-[10px] font-bold uppercase text-emerald-800">{modelo.bio.ancestralidade} • {modelo.bio.profissao}</span><span className="font-bold text-sm">{modelo.bio.nome}</span></div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <p className="text-[10px] text-gray-500 mt-3">Modelos adaptados como ponto de partida para uso nesta ferramenta. Consulte o material oficial para regras e descrições completas.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -834,7 +937,7 @@
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
                                 <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-[#922610] overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
                                     <div className="bg-[#922610] text-white p-3 flex justify-between items-center shrink-0">
-                                        <h2 className="font-title font-bold text-lg">Criar em D&D 5e (2024)</h2>
+                                        <div><h2 className="font-title font-bold text-lg">Criar em D&D 5e (2024)</h2><span className="text-[9px] uppercase font-bold tracking-widest text-orange-100">Novo sistema • em adaptação</span></div>
                                         <button onClick={() => setShowDndModelModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
                                     <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
@@ -918,76 +1021,39 @@
                                     </div>
                                     <div className="p-6 bg-gray-50 text-sm text-gray-700 overflow-y-auto max-h-[60vh] scrollbar-thin">
                                         {guideTab === 'import' && (
-                                            <div className="space-y-6">
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Salvamento e Backups Locais</h3>
-                                                    <p className="mt-1 leading-relaxed">Todos os seus personagens e monstros são salvos exclusivamente no armazenamento local (Local Storage) do seu navegador de internet atual. <strong>Se você limpar o cache ou os dados do navegador, suas fichas serão apagadas.</strong> Recomendamos fortemente que você use o botão <strong>ZIP/JSON</strong> ou <strong>Código</strong> para fazer backup regular.</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Compartilhamento para Chat e Discord</h3>
-                                                    <p className="mt-1 leading-relaxed">Você pode enviar rapidamente uma ficha completa para o chat do seu grupo clicando no ícone de <strong>Mensagem</strong> (Copiar para Chat). Ele formata os atributos da ficha em um texto puro organizado e envia para a sua área de transferência.</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Importação via Código (LZ-String)</h3>
-                                                    <p className="mt-1 leading-relaxed">O botão <strong>Código</strong> gera uma string longa contendo todos os dados compactados da ficha (a imagem de avatar não é exportada para poupar espaço). Use a opção <strong>Colar Código</strong> no painel principal para recriar a ficha imediatamente em outro dispositivo.</p>
-                                                </div>
+                                            <div className="space-y-5">
+                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">💾 Como salvar sem perder sua ficha</h3><p>O botão <strong>Salvar</strong> guarda a ficha no navegador. Como esses dados ficam no Local Storage, limpar os dados do navegador pode apagar suas fichas. Para backup, use <strong>ZIP/JSON</strong>.</p></div>
+                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">📦 ZIP/JSON: backup completo</h3><p>Use para guardar e transferir a ficha com seus dados. Imagens adicionadas à ficha permanecem no JSON exportado. Para importar, extraia o JSON do ZIP e selecione-o no botão ZIP/JSON.</p></div>
+                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">🔗 Código: compartilhamento rápido</h3><p>O Código compacta a ficha em texto para copiar e colar em outro dispositivo. Para manter o código leve, o retrato/avatar não é incluído.</p></div>
+                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">💬 Copiar Ficha</h3><p>Gera uma versão em texto dos principais dados para WhatsApp, Discord ou outros chats.</p></div>
                                             </div>
                                         )}
-                                        
+
                                         {guideTab === 'fichas_db' && (
-                                            <div className="space-y-6">
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Atributos e Condições</h3>
-                                                    <p className="mt-1 leading-relaxed">Ao alterar atributos como FOR e AGL, o sistema atualiza automaticamente os Valores Derivados (Dano Bônus, Movimento). Você pode travar essa automação clicando no botão "Manter/Mantendo" na seção de derivados.</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Chance Base das Perícias</h3>
-                                                    <p className="mt-1 leading-relaxed">As perícias calculam sua "Base" a partir do atributo correspondente. Ao marcar o botão "T" (Treinada), o valor da perícia é dobrado em relação à chance base, seguindo as regras de criação.</p>
-                                                </div>
-                                                <div className="p-4 bg-gray-100 border border-gray-300 rounded text-gray-800 shadow-sm relative overflow-hidden mt-4">
-                                                    <div className="absolute top-0 right-0 bg-gray-700 text-white font-bold text-[9px] px-2 py-0.5 uppercase tracking-wider rounded-bl-lg">Aviso Legal</div>
-                                                    <h3 className="font-title font-bold mb-2 flex items-center gap-2 text-lg">Dragonbane / Drakar och Demoner</h3>
-                                                    <p className="text-xs leading-relaxed">
-                                                        As mecânicas, nomes e sistema base de rolagens de <em>Dragonbane</em> são propriedades da Free League Publishing (Fria Ligan). Esta ferramenta não substitui o livro de regras oficial nem distribui conteúdo protegido. Por favor, apoie os criadores comprando o material oficial e os livros do sistema.
-                                                    </p>
-                                                </div>
+                                            <div className="space-y-5">
+                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4"><h3 className="font-title font-bold text-emerald-900 mb-2">Criando um personagem Dragonbane</h3><p>Você pode começar com uma <strong>ficha em branco</strong> ou escolher um dos <strong>Modelos Prontos</strong>. Preencha nome, ancestralidade, profissão, idade, fraqueza, aparência e memento; depois confira atributos, perícias, habilidades, equipamento e combate.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">1. Atributos e valores derivados</h3><p className="mt-2">FOR, CON, AGL, INT, VON e CAR formam a base do personagem. Ao editar atributos, a ficha recalcula valores derivados quando aplicável. A opção de manter derivados permite preservar ajustes manuais.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">2. Perícias</h3><p className="mt-2">Cada perícia mostra sua base ligada a um atributo. Use o marcador de treinamento para representar perícias treinadas e ajuste valores quando sua mesa precisar.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">3. Habilidades, magia e combate</h3><p className="mt-2">Em <strong>Habilidades e Magias</strong>, adicione cada recurso separadamente e informe PD/Nível quando necessário. Em Combate, registre armadura, elmo e armas.</p></div>
+                                                <div className="p-4 bg-gray-100 border rounded"><h3 className="font-title font-bold mb-2">Material oficial de Dragonbane</h3><p className="text-xs mb-3">Esta ferramenta é independente e não substitui o livro de regras. Para apoiar a publicação brasileira e consultar as regras completas:</p><a href="https://triaeditora.com.br/loja/d20/dragonbane-livro-de-regras-pdf/" target="_blank" rel="noopener noreferrer" className="inline-block bg-emerald-800 hover:bg-emerald-700 text-white px-4 py-2 rounded font-bold text-xs">Comprar o PDF oficial na Tria Editora ↗</a></div>
                                             </div>
                                         )}
-                                        
+
                                         {guideTab === 'ameacas_db' && (
-                                            <div className="space-y-6">
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Lacaios vs Chefes (PNJs)</h3>
-                                                    <p className="mt-1 leading-relaxed">No Gerador de PNJs, "Lacaios" possuem HP e bloqueiam a edição de PD (Pontos de Determinação), pois raramente usam. "Chefes" liberam PD e podem ter habilidades e magias completas.</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Monstros e Tabela de Ataque (D6)</h3>
-                                                    <p className="mt-1 leading-relaxed">Ameaças maiores possuem um valor de Ferocidade (ações por turno). No final da ficha de Monstro, você encontrará os 6 slots de ataque que correspondem a uma rolagem de 1D6 para ditar o comportamento da criatura no combate.</p>
-                                                </div>
+                                            <div className="space-y-5">
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">PNJs</h3><p className="mt-2">Use a ficha de PNJ para aliados, rivais e personagens secundários. Modelos rápidos ajudam a começar com estatísticas básicas e depois você pode personalizar perícias, armas, atitude, motivação e traços.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">Monstros e Ferocidade</h3><p className="mt-2">A ficha de ameaça usa Ferocidade para representar quantas ações a criatura realiza. A tabela de seis ataques permite registrar opções para uma rolagem de D6 durante o combate.</p></div>
                                             </div>
                                         )}
-                                        
+
                                         {guideTab === 'dnd5e' && (
-                                            <div className="space-y-6">
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Automação de Atributos e Perícias</h3>
-                                                    <p className="mt-1 leading-relaxed">A ficha calcula automaticamente os modificadores de habilidade (ex: 16 = +3) e aplica o Bônus de Proficiência (baseado no Nível) às perícias e testes de resistência marcados.</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 mb-1 border-b border-gray-300 pb-1">Expertise (Proficiência Dupla)</h3>
-                                                    <p className="mt-1 leading-relaxed">Nas perícias, o botão de marcação tem 3 estágios: Vazio (Sem Proficiência), Preto (Proficiência) e Vermelho (Expertise - dobro do bônus).</p>
-                                                </div>
-                                                
-                                                <div className="p-4 bg-orange-50 border border-orange-300 rounded text-orange-900 shadow-sm relative overflow-hidden mt-4">
-                                                    <div className="absolute top-0 right-0 bg-orange-500 text-white font-bold text-[9px] px-2 py-0.5 uppercase tracking-wider rounded-bl-lg">Licença e Atribuição</div>
-                                                    <h3 className="font-title font-bold mb-2 flex items-center gap-2 text-lg text-[#922610]">Dungeons & Dragons 5e (SRD 5.2)</h3>
-                                                    <p className="text-xs leading-relaxed mb-3">
-                                                        Este trabalho inclui material retirado do <em>System Reference Document 5.2</em> (SRD 5.2), de autoria da Wizards of the Coast LLC, e é disponibilizado e utilizado sob a <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" className="underline font-bold text-orange-700 hover:text-orange-900 transition-colors">Creative Commons Attribution 4.0 International License (CC-BY-4.0)</a>.
-                                                    </p>
-                                                    <div className="bg-white/60 p-3 rounded text-[11px] leading-relaxed border border-orange-200">
-                                                        <strong>Nota Importante:</strong> Esta ferramenta não é um produto oficial da Wizards of the Coast, não é filiada e não tem patrocínio da mesma. Apenas mecânicas centrais, características básicas e estatísticas de monstros comuns disponibilizados publicamente no SRD são incluídos como modelos estruturais para preenchimento independente pelos usuários.
-                                                    </div>
-                                                </div>
+                                            <div className="space-y-5">
+                                                <div className="bg-orange-50 border border-orange-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-orange-700 mb-1">Novo sistema • em adaptação</div><h3 className="font-title font-bold text-[#922610] mb-2">Criando um personagem D&D 5e (2024)</h3><p>Comece por uma ficha em branco ou modelo pronto. Defina <strong>classe, nível, espécie/linhagem, antecedente e atributos</strong>. A ficha calcula modificadores e bônus de proficiência automaticamente.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">1. Atributos, resistências e perícias</h3><p className="mt-2">Os seis atributos geram seus modificadores. Marque testes de resistência proficientes. Nas perícias, clique no círculo para alternar entre sem proficiência, proficiência e expertise.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">2. Combate e recursos</h3><p className="mt-2">Registre CA, iniciativa, deslocamento, PV, PV temporários, dados de vida e testes de morte. Em <strong>Ataques</strong>, cada arma ou ataque fica em uma linha independente e pode ser adicionado ou removido.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">3. Características & Talentos</h3><p className="mt-2">Use a primeira aba para adicionar individualmente habilidades de classe, talentos, traços de espécie e outros recursos. Cada entrada tem nome, descrição e botão de remoção.</p></div>
+                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">4. Magias</h3><p className="mt-2">Na segunda aba, controle os espaços de magia dos níveis 1–9 e mantenha uma lista organizada de magias, com nome, nível e descrição. O modelo de Mago já vem preparado nesse formato.</p></div>
+                                                <div className="p-4 bg-orange-50 border border-orange-300 rounded"><h3 className="font-title font-bold text-[#922610] mb-2">D&D 5e / SRD 5.2</h3><p className="text-xs">A implementação de D&D está em adaptação contínua no projeto. A ferramenta não é um produto oficial da Wizards of the Coast. Os modelos servem como apoio estrutural de preenchimento.</p></div>
                                             </div>
                                         )}
                                     </div>
@@ -1047,7 +1113,7 @@
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className="font-title font-bold text-lg md:text-xl tracking-wider uppercase">
-                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem' : 'D&D 5e - Bestiário') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
+                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
@@ -1289,16 +1355,16 @@
 
                                     <div className="border border-gray-300 rounded bg-white shadow-sm p-2">
                                         <div className="flex justify-between items-center border-b pb-1 mb-2">
-                                            <h3 className="font-bold text-sm uppercase text-gray-600">Ataques e Magias</h3>
+                                            <h3 className="font-bold text-sm uppercase text-gray-600">Ataques</h3>
                                             <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-2">
                                             {(data.ataques || []).map((atk, idx) => (
                                                 <div key={idx} className="flex gap-2 items-center bg-gray-50 p-1 rounded border">
-                                                    <input type="text" value={atk.nome} placeholder="Nome" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="flex-1 bg-transparent border-b outline-none text-xs font-bold" />
-                                                    <input type="text" value={atk.bonus} placeholder="Bônus" onChange={e => updateArrayField('ataques', idx, 'bonus', e.target.value)} className="w-10 bg-transparent border-b outline-none text-xs text-center" />
-                                                    <input type="text" value={atk.dano} placeholder="Dano" onChange={e => updateArrayField('ataques', idx, 'dano', e.target.value)} className="w-16 bg-transparent border-b outline-none text-xs text-center font-bold" />
-                                                    <input type="text" value={atk.tipo} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-12 bg-transparent border-b outline-none text-[10px]" />
+                                                    <input type="text" value={atk?.nome || ''} placeholder="Nome" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="flex-1 bg-transparent border-b outline-none text-xs font-bold" />
+                                                    <input type="text" value={atk?.bonus || ''} placeholder="Bônus" onChange={e => updateArrayField('ataques', idx, 'bonus', e.target.value)} className="w-10 bg-transparent border-b outline-none text-xs text-center" />
+                                                    <input type="text" value={atk?.dano || ''} placeholder="Dano" onChange={e => updateArrayField('ataques', idx, 'dano', e.target.value)} className="w-16 bg-transparent border-b outline-none text-xs text-center font-bold" />
+                                                    <input type="text" value={atk?.tipo || ''} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-12 bg-transparent border-b outline-none text-[10px]" />
                                                     <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 ml-1"><SVGIcons.Trash/></button>
                                                 </div>
                                             ))}
@@ -1327,26 +1393,70 @@
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.defeitos} onChange={e => updateField('defeitos', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Defeitos..."></textarea></div>
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Características e Talentos</h3>
-                                        <textarea rows="6" value={data.caracteristicas} onChange={e => updateField('caracteristicas', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none" placeholder="Habilidades de classe, talentos..."></textarea>
+                                    <div className="border border-gray-300 rounded bg-white shadow-sm overflow-hidden">
+                                        <div className="flex border-b bg-gray-100">
+                                            <button type="button" onClick={() => setDndPcTab('caracteristicas')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'caracteristicas' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Características & Talentos</button>
+                                            <button type="button" onClick={() => setDndPcTab('magias')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'magias' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Magias</button>
+                                        </div>
+
+                                        {dndPcTab === 'caracteristicas' ? (
+                                            <div className="p-2">
+                                                <div className="flex justify-between items-center mb-2">
+                                                    <span className="text-[10px] text-gray-500">Habilidades de classe, talentos e traços.</span>
+                                                    <button type="button" onClick={() => addToArray('caracteristicas', { nome: '', desc: '' })} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    {(!data.caracteristicas || data.caracteristicas.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma característica adicionada.</p>}
+                                                    {(Array.isArray(data.caracteristicas) ? data.caracteristicas : []).map((carac, idx) => (
+                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
+                                                            <div className="flex-1 space-y-1">
+                                                                <input type="text" value={carac?.nome || ''} onChange={e => updateArrayField('caracteristicas', idx, 'nome', e.target.value)} className="w-full bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da característica ou talento" />
+                                                                <textarea rows="2" value={carac?.desc || ''} onChange={e => updateArrayField('caracteristicas', idx, 'desc', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Descrição, uso, limite, efeito..." />
+                                                            </div>
+                                                            <button type="button" onClick={() => removeFromArray('caracteristicas', idx)} className="text-red-500 hover:text-red-700"><SVGIcons.Trash/></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="p-2">
+                                                <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Espaços de Magia — Atual / Máx.</div>
+                                                <div className="grid grid-cols-3 gap-1 mb-3">
+                                                    {[1,2,3,4,5,6,7,8,9].map(lvl => {
+                                                        const slot = data.magias?.slots?.[lvl] || { atual: 0, max: 0 };
+                                                        return (
+                                                            <div key={lvl} className="flex border rounded overflow-hidden text-[9px] bg-gray-50">
+                                                                <div className="bg-gray-200 px-1 py-1 font-bold text-gray-700 flex items-center justify-center border-r">N{lvl}</div>
+                                                                <input type="number" min="0" value={slot.atual ?? 0} onChange={e => updateField(`magias.slots.${lvl}.atual`, parseInt(e.target.value)||0)} className="w-7 text-center outline-none bg-transparent" />
+                                                                <span className="text-gray-400 py-1">/</span>
+                                                                <input type="number" min="0" value={slot.max ?? 0} onChange={e => updateField(`magias.slots.${lvl}.max`, parseInt(e.target.value)||0)} className="w-7 text-center outline-none bg-transparent font-bold text-[#922610]" />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                                <div className="flex justify-between items-center border-t pt-2 mb-2">
+                                                    <span className="text-[10px] text-gray-500">Lista de magias conhecidas/preparadas.</span>
+                                                    <button type="button" onClick={() => { const list = Array.isArray(data.magias?.lista) ? data.magias.lista : []; updateField('magias.lista', [...list, { nome: '', nivel: '', desc: '' }]); }} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    {(!Array.isArray(data.magias?.lista) || data.magias.lista.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma magia adicionada.</p>}
+                                                    {(Array.isArray(data.magias?.lista) ? data.magias.lista : []).map((magia, idx) => (
+                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
+                                                            <div className="flex-1">
+                                                                <div className="flex gap-2 mb-1">
+                                                                    <input type="text" value={magia?.nome || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], nome:e.target.value}; updateField('magias.lista', list); }} className="flex-1 min-w-0 bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da magia" />
+                                                                    <input type="text" value={magia?.nivel || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], nivel:e.target.value}; updateField('magias.lista', list); }} className="w-16 bg-transparent border-b outline-none text-[10px] text-center" placeholder="Nível" />
+                                                                </div>
+                                                                <textarea rows="2" value={magia?.desc || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], desc:e.target.value}; updateField('magias.lista', list); }} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Notas, duração, alcance ou efeito..." />
+                                                            </div>
+                                                            <button type="button" onClick={() => { const list=data.magias.lista.filter((_,i)=>i!==idx); updateField('magias.lista', list); }} className="text-red-500 hover:text-red-700"><SVGIcons.Trash/></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Magias e Habilidades (Slots)</h3>
-                                        <div className="grid grid-cols-3 gap-1 mb-2">
-                                            {[1,2,3,4,5,6,7,8,9].map(lvl => (
-                                                <div key={lvl} className="flex border rounded overflow-hidden text-[9px] bg-gray-50">
-                                                    <div className="bg-gray-200 px-1 py-1 font-bold text-gray-700 flex items-center justify-center border-r">N{lvl}</div>
-                                                    <input type="number" value={data.magias.slots[lvl].atual} onChange={e => updateField(`magias.slots.${lvl}.atual`, parseInt(e.target.value)||0)} className="w-6 text-center outline-none bg-transparent" />
-                                                    <span className="text-gray-400 py-1">/</span>
-                                                    <input type="number" value={data.magias.slots[lvl].max} onChange={e => updateField(`magias.slots.${lvl}.max`, parseInt(e.target.value)||0)} className="w-6 text-center outline-none bg-transparent font-bold text-[#922610]" />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <textarea rows="4" value={data.magias.lista} onChange={e => updateField('magias.lista', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none" placeholder="Lista de magias, pontos de ki, etc..."></textarea>
-                                    </div>
-                                    
                                     <div className="border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
                                         <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Outras Proficiências / Idiomas</h3>
                                         <textarea rows="3" value={data.outrasProficiencias} onChange={e => updateField('outrasProficiencias', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none"></textarea>
