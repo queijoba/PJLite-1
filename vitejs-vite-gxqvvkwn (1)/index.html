@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criador de Fichas - Lite v0.5.4 Alpha</title>
+    <title>PJ Lite - v0.5.6v Alpha</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -129,6 +129,8 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
+            { versao: '0.5.6v Alpha', descricao: 'Navegação mobile por abas na ficha D&D 5e, melhorias no sistema de temas com imagem de fundo por upload ou URL, reforço da identidade PJ Lite na tela inicial e ajustes gerais de responsividade.' },
+            { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
             { versao: '0.5.4v Alpha', descricao: 'Expansão da adaptação de D&D 5e (2024): correção do modelo de Mago, novo organizador em abas para Características/Talentos e Magias, listas dinâmicas com adicionar/remover, melhorias em Ataques, novo Tema Dungeons & Dragons, modelos prontos de personagens Dragonbane, guias revisados e créditos do projeto.' },
             { versao: '0.5.3 Alpha', descricao: 'Aprimoramentos internos de compatibilidade das fichas D&D e preparação da interface para novos recursos do sistema em adaptação.' },
             { versao: '0.5.2 Alpha', descricao: 'Adição de retrato na Ficha de Personagem D&D 5e com Upload, URL e Remover, seguindo a mesma experiência de avatar do Dragonbane. O retrato permanece salvo na ficha e nos arquivos ZIP, mas continua fora dos Códigos LZ-String para manter o compartilhamento leve.' },
@@ -371,6 +373,7 @@
             
             const [theme, setTheme] = useState(() => { try { return localStorage.getItem(THEME_PREF_KEY) || 'default'; } catch { return 'default'; } });
             const [customBgUrl, setCustomBgUrl] = useState(() => { try { return localStorage.getItem(CUSTOM_BG_KEY) || ''; } catch { return ''; } });
+            const [customBgLink, setCustomBgLink] = useState('');
             const [customWinColor, setCustomWinColor] = useState(() => { try { return localStorage.getItem(CUSTOM_WIN_COLOR_KEY) || '#ffffff'; } catch { return '#ffffff'; } });
             const [customBarColor, setCustomBarColor] = useState(() => { try { return localStorage.getItem(CUSTOM_BAR_COLOR_KEY) || '#1a1a1a'; } catch { return '#1a1a1a'; } });
             const [customOpacity, setCustomOpacity] = useState(() => { try { return localStorage.getItem(CUSTOM_OPACITY_KEY) || '0.93'; } catch { return '0.93'; } });
@@ -400,9 +403,27 @@
             }, [theme]);
 
             useEffect(() => {
-                if (theme === 'custom' && customBgUrl) document.body.style.backgroundImage = `url(${customBgUrl})`;
-                else document.body.style.backgroundImage = '';
+                if (theme === 'custom' && customBgUrl) {
+                    document.body.style.backgroundImage = `url(${customBgUrl})`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
+                } else {
+                    document.body.style.backgroundImage = '';
+                }
             }, [theme, customBgUrl]);
+
+            useEffect(() => {
+                try { localStorage.setItem(CUSTOM_WIN_COLOR_KEY, customWinColor); } catch {}
+            }, [customWinColor]);
+
+            useEffect(() => {
+                try { localStorage.setItem(CUSTOM_BAR_COLOR_KEY, customBarColor); } catch {}
+            }, [customBarColor]);
+
+            useEffect(() => {
+                try { localStorage.setItem(CUSTOM_OPACITY_KEY, customOpacity); } catch {}
+            }, [customOpacity]);
 
             const getWindowStyle = () => {
                 if (theme !== 'custom') return {};
@@ -644,7 +665,12 @@
             if (view === 'dashboard') {
                 return (
                     <React.Fragment>
-                        <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up">
+                        <div className="max-w-5xl mx-auto mt-4 md:mt-10 p-4 animate-fade-in-up relative">
+                            <div className="mb-4 flex justify-start select-none">
+                                <span className="inline-flex items-center gap-1.5 bg-gray-900 text-white border border-gray-700 shadow px-3 py-1 rounded-full text-[10px] md:text-xs font-title font-bold tracking-wide">
+                                    <span className="text-red-500">◆</span> PJ Lite
+                                </span>
+                            </div>
                             {/* Personagens */}
                             <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                                 <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
@@ -994,12 +1020,50 @@
                                         <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
                                         <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
                                     </div>
-                                    <div className="space-y-3 pt-2">
-                                        <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark text-white py-2 px-3 rounded block text-center font-bold text-xs">
-                                            Carregar Imagem <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files[0]; if(f){ const r=new FileReader(); r.onload=(ev)=>{setCustomBgUrl(ev.target.result);localStorage.setItem(CUSTOM_BG_KEY,ev.target.result);setTheme('custom');}; r.readAsDataURL(f); } }} />
-                                        </label>
-                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor Fundo</label><input type="color" value={customWinColor} onChange={e => setCustomWinColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
-                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor Barra</label><input type="color" value={customBarColor} onChange={e => setCustomBarColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
+                                    <div className="space-y-4 pt-2">
+                                        <div className="rounded border border-gray-200 bg-gray-50 p-3 space-y-3">
+                                            <div>
+                                                <div className="text-xs font-bold text-gray-800">Imagem de fundo</div>
+                                                <p className="text-[10px] text-gray-500 mt-0.5">Escolha uma imagem do dispositivo ou cole um link direto para uma imagem.</p>
+                                            </div>
+
+                                            <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark text-white py-2 px-3 rounded block text-center font-bold text-xs">
+                                                <span className="inline-flex items-center justify-center gap-1"><SVGIcons.Upload/> Carregar imagem</span>
+                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files[0]; if(f){ const r=new FileReader(); r.onload=(ev)=>{setCustomBgUrl(ev.target.result);localStorage.setItem(CUSTOM_BG_KEY,ev.target.result);setTheme('custom');setCustomBgLink('');}; r.readAsDataURL(f); } e.target.value=''; }} />
+                                            </label>
+
+                                            <div className="flex items-center gap-2 text-[9px] uppercase font-bold text-gray-400"><span className="h-px bg-gray-300 flex-1"></span>ou URL<span className="h-px bg-gray-300 flex-1"></span></div>
+
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="url"
+                                                    value={customBgLink}
+                                                    onChange={e => setCustomBgLink(e.target.value)}
+                                                    onKeyDown={e => {
+                                                        if (e.key === 'Enter' && customBgLink.trim()) {
+                                                            const url = customBgLink.trim();
+                                                            setCustomBgUrl(url);
+                                                            localStorage.setItem(CUSTOM_BG_KEY, url);
+                                                            setTheme('custom');
+                                                        }
+                                                    }}
+                                                    placeholder="https://site.com/imagem.jpg"
+                                                    className="flex-1 min-w-0 border rounded px-2 py-2 text-xs outline-none focus:border-gray-500"
+                                                />
+                                                <button type="button" onClick={() => { const url=customBgLink.trim(); if(!url) return; setCustomBgUrl(url); localStorage.setItem(CUSTOM_BG_KEY,url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); }} className="bg-gray-800 hover:bg-black text-white px-3 rounded text-xs font-bold">Aplicar</button>
+                                            </div>
+
+                                            {customBgUrl && (
+                                                <button type="button" onClick={() => { setCustomBgUrl(''); setCustomBgLink(''); localStorage.removeItem(CUSTOM_BG_KEY); }} className="w-full border border-red-300 text-red-700 hover:bg-red-50 py-1.5 rounded text-[10px] font-bold">Remover imagem de fundo</button>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das janelas</label><input type="color" value={customWinColor} onChange={e => setCustomWinColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
+                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das barras</label><input type="color" value={customBarColor} onChange={e => setCustomBarColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
+                                        <div className="border-t pt-3">
+                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Opacidade das janelas</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOpacity) * 100)}%</span></div>
+                                            <input type="range" min="0.45" max="1" step="0.05" value={customOpacity} onChange={e => setCustomOpacity(e.target.value)} className="w-full" />
+                                        </div>
                                         <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">Concluir</button>
                                     </div>
                                 </div>
@@ -1166,9 +1230,29 @@
 
                     {/* Editor D&D 5E */}
                     {isDnd && data.type === 'pc' && (
-                        <div className="p-4 md:p-8 space-y-6 bg-white font-dnd">
+                        <div className="bg-white font-dnd">
+                            {/* Abas mobile D&D 5e */}
+                            <div className="md:hidden grid grid-cols-4 bg-[#f3eadc] border-b border-[#c9ad92] sticky top-0 z-20 shadow-sm">
+                                {[
+                                    { id: 'status', label: 'Perfil' },
+                                    { id: 'pericias', label: 'Atributos' },
+                                    { id: 'equipamento', label: 'Combate' },
+                                    { id: 'recursos', label: 'Recursos' }
+                                ].map(tab => (
+                                    <button
+                                        key={tab.id}
+                                        type="button"
+                                        onClick={() => setMobileTab(tab.id)}
+                                        className={`py-3 px-1 text-[9px] font-bold uppercase text-center border-b-4 transition-colors ${mobileTab === tab.id ? 'border-[#922610] text-[#922610] bg-white' : 'border-transparent text-gray-500'}`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="p-4 md:p-8 space-y-6">
                             {/* Header D&D */}
-                            <div className="flex flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-4">
+                            <div className={`${mobileTab === 'status' ? 'flex' : 'hidden md:flex'} flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-4`}>
                                 {/* Retrato D&D 5e - mesma experiência do Dragonbane */}
                                 <div className="flex flex-col items-center gap-2 shrink-0 w-full md:w-36">
                                     <div className="w-32 h-32 md:w-36 md:h-36 border-2 border-[#922610] rounded bg-gray-100 relative group overflow-hidden flex items-center justify-center shadow-sm">
@@ -1283,7 +1367,7 @@
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* D&D Col 1: Atributos e Perícias */}
-                                <div className="space-y-4">
+                                <div className={`${mobileTab === 'pericias' ? 'block' : 'hidden md:block'} space-y-4`}>
                                     <div className="flex gap-4">
                                         <div className="flex flex-col gap-2 w-20">
                                             {['for','des','con','int','sab','car'].map(attr => (
@@ -1346,7 +1430,7 @@
                                 </div>
 
                                 {/* D&D Col 2: Combate, HP, Ataques */}
-                                <div className="space-y-4">
+                                <div className={`${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'} space-y-4`}>
                                     <div className="grid grid-cols-3 gap-2">
                                         <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Classe de Armadura</div>
@@ -1430,7 +1514,7 @@
                                 </div>
 
                                 {/* D&D Col 3: Roleplay e Magias */}
-                                <div className="space-y-4">
+                                <div className={`${mobileTab === 'recursos' ? 'block' : 'hidden md:block'} space-y-4`}>
                                     <div className="border border-gray-300 rounded bg-white shadow-sm flex flex-col gap-2 p-2">
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.tracosPersonalidade} onChange={e => updateField('tracosPersonalidade', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Traços de Personalidade..."></textarea></div>
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.ideais} onChange={e => updateField('ideais', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Ideais..."></textarea></div>
@@ -1507,6 +1591,7 @@
                                         <textarea rows="3" value={data.outrasProficiencias} onChange={e => updateField('outrasProficiencias', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none"></textarea>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     )}
