@@ -112,12 +112,31 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
-            { versao: '0.5.1 Alpha', descricao: 'Ajustes no layout "Sobre o Projeto", restauração da caixa DMLite e reorganização completa das abas de Guias e Tutoriais.' },
-            { versao: '0.5.0 Alpha', descricao: 'Integração completa de Fichas de Personagem (PC) e Blocos de Estatística (Bestiário) de D&D 5e (2024). Automação total de modificadores de habilidade e perícias. Suporte ao formato nativo do SRD 5.2.' },
-            { versao: '0.4.0 Alpha', descricao: 'Remoção do modo de impressão (instável) e adição da cópia da Ficha Completa como Texto para envio no WhatsApp/Discord. Renomeação do App.' },
-            { versao: '0.3.8 Alpha', descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente.' },
-            { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs e Ameaças.' }
-        ];
+    {
+        versao: '0.5.2 Alpha',
+        descricao: 'Adicionado suporte a retrato/foto na ficha de personagem de D&D 5e, com Upload, URL e opção de remover imagem, seguindo o mesmo sistema utilizado nas fichas de Dragonbane.'
+    },
+    {
+        versao: '0.5.1 Alpha',
+        descricao: 'Ajustes no layout "Sobre o Projeto", restauração da caixa DMLite e reorganização completa das abas de Guias e Tutoriais.'
+    },
+    {
+        versao: '0.5.0 Alpha',
+        descricao: 'Integração completa de Fichas de Personagem (PC) e Blocos de Estatística (Bestiário) de D&D 5e (2024). Automação total de modificadores de habilidade e perícias. Suporte ao formato nativo do SRD 5.2.'
+    },
+    {
+        versao: '0.4.0 Alpha',
+        descricao: 'Remoção do modo de impressão (instável) e adição da cópia da Ficha Completa como Texto para envio no WhatsApp/Discord. Renomeação do App.'
+    },
+    {
+        versao: '0.3.8 Alpha',
+        descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente.'
+    },
+    {
+        versao: '0.3.0v',
+        descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs e Ameaças.'
+    }
+];
 
         /* ==============================================================
          * CONSTANTES E MODELOS DE DRAGONBANE (INTACTOS)
@@ -1070,10 +1089,313 @@
                     {isDnd && data.type === 'pc' && (
                         <div className="p-4 md:p-8 space-y-6 bg-white font-dnd">
                             {/* Header D&D */}
-                            <div className="flex flex-col md:flex-row gap-4 border-b-2 border-[#922610] pb-4">
-                                <div className="flex-1">
-                                    <input type="text" value={data.bio?.nome} onChange={e => updateField('bio.nome', e.target.value)} placeholder="Nome do Personagem" className="w-full text-3xl font-title font-bold outline-none text-[#922610]" />
-                                </div>
+                            {/* Header D&D */}
+<div className="flex flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-5 items-start">
+
+    {/* Retrato do Personagem */}
+    <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 shrink-0">
+
+        <div className="w-36 h-36 md:w-40 md:h-40 border-2 border-[#922610] rounded-lg bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center shadow-sm">
+
+            {data.bio?.imagem ? (
+                <img
+                    src={data.bio.imagem}
+                    alt={data.bio?.nome || "Retrato do personagem"}
+                    className="w-full h-full object-cover"
+                />
+            ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-100">
+                    <SVGIcons.User />
+                    <span className="text-[10px] font-bold uppercase mt-2">
+                        Retrato
+                    </span>
+                </div>
+            )}
+
+            {/* Menu sobre a imagem */}
+            <div
+                className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 transition-opacity ${
+                    showUrlInput
+                        ? 'opacity-100'
+                        : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'
+                }`}
+            >
+
+                {!showUrlInput ? (
+                    <React.Fragment>
+
+                        {/* Upload */}
+                        <label className="cursor-pointer bg-white text-black px-3 py-2 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow-lg">
+                            Upload
+
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+
+                                    if (!file) return;
+
+                                    const reader = new FileReader();
+
+                                    reader.onload = (event) => {
+                                        updateField(
+                                            'bio.imagem',
+                                            event.target.result
+                                        );
+                                    };
+
+                                    reader.readAsDataURL(file);
+
+                                    e.target.value = '';
+                                }}
+                            />
+                        </label>
+
+                        {/* URL */}
+                        <button
+                            type="button"
+                            onClick={() => setShowUrlInput(true)}
+                            className="bg-white text-black px-3 py-2 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow-lg"
+                        >
+                            Usar URL
+                        </button>
+
+                        {/* Remover */}
+                        {data.bio?.imagem && (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    updateField('bio.imagem', '');
+                                    setTempUrl('');
+                                    setShowUrlInput(false);
+                                }}
+                                className="bg-red-700 text-white px-3 py-2 rounded text-xs font-bold hover:bg-red-600 w-24 text-center shadow-lg"
+                            >
+                                Remover
+                            </button>
+                        )}
+
+                    </React.Fragment>
+                ) : (
+
+                    /* Campo para URL */
+                    <div className="flex flex-col gap-2 w-full px-3 items-center">
+
+                        <input
+                            type="text"
+                            placeholder="Cole a URL da imagem"
+                            value={tempUrl}
+                            onChange={(e) => setTempUrl(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && tempUrl.trim()) {
+                                    updateField(
+                                        'bio.imagem',
+                                        tempUrl.trim()
+                                    );
+
+                                    setTempUrl('');
+                                    setShowUrlInput(false);
+                                }
+                            }}
+                            className="w-full p-2 text-xs outline-none rounded text-black border-2 border-white"
+                        />
+
+                        <div className="flex gap-2">
+
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    if (!tempUrl.trim()) return;
+
+                                    updateField(
+                                        'bio.imagem',
+                                        tempUrl.trim()
+                                    );
+
+                                    setTempUrl('');
+                                    setShowUrlInput(false);
+                                }}
+                                className="bg-green-700 text-white px-3 py-1.5 text-xs rounded font-bold hover:bg-green-600 shadow-lg"
+                            >
+                                OK
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowUrlInput(false);
+                                    setTempUrl('');
+                                }}
+                                className="bg-gray-500 text-white px-3 py-1.5 text-xs rounded font-bold hover:bg-gray-600 shadow-lg"
+                            >
+                                Voltar
+                            </button>
+
+                        </div>
+                    </div>
+                )}
+
+            </div>
+        </div>
+
+        <span className="text-[9px] uppercase font-bold text-gray-400">
+            Retrato do personagem
+        </span>
+    </div>
+
+
+    {/* Dados principais */}
+    <div className="flex-1 w-full">
+
+        {/* Nome */}
+        <div className="mb-4">
+            <input
+                type="text"
+                value={data.bio?.nome || ''}
+                onChange={(e) =>
+                    updateField('bio.nome', e.target.value)
+                }
+                placeholder="Nome do Personagem"
+                className="w-full text-3xl font-title font-bold outline-none text-[#922610] bg-transparent"
+            />
+        </div>
+
+        {/* Informações */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 gap-y-3 text-sm">
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Classe
+                </label>
+
+                <input
+                    type="text"
+                    value={data.bio?.classe || ''}
+                    onChange={(e) =>
+                        updateField('bio.classe', e.target.value)
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Nível
+                </label>
+
+                <input
+                    type="number"
+                    min="1"
+                    value={data.bio?.nivel || 1}
+                    onChange={(e) =>
+                        updateField(
+                            'bio.nivel',
+                            parseInt(e.target.value) || 1
+                        )
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Linhagem/Espécie
+                </label>
+
+                <input
+                    type="text"
+                    value={data.bio?.linhagem || ''}
+                    onChange={(e) =>
+                        updateField('bio.linhagem', e.target.value)
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Antecedente
+                </label>
+
+                <input
+                    type="text"
+                    value={data.bio?.antecedente || ''}
+                    onChange={(e) =>
+                        updateField(
+                            'bio.antecedente',
+                            e.target.value
+                        )
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Alinhamento
+                </label>
+
+                <input
+                    type="text"
+                    value={data.bio?.alinhamento || ''}
+                    onChange={(e) =>
+                        updateField(
+                            'bio.alinhamento',
+                            e.target.value
+                        )
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    XP
+                </label>
+
+                <input
+                    type="number"
+                    min="0"
+                    value={data.bio?.xp || 0}
+                    onChange={(e) =>
+                        updateField(
+                            'bio.xp',
+                            parseInt(e.target.value) || 0
+                        )
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+
+            <div className="border-b border-[#922610]/50 lg:col-span-2">
+                <label className="text-[10px] uppercase font-bold text-gray-500 block">
+                    Jogador
+                </label>
+
+                <input
+                    type="text"
+                    value={data.bio?.jogador || ''}
+                    onChange={(e) =>
+                        updateField(
+                            'bio.jogador',
+                            e.target.value
+                        )
+                    }
+                    className="w-full outline-none font-bold bg-transparent"
+                />
+            </div>
+
+        </div>
+    </div>
+</div>
                                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-sm w-full md:w-3/4">
                                     <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Classe</label><input type="text" value={data.bio?.classe} onChange={e => updateField('bio.classe', e.target.value)} className="w-full outline-none font-bold" /></div>
                                     <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Nível</label><input type="number" value={data.bio?.nivel} onChange={e => updateField('bio.nivel', parseInt(e.target.value)||1)} className="w-full outline-none font-bold" /></div>
