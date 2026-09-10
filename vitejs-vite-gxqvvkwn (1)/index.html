@@ -94,6 +94,18 @@
         body.theme-dnd input, body.theme-dnd textarea, body.theme-dnd select { border-color: #c9a98f; }
         body.theme-dnd .bg-gray-50, body.theme-dnd .bg-gray-100 { background-color: #fffaf2 !important; }
         
+
+        /* --- TEMA MODO ESCURO --- */
+        body.theme-dark { background-color: #111827 !important; color: #e5e7eb !important; }
+        body.theme-dark .max-w-6xl, body.theme-dark .max-w-5xl { background-color: #1f2937 !important; border-color: #4b5563 !important; }
+        body.theme-dark .bg-white { background-color: #1f2937 !important; color: #e5e7eb !important; }
+        body.theme-dark .bg-gray-50, body.theme-dark .bg-gray-100, body.theme-dark .bg-gray-200 { background-color: #374151 !important; color: #f3f4f6 !important; }
+        body.theme-dark .text-gray-400, body.theme-dark .text-gray-500, body.theme-dark .text-gray-600, body.theme-dark .text-gray-700, body.theme-dark .text-gray-800 { color: #d1d5db !important; }
+        body.theme-dark input, body.theme-dark textarea, body.theme-dark select { background-color: #111827 !important; color: #f9fafb !important; border-color: #6b7280 !important; }
+        body.theme-dark input::placeholder, body.theme-dark textarea::placeholder { color: #9ca3af !important; }
+        body.theme-dark .border-gray-200, body.theme-dark .border-gray-300 { border-color: #4b5563 !important; }
+        body.theme-dark .shadow, body.theme-dark .shadow-sm, body.theme-dark .shadow-md, body.theme-dark .shadow-lg { box-shadow: 0 4px 12px rgba(0,0,0,.35) !important; }
+
         /* Animações */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(10px); }
@@ -399,7 +411,7 @@
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
-                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'custom' ? 'theme-custom' : ''}`;
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : ''}`;
             }, [theme]);
 
             useEffect(() => {
@@ -681,6 +693,7 @@
                                             <option value="default">Tema: Padrão</option>
                                             <option value="classic">Tema: Clássico DB</option>
                                             <option value="dnd">Tema: Dungeons & Dragons</option>
+                                            <option value="dark">Tema: Modo Escuro</option>
                                             <option value="custom">Tema: Custom...</option>
                                         </select>
                                     </div>
