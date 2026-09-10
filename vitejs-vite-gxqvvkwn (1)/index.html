@@ -1041,8 +1041,39 @@
 
                                         {guideTab === 'ameacas_db' && (
                                             <div className="space-y-5">
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">PNJs</h3><p className="mt-2">Use a ficha de PNJ para aliados, rivais e personagens secundários. Modelos rápidos ajudam a começar com estatísticas básicas e depois você pode personalizar perícias, armas, atitude, motivação e traços.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">Monstros e Ferocidade</h3><p className="mt-2">A ficha de ameaça usa Ferocidade para representar quantas ações a criatura realiza. A tabela de seis ataques permite registrar opções para uma rolagem de D6 durante o combate.</p></div>
+                                                <div className="bg-gray-900 text-white rounded p-4">
+                                                    <h3 className="font-title font-bold text-base mb-1">Guia de Ameaças, PNJs e Bestiário</h3>
+                                                    <p className="text-xs text-gray-200">Esta aba cobre os dois sistemas do projeto. Dragonbane usa fichas próprias para PNJs e monstros; D&D 5e usa blocos de estatística com uma estrutura diferente. Escolha o sistema antes de criar a ameaça.</p>
+                                                </div>
+
+                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4 space-y-3">
+                                                    <h3 className="font-title font-bold text-emerald-900">🐉 Dragonbane — PNJs</h3>
+                                                    <p>Use <strong>PNJ</strong> para aliados, rivais, guardas, comerciantes e outros personagens controlados pelo Mestre. A ficha permite registrar nome, ancestralidade, profissão, PV, PD, movimento, dano bônus, armadura, perícias, feitiços, armas, equipamento, atitude, motivação e um traço marcante.</p>
+                                                    <p className="text-xs"><strong>Dica:</strong> os modelos rápidos servem como ponto de partida. Depois de criar o PNJ, personalize apenas o que realmente será importante em jogo; não é necessário preencher cada campo para um personagem secundário simples.</p>
+                                                </div>
+
+                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4 space-y-3">
+                                                    <h3 className="font-title font-bold text-emerald-900">🐲 Dragonbane — Monstros</h3>
+                                                    <p>Use <strong>Ameaça/Monstro</strong> para criaturas que seguem as regras de monstros de Dragonbane. Os campos principais são <strong>Ferocidade, Tamanho, Movimento, Armadura e PV</strong>, além de habilidades especiais e da tabela de ataques.</p>
+                                                    <p><strong>Ferocidade</strong> indica quantas vezes o monstro pode agir na rodada: para cada ponto de Ferocidade, ele recebe uma iniciativa e, portanto, um turno com ação e movimento. Aumentar ou diminuir Ferocidade e PV é uma forma direta de ajustar o perigo da criatura.</p>
+                                                    <p>A seção <strong>Ataques do Monstro</strong> possui seis resultados. Durante o combate, role <strong>1D6</strong> para selecionar um ataque da tabela. Registre no texto o alvo, alcance, dano, condição e se o ataque pode ser esquivado ou aparado quando isso for relevante.</p>
+                                                </div>
+
+                                                <div className="bg-orange-50 border border-orange-200 rounded p-4 space-y-3">
+                                                    <h3 className="font-title font-bold text-[#922610]">🐉 D&D 5e — Bloco de Estatísticas</h3>
+                                                    <p>Em D&D, crie a criatura pela opção <strong>Bestiário/Ameaça</strong>. Comece com <strong>Nome, Tamanho, Tipo, Alinhamento, CA, PV e Deslocamento</strong>. Depois defina os seis atributos: FOR, DES, CON, INT, SAB e CAR.</p>
+                                                    <p>Preencha somente quando necessário <strong>Testes de Resistência, Perícias, Vulnerabilidades, Resistências, Imunidades, Sentidos e Idiomas</strong>. Esses campos representam exceções e capacidades especiais do monstro e podem ficar vazios quando não se aplicarem.</p>
+                                                    <p><strong>Desafio (CR)</strong> representa aproximadamente o nível de ameaça da criatura e também está relacionado ao bônus de proficiência. Use o campo de XP junto do CR conforme a referência da criatura que estiver adaptando.</p>
+                                                    <p>Em seguida, use as listas de <strong>Traços, Ações, Ações Bônus, Reações e Ações Lendárias</strong>. Cada entrada deve ter um nome curto e uma descrição suficiente para ser usada diretamente durante o combate.</p>
+                                                </div>
+
+                                                <div className="bg-white border rounded p-4">
+                                                    <h3 className="font-bold text-gray-900 mb-2">✅ Fluxo rápido recomendado</h3>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                                        <div className="border rounded p-3"><strong>Dragonbane</strong><br/>1. Escolha PNJ ou Monstro.<br/>2. Defina os valores básicos.<br/>3. Adicione perícias/habilidades.<br/>4. Registre armas ou a tabela D6.<br/>5. Salve e teste em combate.</div>
+                                                        <div className="border rounded p-3"><strong>D&D 5e</strong><br/>1. Defina identidade, CA, PV e movimento.<br/>2. Preencha atributos e CR.<br/>3. Adicione resistências e sentidos úteis.<br/>4. Cadastre traços e ações.<br/>5. Confira o bloco final antes de salvar.</div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
 
@@ -1353,19 +1384,33 @@
                                         </div>
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2">
-                                        <div className="flex justify-between items-center border-b pb-1 mb-2">
+                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 min-w-0">
+                                        <div className="flex justify-between items-center border-b pb-1 mb-2 gap-2">
                                             <h3 className="font-bold text-sm uppercase text-gray-600">Ataques</h3>
-                                            <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold"><SVGIcons.Plus/> Adic.</button>
+                                            <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold shrink-0"><SVGIcons.Plus/> Adic.</button>
                                         </div>
-                                        <div className="space-y-2">
+                                        <div className="space-y-2 min-w-0">
                                             {(data.ataques || []).map((atk, idx) => (
-                                                <div key={idx} className="flex gap-2 items-center bg-gray-50 p-1 rounded border">
-                                                    <input type="text" value={atk?.nome || ''} placeholder="Nome" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="flex-1 bg-transparent border-b outline-none text-xs font-bold" />
-                                                    <input type="text" value={atk?.bonus || ''} placeholder="Bônus" onChange={e => updateArrayField('ataques', idx, 'bonus', e.target.value)} className="w-10 bg-transparent border-b outline-none text-xs text-center" />
-                                                    <input type="text" value={atk?.dano || ''} placeholder="Dano" onChange={e => updateArrayField('ataques', idx, 'dano', e.target.value)} className="w-16 bg-transparent border-b outline-none text-xs text-center font-bold" />
-                                                    <input type="text" value={atk?.tipo || ''} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-12 bg-transparent border-b outline-none text-[10px]" />
-                                                    <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 ml-1"><SVGIcons.Trash/></button>
+                                                <div key={idx} className="grid grid-cols-12 gap-1.5 items-end bg-gray-50 p-1.5 rounded border min-w-0">
+                                                    <div className="col-span-12 sm:col-span-5 min-w-0">
+                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Ataque</label>
+                                                        <input type="text" value={atk?.nome || ''} placeholder="Nome do ataque" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs font-bold" />
+                                                    </div>
+                                                    <div className="col-span-4 sm:col-span-2 min-w-0">
+                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5 text-center">Bônus</label>
+                                                        <input type="text" value={atk?.bonus || ''} placeholder="+0" onChange={e => updateArrayField('ataques', idx, 'bonus', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs text-center" />
+                                                    </div>
+                                                    <div className="col-span-4 sm:col-span-2 min-w-0">
+                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5 text-center">Dano</label>
+                                                        <input type="text" value={atk?.dano || ''} placeholder="1d6" onChange={e => updateArrayField('ataques', idx, 'dano', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs text-center font-bold" />
+                                                    </div>
+                                                    <div className="col-span-3 sm:col-span-2 min-w-0">
+                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Tipo</label>
+                                                        <input type="text" value={atk?.tipo || ''} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-[10px]" />
+                                                    </div>
+                                                    <div className="col-span-1 flex justify-end pb-0.5">
+                                                        <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 p-0.5" title="Remover ataque"><SVGIcons.Trash/></button>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
