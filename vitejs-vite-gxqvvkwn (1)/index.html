@@ -456,67 +456,299 @@
         };
 
         const generateChatText = (item) => {
-            let text = "";
             const sys = item.system || 'dragonbane';
-            
-            if (sys === 'dnd5e') {
-                if (item.type === 'pc') {
-                    text += `🐉 PERSONAGEM: ${item.bio?.nome || 'Sem Nome'} (D&D 5e)\n`;
-                    text += `Nível ${item.bio?.nivel || 1} | ${item.bio?.linhagem || '?'} | ${item.bio?.classe || '?'}\n`;
-                    text += `CA: ${item.status?.ca || 10} | PV: ${item.status?.pvAtual || 0}/${item.status?.pvMax || 0} | Deslocamento: ${item.status?.deslocamento || '9m'}\n\n`;
-                    text += `📊 ATRIBUTOS:\n`;
-                    text += `FOR: ${item.atributos.for} (${formatDndMod(getDndAbilityMod(item.atributos.for))}) | DES: ${item.atributos.des} (${formatDndMod(getDndAbilityMod(item.atributos.des))}) | CON: ${item.atributos.con} (${formatDndMod(getDndAbilityMod(item.atributos.con))})\n`;
-                    text += `INT: ${item.atributos.int} (${formatDndMod(getDndAbilityMod(item.atributos.int))}) | SAB: ${item.atributos.sab} (${formatDndMod(getDndAbilityMod(item.atributos.sab))}) | CAR: ${item.atributos.car} (${formatDndMod(getDndAbilityMod(item.atributos.car))})\n\n`;
-                    if (item.ataques && item.ataques.length > 0) {
-                        text += `⚔️ ATAQUES:\n`;
-                        item.ataques.forEach(a => text += `- ${a.nome}: ${a.bonus} (Dano: ${a.dano} ${a.tipo})\n`);
+            const safe = (value, fallback = '-') => value !== undefined && value !== null && value !== '' ? value : fallback;
+            const hasText = (value) => value !== undefined && value !== null && String(value).trim() !== '';
+            const addIf = (label, value) => hasText(value) ? `${label}: ${value}\n` : '';
+            const compactText = (value) => String(value || '').replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+            const bulletsFromText = (value) => {
+                const clean = compactText(value);
+                if (!clean) return '';
+                return clean.split('\n').map(v => v.trim()).filter(Boolean).map(v => `• ${v}`).join('\n');
+            };
+            let text = '';
+
+            // ==========================================================
+            // D&D 5E — PERSONAGEM (FORMATO DE CHAT RESUMIDO)
+            // ==========================================================
+            if (sys === 'dnd5e' && item.type === 'pc') {
+                const bio = item.bio || {};
+                const atr = item.atributos || {};
+                const st = item.status || {};
+                const moedas = item.moedas || {};
+                const profBonus = getDndProficiencyBonus(bio.nivel || 1);
+                const mod = (key) => formatDndMod(getDndAbilityMod(atr[key] ?? 10));
+
+                text += `👤 PERSONAGEM: ${safe(bio.nome, 'Sem Nome')}\n\n`;
+                text += addIf('Jogador', bio.jogador);
+                text += `Espécie: ${safe(bio.linhagem)} | Classe: ${safe(bio.classe)} ${safe(bio.nivel, 1)}\n`;
+                if (hasText(bio.antecedente) || hasText(bio.alinhamento)) text += `Antecedente: ${safe(bio.antecedente)} | Alinhamento: ${safe(bio.alinhamento)}\n`;
+                if ((bio.xp ?? 0) > 0) text += `XP: ${bio.xp}\n`;
+
+                text += `\n📊 ATRIBUTOS\n\n`;
+                text += `FOR: ${safe(atr.for,10)} (${mod('for')}) | DES: ${safe(atr.des,10)} (${mod('des')}) | CON: ${safe(atr.con,10)} (${mod('con')})\n`;
+                text += `INT: ${safe(atr.int,10)} (${mod('int')}) | SAB: ${safe(atr.sab,10)} (${mod('sab')}) | CAR: ${safe(atr.car,10)} (${mod('car')})\n`;
+
+                text += `\n⚙️ STATUS\n\n`;
+                text += `❤️ PV: ${safe(st.pvAtual,0)}/${safe(st.pvMax,0)}${(st.pvTemp || 0) > 0 ? ` (+${st.pvTemp} temp.)` : ''} | 🛡️ CA: ${safe(st.ca,10)}\n`;
+                text += `⚡ Iniciativa: ${safe(st.iniciativa, mod('des'))} | 🏃 Deslocamento: ${safe(st.deslocamento,'9 m')}\n`;
+                text += `🎲 Bônus de Proficiência: +${profBonus}`;
+                if (hasText(st.dadosVida)) text += ` | Dados de Vida: ${st.dadosVida}`;
+                text += `\n`;
+
+                const deathS = (item.testesMorte?.sucessos || []).filter(Boolean).length;
+                const deathF = (item.testesMorte?.falhas || []).filter(Boolean).length;
+                if (deathS || deathF) text += `☠️ Testes de Morte: ${deathS} sucessos | ${deathF} falhas\n`;
+
+                const saves = [['FOR','for'],['DES','des'],['CON','con'],['INT','int'],['SAB','sab'],['CAR','car']]
+                    .filter(([,k]) => item.proficienciasResistencia?.[k])
+                    .map(([n,k]) => `${n} ${formatDndMod(getDndAbilityMod(atr[k] ?? 10) + profBonus)}`);
+                if (saves.length) text += `Resistências: ${saves.join(' | ')}\n`;
+
+                if ((item.ataques || []).length) {
+                    text += `\n⚔️ ATAQUES\n\n`;
+                    item.ataques.forEach(a => {
+                        text += `• ${safe(a.nome,'Ataque')} — ${safe(a.bonus)} | ${safe(a.dano)}${hasText(a.tipo) ? ` ${a.tipo}` : ''}\n`;
+                    });
+                }
+
+                const trainedSkills = DND_SKILLS_LIST.map(sk => {
+                    const entry = (item.pericias || []).find(p => p.id === sk.id) || { prof: 0 };
+                    if (!entry.prof) return null;
+                    const bonus = getDndAbilityMod(atr[sk.attr] ?? 10) + entry.prof * profBonus;
+                    return `${entry.prof === 2 ? '[E]' : '[T]'} ${sk.nome} ${formatDndMod(bonus)}`;
+                }).filter(Boolean);
+                if (trainedSkills.length) {
+                    text += `\n🎯 PERÍCIAS PRINCIPAIS\n\n${trainedSkills.join(' | ')}\n`;
+                }
+
+                if (Array.isArray(item.caracteristicas) && item.caracteristicas.length) {
+                    text += `\n✨ CARACTERÍSTICAS & TALENTOS\n\n`;
+                    item.caracteristicas.forEach(c => {
+                        text += `✦ ${safe(c.nome,'Característica').toUpperCase()}\n`;
+                        if (hasText(c.desc)) text += `${compactText(c.desc)}\n`;
                         text += `\n`;
-                    }
-                    if (Array.isArray(item.caracteristicas) && item.caracteristicas.length) { text += `✨ CARACTERÍSTICAS E TALENTOS:\n`; item.caracteristicas.forEach(c => text += `- ${c.nome}${c.desc ? ': ' + c.desc : ''}\n`); } else if (item.caracteristicas) text += `✨ CARACTERÍSTICAS:\n${item.caracteristicas}\n`;
-                } else {
-                    text += `🐉 BESTIÁRIO: ${item.nome || 'Sem Nome'} (D&D 5e)\n`;
-                    text += `${item.tamanho} ${item.tipo}, ${item.alinhamento}\n`;
-                    text += `CA: ${item.ca || 10} | PV: ${item.pv || 0} | Deslocamento: ${item.deslocamento || '9m'}\n`;
-                    text += `Desafio: ${item.desafio || '1/8'}\n\n`;
-                    text += `📊 ATRIBUTOS:\n`;
-                    text += `FOR: ${item.atributos.for} (${formatDndMod(getDndAbilityMod(item.atributos.for))}) | DES: ${item.atributos.des} (${formatDndMod(getDndAbilityMod(item.atributos.des))}) | CON: ${item.atributos.con} (${formatDndMod(getDndAbilityMod(item.atributos.con))})\n`;
-                    text += `INT: ${item.atributos.int} (${formatDndMod(getDndAbilityMod(item.atributos.int))}) | SAB: ${item.atributos.sab} (${formatDndMod(getDndAbilityMod(item.atributos.sab))}) | CAR: ${item.atributos.car} (${formatDndMod(getDndAbilityMod(item.atributos.car))})\n\n`;
-                    if (item.acoes && item.acoes.length > 0) {
-                        text += `⚔️ AÇÕES:\n`;
-                        item.acoes.forEach(a => text += `- ${a.nome}: ${a.desc}\n`);
+                    });
+                } else if (hasText(item.caracteristicas)) {
+                    text += `\n✨ CARACTERÍSTICAS & TALENTOS\n\n${compactText(item.caracteristicas)}\n`;
+                }
+
+                const slots = item.magias?.slots || {};
+                const slotLines = [];
+                for (let lvl=1; lvl<=9; lvl++) {
+                    const sl = slots[lvl] || {};
+                    if ((sl.max || 0) > 0 || (sl.atual || 0) > 0) slotLines.push(`${lvl}º: ${safe(sl.atual,0)}/${safe(sl.max,0)}`);
+                }
+                const spellList = Array.isArray(item.magias?.lista) ? item.magias.lista.filter(m => hasText(m?.nome)) : [];
+                if (slotLines.length || spellList.length) {
+                    text += `\n🔮 MAGIAS\n\n`;
+                    if (slotLines.length) text += `Espaços: ${slotLines.join(' | ')}\n\n`;
+                    if (spellList.length) {
+                        const groups = {};
+                        spellList.forEach(m => {
+                            const lvl = safe(m.nivel, 'Truque');
+                            if (!groups[lvl]) groups[lvl] = [];
+                            groups[lvl].push(m);
+                        });
+                        Object.keys(groups).sort((a,b) => {
+                            const na = parseInt(a), nb = parseInt(b);
+                            if (Number.isNaN(na) && Number.isNaN(nb)) return String(a).localeCompare(String(b));
+                            if (Number.isNaN(na)) return -1;
+                            if (Number.isNaN(nb)) return 1;
+                            return na-nb;
+                        }).forEach(lvl => {
+                            text += `${String(lvl).toLowerCase().includes('tru') || lvl === '0' ? 'Truques' : `${lvl}º Nível`}:\n`;
+                            groups[lvl].forEach(m => {
+                                text += `• ${m.nome}`;
+                                if (hasText(m.desc)) text += ` — ${compactText(m.desc)}`;
+                                text += `\n`;
+                            });
+                            text += `\n`;
+                        });
                     }
                 }
-            } else {
-                if (item.type === 'pc') {
-                    text += `👤 PERSONAGEM: ${item.bio?.nome || 'Sem Nome'} (Dragonbane)\n`;
-                    text += `Ancestralidade: ${item.bio?.ancestralidade || '?'} | Profissão: ${item.bio?.profissao || '?'}\n`;
-                    text += `\n📊 ATRIBUTOS E CONDIÇÕES\n`;
-                    text += `FOR: ${item.atributos.for?.valor || 10} | CON: ${item.atributos.con?.valor || 10} | AGL: ${item.atributos.agl?.valor || 10}\n`;
-                    text += `INT: ${item.atributos.int?.valor || 10} | VON: ${item.atributos.von?.valor || 10} | CAR: ${item.atributos.car?.valor || 10}\n\n`;
-                    text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0} | 🛡️ PD: ${item.status?.pd?.atual || 0}/${item.status?.pd?.max || 0}\n\n`;
-                    text += `⚔️ COMBATE\n`;
-                    text += `Armadura: ${item.defesa?.armadura?.nome || 'Nenhuma'} (Val: ${item.defesa?.armadura?.valor || 0})\n\n`;
-                    if (item.armas && item.armas.length > 0) {
-                        text += `🗡️ ARMAS\n`;
-                        item.armas.forEach(a => text += `- ${a.nome} | Dano: ${a.dano}\n`);
-                    }
-                } else if (item.type === 'pnj') {
-                    text += `👥 PNJ: ${item.nome || 'Sem Nome'}\n`;
-                    text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0}\n`;
-                    text += `Movimento: ${item.movimento || 10} | Armadura: ${item.armaduraTipica?.nome || 'Nenhuma'} (Val: ${item.armaduraTipica?.valor || 0})\n\n`;
-                    if (item.armas && item.armas.length > 0) {
-                        text += `🗡️ ARMAS\n`;
-                        item.armas.forEach(a => text += `- ${a.nome} (Perícia: ${a.pericia || 0}) | Dano: ${a.dano}\n`);
-                    }
-                } else if (item.type === 'ameaca') {
-                    text += `🐉 AMEAÇA: ${item.nome || 'Sem Nome'}\n`;
-                    text += `Ferocidade: ${item.ferocidade || 1} | Tamanho: ${item.tamanho || 'Normal'}\n`;
-                    text += `❤️ PV: ${item.status?.pv?.atual || 0}/${item.status?.pv?.max || 0}\n\n`;
-                    text += `⚔️ ATAQUES DO MONSTRO (Role 1D6)\n`;
-                    (item.ataques || []).forEach(a => text += `[ ${a.id} ] ${a.descricao || '-'}\n`);
+
+                const roleplay = [
+                    ['Traços', item.tracosPersonalidade], ['Ideais', item.ideais],
+                    ['Vínculos', item.vinculos], ['Defeitos', item.defeitos]
+                ].filter(([,v]) => hasText(v));
+                if (roleplay.length) {
+                    text += `🎭 INTERPRETAÇÃO\n\n`;
+                    roleplay.forEach(([l,v]) => text += `${l}: ${compactText(v)}\n`);
                 }
+
+                if (hasText(item.inventario) || hasText(item.outrasProficiencias) || Object.values(moedas).some(v => Number(v) > 0)) {
+                    text += `\n🎒 INVENTÁRIO\n\n`;
+                    if (Object.values(moedas).some(v => Number(v) > 0)) {
+                        text += `Moedas: ${safe(moedas.po,0)} PO | ${safe(moedas.pp,0)} PP | ${safe(moedas.pe,0)} PE | ${safe(moedas.pc,0)} PC | ${safe(moedas.pl,0)} PL\n`;
+                    }
+                    if (hasText(item.inventario)) text += `\nEquipamento:\n${bulletsFromText(item.inventario)}\n`;
+                    if (hasText(item.outrasProficiencias)) text += `\nProficiências/Idiomas: ${compactText(item.outrasProficiencias)}\n`;
+                }
+
+                return text.trim();
             }
-            return text;
+
+            // ==========================================================
+            // D&D 5E — AMEAÇA / BESTIÁRIO (COMPACTO)
+            // ==========================================================
+            if (sys === 'dnd5e') {
+                const atr = item.atributos || {};
+                text += `🐲 AMEAÇA: ${safe(item.nome,'Sem Nome')}\n`;
+                text += `${safe(item.tamanho)} ${safe(item.tipo)}, ${safe(item.alinhamento)}\n\n`;
+                text += `🛡️ CA: ${safe(item.ca,10)} | ❤️ PV: ${safe(item.pv,0)} | 🏃 ${safe(item.deslocamento,'9 m')}\n`;
+                text += `🎲 Desafio: ${safe(item.desafio)} | Proficiência: ${safe(item.proficienciaBonus)}\n\n`;
+                text += `📊 FOR ${safe(atr.for,10)} (${formatDndMod(getDndAbilityMod(atr.for ?? 10))}) | DES ${safe(atr.des,10)} (${formatDndMod(getDndAbilityMod(atr.des ?? 10))}) | CON ${safe(atr.con,10)} (${formatDndMod(getDndAbilityMod(atr.con ?? 10))})\n`;
+                text += `INT ${safe(atr.int,10)} (${formatDndMod(getDndAbilityMod(atr.int ?? 10))}) | SAB ${safe(atr.sab,10)} (${formatDndMod(getDndAbilityMod(atr.sab ?? 10))}) | CAR ${safe(atr.car,10)} (${formatDndMod(getDndAbilityMod(atr.car ?? 10))})\n`;
+
+                const info = [
+                    ['Resistências', item.testesResistencia], ['Perícias', item.pericias],
+                    ['Vulnerabilidades', item.vulnerabilidades], ['Resist. a Dano', item.resistencias],
+                    ['Imunidades', item.imunidadesDano], ['Imunid. Condição', item.imunidadesCondicao],
+                    ['Sentidos', item.sentidos], ['Idiomas', item.idiomas]
+                ].filter(([,v]) => hasText(v));
+                if (info.length) {
+                    text += `\n📚 ESTATÍSTICAS\n\n`;
+                    info.forEach(([l,v]) => text += `${l}: ${compactText(v)}\n`);
+                }
+
+                const sec = (icon, title, arr) => {
+                    const list = (arr || []).filter(x => hasText(x?.nome) || hasText(x?.desc));
+                    if (!list.length) return;
+                    text += `\n${icon} ${title}\n\n`;
+                    list.forEach(x => {
+                        text += `• ${safe(x.nome,title)}`;
+                        if (hasText(x.desc)) text += ` — ${compactText(x.desc)}`;
+                        text += `\n`;
+                    });
+                };
+                sec('✨','TRAÇOS', item.tracos);
+                sec('⚔️','AÇÕES', item.acoes);
+                sec('⚡','AÇÕES BÔNUS', item.acoesBonus);
+                sec('🛡️','REAÇÕES', item.reacoes);
+                sec('👑','AÇÕES LENDÁRIAS', item.acoesLendarias);
+                return text.trim();
+            }
+
+            // ==========================================================
+            // DRAGONBANE — PERSONAGEM (MODELO PEDIDO PELO USUÁRIO)
+            // ==========================================================
+            if (item.type === 'pc') {
+                const bio = item.bio || {};
+                const atr = item.atributos || {};
+                const st = item.status || {};
+                const moedas = item.moedas || {};
+                const condicoes = [['Exausto','for'],['Adoecido','con'],['Aturdido','agl'],['Enraivecido','int'],['Assustado','von'],['Desanimado','car']]
+                    .filter(([,k]) => atr[k]?.condicao).map(([n]) => n);
+
+                const forVal = safe(atr.for?.valor,10), conVal = safe(atr.con?.valor,10), aglVal = safe(atr.agl?.valor,10);
+                const intVal = safe(atr.int?.valor,10), vonVal = safe(atr.von?.valor,10), carVal = safe(atr.car?.valor,10);
+                const cargaAtual = (() => {
+                    const inv = compactText(item.inventario);
+                    if (!inv) return null;
+                    const matches = [...inv.matchAll(/(?:^|\n).*?[-–—xX]\s*(\d+(?:[.,]\d+)?)(?:\s|$)/g)];
+                    if (!matches.length) return null;
+                    return matches.reduce((s,m) => s + (parseFloat(String(m[1]).replace(',','.')) || 0), 0);
+                })();
+
+                text += `👤 PERSONAGEM: ${safe(bio.nome,'Sem Nome')}\n\n`;
+                text += addIf('Jogador', bio.jogador);
+                text += `Ancestralidade: ${safe(bio.ancestralidade)} | Profissão: ${safe(bio.profissao)}\n`;
+                text += `Idade: ${safe(bio.idade)} | Fraqueza: ${safe(bio.fraqueza)}\n`;
+                if (hasText(bio.aparencia)) text += `\nAparência: ${compactText(bio.aparencia)}\n`;
+                if (hasText(bio.memento)) text += `\nMemento: ${compactText(bio.memento)}\n`;
+
+                text += `\n📊 ATRIBUTOS E CONDIÇÕES\n\n`;
+                text += `FOR: ${forVal} | CON: ${conVal} | AGL: ${aglVal}\n`;
+                text += `INT: ${intVal} | VON: ${vonVal} | CAR: ${carVal}\n`;
+                if (condicoes.length) text += `\nCondições: ${condicoes.join(', ')}\n`;
+
+                text += `\n⚙️ DERIVADOS E STATUS\n\n`;
+                text += `Movimento: ${safe(item.derivados?.movimento)} | Sobrecarga: ${cargaAtual !== null ? `${cargaAtual}/` : ''}${safe(item.derivados?.limiteSobrecarga)}\n`;
+                text += `Dano Bônus: FOR (${safe(item.derivados?.danoBonusFor)}) / AGL (${safe(item.derivados?.danoBonusAgl)})\n`;
+                text += `❤️ PV: ${safe(st.pv?.atual,0)}/${safe(st.pv?.max,0)} | 🛡️ PD: ${safe(st.pd?.atual,0)}/${safe(st.pd?.max,0)}\n`;
+
+                text += `\n⚔️ COMBATE E DEFESA\n\n`;
+                text += `Armadura: ${safe(item.defesa?.armadura?.nome,'Nenhuma')} (Val: ${safe(item.defesa?.armadura?.valor,0)})\n`;
+                text += `Elmo: ${safe(item.defesa?.elmo?.nome,'Nenhum')} (Val: ${safe(item.defesa?.elmo?.valor,0)})\n`;
+
+                if ((item.armas || []).length) {
+                    text += `\n🗡️ ARMAS\n\n`;
+                    item.armas.forEach(a => {
+                        const details = [];
+                        if (hasText(a.empunhadura)) details.push(`${a.empunhadura}`);
+                        if (hasText(a.alcance)) details.push(`${a.alcance}`);
+                        text += `- ${safe(a.nome,'Arma')}${details.length ? ` [${details.join(' | ')}]` : ''} | Dano: ${safe(a.dano)}`;
+                        if (hasText(a.tracos)) text += ` | Traços: ${compactText(a.tracos)}`;
+                        if (hasText(a.durabilidade)) text += ` | Durab. ${a.durabilidade}`;
+                        text += `\n`;
+                    });
+                }
+
+                if ((item.habilidadesFeiticos || []).length) {
+                    text += `\n✨ HABILIDADES E MAGIAS\n\n`;
+                    item.habilidadesFeiticos.forEach(h => {
+                        text += `- ✦${safe(h.nome,'Habilidade').toUpperCase()}\n\n`;
+                        const desc = hasText(h.descricao) ? h.descricao : h.desc;
+                        if (hasText(desc)) text += `${compactText(desc)}`;
+                        if (hasText(h.fv_nvl)) text += `${hasText(desc) ? ' ' : ''}(Custo/Nv: ${h.fv_nvl})`;
+                        text += `\n\n`;
+                    });
+                }
+
+                const trained = [];
+                const pushTrained = (arr) => (arr || []).forEach(p => {
+                    if (p.treinada || hasText(p.valor) && Number(p.valor) >= 12) trained.push(`[T] ${p.nome} ${safe(p.valor)}`);
+                });
+                pushTrained(item.periciasBase);
+                pushTrained(item.periciasArmas);
+                (item.periciasSecundarias || []).forEach(p => {
+                    if (hasText(p.nome)) trained.push(`${p.treinada ? '[T] ' : ''}${p.nome} ${safe(p.valor)}`.trim());
+                });
+                if (trained.length) text += `🎯 PERÍCIAS (Valores Atuais)\n\n${trained.join(' | ')}\n`;
+
+                text += `\n🎒 INVENTÁRIO\n\n`;
+                text += `Moedas: ${safe(moedas.ouro,0)} PO, ${safe(moedas.prata,0)} PP, ${safe(moedas.cobre,0)} PC\n`;
+                if (hasText(item.inventario)) text += `\nEquipamento:\n${bulletsFromText(item.inventario)}\n`;
+                if (hasText(item.itensMiudos)) text += `\n-------------------------\n\nItens Miúdos:\n${bulletsFromText(item.itensMiudos)}\n`;
+                return text.trim();
+            }
+
+            // ==========================================================
+            // DRAGONBANE — PNJ (COMPACTO)
+            // ==========================================================
+            if (item.type === 'pnj') {
+                text += `👥 PNJ: ${safe(item.nome,'Sem Nome')}\n`;
+                text += `${safe(item.ancestralidade)} | ${safe(item.profissao)} | ${safe(item.tipoPnj)}\n\n`;
+                text += `❤️ PV: ${safe(item.status?.pv?.atual,0)}/${safe(item.status?.pv?.max,0)} | 🛡️ PD: ${safe(item.status?.pd?.atual,0)}/${safe(item.status?.pd?.max,0)}\n`;
+                text += `Movimento: ${safe(item.movimento)} | Dano Bônus: ${safe(item.danoBonus)}\n`;
+                text += `Armadura: ${safe(item.armaduraTipica?.nome,'Nenhuma')} (Val: ${safe(item.armaduraTipica?.valor,0)})\n`;
+                if ((item.pericias || []).length) text += `\n🎯 PERÍCIAS\n${item.pericias.map(p => `• ${safe(p.nome)} ${safe(p.valor)}`).join('\n')}\n`;
+                if ((item.armas || []).length) text += `\n⚔️ ARMAS\n${item.armas.map(a => `• ${safe(a.nome)} | ${safe(a.pericia)} | Dano ${safe(a.dano)}`).join('\n')}\n`;
+                if ((item.feiticos || []).length) text += `\n✨ HABILIDADES/FEITIÇOS\n${item.feiticos.map(f => `• ${safe(f.nome)}${hasText(f.desc) ? ` — ${compactText(f.desc)}` : ''}`).join('\n')}\n`;
+                if (hasText(item.equipamento)) text += `\n🎒 EQUIPAMENTO\n${bulletsFromText(item.equipamento)}\n`;
+                if (hasText(item.atitude) || hasText(item.motivacao) || hasText(item.tracoMarcante)) {
+                    text += `\n🎭 INTERPRETAÇÃO\n`;
+                    text += addIf('Atitude', item.atitude) + addIf('Motivação', item.motivacao) + addIf('Traço marcante', item.tracoMarcante);
+                }
+                return text.trim();
+            }
+
+            // ==========================================================
+            // DRAGONBANE — AMEAÇA (COMPACTO)
+            // ==========================================================
+            text += `🐉 AMEAÇA: ${safe(item.nome,'Sem Nome')}\n\n`;
+            text += `Ferocidade: ${safe(item.ferocidade,1)} | Tamanho: ${safe(item.tamanho,'Normal')} | Movimento: ${safe(item.movimento)}\n`;
+            text += `Armadura: ${safe(item.armadura)} | ❤️ PV: ${safe(item.status?.pv?.atual,0)}/${safe(item.status?.pv?.max,0)}\n`;
+            if ((item.habilidades || []).length) {
+                text += `\n✨ HABILIDADES\n\n`;
+                item.habilidades.forEach(h => text += `• ${safe(h.nome,'Habilidade')}${hasText(h.desc) ? ` — ${compactText(h.desc)}` : ''}\n`);
+            }
+            if ((item.ataques || []).length) {
+                text += `\n⚔️ ATAQUES DO MONSTRO (Role 1D6)\n\n`;
+                item.ataques.forEach(a => text += `[${safe(a.id,'?')}] ${compactText(a.descricao)}\n`);
+            }
+            return text.trim();
         };
 
         function App() {
