@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite - v0.5.9v Alpha</title>
+    <title>PJ Lite - v0.6.0v Alpha</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -326,6 +326,16 @@
             box-shadow: 0 8px 24px rgba(30,88,88,.14) !important;
         }
 
+
+        /* Impressão / PDF — v0.6.0 */
+        @media print {
+            body { background: #fff !important; padding: 0 !important; color: #111 !important; }
+            .no-print { display: none !important; }
+            #root > div { max-width: none !important; width: 100% !important; box-shadow: none !important; border: 0 !important; }
+            input, textarea, select { border-color: #bbb !important; box-shadow: none !important; }
+            .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+            .sticky { position: static !important; }
+        }
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -341,8 +351,11 @@
         const CUSTOM_WIN_COLOR_KEY = 'dragonbane_custom_win_color';
         const CUSTOM_BAR_COLOR_KEY = 'dragonbane_custom_bar_color';
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
+        const HISTORY_STORAGE_KEY = 'pjlite_item_history_v1';
+        const SCHEMA_VERSION = 4;
 
         const UPDATE_LOG = [
+            { versao: '0.6.0v Alpha', descricao: 'Pacote de Organização e Segurança refinado: autosave com indicador, busca e filtros discretos, favoritos, campanhas, duplicação, backup geral em área própria, histórico local de versões, impressão e dashboard mais limpo.' },
             { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
             { versao: '0.5.6v Alpha', descricao: 'Prévia de Fabula Ultima ampliada: tema escuro refinado, ficha de Ameaça/PNJ com estrutura de bestiário, modelos prontos de personagens Press Start, inventário dinâmico e Fichas Extras. D&D mobile mantém Perfil e Atributos unificados.' },
             { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
@@ -650,8 +663,15 @@
             Shield: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
         };
 
-        const getSavedCharacters = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch { return []; } };
-        const getSavedThreats = () => { try { return JSON.parse(localStorage.getItem(THREAT_STORAGE_KEY)) || []; } catch { return []; } };
+        const normalizeMetaItem = (item) => {
+            const clone = JSON.parse(JSON.stringify(item || {}));
+            clone.dataVersion = Number(clone.dataVersion || SCHEMA_VERSION);
+            clone.meta = { favorite: false, campanha: '', createdAt: '', updatedAt: '', ...(clone.meta || {}) };
+            clone.companheiros = Array.isArray(clone.companheiros) ? clone.companheiros : [];
+            return clone;
+        };
+        const getSavedCharacters = () => { try { return (JSON.parse(localStorage.getItem(STORAGE_KEY)) || []).map(normalizeMetaItem); } catch { return []; } };
+        const getSavedThreats = () => { try { return (JSON.parse(localStorage.getItem(THREAT_STORAGE_KEY)) || []).map(normalizeMetaItem); } catch { return []; } };
 
         const getChanceBase = (val) => { if (val >= 16) return 7; if (val >= 13) return 6; if (val >= 9) return 5; if (val >= 6) return 4; return 3; };
         const getDanoBonus = (val) => { if (val >= 17) return '+D6'; if (val >= 13) return '+D4'; return '-'; };
@@ -1071,6 +1091,15 @@
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
 
+            // Organização e segurança — v0.6.0
+            const [searchQuery, setSearchQuery] = useState('');
+            const [systemFilter, setSystemFilter] = useState('all');
+            const [sortMode, setSortMode] = useState('recent');
+            const [onlyFavorites, setOnlyFavorites] = useState(false);
+            const [showFilters, setShowFilters] = useState(false);
+            const [saveStatus, setSaveStatus] = useState('');
+            const [showHistoryModal, setShowHistoryModal] = useState(false);
+
             const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
 
             useEffect(() => {
@@ -1101,6 +1130,14 @@
                 try { localStorage.setItem(CUSTOM_OPACITY_KEY, customOpacity); } catch {}
             }, [customOpacity]);
 
+            // Autosave com debounce: evita perder alterações sem gravar a cada tecla imediatamente.
+            useEffect(() => {
+                if (view !== 'editor' || !data) return;
+                setSaveStatus('pending');
+                const timer = setTimeout(() => { try { saveToLocal(data, true); } catch { setSaveStatus('error'); } }, 1400);
+                return () => clearTimeout(timer);
+            }, [data, view]);
+
             const getWindowStyle = () => {
                 if (theme !== 'custom') return {};
                 const [r, g, b] = hexToRgb(customWinColor);
@@ -1117,8 +1154,25 @@
                 setTimeout(() => setToastMsg(''), 3000);
             };
 
-            const saveToLocal = (itemData) => {
-                let savingData = JSON.parse(JSON.stringify(itemData));
+            const getHistory = () => { try { return JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || {}; } catch { return {}; } };
+            const pushHistorySnapshot = (item) => {
+                if (!item?.id) return;
+                try {
+                    const history = getHistory();
+                    const list = Array.isArray(history[item.id]) ? history[item.id] : [];
+                    const snapshot = { at: new Date().toISOString(), data: JSON.parse(JSON.stringify(item)) };
+                    history[item.id] = [snapshot, ...list].slice(0, 5);
+                    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+                } catch {}
+            };
+
+            const saveToLocal = (itemData, silent = false) => {
+                let savingData = normalizeMetaItem(itemData);
+                const now = new Date().toISOString();
+                savingData.dataVersion = SCHEMA_VERSION;
+                savingData.meta.createdAt = savingData.meta.createdAt || now;
+                savingData.meta.updatedAt = now;
+                setSaveStatus('saving');
                 if (!savingData.id) savingData.id = Date.now().toString();
                 if (!savingData.system) savingData.system = 'dragonbane';
                 
@@ -1127,30 +1181,109 @@
                 if (type === 'pc') {
                     let chars = getSavedCharacters();
                     const index = chars.findIndex(c => c.id === savingData.id);
-                    if (index >= 0) chars[index] = savingData;
+                    if (index >= 0) { if (!silent) pushHistorySnapshot(chars[index]); chars[index] = savingData; }
                     else chars.push(savingData);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
                     setSavedChars(chars);
-                    showToast(savingData.system === 'fabula' ? "Personagem Fabula salvo!" : "Personagem salvo!");
+                    if (!silent) showToast(savingData.system === 'fabula' ? "Personagem Fabula salvo!" : "Personagem salvo!");
                 } else {
                     let threats = getSavedThreats();
                     const index = threats.findIndex(t => t.id === savingData.id);
-                    if (index >= 0) threats[index] = savingData;
+                    if (index >= 0) { if (!silent) pushHistorySnapshot(threats[index]); threats[index] = savingData; }
                     else threats.push(savingData);
                     localStorage.setItem(THREAT_STORAGE_KEY, JSON.stringify(threats));
                     setSavedThreats(threats);
-                    showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : savingData.system === 'fabula' ? 'Ameaça / PNJ Fabula salvo!' : type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
+                    if (!silent) showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : savingData.system === 'fabula' ? 'Ameaça / PNJ Fabula salvo!' : type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
                 }
                 
-                if (!data.id || data.id === savingData.id) {
-                    setData(savingData);
-                }
+                if (!silent && (!data.id || data.id === savingData.id)) setData(savingData);
+                setSaveStatus('saved');
+                setTimeout(() => setSaveStatus(''), 1800);
+            };
+
+            const duplicateItem = (item, isThreat = false) => {
+                const copy = normalizeMetaItem(item);
+                copy.id = `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+                copy.meta.createdAt = new Date().toISOString();
+                copy.meta.updatedAt = copy.meta.createdAt;
+                copy.meta.favorite = false;
+                if (copy.bio?.nome) copy.bio.nome = `${copy.bio.nome} (Cópia)`;
+                else if (copy.nome) copy.nome = `${copy.nome} (Cópia)`;
+                const list = isThreat ? getSavedThreats() : getSavedCharacters();
+                list.push(copy);
+                localStorage.setItem(isThreat ? THREAT_STORAGE_KEY : STORAGE_KEY, JSON.stringify(list));
+                if (isThreat) setSavedThreats(list); else setSavedChars(list);
+                showToast('Ficha duplicada com sucesso.');
+            };
+
+            const toggleFavorite = (id, isThreat = false) => {
+                const list = (isThreat ? getSavedThreats() : getSavedCharacters()).map(x => {
+                    if (x.id !== id) return x;
+                    return { ...x, meta: { ...(x.meta || {}), favorite: !x.meta?.favorite } };
+                });
+                localStorage.setItem(isThreat ? THREAT_STORAGE_KEY : STORAGE_KEY, JSON.stringify(list));
+                if (isThreat) setSavedThreats(list); else setSavedChars(list);
+            };
+
+            const exportFullBackup = () => {
+                const payload = { pjLiteBackup: true, version: '0.6.0v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
+                const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `PJ_Lite_Backup_${new Date().toISOString().slice(0,10)}.json`;
+                a.click(); URL.revokeObjectURL(a.href);
+                showToast('Backup geral exportado.');
+            };
+
+            const restoreFullBackup = (event) => {
+                const file = event.target.files?.[0];
+                event.target.value = '';
+                if (!file) return;
+                const r = new FileReader();
+                r.onload = () => {
+                    try {
+                        const payload = JSON.parse(r.result);
+                        if (!payload?.pjLiteBackup || !Array.isArray(payload.characters) || !Array.isArray(payload.threats)) throw new Error('Backup inválido');
+                        if (!window.confirm('Restaurar este backup substituirá as fichas salvas atualmente. Continuar?')) return;
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload.characters.map(normalizeMetaItem)));
+                        localStorage.setItem(THREAT_STORAGE_KEY, JSON.stringify(payload.threats.map(normalizeMetaItem)));
+                        if (payload.history) localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(payload.history));
+                        setSavedChars(getSavedCharacters()); setSavedThreats(getSavedThreats());
+                        showToast('Backup restaurado com sucesso.');
+                    } catch { showToast('Não foi possível restaurar: arquivo de backup inválido.'); }
+                };
+                r.readAsText(file);
+            };
+
+
+            const restoreHistorySnapshot = (snapshot) => {
+                if (!snapshot?.data) return;
+                setData(normalizeMetaItem(snapshot.data));
+                setShowHistoryModal(false);
+                showToast('Versão anterior carregada. Clique em Salvar para confirmar.');
+            };
+
+            const filterAndSortItems = (items) => {
+                const q = searchQuery.trim().toLowerCase();
+                return items.filter(item => {
+                    const sys = item.system || 'dragonbane';
+                    if (systemFilter !== 'all' && sys !== systemFilter) return false;
+                    if (onlyFavorites && !item.meta?.favorite) return false;
+                    if (!q) return true;
+                    const hay = [item.bio?.nome, item.nome, item.bio?.classe, item.bio?.profissao, item.bio?.identidade, item.meta?.campanha, sys].filter(Boolean).join(' ').toLowerCase();
+                    return hay.includes(q);
+                }).sort((a,b) => {
+                    if (sortMode === 'name') return String(a.bio?.nome || a.nome || '').localeCompare(String(b.bio?.nome || b.nome || ''), 'pt-BR');
+                    if (sortMode === 'system') return String(a.system||'dragonbane').localeCompare(String(b.system||'dragonbane'));
+                    return String(b.meta?.updatedAt || b.meta?.createdAt || '').localeCompare(String(a.meta?.updatedAt || a.meta?.createdAt || ''));
+                });
             };
 
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
                 if (char) {
-                    let normalized = normalizeDndPcData(char);
+                    let normalized = normalizeMetaItem(char);
+                    normalized = normalizeDndPcData(normalized);
                     normalized = normalizeFabulaPcData(normalized);
                     normalized = normalizeFabulaThreatData(normalized);
                     setData(normalized);
@@ -1163,7 +1296,7 @@
             const loadThreat = (id) => {
                 const threat = savedThreats.find(t => t.id === id);
                 if (threat) {
-                    let normalized = JSON.parse(JSON.stringify(threat));
+                    let normalized = normalizeMetaItem(threat);
                     normalized = normalizeFabulaThreatData(normalized);
                     setData(normalized);
                     setView('editor');
@@ -1171,7 +1304,8 @@
             };
             
             const loadTemplate = (modelo) => {
-                let templateData = normalizeDndPcData(modelo);
+                let templateData = normalizeMetaItem(modelo);
+                templateData = normalizeDndPcData(templateData);
                 templateData = normalizeFabulaPcData(templateData);
                 templateData = normalizeFabulaThreatData(templateData);
                 templateData.id = Date.now().toString();
@@ -1357,6 +1491,12 @@
                 .catch(() => { const textArea = document.createElement("textarea"); textArea.value = text; document.body.appendChild(textArea); textArea.select(); document.execCommand('copy'); textArea.remove(); showToast("Ficha copiada!"); });
             };
 
+            const renderHistoryModal = () => {
+                if (!showHistoryModal) return null;
+                const list = data?.id ? (getHistory()[data.id] || []) : [];
+                return <div className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-4 no-print"><div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-lg p-5"><div className="flex justify-between items-center mb-4"><div><h3 className="font-title font-bold text-xl">🕘 Histórico local</h3><p className="text-xs text-gray-500">Até 5 versões anteriores salvas manualmente.</p></div><button onClick={()=>setShowHistoryModal(false)} className="text-xl font-bold">×</button></div>{list.length===0?<p className="text-sm text-gray-500 italic">Ainda não há versões anteriores desta ficha.</p>:<div className="space-y-2">{list.map((snap,i)=><button key={i} onClick={()=>restoreHistorySnapshot(snap)} className="w-full text-left border rounded p-3 hover:bg-gray-50"><strong>Versão {i+1}</strong><br/><span className="text-xs text-gray-500">{new Date(snap.at).toLocaleString('pt-BR')}</span></button>)}</div>}</div></div>;
+            };
+
             if (view === 'dashboard') {
                 return (
                     <React.Fragment>
@@ -1405,14 +1545,32 @@
                                 <span className="shrink-0 bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Prévia • Em implementação</span>
                             </div>
 
-                            {savedChars.length === 0 ? (
+                            <div className="mb-5 no-print">
+                                <div className="flex items-center gap-2 max-w-2xl">
+                                    <input value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} className="flex-1 min-w-0 border border-gray-300 rounded px-3 py-2 text-sm bg-white shadow-sm" placeholder="🔎 Buscar fichas..." />
+                                    <button onClick={()=>setShowFilters(v=>!v)} className={`shrink-0 border rounded px-3 py-2 text-xs font-bold shadow-sm ${showFilters || systemFilter!=='all' || sortMode!=='recent' || onlyFavorites ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}>⚙ Filtros</button>
+                                </div>
+                                {showFilters && (
+                                    <div style={getWindowStyle()} className="mt-2 max-w-2xl bg-white border border-gray-200 rounded-lg shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                        <select value={systemFilter} onChange={e=>setSystemFilter(e.target.value)} className="border rounded px-2 py-2 text-xs bg-white">
+                                            <option value="all">Todos os sistemas</option><option value="dragonbane">Dragonbane</option><option value="dnd5e">D&D 5e</option><option value="fabula">Fabula Ultima</option>
+                                        </select>
+                                        <select value={sortMode} onChange={e=>setSortMode(e.target.value)} className="border rounded px-2 py-2 text-xs bg-white">
+                                            <option value="recent">Mais recentes</option><option value="name">Nome A–Z</option><option value="system">Por sistema</option>
+                                        </select>
+                                        <button onClick={()=>setOnlyFavorites(v=>!v)} className={`rounded px-3 py-2 text-xs font-bold border ${onlyFavorites?'bg-yellow-100 border-yellow-400 text-yellow-800':'bg-gray-50 border-gray-300 text-gray-700'}`}>★ {onlyFavorites?'Só favoritos':'Favoritos'}</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {filterAndSortItems(savedChars).length === 0 ? (
                                 <div style={getWindowStyle()} className="text-center py-20 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
                                     <div className="flex justify-center text-gray-400"><SVGIcons.User /></div>
                                     <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {savedChars.map(char => {
+                                    {filterAndSortItems(savedChars).map(char => {
                                         const isDnd = char.system === 'dnd5e';
                                         const isFabula = char.system === 'fabula';
                                         return (
@@ -1434,6 +1592,8 @@
                                                         {isDnd ? `${char.bio?.linhagem || '?'} • ${char.bio?.classe || '?'}` : isFabula ? `${char.bio?.identidade || 'Sem identidade'} • ${char.bio?.tema || 'Sem tema'}` : `${char.bio?.ancestralidade || '?'} • ${char.bio?.profissao || '?'}`}
                                                     </p>
                                                     <p className="text-[10px] text-gray-500 mt-2 truncate italic">Nível {isFabula ? (char.nivel || 5) : (char.bio?.nivel || 1)}</p>
+                                                    {char.meta?.campanha && <p className="text-[10px] text-indigo-600 mt-1 truncate font-bold">📁 {char.meta.campanha}</p>}
+                                                    {char.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(char.meta.updatedAt).toLocaleString('pt-BR')}</p>}
                                                 </div>
                                             </div>
                                             <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
@@ -1441,6 +1601,8 @@
                                                     <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Save/></button>
                                                     <button onClick={() => openCodeExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Code/></button>
                                                     <button onClick={() => copySheetToChat(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
+                                                    <button onClick={() => duplicateItem(char, false)} title="Duplicar ficha" className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm">⧉</button>
+                                                    <button onClick={() => toggleFavorite(char.id, false)} title="Favorito" className={`font-bold px-2 py-1 rounded border shadow-sm ${char.meta?.favorite?'bg-yellow-100 border-yellow-400 text-yellow-700':'bg-gray-200 border-gray-300 text-gray-500'}`}>★</button>
                                                 </div>
                                                 {deleteConfirmId === char.id ? (
                                                     <button onClick={() => deleteCharacter(char.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
@@ -1468,26 +1630,28 @@
                                 </div>
                             </div>
 
-                            {savedThreats.length === 0 ? (
+                            {filterAndSortItems(savedThreats).length === 0 ? (
                                 <div style={getWindowStyle()} className="text-center py-16 bg-white rounded-lg shadow border-2 border-dashed border-gray-300">
                                     <div className="flex justify-center text-gray-400 mb-4"><SVGIcons.Skull /></div>
                                     <p className="text-gray-500 text-lg">Nenhuma ameaça ou PNJ encontrado.</p>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {savedThreats.map(threat => {
+                                    {filterAndSortItems(savedThreats).map(threat => {
                                         const sys = threat.system || 'dragonbane';
                                         return (
-                                        <div key={threat.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : 'border-gray-500'} overflow-hidden flex flex-col relative`}>
-                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${sys === 'dnd5e' ? 'bg-[#922610]' : threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
-                                                {sys === 'dnd5e' ? 'D&D 5e (Stat Block)' : threat.type === 'pnj' ? 'PNJ (DB)' : 'Monstro (DB)'}
+                                        <div key={threat.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : sys === 'fabula' ? 'border-teal-700' : 'border-gray-500'} overflow-hidden flex flex-col relative`}>
+                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${sys === 'dnd5e' ? 'bg-[#922610]' : sys === 'fabula' ? 'bg-teal-700' : threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
+                                                {sys === 'dnd5e' ? 'D&D 5e (Stat Block)' : sys === 'fabula' ? 'Fabula Ultima' : threat.type === 'pnj' ? 'PNJ (DB)' : 'Monstro (DB)'}
                                             </div>
                                             <div className="flex h-24 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadThreat(threat.id)}>
                                                 <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                    <h3 className={`font-title font-bold text-lg truncate ${sys === 'dnd5e' ? 'text-[#7a200d]' : 'text-gray-900'}`}>{threat.nome || 'Sem Nome'}</h3>
+                                                    <h3 className={`font-title font-bold text-lg truncate ${sys === 'dnd5e' ? 'text-[#7a200d]' : sys === 'fabula' ? 'text-teal-800' : 'text-gray-900'}`}>{threat.nome || 'Sem Nome'}</h3>
                                                     <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
-                                                        {sys === 'dnd5e' ? `${threat.tamanho} ${threat.tipo}` : threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
+                                                        {sys === 'dnd5e' ? `${threat.tamanho} ${threat.tipo}` : sys === 'fabula' ? `Nível ${threat.nivel || 5} • ${threat.patente || 'Soldado'} • ${threat.especie || '?'}` : threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
                                                     </p>
+                                                    {threat.meta?.campanha && <p className="text-[10px] text-indigo-600 mt-1 truncate font-bold">📁 {threat.meta.campanha}</p>}
+                                                    {threat.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(threat.meta.updatedAt).toLocaleString('pt-BR')}</p>}
                                                 </div>
                                             </div>
                                             <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
@@ -1495,6 +1659,8 @@
                                                     <button onClick={() => handleExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Save/></button>
                                                     <button onClick={() => openCodeExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Code/></button>
                                                     <button onClick={() => copySheetToChat(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
+                                                    <button onClick={() => duplicateItem(threat, true)} title="Duplicar ficha" className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm">⧉</button>
+                                                    <button onClick={() => toggleFavorite(threat.id, true)} title="Favorito" className={`font-bold px-2 py-1 rounded border shadow-sm ${threat.meta?.favorite?'bg-yellow-100 border-yellow-400 text-yellow-700':'bg-gray-200 border-gray-300 text-gray-500'}`}>★</button>
                                                 </div>
                                                 {deleteConfirmId === threat.id ? (
                                                     <button onClick={() => deleteThreat(threat.id)} className="bg-red-600 text-white font-bold px-3 py-1 rounded shadow animate-pulse">Confirmar</button>
@@ -1525,6 +1691,16 @@
                                             <p className="mt-1">Telegram: <strong>@ralseibaiano</strong> &nbsp;•&nbsp; Discord: <strong>inabakaoru</strong></p>
                                             <p className="mt-1 text-[10px] text-gray-500">Projeto comunitário e gratuito, desenvolvido para facilitar a criação e organização de fichas de RPG.</p>
                                         </div>
+                                        <details className="mt-4 border border-gray-200 rounded-lg bg-gray-50 no-print">
+                                            <summary className="cursor-pointer select-none px-4 py-3 font-title font-bold text-sm text-gray-800 hover:bg-gray-100 rounded-lg">💾 Backup & Restauração</summary>
+                                            <div className="border-t border-gray-200 p-4">
+                                                <p className="text-xs text-gray-600 mb-3">Exporte todas as fichas de uma vez ou restaure um backup completo. A restauração substitui os dados salvos atualmente no navegador.</p>
+                                                <div className="flex flex-wrap gap-2">
+                                                    <button onClick={exportFullBackup} className="bg-emerald-700 hover:bg-emerald-800 text-white px-3 py-2 rounded text-xs font-bold">💾 Exportar backup geral</button>
+                                                    <label className="cursor-pointer bg-blue-700 hover:bg-blue-800 text-white px-3 py-2 rounded text-xs font-bold">↩ Restaurar backup<input type="file" accept=".json" className="hidden" onChange={restoreFullBackup}/></label>
+                                                </div>
+                                            </div>
+                                        </details>
                                     </div>
                                     <div className="space-y-4">
                                         <div className="bg-gray-50 border border-gray-200 rounded p-4">
@@ -1970,7 +2146,7 @@
             return (
                 <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-gray-500'} transition-all duration-300`}>
                     
-                    <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
+                    <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`no-print p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
                         <div className="flex items-center gap-4">
                             <button onClick={() => setView('dashboard')} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
@@ -1980,6 +2156,10 @@
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
+                            <input value={data.meta?.campanha || ''} onChange={e=>updateField('meta.campanha', e.target.value)} placeholder="Campanha" className="w-28 md:w-36 px-2 py-1 rounded text-xs text-gray-900 bg-white/90 border border-white/30" title="Campanha / pasta desta ficha" />
+                            {saveStatus && <span className={`text-[10px] font-bold px-2 py-1 rounded ${saveStatus==='error'?'bg-red-900':saveStatus==='saving'?'bg-amber-700':'bg-black/30'}`}>{saveStatus==='pending'?'Alterado…':saveStatus==='saving'?'Salvando…':saveStatus==='saved'?'✓ Salvo':'Erro ao salvar'}</span>}
+                            <button onClick={()=>setShowHistoryModal(true)} className="px-3 py-1 rounded text-xs md:text-sm font-bold bg-black/30 hover:bg-black/50 text-white" title="Histórico local">🕘</button>
+                            <button onClick={()=>window.print()} className="px-3 py-1 rounded text-xs md:text-sm font-bold bg-black/30 hover:bg-black/50 text-white" title="Imprimir / Salvar PDF">🖨️</button>
                             <button onClick={() => copySheetToChat(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-black/30 hover:bg-black/50 text-white" title="Copiar como texto">
                                 <SVGIcons.MessageCircle /> Copiar Ficha
                             </button>
@@ -1995,6 +2175,7 @@
                             {toastMsg}
                         </div>
                     )}
+                    {renderHistoryModal()}
 
 
                     {/* Editor Fabula Ultima — primeira implementação */}
