@@ -429,9 +429,24 @@
         body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:rgba(248,250,252,.78) !important; }
 
         /* Impressão / PDF — v0.6.0 */
+        .print-only { display:none; }
+        /* Polimento geral — v0.6.0 */
+        textarea { field-sizing: content; min-height: 4.5rem; }
+        .pj-mobile-tabs { scrollbar-width: thin; overscroll-behavior-x: contain; }
+        .pj-card-compact { transition: transform .15s ease, box-shadow .15s ease; }
+        .pj-card-compact:hover { transform: translateY(-1px); }
+        .pj-focus-ring:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+        @media (max-width: 767px) {
+            button, summary, label.cursor-pointer { min-height: 40px; }
+            .pj-mobile-tabs { position: sticky; top: 0; z-index: 30; }
+        }
+
         @media print {
             body { background: #fff !important; padding: 0 !important; color: #111 !important; }
             .no-print { display: none !important; }
+            body { background:#fff !important; padding:0 !important; }
+            .print-only { display:block !important; }
+            textarea { overflow:visible !important; resize:none !important; }
             #root > div { max-width: none !important; width: 100% !important; box-shadow: none !important; border: 0 !important; }
             input, textarea, select { border-color: #bbb !important; box-shadow: none !important; }
             .shadow, .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
@@ -1208,6 +1223,9 @@
             const [showFilters, setShowFilters] = useState(false);
             const [saveStatus, setSaveStatus] = useState('');
             const [showHistoryModal, setShowHistoryModal] = useState(false);
+            const [dashboardView, setDashboardView] = useState(() => { try { return localStorage.getItem('pj_lite_dashboard_view') || 'cards'; } catch { return 'cards'; } });
+            const [undoState, setUndoState] = useState(null);
+            const [chatModal, setChatModal] = useState({ isOpen: false, item: null, mode: 'simples' });
 
             const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
 
@@ -1244,6 +1262,7 @@
             useEffect(() => { try { localStorage.setItem(CUSTOM_TEXT_COLOR_KEY, customTextColor); } catch {} }, [customTextColor]);
             useEffect(() => { try { localStorage.setItem(CUSTOM_OVERLAY_KEY, customOverlay); } catch {} }, [customOverlay]);
             useEffect(() => { try { localStorage.setItem(CUSTOM_BLUR_KEY, customBlur); } catch {} }, [customBlur]);
+            useEffect(() => { try { localStorage.setItem('pj_lite_dashboard_view', dashboardView); } catch {} }, [dashboardView]);
 
             useEffect(() => {
                 if (theme !== 'custom') return;
@@ -1405,6 +1424,83 @@
                 });
             };
 
+            const getValidationWarnings = (item) => {
+                if (!item) return [];
+                const warnings = [];
+                const name = item.bio?.nome || item.nome;
+                if (!name || !String(name).trim()) warnings.push('Adicione um nome para identificar a ficha.');
+                if (item.type === 'pc') {
+                    if (item.system === 'dnd5e' && Number(item.status?.pvMax || 0) <= 0) warnings.push('Defina os PV máximos.');
+                    if (item.system === 'fabula' && Number(item.status?.pvMax || 0) <= 0) warnings.push('Defina os PV máximos.');
+                    if ((item.system || 'dragonbane') === 'dragonbane' && Number(item.status?.pv?.max || 0) <= 0) warnings.push('Defina os PV máximos.');
+                }
+                return warnings;
+            };
+
+            const filterChatText = (raw, sections) => {
+                if (!raw) return '';
+                const mapHeading = (line) => {
+                    const u = line.toUpperCase();
+                    if (/STATUS|ATRIBUTOS|CONDIÇÕES|AFINIDADES/.test(u)) return 'status';
+                    if (/ATAQUES|EQUIPAMENTO|COMBATE|PERÍCIAS PRINCIPAIS/.test(u)) return 'combate';
+                    if (/PODERES|CARACTERÍSTICAS|MAGIAS|FEITIÇOS|CLASSES/.test(u)) return 'poderes';
+                    if (/INVENTÁRIO|MOCHILA/.test(u)) return 'inventario';
+                    if (/INTERPRETAÇÃO|LAÇOS/.test(u)) return 'interpretacao';
+                    return null;
+                };
+                const lines = raw.split('\n');
+                const out = [];
+                let active = null;
+                for (const line of lines) {
+                    const section = mapHeading(line);
+                    if (section) active = section;
+                    if (!active || sections?.[active] !== false) out.push(line);
+                }
+                return out.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+            };
+
+            const CHAT_MODES = {
+                completa: {
+                    nome: 'Completa',
+                    desc: 'Copia todas as informações disponíveis da ficha.',
+                    sections: { status:true, combate:true, poderes:true, inventario:true, interpretacao:true }
+                },
+                simples: {
+                    nome: 'Simples',
+                    desc: 'Informações principais, atributos/status e combate.',
+                    sections: { status:true, combate:true, poderes:false, inventario:false, interpretacao:false }
+                },
+                resumida: {
+                    nome: 'Resumida',
+                    desc: 'Somente identificação e o essencial de atributos/status.',
+                    sections: { status:true, combate:false, poderes:false, inventario:false, interpretacao:false }
+                },
+                habilidades: {
+                    nome: 'Habilidades & Magias',
+                    desc: 'Foca em poderes, características, classes, habilidades e magias.',
+                    sections: { status:false, combate:false, poderes:true, inventario:false, interpretacao:false }
+                }
+            };
+
+            const openChatOptions = (item) => setChatModal({ isOpen:true, item, mode:'simples' });
+            const copyChatFromModal = () => {
+                if (!chatModal.item) return;
+                const selectedMode = CHAT_MODES[chatModal.mode] || CHAT_MODES.simples;
+                const raw = generateChatText(chatModal.item);
+                const text = chatModal.mode === 'completa' ? raw : filterChatText(raw, selectedMode.sections);
+                navigator.clipboard.writeText(text).then(() => showToast(`Ficha ${selectedMode.nome.toLowerCase()} copiada!`)).catch(() => {
+                    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); showToast('Ficha copiada!');
+                });
+                setChatModal({...chatModal, isOpen:false});
+            };
+
+            const undoLastRemoval = () => {
+                if (!undoState?.data) return;
+                setData(undoState.data);
+                setUndoState(null);
+                showToast('Remoção desfeita.');
+            };
+
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
                 if (char) {
@@ -1486,9 +1582,12 @@
             };
             
             const removeFromArray = (arrayName, index) => {
+                const before = JSON.parse(JSON.stringify(data));
                 const newData = JSON.parse(JSON.stringify(data));
                 newData[arrayName] = newData[arrayName].filter((_, i) => i !== index);
+                setUndoState({ data: before, label: 'item removido' });
                 setData(newData);
+                showToast('Item removido.');
             };
 
             /* Dragonbane Específicos */
@@ -1569,8 +1668,10 @@
                         const importedData = JSON.parse(e.target.result);
                         if(!importedData.id) importedData.id = Date.now().toString();
                         if(!importedData.system) importedData.system = 'dragonbane';
+                        if (typeof importedData !== 'object' || Array.isArray(importedData)) throw new Error('Formato de ficha inválido');
                         let normalizedData = normalizeDndPcData(importedData);
                         normalizedData = normalizeFabulaPcData(normalizedData);
+                        normalizedData = normalizeFabulaThreatData(normalizedData);
                         saveToLocal(normalizedData);
                         setData(normalizedData);
                         setView('editor');
@@ -1675,6 +1776,10 @@
                                 <div className="flex items-center gap-2 max-w-2xl">
                                     <input value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} className="flex-1 min-w-0 border border-gray-300 rounded px-3 py-2 text-sm bg-white shadow-sm" placeholder="🔎 Buscar fichas..." />
                                     <button onClick={()=>setShowFilters(v=>!v)} className={`shrink-0 border rounded px-3 py-2 text-xs font-bold shadow-sm ${showFilters || systemFilter!=='all' || sortMode!=='recent' || onlyFavorites ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`}>⚙ Filtros</button>
+                                    <div className="hidden sm:flex border rounded overflow-hidden shadow-sm" title="Visualização do painel">
+                                        <button onClick={()=>setDashboardView('cards')} className={`px-2.5 py-2 text-xs ${dashboardView==='cards'?'bg-gray-800 text-white':'bg-white text-gray-500'}`}>▦</button>
+                                        <button onClick={()=>setDashboardView('list')} className={`px-2.5 py-2 text-xs ${dashboardView==='list'?'bg-gray-800 text-white':'bg-white text-gray-500'}`}>☰</button>
+                                    </div>
                                 </div>
                                 {showFilters && (
                                     <div style={getWindowStyle()} className="mt-2 max-w-2xl bg-white border border-gray-200 rounded-lg shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -1695,16 +1800,16 @@
                                     <p className="text-gray-500 mt-4 text-lg">Nenhum personagem encontrado na sua pasta.</p>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className={dashboardView==='list' ? 'grid grid-cols-1 gap-3' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}>
                                     {filterAndSortItems(savedChars).map(char => {
                                         const isDnd = char.system === 'dnd5e';
                                         const isFabula = char.system === 'fabula';
                                         return (
-                                        <div key={char.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-dragon-dark'} overflow-hidden flex flex-col relative`}>
+                                        <div key={char.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-dragon-dark'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
                                             <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-700' : 'bg-dragon-dark'}`}>
                                                 {isDnd ? 'D&D 5e' : isFabula ? 'Fabula Ultima' : 'Dragonbane'}
                                             </div>
-                                            <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
+                                            <div className={`${dashboardView==='list'?'flex flex-1 min-w-0 h-24 border-r':'flex h-28 border-b'} border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors`} onClick={() => loadCharacter(char.id)}>
                                                 <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
                                                     {char.bio?.imagem ? (
                                                         <img src={char.bio.imagem} alt={char.bio.nome} className="w-full h-full object-cover" />
@@ -1722,11 +1827,11 @@
                                                     {char.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(char.meta.updatedAt).toLocaleString('pt-BR')}</p>}
                                                 </div>
                                             </div>
-                                            <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
+                                            <div className={`${dashboardView==='list'?'bg-gray-100 p-2 flex items-center':'bg-gray-100 p-2 flex justify-between items-center'} text-xs`}>
                                                 <div className="flex gap-1 flex-wrap">
                                                     <button onClick={() => handleExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Save/></button>
                                                     <button onClick={() => openCodeExport(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Code/></button>
-                                                    <button onClick={() => copySheetToChat(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
+                                                    <button onClick={() => openChatOptions(char)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
                                                     <button onClick={() => duplicateItem(char, false)} title="Duplicar ficha" className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm">⧉</button>
                                                     <button onClick={() => toggleFavorite(char.id, false)} title="Favorito" className={`font-bold px-2 py-1 rounded border shadow-sm ${char.meta?.favorite?'bg-yellow-100 border-yellow-400 text-yellow-700':'bg-gray-200 border-gray-300 text-gray-500'}`}>★</button>
                                                 </div>
@@ -1762,15 +1867,15 @@
                                     <p className="text-gray-500 text-lg">Nenhuma ameaça ou PNJ encontrado.</p>
                                 </div>
                             ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className={dashboardView==='list' ? 'grid grid-cols-1 gap-3' : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'}>
                                     {filterAndSortItems(savedThreats).map(threat => {
                                         const sys = threat.system || 'dragonbane';
                                         return (
-                                        <div key={threat.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : sys === 'fabula' ? 'border-teal-700' : 'border-gray-500'} overflow-hidden flex flex-col relative`}>
+                                        <div key={threat.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : sys === 'fabula' ? 'border-teal-700' : 'border-gray-500'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
                                             <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${sys === 'dnd5e' ? 'bg-[#922610]' : sys === 'fabula' ? 'bg-teal-700' : threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
                                                 {sys === 'dnd5e' ? 'D&D 5e (Stat Block)' : sys === 'fabula' ? 'Fabula Ultima' : threat.type === 'pnj' ? 'PNJ (DB)' : 'Monstro (DB)'}
                                             </div>
-                                            <div className="flex h-24 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadThreat(threat.id)}>
+                                            <div className={`${dashboardView==='list'?'flex flex-1 min-w-0 h-24 border-r':'flex h-24 border-b'} border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors`} onClick={() => loadThreat(threat.id)}>
                                                 <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
                                                     <h3 className={`font-title font-bold text-lg truncate ${sys === 'dnd5e' ? 'text-[#7a200d]' : sys === 'fabula' ? 'text-teal-800' : 'text-gray-900'}`}>{threat.nome || 'Sem Nome'}</h3>
                                                     <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
@@ -1780,11 +1885,11 @@
                                                     {threat.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(threat.meta.updatedAt).toLocaleString('pt-BR')}</p>}
                                                 </div>
                                             </div>
-                                            <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
+                                            <div className={`${dashboardView==='list'?'bg-gray-100 p-2 flex items-center':'bg-gray-100 p-2 flex justify-between items-center'} text-xs`}>
                                                 <div className="flex gap-1 flex-wrap">
                                                     <button onClick={() => handleExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Save/></button>
                                                     <button onClick={() => openCodeExport(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.Code/></button>
-                                                    <button onClick={() => copySheetToChat(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
+                                                    <button onClick={() => openChatOptions(threat)} className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm"><SVGIcons.MessageCircle/></button>
                                                     <button onClick={() => duplicateItem(threat, true)} title="Duplicar ficha" className="text-gray-700 hover:text-black font-bold px-2 py-1 bg-gray-200 rounded border border-gray-300 shadow-sm">⧉</button>
                                                     <button onClick={() => toggleFavorite(threat.id, true)} title="Favorito" className={`font-bold px-2 py-1 rounded border shadow-sm ${threat.meta?.favorite?'bg-yellow-100 border-yellow-400 text-yellow-700':'bg-gray-200 border-gray-300 text-gray-500'}`}>★</button>
                                                 </div>
@@ -2270,10 +2375,22 @@
                                 </div>
                             </div>, document.body
                         )}
-                        
+                        {chatModal.isOpen && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 z-[320] flex items-center justify-center p-4 no-print">
+                                <div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-md overflow-hidden">
+                                    <div className="bg-gray-900 text-white p-3 flex justify-between items-center"><div><h3 className="font-title font-bold">💬 Ficha Chat</h3><p className="text-[10px] text-gray-300">Escolha um formato pronto para copiar.</p></div><button onClick={()=>setChatModal({...chatModal,isOpen:false})} className="text-2xl">×</button></div>
+                                    <div className="p-4 space-y-2">
+                                        {Object.entries(CHAT_MODES).map(([id,opt])=><button type="button" key={id} onClick={()=>setChatModal({...chatModal,mode:id})} className={`w-full text-left border rounded-lg p-3 transition ${chatModal.mode===id?'border-gray-900 bg-gray-100 ring-1 ring-gray-900':'border-gray-200 hover:bg-gray-50'}`}><div className="flex items-center justify-between gap-3"><span className="text-sm font-bold">{opt.nome}</span><span className={`w-4 h-4 rounded-full border-2 shrink-0 ${chatModal.mode===id?'border-gray-900 bg-gray-900':'border-gray-300'}`}></span></div><p className="text-[10px] text-gray-500 mt-1">{opt.desc}</p></button>)}
+                                        <div className="flex justify-end gap-2 pt-3"><button onClick={()=>setChatModal({...chatModal,isOpen:false})} className="px-4 py-2 rounded bg-gray-200 font-bold text-xs">Cancelar</button><button onClick={copyChatFromModal} className="px-4 py-2 rounded bg-gray-900 text-white font-bold text-xs">Copiar {CHAT_MODES[chatModal.mode]?.nome || 'ficha'}</button></div>
+                                    </div>
+                                </div>
+                            </div>, document.body
+                        )}
+
+
                         {toastMsg && (
                             <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-[200] animate-fade-in-up">
-                                {toastMsg}
+                                <span>{toastMsg}</span>{undoState && <button onClick={undoLastRemoval} className="ml-3 underline font-bold text-amber-300">Desfazer</button>}
                             </div>
                         )}
                     </React.Fragment>
@@ -2286,6 +2403,7 @@
 
             return (
                 <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-gray-500'} transition-all duration-300`}>
+                    <div className="print-only px-6 pt-5 pb-3 border-b-2 border-gray-800"><div className="text-xs font-bold uppercase tracking-widest">PJ Lite • {(data.system||'dragonbane').toUpperCase()}</div><div className="text-2xl font-title font-bold mt-1">{data.bio?.nome || data.nome || 'Ficha sem nome'}</div>{data.meta?.campanha && <div className="text-xs mt-1">Campanha: {data.meta.campanha}</div>}</div>
                     
                     <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`no-print p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
                         <div className="flex items-center gap-4">
@@ -2301,7 +2419,7 @@
                             {saveStatus && <span className={`text-[10px] font-bold px-2 py-1 rounded ${saveStatus==='error'?'bg-red-900':saveStatus==='saving'?'bg-amber-700':'bg-black/30'}`}>{saveStatus==='pending'?'Alterado…':saveStatus==='saving'?'Salvando…':saveStatus==='saved'?'✓ Salvo':'Erro ao salvar'}</span>}
                             <button onClick={()=>setShowHistoryModal(true)} className="px-3 py-1 rounded text-xs md:text-sm font-bold bg-black/30 hover:bg-black/50 text-white" title="Histórico local">🕘</button>
                             <button onClick={()=>window.print()} className="px-3 py-1 rounded text-xs md:text-sm font-bold bg-black/30 hover:bg-black/50 text-white" title="Imprimir / Salvar PDF">🖨️</button>
-                            <button onClick={() => copySheetToChat(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-black/30 hover:bg-black/50 text-white" title="Copiar como texto">
+                            <button onClick={() => openChatOptions(data)} className="flex items-center gap-1 px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-black/30 hover:bg-black/50 text-white" title="Copiar como texto">
                                 <SVGIcons.MessageCircle /> Copiar Ficha
                             </button>
                             <button onClick={() => handleExport(data)} className="px-3 py-1 rounded text-xs md:text-sm font-bold transition-colors shadow bg-black/30 hover:bg-black/50 text-white" title="Baixar ZIP">ZIP</button>
@@ -2311,18 +2429,37 @@
                         </div>
                     </div>
 
+                    {data?.type === 'pc' && (()=>{
+                        const warnings=getValidationWarnings(data);
+                        if (!warnings.length) return null;
+                        return <div className="no-print px-4 md:px-7 pt-4">
+                            <details className="border border-amber-300 bg-amber-50 rounded-lg"><summary className="px-3 py-2 text-xs font-bold text-amber-900 cursor-pointer">⚠ Revisão rápida: {warnings.length} ponto{warnings.length>1?'s':''} para conferir</summary><div className="px-3 pb-3 text-xs text-amber-900">{warnings.map((w,i)=><div key={i}>• {w}</div>)}</div></details>
+                        </div>;
+                    })()}
+
                     {toastMsg && (
                         <div className="fixed bottom-4 right-4 bg-gray-900 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-[200] animate-fade-in-up">
                             {toastMsg}
                         </div>
                     )}
                     {renderHistoryModal()}
+                        {chatModal.isOpen && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 z-[320] flex items-center justify-center p-4 no-print">
+                                <div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-md overflow-hidden">
+                                    <div className="bg-gray-900 text-white p-3 flex justify-between items-center"><div><h3 className="font-title font-bold">💬 Ficha Chat</h3><p className="text-[10px] text-gray-300">Escolha um formato pronto para copiar.</p></div><button onClick={()=>setChatModal({...chatModal,isOpen:false})} className="text-2xl">×</button></div>
+                                    <div className="p-4 space-y-2">
+                                        {Object.entries(CHAT_MODES).map(([id,opt])=><button type="button" key={id} onClick={()=>setChatModal({...chatModal,mode:id})} className={`w-full text-left border rounded-lg p-3 transition ${chatModal.mode===id?'border-gray-900 bg-gray-100 ring-1 ring-gray-900':'border-gray-200 hover:bg-gray-50'}`}><div className="flex items-center justify-between gap-3"><span className="text-sm font-bold">{opt.nome}</span><span className={`w-4 h-4 rounded-full border-2 shrink-0 ${chatModal.mode===id?'border-gray-900 bg-gray-900':'border-gray-300'}`}></span></div><p className="text-[10px] text-gray-500 mt-1">{opt.desc}</p></button>)}
+                                        <div className="flex justify-end gap-2 pt-3"><button onClick={()=>setChatModal({...chatModal,isOpen:false})} className="px-4 py-2 rounded bg-gray-200 font-bold text-xs">Cancelar</button><button onClick={copyChatFromModal} className="px-4 py-2 rounded bg-gray-900 text-white font-bold text-xs">Copiar {CHAT_MODES[chatModal.mode]?.nome || 'ficha'}</button></div>
+                                    </div>
+                                </div>
+                            </div>, document.body
+                        )}
 
 
                     {/* Editor Fabula Ultima — primeira implementação */}
                     {isFabula && data.type === 'pc' && (
                         <div className="bg-white">
-                            <div className="md:hidden flex overflow-x-auto bg-teal-50 border-b border-teal-200 sticky top-0 z-20 shadow-sm">
+                            <div className="pj-mobile-tabs md:hidden flex overflow-x-auto bg-teal-50 border-b border-teal-200 sticky top-0 z-20 shadow-sm">
                                 {[
                                     {id:'perfil',label:'Perfil & Status'}, {id:'combate',label:'Combate'}, {id:'classes',label:'Classes'},
                                     ...(data.extrasAtivos || []).map(id => ({id:`extra-${id}`, label:(FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id).split(' ')[0]}))
