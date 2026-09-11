@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite - v0.5.6v Alpha</title>
+    <title>PJ Lite - v0.5.9v Alpha</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -266,6 +266,66 @@
             border-top: 2px solid #922610;
             margin: 6px 0;
         }
+    
+        /* Fabula Ultima — reforço de contraste no tema escuro */
+        body.theme-dark .bg-teal-50 { background-color: #0f2f2f !important; color: #d5f5f2 !important; }
+        body.theme-dark .bg-teal-100 { background-color: #123b3a !important; color: #ccfbf1 !important; }
+        body.theme-dark .bg-teal-700, body.theme-dark .bg-teal-800 { background-color: #115e59 !important; color: #ffffff !important; }
+        body.theme-dark .text-teal-900, body.theme-dark .text-teal-800, body.theme-dark .text-teal-700 { color: #99f6e4 !important; }
+        body.theme-dark .border-teal-200, body.theme-dark .border-teal-300, body.theme-dark .border-teal-600, body.theme-dark .border-teal-700 { border-color: #2dd4bf !important; }
+        body.theme-dark .bg-amber-50, body.theme-dark .bg-amber-100 { background-color: #3a2b0b !important; color: #fef3c7 !important; }
+        body.theme-dark .text-amber-900, body.theme-dark .text-amber-800 { color: #fde68a !important; }
+        body.theme-dark .border-amber-300 { border-color: #d97706 !important; }
+        body.theme-dark .bg-rose-100 { background-color: #4c1825 !important; color: #ffe4e6 !important; }
+        body.theme-dark .text-rose-900 { color: #fecdd3 !important; }
+        body.theme-dark .border-rose-400 { border-color: #fb7185 !important; }
+        body.theme-dark .bg-purple-50, body.theme-dark .bg-purple-100 { background-color: #2e1b47 !important; color: #f3e8ff !important; }
+        body.theme-dark .text-purple-900, body.theme-dark .text-purple-800 { color: #e9d5ff !important; }
+        body.theme-dark .border-purple-200, body.theme-dark .border-purple-300 { border-color: #a78bfa !important; }
+        body.theme-dark .fabula-panel { background-color: #172126 !important; border-color: #2b756f !important; color: #e6fffb !important; }
+        body.theme-dark .fabula-panel .text-gray-500, body.theme-dark .fabula-panel .text-gray-600 { color: #cbd5e1 !important; }
+        body.theme-dark .fabula-chip { background-color: #22323a !important; color: #eefcfb !important; border-color: #3e716e !important; }
+
+        /* Tema Fabula Ultima — identidade original do PJ Lite inspirada em menus de JRPG */
+        body.theme-fabula {
+            background: radial-gradient(circle at top, #eafcff 0%, #d8f2ee 38%, #bfdedb 100%) !important;
+            color: #18383b !important;
+        }
+        body.theme-fabula .max-w-6xl, body.theme-fabula .max-w-5xl, body.theme-fabula .bg-white {
+            background-color: rgba(252,255,253,.96) !important;
+            border-color: #79aaa5 !important;
+            color: #18383b !important;
+        }
+        body.theme-fabula .bg-dragon-dark { background-color: #245f61 !important; }
+        body.theme-fabula .border-dragon-dark { border-color: #245f61 !important; }
+        body.theme-fabula .text-dragon-dark { color: #245f61 !important; }
+        body.theme-fabula .bg-gray-50, body.theme-fabula .bg-gray-100, body.theme-fabula .bg-gray-200 {
+            background-color: #eef8f5 !important;
+        }
+        body.theme-fabula .border-gray-200, body.theme-fabula .border-gray-300 { border-color: #a9cbc7 !important; }
+        body.theme-fabula input, body.theme-fabula textarea, body.theme-fabula select {
+            background-color: #fbfffe !important;
+            color: #17373b !important;
+            border-color: #8ab8b2 !important;
+        }
+        body.theme-fabula input:focus, body.theme-fabula textarea:focus, body.theme-fabula select:focus {
+            border-color: #2f7f7b !important;
+            box-shadow: 0 0 0 2px rgba(47,127,123,.13);
+        }
+        body.theme-fabula .text-gray-900, body.theme-fabula .text-gray-800, body.theme-fabula .text-gray-700 { color: #18383b !important; }
+        body.theme-fabula .text-gray-600, body.theme-fabula .text-gray-500 { color: #527174 !important; }
+        body.theme-fabula .bg-teal-800, body.theme-fabula .bg-teal-700 { background-color: #2d7472 !important; }
+        body.theme-fabula .text-teal-900, body.theme-fabula .text-teal-800, body.theme-fabula .text-teal-700 { color: #245f61 !important; }
+        body.theme-fabula .border-teal-700, body.theme-fabula .border-teal-300, body.theme-fabula .border-teal-200 { border-color: #70aaa4 !important; }
+        body.theme-fabula .bg-teal-50 { background-color: #e7f7f3 !important; }
+        body.theme-fabula .bg-amber-100 { background-color: #fff3c9 !important; }
+        body.theme-fabula .text-amber-900 { color: #7b5611 !important; }
+        body.theme-fabula .fabula-panel { background-color: #f4fbf8 !important; border-color: #74aaa4 !important; color: #17373b !important; }
+        body.theme-fabula .fabula-chip { background-color: #e1f3ef !important; color: #245f61 !important; border-color: #8ab8b2 !important; }
+        body.theme-fabula .shadow, body.theme-fabula .shadow-sm, body.theme-fabula .shadow-md, body.theme-fabula .shadow-lg {
+            box-shadow: 0 8px 24px rgba(30,88,88,.14) !important;
+        }
+
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -283,7 +343,8 @@
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
 
         const UPDATE_LOG = [
-            { versao: '0.5.6v Alpha', descricao: 'Navegação mobile por abas na ficha D&D 5e, melhorias no sistema de temas com imagem de fundo por upload ou URL, reforço da identidade PJ Lite na tela inicial e ajustes gerais de responsividade.' },
+            { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
+            { versao: '0.5.6v Alpha', descricao: 'Prévia de Fabula Ultima ampliada: tema escuro refinado, ficha de Ameaça/PNJ com estrutura de bestiário, modelos prontos de personagens Press Start, inventário dinâmico e Fichas Extras. D&D mobile mantém Perfil e Atributos unificados.' },
             { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
             { versao: '0.5.4v Alpha', descricao: 'Expansão da adaptação de D&D 5e (2024): correção do modelo de Mago, novo organizador em abas para Características/Talentos e Magias, listas dinâmicas com adicionar/remover, melhorias em Ataques, novo Tema Dungeons & Dragons, modelos prontos de personagens Dragonbane, guias revisados e créditos do projeto.' },
             { versao: '0.5.3 Alpha', descricao: 'Aprimoramentos internos de compatibilidade das fichas D&D e preparação da interface para novos recursos do sistema em adaptação.' },
@@ -385,6 +446,160 @@
             { ...initialDndMonsterData, nome: 'Ogro (SRD)', tamanho: 'Grande', tipo: 'gigante', alinhamento: 'caótico e mau', ca: '11 (peles)', pv: '59 (7d10 + 21)', deslocamento: '12 m', atributos: { for: 19, des: 8, con: 16, int: 5, sab: 7, car: 7 }, sentidos: 'visão no escuro 18 m, Percepção passiva 8', idiomas: 'Comum, Gigante', desafio: '2 (450 XP)', proficienciaBonus: '+2', acoes: [{ nome: 'Clava Grande', desc: 'Ataque Corpo-a-Corpo com Arma: +6 para atingir, alcance 1,5 m, um alvo. Acerto: 13 (2d8 + 4) de dano de concussão.' }, { nome: 'Azagaia', desc: 'Ataque à Distância com Arma: +6 para atingir, alcance 9/36 m, um alvo. Acerto: 11 (2d6 + 4) de dano perfurante.' }] }
         ];
 
+
+        /* ==============================================================
+         * FABULA ULTIMA — PRIMEIRA IMPLEMENTAÇÃO / FICHA PRINCIPAL
+         * Interface original do PJ Lite, preparada para fichas extras.
+         * ============================================================== */
+        const FABULA_EXTRA_OPTIONS = [
+            { id: 'magia', icon: '🔮', nome: 'Magia & Rituais', desc: 'Feitiços, disciplinas e rituais.' },
+            { id: 'arcanos', icon: '🌟', nome: 'Arcanos', desc: 'Vínculos, domínios e efeitos de Arcanos.' },
+            { id: 'mnemosfera', icon: '🧠', nome: 'Mnemosfera', desc: 'Classe, nível, poderes e Poder Heroico.' },
+            { id: 'receitas', icon: '🍳', nome: 'Receitas', desc: 'Ingredientes, sabores, combinações e efeitos.' },
+            { id: 'anotacoes', icon: '📝', nome: 'Anotações Extras', desc: 'Regras opcionais, peculiaridades e lembretes.' }
+        ];
+
+        const initialFabulaPcData = {
+            id: '', system: 'fabula', type: 'pc',
+            bio: { nome: '', jogador: '', genero: '', identidade: '', tema: '', origem: '', tracos: '', imagem: '' },
+            nivel: 5, experiencia: 0, zenites: 0,
+            atributos: {
+                des: { base: 'd8', atual: 'd8' }, ast: { base: 'd8', atual: 'd8' },
+                vig: { base: 'd8', atual: 'd8' }, von: { base: 'd8', atual: 'd8' }
+            },
+            condicoes: { lento: false, enfurecido: false, atordoado: false, fraco: false, envenenado: false, abalado: false },
+            status: { pvAtual: 40, pvMax: 40, pmAtual: 40, pmMax: 40, piAtual: 6, piMax: 6, fabula: 3, defesa: 8, defesaMagica: 8, iniciativa: 0 },
+            lacos: [],
+            classes: [
+                { nome: '', nivel: 1, beneficios: '', poderes: [] },
+                { nome: '', nivel: 1, beneficios: '', poderes: [] }
+            ],
+            poderesHeroicos: [],
+            equipamentos: [
+                { slot: 'Mão dominante', nome: '', descricao: '' },
+                { slot: 'Mão secundária', nome: '', descricao: '' },
+                { slot: 'Armadura', nome: '', descricao: '' },
+                { slot: 'Acessório', nome: '', descricao: '' }
+            ],
+            equipavel: { armaduraMarcial: false, escudoMarcial: false, armaCorpoMarcial: false, armaDistanciaMarcial: false },
+            inventario: [],
+            mochila: '', caracteristicas: '',
+            extrasAtivos: [],
+            extras: {
+                magia: { disciplinas: [], feiticos: [], rituais: [] },
+                arcanos: { lista: [] },
+                mnemosfera: { nome: '', classe: '', nivel: 1, poderes: [], poderHeroico: '' },
+                receitas: { maxIngredientes: '', ingredientes: { amargo: '', salgado: '', azedo: '', doce: '', umami: '' }, combinacoes: '', notas: '' },
+                anotacoes: { regras: '', notas: '' }
+            }
+        };
+
+        const normalizeFabulaPcData = (item) => {
+            const clone = JSON.parse(JSON.stringify(item));
+            if (clone.system !== 'fabula' || clone.type !== 'pc') return clone;
+            clone.bio = { ...initialFabulaPcData.bio, ...(clone.bio || {}) };
+            clone.atributos = { ...JSON.parse(JSON.stringify(initialFabulaPcData.atributos)), ...(clone.atributos || {}) };
+            Object.keys(initialFabulaPcData.atributos).forEach(k => clone.atributos[k] = { ...initialFabulaPcData.atributos[k], ...(clone.atributos[k] || {}) });
+            clone.condicoes = { ...initialFabulaPcData.condicoes, ...(clone.condicoes || {}) };
+            clone.status = { ...initialFabulaPcData.status, ...(clone.status || {}) };
+            clone.lacos = Array.isArray(clone.lacos) ? clone.lacos : [];
+            clone.classes = Array.isArray(clone.classes) ? clone.classes : JSON.parse(JSON.stringify(initialFabulaPcData.classes));
+            clone.classes = clone.classes.map(c => ({ nome: '', nivel: 1, beneficios: '', poderes: [], ...c, poderes: Array.isArray(c?.poderes) ? c.poderes : [] }));
+            clone.poderesHeroicos = Array.isArray(clone.poderesHeroicos) ? clone.poderesHeroicos : [];
+            clone.equipamentos = Array.isArray(clone.equipamentos) ? clone.equipamentos : JSON.parse(JSON.stringify(initialFabulaPcData.equipamentos));
+            clone.equipavel = { ...initialFabulaPcData.equipavel, ...(clone.equipavel || {}) };
+            clone.inventario = Array.isArray(clone.inventario) ? clone.inventario : (clone.inventario ? String(clone.inventario).split('\n').filter(Boolean).map(nome => ({ nome, quantidade: 1, notas: '' })) : []);
+            clone.extrasAtivos = Array.isArray(clone.extrasAtivos) ? clone.extrasAtivos : [];
+            clone.extras = { ...JSON.parse(JSON.stringify(initialFabulaPcData.extras)), ...(clone.extras || {}) };
+            clone.extras.magia = { ...initialFabulaPcData.extras.magia, ...(clone.extras.magia || {}) };
+            clone.extras.magia.disciplinas = Array.isArray(clone.extras.magia.disciplinas) ? clone.extras.magia.disciplinas : [];
+            clone.extras.magia.feiticos = Array.isArray(clone.extras.magia.feiticos) ? clone.extras.magia.feiticos : [];
+            clone.extras.magia.rituais = Array.isArray(clone.extras.magia.rituais) ? clone.extras.magia.rituais : [];
+            clone.extras.arcanos = { ...initialFabulaPcData.extras.arcanos, ...(clone.extras.arcanos || {}) };
+            clone.extras.arcanos.lista = Array.isArray(clone.extras.arcanos.lista) ? clone.extras.arcanos.lista : [];
+            clone.extras.mnemosfera = { ...initialFabulaPcData.extras.mnemosfera, ...(clone.extras.mnemosfera || {}) };
+            clone.extras.mnemosfera.poderes = Array.isArray(clone.extras.mnemosfera.poderes) ? clone.extras.mnemosfera.poderes : [];
+            clone.extras.receitas = { ...initialFabulaPcData.extras.receitas, ...(clone.extras.receitas || {}) };
+            clone.extras.receitas.ingredientes = { ...initialFabulaPcData.extras.receitas.ingredientes, ...(clone.extras.receitas.ingredientes || {}) };
+            clone.extras.anotacoes = { ...initialFabulaPcData.extras.anotacoes, ...(clone.extras.anotacoes || {}) };
+            return clone;
+        };
+
+
+        const initialFabulaThreatData = {
+            id: '', system: 'fabula', type: 'ameaca',
+            nome: '', nivel: 5, patente: 'Soldado', especie: 'Humanoide', tipoNpc: 'Ameaça', pontosUltima: 0,
+            descricao: '', tracos: '',
+            atributos: { des: 'd8', ast: 'd8', vig: 'd8', von: 'd8' },
+            status: { pvAtual: 50, pvMax: 50, pmAtual: 40, pmMax: 40, iniciativa: 8, defesa: 8, defesaMagica: 8 },
+            afinidades: { fisico:'', ar:'', raio:'', trevas:'', terra:'', fogo:'', gelo:'', luz:'', veneno:'' },
+            ataques: [], feiticos: [], poderes: [], outrasAcoes: [], regrasEspeciais: []
+        };
+
+        const normalizeFabulaThreatData = (item) => {
+            const clone = JSON.parse(JSON.stringify(item));
+            if (clone.system !== 'fabula' || clone.type === 'pc') return clone;
+            clone.type = 'ameaca';
+            clone.atributos = { ...initialFabulaThreatData.atributos, ...(clone.atributos || {}) };
+            clone.status = { ...initialFabulaThreatData.status, ...(clone.status || {}) };
+            clone.afinidades = { ...initialFabulaThreatData.afinidades, ...(clone.afinidades || {}) };
+            clone.ataques = Array.isArray(clone.ataques) ? clone.ataques : [];
+            clone.feiticos = Array.isArray(clone.feiticos) ? clone.feiticos : [];
+            clone.poderes = Array.isArray(clone.poderes) ? clone.poderes : [];
+            clone.outrasAcoes = Array.isArray(clone.outrasAcoes) ? clone.outrasAcoes : [];
+            clone.regrasEspeciais = Array.isArray(clone.regrasEspeciais) ? clone.regrasEspeciais : [];
+            return { ...JSON.parse(JSON.stringify(initialFabulaThreatData)), ...clone, atributos: clone.atributos, status: clone.status, afinidades: clone.afinidades };
+        };
+
+        const MODELOS_FABULA_PC = [
+            {
+                ...JSON.parse(JSON.stringify(initialFabulaPcData)),
+                bio: { ...initialFabulaPcData.bio, nome:'Blair Clarimonde', genero:'Elu/Delu', identidade:'Herdeire do Trono de Dunova', tema:'Dever', origem:'Dunova', tracos:'Há algo que eu devo fazer.', imagem:'' },
+                nivel: 5, zenites: 120,
+                atributos: { des:{base:'d6',atual:'d6'}, ast:{base:'d10',atual:'d10'}, vig:{base:'d8',atual:'d8'}, von:{base:'d8',atual:'d8'} },
+                status: { ...initialFabulaPcData.status, pvAtual:45,pvMax:45,pmAtual:60,pmMax:60,piAtual:6,piMax:6,fabula:3,defesa:9,defesaMagica:12,iniciativa:-2 },
+                equipamentos:[
+                    {slot:'Mão dominante',nome:'Adaga de Aço',descricao:'Corpo a corpo • Precisão [DES + AST] +1 • dano [RA + 4] físico.'},
+                    {slot:'Armadura',nome:'Manto do Sábio',descricao:'Defesa = Destreza +1; Defesa Mágica = Astúcia +2; -2 Iniciativa.'},
+                    {slot:'Mão secundária',nome:'Escudo de Bronze',descricao:'+2 Defesa.'}
+                ],
+                caracteristicas:'EPIFANIA — Ao obter 13+ na ação Estudar, faça uma pergunta ao Mestre sobre o alvo; a resposta é honesta.',
+                classes:[{nome:'',nivel:1,beneficios:'',poderes:[{nome:'Encorajar',nivel:1,desc:'Em conflito, use uma ação e 5 PM para curar 10 PV de outra criatura e elevar temporariamente um de seus atributos em um passo.'},{nome:'Curar',nivel:1,desc:'Feitiço: até três criaturas, 10 PM por alvo; cada alvo recupera 40 PV.'},{nome:'Lux',nivel:1,desc:'Feitiço ofensivo: até três criaturas, 10 PM por alvo; teste [AST + VON], dano de luz [RA + 15].'}]}],
+                inventario:[]
+            },
+            {
+                ...JSON.parse(JSON.stringify(initialFabulaPcData)),
+                bio:{...initialFabulaPcData.bio,nome:'Cassandra',genero:'Ela/Dela',identidade:'Ex-Capitã dos Skyrider',tema:'Dúvida',origem:'Stormkeep',tracos:'Há algo que eu preciso saber.',imagem:''},
+                nivel:5, zenites:170,
+                atributos:{des:{base:'d10',atual:'d10'},ast:{base:'d6',atual:'d6'},vig:{base:'d8',atual:'d8'},von:{base:'d8',atual:'d8'}},
+                status:{...initialFabulaPcData.status,pvAtual:50,pvMax:50,pmAtual:50,pmMax:50,piAtual:6,piMax:6,fabula:3,defesa:11,defesaMagica:8,iniciativa:-2},
+                equipamentos:[{slot:'Mão dominante',nome:'Lança',descricao:'Corpo a corpo • Precisão [DES + VIG] +1 • dano [RA + 12] físico.'},{slot:'Armadura',nome:'Manto do Sábio',descricao:'Defesa = Destreza +1; Defesa Mágica = Astúcia +2; -2 Iniciativa.'}],
+                classes:[{nome:'',nivel:1,beneficios:'',poderes:[{nome:'Esmaga Ossos',nivel:1,desc:'Após atingir com a lança, pode abrir mão do dano para deixar o alvo abalado ou fraco, ou fazê-lo perder 20 PM.'},{nome:'Ataque Crescente',nivel:1,desc:'Feitiço: 10 PM. Faça um ataque com a lança que pode atingir alvos voadores e causa +5 dano.'},{nome:'Arma Elemental',nivel:1,desc:'Feitiço: 10 PM. Uma arma equipada passa a causar dano de vento, raio, terra, fogo ou gelo até o fim da cena.'}]}]
+            },
+            {
+                ...JSON.parse(JSON.stringify(initialFabulaPcData)),
+                bio:{...initialFabulaPcData.bio,nome:'Edgar',genero:'Ele/Dele',identidade:'Jovem Cientista que Sobreviveu',tema:'Esperança',origem:'Pemble',tracos:'Nós podemos tornar este mundo um lugar melhor.',imagem:''},
+                nivel:5, zenites:70,
+                atributos:{des:{base:'d10',atual:'d10'},ast:{base:'d8',atual:'d8'},vig:{base:'d6',atual:'d6'},von:{base:'d8',atual:'d8'}},
+                status:{...initialFabulaPcData.status,pvAtual:40,pvMax:40,pmAtual:45,pmMax:45,piAtual:8,piMax:8,fabula:3,defesa:13,defesaMagica:11,iniciativa:-1},
+                equipamentos:[{slot:'Mão dominante',nome:'Pistola',descricao:'À distância • Precisão [DES + AST] +1 • dano [RA + 8] físico.'},{slot:'Armadura',nome:'Traje de Viagem',descricao:'Defesa = Destreza +1; Defesa Mágica = Astúcia +1; -2 Iniciativa.'},{slot:'Mão secundária',nome:'Escudo Rúnico',descricao:'+2 Defesa e +2 Defesa Mágica.'}],
+                classes:[{nome:'',nivel:1,beneficios:'',poderes:[{nome:'Barragem',nivel:1,desc:'Ao atacar com a pistola, gaste 10 PM para atacar duas criaturas com um único teste de Precisão.'},{nome:'Tiro de Aviso',nivel:1,desc:'Após atingir com a pistola, pode abrir mão do dano para deixar os alvos confusos ou lentos, ou fazê-los perder 20 PM.'},{nome:'Chuva de Poções',nivel:1,desc:'Ao usar Remédio ou Elixir com PI, pode afetar duas criaturas, recuperando metade do valor normal em cada uma.'}]}]
+            },
+            {
+                ...JSON.parse(JSON.stringify(initialFabulaPcData)),
+                bio:{...initialFabulaPcData.bio,nome:'Lavigne Fallbright',genero:'Ela/Dela',identidade:'Princesa sem Reino',tema:'Culpa',origem:'Armorica',tracos:'Há algo por que não posso me perdoar...',imagem:''},
+                nivel:5, zenites:120,
+                atributos:{des:{base:'d8',atual:'d8'},ast:{base:'d6',atual:'d6'},vig:{base:'d10',atual:'d10'},von:{base:'d8',atual:'d8'}},
+                status:{...initialFabulaPcData.status,pvAtual:70,pvMax:70,pmAtual:45,pmMax:45,piAtual:6,piMax:6,fabula:3,defesa:11,defesaMagica:7,iniciativa:-3},
+                equipamentos:[{slot:'Mão dominante',nome:'Montante',descricao:'Corpo a corpo • Precisão [DES + VIG] +1 • dano [RA + 10] físico.'},{slot:'Armadura',nome:'Armadura Rúnica',descricao:'Defesa 11; Defesa Mágica = Astúcia +1; -3 Iniciativa.'}],
+                classes:[{nome:'',nivel:1,beneficios:'',poderes:[{nome:'Adrenalina',nivel:1,desc:'Enquanto estiver com 35 PV ou menos, seus ataques causam +6 dano.'},{nome:'Golpe de Sombras',nivel:1,desc:'Em conflito, se tiver ao menos 6 PV, use uma ação e gaste 5 PV para atacar com o montante, causar +6 dano e converter o dano em trevas.'},{nome:'Proteger',nivel:1,desc:'Quando outra criatura for alvo de ataque, feitiço ou perigo, você pode tomar o lugar dela; em conflito, uma vez por rodada.'}]}]
+            }
+        ];
+
+        const MODELOS_FABULA_AMEACA = [
+            { ...JSON.parse(JSON.stringify(initialFabulaThreatData)), nome:'Cactonto', nivel:15, patente:'Soldado', especie:'Planta', descricao:'Cacto monstruoso territorial, ótimo como exemplo de criatura básica.', tracos:'Assustador, enorme, sensível à água, territorial', atributos:{des:'d8',ast:'d6',vig:'d12',von:'d6'}, status:{pvAtual:90,pvMax:90,pmAtual:55,pmMax:55,iniciativa:7,defesa:8,defesaMagica:6}, afinidades:{...initialFabulaThreatData.afinidades}, ataques:[{nome:'Abraço Perfurador',tipo:'Corpo a corpo',teste:'VIG + VIG +1',dano:'RA + 10',tipoDano:'Físico',efeito:''},{nome:'Barragem de Espinhos',tipo:'À distância',teste:'DES + VIG +1',dano:'RA + 5',tipoDano:'Físico',efeito:''}], feiticos:[{nome:'Drenar Umidade',teste:'VIG + VON +1',pm:10,alvo:'Uma criatura',duracao:'Instantânea',efeito:'Causa [RA + 15] de dano de veneno e recupera PV igual à metade dos PV perdidos pelo alvo.'}], outrasAcoes:[{nome:'Seiva de Cactonto',desc:'Recupera-se das condições fraco e lento e usa Barragem de Espinhos como ataque livre.'}], regrasEspeciais:[{nome:'Planta',desc:'Imune às condições abalado, atordoado e enfurecido.'}] }
+        ];
+
         /* Helpers D&D 5e */
         const getDndAbilityMod = (score) => Math.floor((score - 10) / 2);
         const formatDndMod = (mod) => mod >= 0 ? `+${mod}` : `${mod}`;
@@ -469,6 +684,57 @@
             let text = '';
 
             // ==========================================================
+            // FABULA ULTIMA — PERSONAGEM (RESUMO DE CHAT)
+            // ==========================================================
+            if (sys === 'fabula' && item.type === 'pc') {
+                const b = item.bio || {}, a = item.atributos || {}, st = item.status || {};
+                text += `👤 PERSONAGEM: ${safe(b.nome,'Sem Nome')}\n\n`;
+                text += addIf('Jogador', b.jogador);
+                if (hasText(b.identidade) || hasText(b.genero)) text += `Identidade: ${safe(b.identidade)}${hasText(b.genero) ? ` | Gênero: ${b.genero}` : ''}\n`;
+                if (hasText(b.tema) || hasText(b.origem)) text += `Tema: ${safe(b.tema)} | Origem: ${safe(b.origem)}\n`;
+                if (hasText(b.tracos)) text += `Traços: ${compactText(b.tracos)}\n`;
+                text += `\n📊 ATRIBUTOS\n\n`;
+                text += `DES: ${safe(a.des?.atual,'d8')} | AST: ${safe(a.ast?.atual,'d8')} | VIG: ${safe(a.vig?.atual,'d8')} | VON: ${safe(a.von?.atual,'d8')}\n`;
+                const conds = Object.entries(item.condicoes || {}).filter(([,v]) => v).map(([k]) => k.charAt(0).toUpperCase()+k.slice(1));
+                if (conds.length) text += `Condições: ${conds.join(', ')}\n`;
+                text += `\n⚙️ STATUS\n\n`;
+                text += `❤️ PV: ${safe(st.pvAtual,0)}/${safe(st.pvMax,0)} | 🔷 PM: ${safe(st.pmAtual,0)}/${safe(st.pmMax,0)} | 🎒 PI: ${safe(st.piAtual,0)}/${safe(st.piMax,0)}\n`;
+                text += `🛡️ Defesa: ${safe(st.defesa)} | ✨ Def. Mágica: ${safe(st.defesaMagica)} | ⚡ Iniciativa: ${safe(st.iniciativa,0)}\n`;
+                text += `🌟 Pontos de Fabula: ${safe(st.fabula,0)} | Nível: ${safe(item.nivel,5)} | EXP: ${safe(item.experiencia,0)}\n`;
+                const classes=(item.classes||[]).filter(c=>hasText(c.nome));
+                if(classes.length){ text += `\n✨ CLASSES & PODERES\n\n`; classes.forEach(c=>{ text += `• ${c.nome} — Nível ${safe(c.nivel,1)}\n`; (c.poderes||[]).filter(p=>hasText(p.nome)).forEach(p=>text += `  ✦ ${p.nome}${p.nivel?` (${p.nivel})`:''}${hasText(p.desc)?` — ${compactText(p.desc)}`:''}\n`); }); }
+                const equips=(item.equipamentos||[]).filter(e=>hasText(e.nome));
+                if(equips.length){ text += `\n⚔️ EQUIPAMENTO\n\n`; equips.forEach(e=>text += `• ${e.slot}: ${e.nome}${hasText(e.descricao)?` — ${compactText(e.descricao)}`:''}\n`); }
+                if((item.lacos||[]).length){ text += `\n🤝 LAÇOS\n\n`; item.lacos.filter(l=>hasText(l.alvo)).forEach(l=>text += `• ${l.alvo} (${safe(l.forca,1)}): ${safe(l.emocoes)}\n`); }
+                const invFabula=(item.inventario||[]).filter(it=>hasText(it?.nome));
+                if(invFabula.length || hasText(item.mochila) || Number(item.zenites)>0){ text += `\n🎒 INVENTÁRIO / MOCHILA\n\n`; if(Number(item.zenites)>0) text += `Zênites: ${item.zenites}z\n`; invFabula.forEach(it=>text += `• ${it.nome}${Number(it.quantidade||1)!==1?` x${it.quantidade}`:''}${hasText(it.notas)?` — ${compactText(it.notas)}`:''}\n`); if(hasText(item.mochila)) text += `${invFabula.length?'\n':''}${bulletsFromText(item.mochila)}\n`; }
+                if((item.extrasAtivos||[]).length) text += `\n📚 Fichas extras: ${(item.extrasAtivos||[]).map(id => FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id).join(', ')}\n`;
+                return text.trim();
+            }
+
+            // ==========================================================
+            // FABULA ULTIMA — AMEAÇA / PNJ
+            // ==========================================================
+            if (sys === 'fabula' && item.type !== 'pc') {
+                const a = item.atributos || {}, st = item.status || {}, af = item.afinidades || {};
+                text += `👹 ${String(item.tipoNpc || 'AMEAÇA').toUpperCase()}: ${safe(item.nome,'Sem Nome')}\n\n`;
+                text += `Nível: ${safe(item.nivel,5)} | Patente: ${safe(item.patente,'Soldado')} | Espécie: ${safe(item.especie)}\n`;
+                if (hasText(item.descricao)) text += `${compactText(item.descricao)}\n`;
+                if (hasText(item.tracos)) text += `Traços: ${compactText(item.tracos)}\n`;
+                if (item.tipoNpc === 'Vilão' && Number(item.pontosUltima || 0) > 0) text += `Pontos de Ultima: ${item.pontosUltima}\n`;
+                text += `\n📊 ATRIBUTOS & STATUS\n\nDES ${safe(a.des,'d8')} | AST ${safe(a.ast,'d8')} | VIG ${safe(a.vig,'d8')} | VON ${safe(a.von,'d8')}\n`;
+                text += `❤️ PV ${safe(st.pvAtual,0)}/${safe(st.pvMax,0)} | 🔷 PM ${safe(st.pmAtual,0)}/${safe(st.pmMax,0)}\n`;
+                text += `🛡️ DEF ${safe(st.defesa,0)} | DEF.M ${safe(st.defesaMagica,0)} | ⚡ Inic. ${safe(st.iniciativa,0)}\n`;
+                const afin = Object.entries(af).filter(([,v]) => hasText(v)).map(([k,v]) => `${k.charAt(0).toUpperCase()+k.slice(1)} ${v}`);
+                if (afin.length) text += `\n🧬 AFINIDADES\n${afin.join(' | ')}\n`;
+                if ((item.ataques || []).length) { text += `\n⚔️ ATAQUES\n\n`; item.ataques.forEach(x => { text += `• ${safe(x.nome,'Ataque')} [${safe(x.tipo,'')}] — ${safe(x.teste,'')} | ${safe(x.dano,'')} ${safe(x.tipoDano,'')}`; if (hasText(x.efeito)) text += `\n  ${compactText(x.efeito)}`; text += `\n`; }); }
+                if ((item.feiticos || []).length) { text += `\n🔮 FEITIÇOS\n\n`; item.feiticos.forEach(x => { text += `• ${safe(x.nome,'Feitiço')} — ${safe(x.pm,0)} PM | ${safe(x.alvo,'')} | ${safe(x.duracao,'')}\n`; if (hasText(x.efeito)) text += `  ${compactText(x.efeito)}\n`; }); }
+                const extras = [...(item.poderes||[]), ...(item.outrasAcoes||[]), ...(item.regrasEspeciais||[])];
+                if (extras.length) { text += `\n✨ PODERES, AÇÕES & REGRAS\n\n`; extras.forEach(x => text += `• ${safe(x.nome,'Regra')}${hasText(x.desc) ? ` — ${compactText(x.desc)}` : ''}\n`); }
+                return text.trim();
+            }
+
+            // ==========================================================
             // D&D 5E — PERSONAGEM (FORMATO DE CHAT RESUMIDO)
             // ==========================================================
             if (sys === 'dnd5e' && item.type === 'pc') {
@@ -476,7 +742,7 @@
                 const atr = item.atributos || {};
                 const st = item.status || {};
                 const moedas = item.moedas || {};
-                const profBonus = getDndProficiencyBonus(bio.nivel || 1);
+                const profBonus = getProficiencyBonus(bio.nivel || 1);
                 const mod = (key) => formatDndMod(getDndAbilityMod(atr[key] ?? 10));
 
                 text += `👤 PERSONAGEM: ${safe(bio.nome, 'Sem Nome')}\n\n`;
@@ -751,6 +1017,25 @@
             return text.trim();
         };
 
+
+        function FabulaMagicPanel({ data, updateField }) {
+            const ex=data.extras?.magia||{disciplinas:[],feiticos:[],rituais:[]};
+            const set=(k,v)=>updateField(`extras.magia.${k}`,v);
+            return <div className="space-y-5 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🔮 Magia & Rituais</h2><label className="block text-xs font-bold">Disciplinas (separe por vírgulas)<input value={(ex.disciplinas||[]).join(', ')} onChange={e=>set('disciplinas',e.target.value.split(',').map(x=>x.trim()).filter(Boolean))} className="mt-1 w-full border rounded p-2" placeholder="Elementalismo, Ritualismo..."/></label><div><div className="flex justify-between mb-2"><h3 className="font-bold text-teal-900">Feitiços</h3><button onClick={()=>set('feiticos',[...(ex.feiticos||[]),{nome:'',pm:'',alvos:'',duracao:'',desc:''}])} className="text-xs font-bold text-teal-800">+ Feitiço</button></div>{(ex.feiticos||[]).map((f,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[1fr_70px_1fr_1fr_30px] gap-2 mb-2"><input value={f.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].nome=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Nome"/><input value={f.pm||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].pm=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="PM"/><input value={f.alvos||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].alvos=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Alvos"/><input value={f.duracao||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].duracao=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Duração"/><button onClick={()=>set('feiticos',ex.feiticos.filter((_,x)=>x!==i))} className="text-red-600">×</button><textarea value={f.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].desc=e.target.value;set('feiticos',a)}} className="md:col-span-5 border rounded p-2 text-xs" placeholder="Efeito / lembrete"/></div>)}</div><div><div className="flex justify-between"><h3 className="font-bold text-teal-900">Rituais</h3><button onClick={()=>set('rituais',[...(ex.rituais||[]),{nome:'',desc:''}])} className="text-xs font-bold text-teal-800">+ Ritual</button></div>{(ex.rituais||[]).map((r,i)=><div key={i} className="grid grid-cols-[1fr_2fr_30px] gap-2 mt-2"><input value={r.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].nome=e.target.value;set('rituais',a)}} className="border rounded p-2 text-xs"/><input value={r.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].desc=e.target.value;set('rituais',a)}} className="border rounded p-2 text-xs"/><button onClick={()=>set('rituais',ex.rituais.filter((_,x)=>x!==i))} className="text-red-600">×</button></div>)}</div></div>;
+        }
+        function FabulaArcanosPanel({ data, updateField }) { const lista=data.extras?.arcanos?.lista||[]; const set=v=>updateField('extras.arcanos.lista',v); return <div className="space-y-4 animate-fade-in-up"><div className="flex justify-between"><h2 className="font-title font-bold text-xl text-teal-900">🌟 Arcanos</h2><button onClick={()=>set([...lista,{nome:'',dominios:'',fundir:'',dispensar:''}])} className="text-xs font-bold text-teal-800">+ Arcano</button></div>{lista.map((a,i)=><div key={i} className="border-2 border-teal-200 rounded p-3 space-y-2"><div className="flex gap-2"><input value={a.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].nome=e.target.value;set(x)}} className="flex-1 border rounded p-2 font-bold" placeholder="Nome do Arcano"/><button onClick={()=>set(lista.filter((_,x)=>x!==i))} className="text-red-600">×</button></div><input value={a.dominios||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dominios=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Domínios"/><textarea value={a.fundir||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].fundir=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de fundir"/><textarea value={a.dispensar||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dispensar=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de dispensar"/></div>)}</div>; }
+        function FabulaMnemosferaPanel({ data, updateField }) { const m=data.extras?.mnemosfera||{}; const ps=m.poderes||[]; return <div className="space-y-4 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🧠 Mnemosfera</h2><div className="grid grid-cols-1 md:grid-cols-3 gap-2"><input value={m.nome||''} onChange={e=>updateField('extras.mnemosfera.nome',e.target.value)} className="border rounded p-2" placeholder="Mnemosfera"/><input value={m.classe||''} onChange={e=>updateField('extras.mnemosfera.classe',e.target.value)} className="border rounded p-2" placeholder="Classe"/><input type="number" min="1" value={m.nivel||1} onChange={e=>updateField('extras.mnemosfera.nivel',Number(e.target.value))} className="border rounded p-2"/></div><div>{ps.map((p,i)=><div key={i} className="grid grid-cols-[1fr_90px_30px] gap-2 mb-2"><input value={p.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nome=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Poder"/><input value={p.nivel||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nivel=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Nível"/><button onClick={()=>updateField('extras.mnemosfera.poderes',ps.filter((_,x)=>x!==i))} className="text-red-600">×</button></div>)}<button onClick={()=>updateField('extras.mnemosfera.poderes',[...ps,{nome:'',nivel:''}])} className="text-xs font-bold text-teal-800">+ Poder</button></div><label className="block text-xs font-bold">Poder Heroico<textarea value={m.poderHeroico||''} onChange={e=>updateField('extras.mnemosfera.poderHeroico',e.target.value)} className="mt-1 w-full border rounded p-2"/></label></div>; }
+        function FabulaReceitasPanel({ data, updateField }) { const r=data.extras?.receitas||{}; const ing=r.ingredientes||{}; return <div className="space-y-5 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🍳 Receitas</h2><label className="text-xs font-bold">Máximo de ingredientes<input value={r.maxIngredientes||''} onChange={e=>updateField('extras.receitas.maxIngredientes',e.target.value)} className="ml-2 border rounded p-2"/></label><div className="grid grid-cols-1 md:grid-cols-5 gap-2">{['amargo','salgado','azedo','doce','umami'].map(k=><label key={k} className="text-xs font-bold capitalize">{k}<textarea value={ing[k]||''} onChange={e=>updateField(`extras.receitas.ingredientes.${k}`,e.target.value)} rows="5" className="mt-1 w-full border rounded p-2 text-xs"/></label>)}</div><label className="block text-xs font-bold">Combinações & efeitos<textarea value={r.combinacoes||''} onChange={e=>updateField('extras.receitas.combinacoes',e.target.value)} rows="8" className="mt-1 w-full border rounded p-2"/></label><label className="block text-xs font-bold">Notas úteis<textarea value={r.notas||''} onChange={e=>updateField('extras.receitas.notas',e.target.value)} rows="4" className="mt-1 w-full border rounded p-2"/></label></div>; }
+        function FabulaNotasPanel({ data, updateField }) { const n=data.extras?.anotacoes||{}; return <div className="space-y-4 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">📝 Anotações Extras</h2><label className="block text-xs font-bold">Regras opcionais / peculiaridades<textarea value={n.regras||''} onChange={e=>updateField('extras.anotacoes.regras',e.target.value)} rows="8" className="mt-1 w-full border rounded p-2"/></label><label className="block text-xs font-bold">Anotações<textarea value={n.notas||''} onChange={e=>updateField('extras.anotacoes.notas',e.target.value)} rows="10" className="mt-1 w-full border rounded p-2"/></label></div>; }
+
+
+        const FabulaThreatList = ({ title, path, items, add, remove, update, spell=false }) => (
+            <div className="fabula-panel border rounded-lg overflow-hidden bg-white">
+                <div className="bg-teal-50 p-3 flex justify-between items-center"><h3 className="font-title font-bold text-teal-900">{title}</h3><button onClick={add} className="bg-teal-700 text-white px-2 py-1 rounded text-xs font-bold">+ Adicionar</button></div>
+                <div className="p-3 space-y-2">{items.length===0&&<div className="text-xs text-gray-400 italic">Nenhum registro.</div>}{items.map((x,i)=><div key={i} className="border rounded p-2 bg-gray-50 space-y-2">{spell?<><div className="grid grid-cols-2 md:grid-cols-5 gap-2"><input value={x.nome||''} onChange={e=>update(path,i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Feitiço"/><input value={x.teste||''} onChange={e=>update(path,i,'teste',e.target.value)} className="border rounded p-2 text-xs" placeholder="Teste"/><input type="number" value={x.pm||0} onChange={e=>update(path,i,'pm',Number(e.target.value))} className="border rounded p-2 text-xs" placeholder="PM"/><input value={x.alvo||''} onChange={e=>update(path,i,'alvo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Alvo"/><input value={x.duracao||''} onChange={e=>update(path,i,'duracao',e.target.value)} className="border rounded p-2 text-xs" placeholder="Duração"/></div><textarea value={x.efeito||''} onChange={e=>update(path,i,'efeito',e.target.value)} rows="2" className="w-full border rounded p-2 text-xs" placeholder="Efeito"/></>:<><div className="flex gap-2"><input value={x.nome||''} onChange={e=>update(path,i,'nome',e.target.value)} className="flex-1 border rounded p-2 text-xs font-bold" placeholder="Nome"/><button onClick={()=>remove(path,i)} className="text-red-600 font-bold">×</button></div><textarea value={x.desc||''} onChange={e=>update(path,i,'desc',e.target.value)} rows="2" className="w-full border rounded p-2 text-xs" placeholder="Descrição"/></>}{spell&&<div className="flex justify-end"><button onClick={()=>remove(path,i)} className="text-red-600 text-xs font-bold">Remover</button></div>}</div>)}</div>
+            </div>
+        );
+
         function App() {
             const [view, setView] = useState('dashboard');
             const [savedChars, setSavedChars] = useState(getSavedCharacters());
@@ -777,7 +1062,10 @@
             const [showThreatModal, setShowThreatModal] = useState(false);
             const [showDndModelModal, setShowDndModelModal] = useState(false);
             const [showDbModelModal, setShowDbModelModal] = useState(false);
+            const [showFabulaModelModal, setShowFabulaModelModal] = useState(false);
             const [dndPcTab, setDndPcTab] = useState('caracteristicas');
+            const [fabulaTab, setFabulaTab] = useState('perfil');
+            const [showFabulaExtras, setShowFabulaExtras] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('import');
 
@@ -785,7 +1073,7 @@
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
-                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : ''}`;
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'fabula' ? 'theme-fabula' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : ''}`;
             }, [theme]);
 
             useEffect(() => {
@@ -841,7 +1129,7 @@
                     else chars.push(savingData);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
                     setSavedChars(chars);
-                    showToast("Personagem salvo!");
+                    showToast(savingData.system === 'fabula' ? "Personagem Fabula salvo!" : "Personagem salvo!");
                 } else {
                     let threats = getSavedThreats();
                     const index = threats.findIndex(t => t.id === savingData.id);
@@ -849,7 +1137,7 @@
                     else threats.push(savingData);
                     localStorage.setItem(THREAT_STORAGE_KEY, JSON.stringify(threats));
                     setSavedThreats(threats);
-                    showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
+                    showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : savingData.system === 'fabula' ? 'Ameaça / PNJ Fabula salvo!' : type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
                 }
                 
                 if (!data.id || data.id === savingData.id) {
@@ -859,23 +1147,40 @@
 
             const loadCharacter = (id) => {
                 const char = savedChars.find(c => c.id === id);
-                if (char) { setData(normalizeDndPcData(char)); setDndPcTab('caracteristicas'); setView('editor'); }
+                if (char) {
+                    let normalized = normalizeDndPcData(char);
+                    normalized = normalizeFabulaPcData(normalized);
+                    normalized = normalizeFabulaThreatData(normalized);
+                    setData(normalized);
+                    setDndPcTab('caracteristicas');
+                    setFabulaTab('perfil');
+                    setView('editor');
+                }
             };
             
             const loadThreat = (id) => {
                 const threat = savedThreats.find(t => t.id === id);
-                if (threat) { setData(JSON.parse(JSON.stringify(threat))); setView('editor'); }
+                if (threat) {
+                    let normalized = JSON.parse(JSON.stringify(threat));
+                    normalized = normalizeFabulaThreatData(normalized);
+                    setData(normalized);
+                    setView('editor');
+                }
             };
             
             const loadTemplate = (modelo) => {
-                const templateData = normalizeDndPcData(modelo);
+                let templateData = normalizeDndPcData(modelo);
+                templateData = normalizeFabulaPcData(templateData);
+                templateData = normalizeFabulaThreatData(templateData);
                 templateData.id = Date.now().toString();
                 setData(templateData);
                 setShowThreatModal(false);
                 setShowDndModelModal(false);
                 setShowDbModelModal(false);
+                setShowFabulaModelModal(false);
                 setCreateTarget(null);
                 setDndPcTab('caracteristicas');
+                setFabulaTab('perfil');
                 setView('editor');
             };
 
@@ -1002,7 +1307,8 @@
                         const importedData = JSON.parse(e.target.result);
                         if(!importedData.id) importedData.id = Date.now().toString();
                         if(!importedData.system) importedData.system = 'dragonbane';
-                        const normalizedData = normalizeDndPcData(importedData);
+                        let normalizedData = normalizeDndPcData(importedData);
+                        normalizedData = normalizeFabulaPcData(normalizedData);
                         saveToLocal(normalizedData);
                         setData(normalizedData);
                         setView('editor');
@@ -1028,7 +1334,8 @@
                     if (!decompressed) throw new Error("Código inválido");
                     const importedData = JSON.parse(decompressed);
                     if(!importedData.id) importedData.id = Date.now().toString();
-                    const normalizedData = normalizeDndPcData(importedData);
+                    let normalizedData = normalizeDndPcData(importedData);
+                    normalizedData = normalizeFabulaPcData(normalizedData);
                     saveToLocal(normalizedData);
                     setData(normalizedData);
                     setView('editor');
@@ -1067,6 +1374,7 @@
                                             <option value="default">Tema: Padrão</option>
                                             <option value="classic">Tema: Clássico DB</option>
                                             <option value="dnd">Tema: Dungeons & Dragons</option>
+                                            <option value="fabula">Tema: Fabula Ultima</option>
                                             <option value="dark">Tema: Modo Escuro</option>
                                             <option value="custom">Tema: Custom...</option>
                                         </select>
@@ -1089,10 +1397,10 @@
 
                             <div className="mb-6 rounded border-2 border-[#922610] bg-[#fdf1dc] px-4 py-3 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                                 <div>
-                                    <div className="font-title font-bold text-[#922610]">🐉 D&D 5e (2024) chegou ao projeto</div>
-                                    <p className="text-xs text-gray-700 mt-1">Novo sistema em adaptação contínua. A ficha de personagem e o bestiário já estão disponíveis e continuarão recebendo melhorias.</p>
+                                    <div className="font-title font-bold text-[#922610]">✨ Fabula Ultima entrou em implementação</div>
+                                    <p className="text-xs text-gray-700 mt-1">A primeira prévia da ficha de personagem já está disponível: ficha principal responsiva e fichas extras ativáveis conforme a proposta do personagem.</p>
                                 </div>
-                                <span className="shrink-0 bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Novo • Em adaptação</span>
+                                <span className="shrink-0 bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">Prévia • Em implementação</span>
                             </div>
 
                             {savedChars.length === 0 ? (
@@ -1104,10 +1412,11 @@
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {savedChars.map(char => {
                                         const isDnd = char.system === 'dnd5e';
+                                        const isFabula = char.system === 'fabula';
                                         return (
-                                        <div key={char.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : 'border-dragon-dark'} overflow-hidden flex flex-col relative`}>
-                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${isDnd ? 'bg-[#922610]' : 'bg-dragon-dark'}`}>
-                                                {isDnd ? 'D&D 5e' : 'Dragonbane'}
+                                        <div key={char.id} style={getWindowStyle()} className={`bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-dragon-dark'} overflow-hidden flex flex-col relative`}>
+                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-700' : 'bg-dragon-dark'}`}>
+                                                {isDnd ? 'D&D 5e' : isFabula ? 'Fabula Ultima' : 'Dragonbane'}
                                             </div>
                                             <div className="flex h-28 border-b border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => loadCharacter(char.id)}>
                                                 <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
@@ -1118,11 +1427,11 @@
                                                     )}
                                                 </div>
                                                 <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                    <h3 className={`font-title font-bold text-lg truncate ${isDnd ? 'text-[#922610]' : 'text-red-900'}`}>{char.bio?.nome || 'Sem Nome'}</h3>
+                                                    <h3 className={`font-title font-bold text-lg truncate ${isDnd ? 'text-[#922610]' : isFabula ? 'text-teal-800' : 'text-red-900'}`}>{char.bio?.nome || 'Sem Nome'}</h3>
                                                     <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
-                                                        {isDnd ? `${char.bio?.linhagem || '?'} • ${char.bio?.classe || '?'}` : `${char.bio?.ancestralidade || '?'} • ${char.bio?.profissao || '?'}`}
+                                                        {isDnd ? `${char.bio?.linhagem || '?'} • ${char.bio?.classe || '?'}` : isFabula ? `${char.bio?.identidade || 'Sem identidade'} • ${char.bio?.tema || 'Sem tema'}` : `${char.bio?.ancestralidade || '?'} • ${char.bio?.profissao || '?'}`}
                                                     </p>
-                                                    <p className="text-[10px] text-gray-500 mt-2 truncate italic">Nível {char.bio?.nivel || 1}</p>
+                                                    <p className="text-[10px] text-gray-500 mt-2 truncate italic">Nível {isFabula ? (char.nivel || 5) : (char.bio?.nivel || 1)}</p>
                                                 </div>
                                             </div>
                                             <div className="bg-gray-100 p-2 flex justify-between items-center text-xs">
@@ -1265,6 +1574,41 @@
                                                 <p className="text-xs text-gray-500">Regras do SRD 5.2 • novo sistema em adaptação</p>
                                             </div>
                                         </div>
+
+                                        <div onClick={() => { setShowSystemModal(false); setShowFabulaModelModal(true); }} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
+                                            <div className="w-14 h-14 bg-teal-700 group-hover:bg-teal-800 text-white rounded flex items-center justify-center font-bold font-title text-xl shadow-inner transition-colors">FU</div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2"><h3 className="font-title font-bold text-gray-900 group-hover:text-teal-800 text-lg transition-colors">Fabula Ultima</h3><span className="bg-teal-100 text-teal-800 text-[9px] font-bold uppercase px-2 py-0.5 rounded">Prévia</span></div>
+                                                <p className="text-xs text-gray-500">{createTarget === 'pc' ? 'Personagem + modelos prontos' : 'Ameaça / PNJ + bestiário'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>, document.body
+                        )}
+
+
+                        {showFabulaModelModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-3xl border-2 border-teal-700 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div className="bg-teal-800 text-white p-3 flex justify-between items-center shrink-0">
+                                        <div><h2 className="font-title font-bold text-lg">Criar em Fabula Ultima</h2><p className="text-[10px] text-teal-100">Prévia do sistema no PJ Lite</p></div>
+                                        <button onClick={() => { setShowFabulaModelModal(false); setCreateTarget(null); }} className="text-teal-100 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
+                                        {createTarget === 'pc' ? <>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Personagem em Branco</h3>
+                                                <div onClick={() => loadTemplate(initialFabulaPcData)} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-teal-700 text-white rounded flex items-center justify-center text-xl">👤</div><div><h3 className="font-bold text-sm">Novo Personagem</h3><p className="text-xs text-gray-500">Comece uma ficha de Fabula Ultima do zero.</p></div></div>
+                                            </div>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Personagens Prontos • Press Start</h3>
+                                                <div className="grid sm:grid-cols-2 gap-3">{MODELOS_FABULA_PC.map((m,i)=><div key={i} onClick={()=>loadTemplate(m)} className="bg-white border-2 border-teal-200 hover:border-teal-700 rounded p-3 cursor-pointer hover:shadow-md"><div className="font-bold text-teal-900">{m.bio.nome}</div><div className="text-[10px] text-gray-500">{m.bio.identidade}</div><div className="text-[10px] mt-1">{m.bio.origem} • Tema: {m.bio.tema}</div></div>)}</div>
+                                            </div>
+                                        </> : <>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Ameaça / PNJ em Branco</h3>
+                                                <div onClick={() => loadTemplate(initialFabulaThreatData)} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-teal-800 text-white rounded flex items-center justify-center text-xl">👹</div><div><h3 className="font-bold text-sm">Novo NPC / Ameaça</h3><p className="text-xs text-gray-500">Crie soldados, elites, campeões ou vilões.</p></div></div>
+                                            </div>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Modelo de Bestiário</h3>{MODELOS_FABULA_AMEACA.map((m,i)=><div key={i} onClick={()=>loadTemplate(m)} className="bg-white border-2 border-teal-200 hover:border-teal-700 rounded p-3 cursor-pointer"><div className="font-bold text-teal-900">{m.nome}</div><div className="text-xs text-gray-500">Nível {m.nivel} • {m.patente} • {m.especie}</div></div>)}</div>
+                                        </>}
                                     </div>
                                 </div>
                             </div>, document.body
@@ -1469,6 +1813,7 @@
                                         <button onClick={() => setGuideTab('fichas_db')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'fichas_db' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Fichas DB</button>
                                         <button onClick={() => setGuideTab('ameacas_db')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'ameacas_db' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Ameaças e PNJs</button>
                                         <button onClick={() => setGuideTab('dnd5e')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'dnd5e' ? 'border-orange-600 text-orange-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>D&D 5e</button>
+                                        <button onClick={() => setGuideTab('fabula')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'fabula' ? 'border-teal-600 text-teal-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Fabula Ultima</button>
                                     </div>
                                     <div className="p-6 bg-gray-50 text-sm text-gray-700 overflow-y-auto max-h-[60vh] scrollbar-thin">
                                         {guideTab === 'import' && (
@@ -1482,11 +1827,16 @@
 
                                         {guideTab === 'fichas_db' && (
                                             <div className="space-y-5">
-                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4"><h3 className="font-title font-bold text-emerald-900 mb-2">Criando um personagem Dragonbane</h3><p>Você pode começar com uma <strong>ficha em branco</strong> ou escolher um dos <strong>Modelos Prontos</strong>. Preencha nome, ancestralidade, profissão, idade, fraqueza, aparência e memento; depois confira atributos, perícias, habilidades, equipamento e combate.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">1. Atributos e valores derivados</h3><p className="mt-2">FOR, CON, AGL, INT, VON e CAR formam a base do personagem. Ao editar atributos, a ficha recalcula valores derivados quando aplicável. A opção de manter derivados permite preservar ajustes manuais.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">2. Perícias</h3><p className="mt-2">Cada perícia mostra sua base ligada a um atributo. Use o marcador de treinamento para representar perícias treinadas e ajuste valores quando sua mesa precisar.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">3. Habilidades, magia e combate</h3><p className="mt-2">Em <strong>Habilidades e Magias</strong>, adicione cada recurso separadamente e informe PD/Nível quando necessário. Em Combate, registre armadura, elmo e armas.</p></div>
-                                                <div className="p-4 bg-gray-100 border rounded"><h3 className="font-title font-bold mb-2">Material oficial de Dragonbane</h3><p className="text-xs mb-3">Esta ferramenta é independente e não substitui o livro de regras. Para apoiar a publicação brasileira e consultar as regras completas:</p><a href="https://triaeditora.com.br/loja/d20/dragonbane-livro-de-regras-pdf/" target="_blank" rel="noopener noreferrer" className="inline-block bg-emerald-800 hover:bg-emerald-700 text-white px-4 py-2 rounded font-bold text-xs">Comprar o PDF oficial na Tria Editora ↗</a></div>
+                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4"><h3 className="font-title font-bold text-emerald-900 mb-2">🐉 Dragonbane — personagem passo a passo</h3><p>Se for sua primeira ficha, siga a ordem abaixo. Você não precisa preencher tudo de uma vez: comece pelo conceito, depois números e por último equipamento.</p></div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    <div className="bg-white border rounded p-4"><strong>1. Conceito</strong><p className="text-xs mt-1">Preencha Nome, Jogador, Ancestralidade, Profissão, Idade e Fraqueza. Escreva uma Aparência curta e escolha um Memento que ajude a lembrar quem esse personagem é.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Defina FOR, CON, AGL, INT, VON e CAR. Depois confira Movimento, Sobrecarga, PV, PD e os Dados de Bônus. Se fizer ajustes manuais, use “manter derivados”.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Perícias</strong><p className="text-xs mt-1">Marque as perícias treinadas e confira os valores atuais. Faça o mesmo para perícias de armas e secundárias quando existirem.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>4. Combate</strong><p className="text-xs mt-1">Cadastre armas, dano, traços, armadura e elmo. Isso deixa a parte que você mais consulta durante a sessão pronta para usar.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Habilidades e Magias</strong><p className="text-xs mt-1">Adicione uma entrada para cada habilidade ou magia. Coloque nome, descrição e custo em PD/Nível quando aplicável.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Inventário</strong><p className="text-xs mt-1">Finalize com moedas, equipamentos, consumíveis e itens miúdos. Salve a ficha e gere a Ficha Chat se quiser consultar pelo celular.</p></div>
+                                                </div>
+                                                <div className="p-4 bg-gray-100 border rounded"><h3 className="font-title font-bold mb-2">Material oficial de Dragonbane</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o livro de regras.</p><a href="https://triaeditora.com.br/loja/d20/dragonbane-livro-de-regras-pdf/" target="_blank" rel="noopener noreferrer" className="inline-block bg-emerald-800 hover:bg-emerald-700 text-white px-4 py-2 rounded font-bold text-xs">Obter o PDF oficial na Tria Editora ↗</a></div>
                                             </div>
                                         )}
 
@@ -1494,7 +1844,7 @@
                                             <div className="space-y-5">
                                                 <div className="bg-gray-900 text-white rounded p-4">
                                                     <h3 className="font-title font-bold text-base mb-1">Guia de Ameaças, PNJs e Bestiário</h3>
-                                                    <p className="text-xs text-gray-200">Esta aba cobre os dois sistemas do projeto. Dragonbane usa fichas próprias para PNJs e monstros; D&D 5e usa blocos de estatística com uma estrutura diferente. Escolha o sistema antes de criar a ameaça.</p>
+                                                    <p className="text-xs text-gray-200">Esta aba cobre os três sistemas do projeto. Dragonbane usa PNJs e monstros; D&D 5e usa blocos de estatísticas; Fabula Ultima usa fichas de NPC com nível, patente, espécie, afinidades, ataques e poderes. Escolha o sistema antes de criar a ameaça.</p>
                                                 </div>
 
                                                 <div className="bg-emerald-50 border border-emerald-200 rounded p-4 space-y-3">
@@ -1518,11 +1868,19 @@
                                                     <p>Em seguida, use as listas de <strong>Traços, Ações, Ações Bônus, Reações e Ações Lendárias</strong>. Cada entrada deve ter um nome curto e uma descrição suficiente para ser usada diretamente durante o combate.</p>
                                                 </div>
 
+                                                <div className="bg-teal-50 border border-teal-300 rounded p-4 space-y-3">
+                                                    <h3 className="font-title font-bold text-teal-900">✨ Fabula Ultima — Ameaças e PNJs</h3>
+                                                    <p>Comece por <strong>Nome, Nível, Patente e Espécie</strong>. Depois defina Traços, DES/AST/VIG/VON, PV, PM, Iniciativa, Defesa e Defesa Mágica.</p>
+                                                    <p>Em <strong>Afinidades</strong>, registre Vulnerabilidade, Resistência, Imunidade ou Absorção quando existirem. Em seguida adicione Ataques Básicos, Feitiços, Poderes, Outras Ações e Regras Especiais.</p>
+                                                    <p className="text-xs"><strong>Vilões:</strong> use o campo de Pontos de Ultima quando o antagonista funcionar como vilão. Para criar rápido, comece com um modelo e ajuste o nível, atributos e poderes conforme a função do inimigo.</p>
+                                                </div>
+
                                                 <div className="bg-white border rounded p-4">
                                                     <h3 className="font-bold text-gray-900 mb-2">✅ Fluxo rápido recomendado</h3>
-                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
                                                         <div className="border rounded p-3"><strong>Dragonbane</strong><br/>1. Escolha PNJ ou Monstro.<br/>2. Defina os valores básicos.<br/>3. Adicione perícias/habilidades.<br/>4. Registre armas ou a tabela D6.<br/>5. Salve e teste em combate.</div>
                                                         <div className="border rounded p-3"><strong>D&D 5e</strong><br/>1. Defina identidade, CA, PV e movimento.<br/>2. Preencha atributos e CR.<br/>3. Adicione resistências e sentidos úteis.<br/>4. Cadastre traços e ações.<br/>5. Confira o bloco final antes de salvar.</div>
+                                                        <div className="border rounded p-3"><strong>Fabula Ultima</strong><br/>1. Nome, nível, patente e espécie.<br/>2. Atributos, PV/PM e defesas.<br/>3. Afinidades a dano.<br/>4. Ataques, feitiços e poderes.<br/>5. Regras especiais e Pontos de Ultima, se houver.</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1530,12 +1888,32 @@
 
                                         {guideTab === 'dnd5e' && (
                                             <div className="space-y-5">
-                                                <div className="bg-orange-50 border border-orange-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-orange-700 mb-1">Novo sistema • em adaptação</div><h3 className="font-title font-bold text-[#922610] mb-2">Criando um personagem D&D 5e (2024)</h3><p>Comece por uma ficha em branco ou modelo pronto. Defina <strong>classe, nível, espécie/linhagem, antecedente e atributos</strong>. A ficha calcula modificadores e bônus de proficiência automaticamente.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">1. Atributos, resistências e perícias</h3><p className="mt-2">Os seis atributos geram seus modificadores. Marque testes de resistência proficientes. Nas perícias, clique no círculo para alternar entre sem proficiência, proficiência e expertise.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">2. Combate e recursos</h3><p className="mt-2">Registre CA, iniciativa, deslocamento, PV, PV temporários, dados de vida e testes de morte. Em <strong>Ataques</strong>, cada arma ou ataque fica em uma linha independente e pode ser adicionado ou removido.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">3. Características & Talentos</h3><p className="mt-2">Use a primeira aba para adicionar individualmente habilidades de classe, talentos, traços de espécie e outros recursos. Cada entrada tem nome, descrição e botão de remoção.</p></div>
-                                                <div><h3 className="font-bold text-gray-900 border-b pb-1">4. Magias</h3><p className="mt-2">Na segunda aba, controle os espaços de magia dos níveis 1–9 e mantenha uma lista organizada de magias, com nome, nível e descrição. O modelo de Mago já vem preparado nesse formato.</p></div>
-                                                <div className="p-4 bg-orange-50 border border-orange-300 rounded"><h3 className="font-title font-bold text-[#922610] mb-2">D&D 5e / SRD 5.2</h3><p className="text-xs">A implementação de D&D está em adaptação contínua no projeto. A ferramenta não é um produto oficial da Wizards of the Coast. Os modelos servem como apoio estrutural de preenchimento.</p></div>
+                                                <div className="bg-orange-50 border border-orange-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-orange-700 mb-1">D&D 5e (2024) • em adaptação</div><h3 className="font-title font-bold text-[#922610] mb-2">🐲 Personagem passo a passo</h3><p>Siga esta ordem para não se perder entre os muitos campos da ficha.</p></div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    <div className="bg-white border rounded p-4"><strong>1. Identidade</strong><p className="text-xs mt-1">Nome, Jogador, Classe, Nível, Espécie/Linhagem e Antecedente. Você também pode adicionar o retrato por Upload ou URL.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Preencha FOR, DES, CON, INT, SAB e CAR. A ficha calcula os modificadores. Depois marque resistências e níveis de proficiência nas perícias.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Combate</strong><p className="text-xs mt-1">Informe CA, Iniciativa, Deslocamento, PV, PV temporários, Dados de Vida e Testes de Morte. Adicione cada ataque em uma linha própria.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>4. Características</strong><p className="text-xs mt-1">Cadastre talentos, habilidades de classe e traços de espécie separadamente para ficar fácil consultar durante o jogo.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Magias</strong><p className="text-xs mt-1">Se o personagem conjura, configure os espaços de 1º a 9º nível e adicione as magias com nome, nível e descrição.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Equipamento</strong><p className="text-xs mt-1">Registre inventário, moedas, proficiências e idiomas. Revise a aba Recursos e salve quando estiver satisfeito.</p></div>
+                                                </div>
+                                                <div className="p-4 bg-orange-50 border border-orange-300 rounded"><h3 className="font-title font-bold text-[#922610] mb-2">D&D 5e / SRD 5.2</h3><p className="text-xs">A implementação está em adaptação contínua. O PJ Lite não é um produto oficial da Wizards of the Coast.</p></div>
+                                            </div>
+                                        )}
+
+                                        {guideTab === 'fabula' && (
+                                            <div className="space-y-5">
+                                                <div className="bg-teal-50 border border-teal-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-teal-700 mb-1">Novo sistema • Alpha</div><h3 className="font-title font-bold text-teal-900 mb-2">✨ Fabula Ultima — personagem passo a passo</h3><p>A ficha foi organizada para funcionar como um menu de JRPG: comece pelo conceito, avance pelos valores principais e só então habilite fichas extras se o personagem realmente precisar.</p></div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                    <div className="bg-white border rounded p-4"><strong>1. Perfil & conceito</strong><p className="text-xs mt-1">Preencha Nome, Jogador, Identidade, Tema, Origem, Gênero e Traços. Adicione o retrato por <strong>Upload ou URL</strong>. Depois crie os Laços importantes do personagem.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos & condições</strong><p className="text-xs mt-1">Escolha os dados de DES, AST, VIG e VON e mantenha Base/Atual corretos. Marque condições apenas quando estiverem ativas.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Recursos</strong><p className="text-xs mt-1">Defina PV, PM, PI, Pontos de Fabula, nível, EXP e Zênites. Confira Defesa, Defesa Mágica e Iniciativa antes de ir para combate.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>4. Combate & equipamento</strong><p className="text-xs mt-1">Cadastre armas, armadura, acessórios e itens equipados. Use a Mochila/Inventário para tudo que o personagem guarda e não está equipado.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Classes & poderes</strong><p className="text-xs mt-1">Adicione cada Classe com seu nível e benefícios. Registre os Poderes de Classe e, quando adquirir, os Poderes Heroicos.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Fichas Extras</strong><p className="text-xs mt-1">Abra <strong>＋ Fichas Extras</strong> e habilite somente o que o conceito precisa: Magia & Rituais, Arcanos, Mnemosfera, Receitas ou Anotações. Desativar um extra apenas o esconde; os dados permanecem salvos.</p></div>
+                                                </div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">🧭 Ordem rápida para uma ficha nova</h3><p className="text-xs">Conceito → Atributos → PV/PM/PI → Classes → Equipamento → Extras → Laços → Revisão → Salvar.</p><p className="text-xs text-gray-500">Se estiver aprendendo o sistema, os modelos prontos são uma boa referência de como os campos se conectam.</p></div>
+                                                <div className="p-4 bg-teal-50 border border-teal-300 rounded"><h3 className="font-title font-bold text-teal-900 mb-2">Material oficial de Fabula Ultima</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o Livro Básico. Consulte as regras completas e apoie a publicação oficial brasileira:</p><a href="https://jamboeditora.com.br/produto/fabula-ultima-livro-basico/" target="_blank" rel="noopener noreferrer" className="inline-block bg-teal-800 hover:bg-teal-700 text-white px-4 py-2 rounded font-bold text-xs">Obter Fabula Ultima — Livro Básico na Jambô ↗</a></div>
                                             </div>
                                         )}
                                     </div>
@@ -1584,18 +1962,19 @@
             }
 
             const isDnd = data.system === 'dnd5e';
-            const topBarColor = isDnd ? 'bg-[#922610]' : (data.type === 'pnj' ? 'bg-blue-900' : data.type === 'ameaca' ? 'bg-red-900' : 'bg-dragon-dark');
+            const isFabula = data.system === 'fabula';
+            const topBarColor = isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-800' : (data.type === 'pnj' ? 'bg-blue-900' : data.type === 'ameaca' ? 'bg-red-900' : 'bg-dragon-dark');
 
             return (
-                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : 'border-gray-500'} transition-all duration-300`}>
+                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-gray-500'} transition-all duration-300`}>
                     
-                    <div style={isDnd ? {} : getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
+                    <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
                         <div className="flex items-center gap-4">
                             <button onClick={() => setView('dashboard')} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className="font-title font-bold text-lg md:text-xl tracking-wider uppercase">
-                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
+                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : isFabula ? (data.type === 'pc' ? 'FABULA ULTIMA • PERSONAGEM • PRÉVIA' : 'FABULA ULTIMA • AMEAÇA / PNJ • PRÉVIA') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
@@ -1615,14 +1994,135 @@
                         </div>
                     )}
 
+
+                    {/* Editor Fabula Ultima — primeira implementação */}
+                    {isFabula && data.type === 'pc' && (
+                        <div className="bg-white">
+                            <div className="md:hidden flex overflow-x-auto bg-teal-50 border-b border-teal-200 sticky top-0 z-20 shadow-sm">
+                                {[
+                                    {id:'perfil',label:'Perfil & Status'}, {id:'combate',label:'Combate'}, {id:'classes',label:'Classes'},
+                                    ...(data.extrasAtivos || []).map(id => ({id:`extra-${id}`, label:(FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id).split(' ')[0]}))
+                                ].map(tab => <button key={tab.id} onClick={() => setFabulaTab(tab.id)} className={`shrink-0 px-4 py-3 text-[9px] font-bold uppercase border-b-4 ${fabulaTab===tab.id?'border-teal-700 text-teal-900 bg-white':'border-transparent text-gray-500'}`}>{tab.label}</button>)}
+                            </div>
+
+                            <div className="p-4 md:p-7 space-y-6">
+                                <div className="hidden md:flex flex-wrap gap-2 border-b border-teal-200 pb-3">
+                                    {[
+                                        {id:'perfil',label:'👤 Perfil & Status'}, {id:'combate',label:'⚔️ Combate'}, {id:'classes',label:'✨ Classes'},
+                                        ...(data.extrasAtivos || []).map(id => ({id:`extra-${id}`, label:`${FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.icon || '📄'} ${FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id}`}))
+                                    ].map(tab => <button key={tab.id} onClick={() => setFabulaTab(tab.id)} className={`px-3 py-2 rounded text-xs font-bold transition-colors ${fabulaTab===tab.id?'bg-teal-800 text-white':'bg-gray-100 hover:bg-teal-50 text-gray-700'}`}>{tab.label}</button>)}
+                                    <button onClick={() => setShowFabulaExtras(true)} className="ml-auto px-3 py-2 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200">＋ Fichas Extras</button>
+                                </div>
+                                <div className="md:hidden flex justify-end"><button onClick={() => setShowFabulaExtras(true)} className="px-3 py-2 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">＋ Fichas Extras</button></div>
+
+                                {fabulaTab === 'perfil' && (
+                                    <div className="grid grid-cols-1 lg:grid-cols-[190px_1fr] gap-5 animate-fade-in-up">
+                                        <div className="space-y-2">
+                                            <div className="w-44 h-44 mx-auto lg:mx-0 rounded-xl border-2 border-teal-700 bg-teal-50 overflow-hidden flex items-center justify-center relative group">
+                                                {data.bio?.imagem ? <img src={data.bio.imagem} alt="Retrato" className="w-full h-full object-cover"/> : <span className="text-teal-700 font-bold text-xs uppercase">Retrato</span>}
+                                                <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
+                                                    {!showUrlInput ? (
+                                                        <React.Fragment>
+                                                            <label className="cursor-pointer bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">Upload<input type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=x=>updateField('bio.imagem',x.target.result); r.readAsDataURL(f); e.target.value='';}}/></label>
+                                                            <button type="button" onClick={()=>setShowUrlInput(true)} className="bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 w-24 shadow">Usar URL</button>
+                                                            {data.bio?.imagem && <button type="button" onClick={()=>updateField('bio.imagem','')} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-red-700 w-24 shadow">Remover</button>}
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        <div className="flex flex-col gap-2 w-full px-3 items-center">
+                                                            <input type="url" placeholder="https://.../imagem.jpg" value={tempUrl} onChange={e=>setTempUrl(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&tempUrl.trim()){updateField('bio.imagem',tempUrl.trim());setTempUrl('');setShowUrlInput(false);}}} className="w-full p-2 text-[10px] outline-none rounded text-black bg-white"/>
+                                                            <div className="flex gap-2">
+                                                                <button type="button" onClick={()=>{if(tempUrl.trim()){updateField('bio.imagem',tempUrl.trim());setTempUrl('');setShowUrlInput(false);}}} className="bg-teal-600 text-white px-3 py-1 rounded text-xs font-bold">Aplicar</button>
+                                                                <button type="button" onClick={()=>{setTempUrl('');setShowUrlInput(false);}} className="bg-gray-500 text-white px-3 py-1 rounded text-xs font-bold">Voltar</button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <p className="text-[10px] text-gray-500 text-center lg:text-left">Passe o mouse/toque no retrato para usar Upload ou URL.</p>
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                <label className="md:col-span-2 text-xs font-bold text-gray-600">Nome<input value={data.bio?.nome||''} onChange={e=>updateField('bio.nome',e.target.value)} className="mt-1 w-full border-2 border-teal-200 rounded p-2 text-lg font-bold outline-none focus:border-teal-700"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Jogador<input value={data.bio?.jogador||''} onChange={e=>updateField('bio.jogador',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Identidade<input value={data.bio?.identidade||''} onChange={e=>updateField('bio.identidade',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Tema<input value={data.bio?.tema||''} onChange={e=>updateField('bio.tema',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Origem<input value={data.bio?.origem||''} onChange={e=>updateField('bio.origem',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Gênero<input value={data.bio?.genero||''} onChange={e=>updateField('bio.genero',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Nível<input type="number" min="1" value={data.nivel||1} onChange={e=>updateField('nivel',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>
+                                                <label className="text-xs font-bold text-gray-600">Experiência<input type="number" min="0" value={data.experiencia||0} onChange={e=>updateField('experiencia',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>
+                                            </div>
+                                            <label className="text-xs font-bold text-gray-600 block">Traços<textarea value={data.bio?.tracos||''} onChange={e=>updateField('bio.tracos',e.target.value)} rows="3" className="mt-1 w-full border rounded p-2 resize-y" placeholder="Traços que definem o protagonista..."/></label>
+                                            <div className="border-t pt-3">
+                                                <div className="flex justify-between items-center mb-2"><h3 className="font-title font-bold text-teal-900">🤝 Laços</h3><button onClick={()=>addToArray('lacos',{alvo:'',forca:1,emocoes:''})} className="text-xs font-bold bg-teal-700 text-white px-2 py-1 rounded">+ Laço</button></div>
+                                                <div className="space-y-2">{(data.lacos||[]).map((l,i)=><div key={i} className="grid grid-cols-[1fr_70px_1fr_32px] gap-2"><input value={l.alvo||''} onChange={e=>updateArrayField('lacos',i,'alvo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Pessoa / local"/><input type="number" min="1" max="3" value={l.forca||1} onChange={e=>updateArrayField('lacos',i,'forca',Number(e.target.value))} className="border rounded p-2 text-xs"/><input value={l.emocoes||''} onChange={e=>updateArrayField('lacos',i,'emocoes',e.target.value)} className="border rounded p-2 text-xs" placeholder="Afeto, lealdade..."/><button onClick={()=>removeFromArray('lacos',i)} className="text-red-600">×</button></div>)}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {fabulaTab === 'perfil' && (
+                                    <div className="space-y-6 animate-fade-in-up">
+                                        <div><h2 className="font-title font-bold text-xl text-teal-900 mb-3">📊 Atributos e Condições</h2><div className="grid grid-cols-2 md:grid-cols-4 gap-3">{[['des','Destreza'],['ast','Astúcia'],['vig','Vigor'],['von','Vontade']].map(([k,n])=><div key={k} className="rounded-lg border-2 border-teal-200 bg-teal-50 p-3"><div className="font-bold text-xs text-teal-900 uppercase">{n}</div><div className="grid grid-cols-2 gap-2 mt-2"><select value={data.atributos?.[k]?.base||'d8'} onChange={e=>updateField(`atributos.${k}.base`,e.target.value)} className="border rounded p-2 font-bold">{['d6','d8','d10','d12'].map(d=><option key={d}>{d}</option>)}</select><select value={data.atributos?.[k]?.atual||'d8'} onChange={e=>updateField(`atributos.${k}.atual`,e.target.value)} className="border rounded p-2 font-bold">{['d6','d8','d10','d12'].map(d=><option key={d}>{d}</option>)}</select></div><div className="grid grid-cols-2 text-[9px] text-gray-500 mt-1"><span>Base</span><span>Atual</span></div></div>)}</div></div>
+                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">{Object.keys(initialFabulaPcData.condicoes).map(k=><label key={k} className={`flex items-center gap-2 rounded border p-2 text-xs font-bold ${data.condicoes?.[k]?'bg-rose-100 border-rose-400 text-rose-900':'bg-gray-50'}`}><input type="checkbox" checked={!!data.condicoes?.[k]} onChange={e=>updateField(`condicoes.${k}`,e.target.checked)}/>{k.charAt(0).toUpperCase()+k.slice(1)}</label>)}</div>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{[['pv','PV','❤️'],['pm','PM','🔷'],['pi','PI','🎒']].map(([k,n,ic])=><div key={k} className="border rounded-lg p-3"><div className="font-bold text-sm">{ic} {n}</div><div className="grid grid-cols-2 gap-2 mt-2"><input type="number" value={data.status?.[`${k}Atual`]??0} onChange={e=>updateField(`status.${k}Atual`,Number(e.target.value))} className="border rounded p-2"/><input type="number" value={data.status?.[`${k}Max`]??0} onChange={e=>updateField(`status.${k}Max`,Number(e.target.value))} className="border rounded p-2"/></div><div className="grid grid-cols-2 text-[9px] text-gray-500"><span>Atual</span><span>Máx.</span></div></div>)}<div className="border rounded-lg p-3 bg-amber-50"><div className="font-bold text-sm">🌟 Pontos de Fabula</div><input type="number" min="0" value={data.status?.fabula??0} onChange={e=>updateField('status.fabula',Number(e.target.value))} className="mt-2 w-full border rounded p-2"/></div></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">{[['defesa','Defesa'],['defesaMagica','Defesa Mágica'],['iniciativa','Mod. Iniciativa']].map(([k,n])=><label key={k} className="text-xs font-bold text-gray-600">{n}<input type="number" value={data.status?.[k]??0} onChange={e=>updateField(`status.${k}`,Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>)}<label className="text-xs font-bold text-gray-600">Zênites<input type="number" min="0" value={data.zenites||0} onChange={e=>updateField('zenites',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label></div>
+                                    </div>
+                                )}
+
+                                {fabulaTab === 'combate' && (
+                                    <div className="space-y-6 animate-fade-in-up">
+                                        <div><h2 className="font-title font-bold text-xl text-teal-900 mb-3">⚔️ Equipamento</h2><div className="space-y-2">{(data.equipamentos||[]).map((eq,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[150px_1fr_2fr] gap-2 border rounded p-2 bg-gray-50"><input value={eq.slot||''} onChange={e=>updateArrayField('equipamentos',i,'slot',e.target.value)} className="border rounded p-2 text-xs font-bold"/><input value={eq.nome||''} onChange={e=>updateArrayField('equipamentos',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Item equipado"/><input value={eq.descricao||''} onChange={e=>updateArrayField('equipamentos',i,'descricao',e.target.value)} className="border rounded p-2 text-xs" placeholder="Precisão, dano, defesa, qualidade..."/></div>)}</div><button onClick={()=>addToArray('equipamentos',{slot:'Outro',nome:'',descricao:''})} className="mt-2 text-xs font-bold text-teal-800">+ Adicionar equipamento</button></div>
+                                        <div><h3 className="font-title font-bold text-teal-900 mb-2">Proficiências de equipamento</h3><div className="grid grid-cols-2 md:grid-cols-4 gap-2">{[['armaduraMarcial','Armadura marcial'],['escudoMarcial','Escudo marcial'],['armaCorpoMarcial','Arma corpo a corpo marcial'],['armaDistanciaMarcial','Arma à distância marcial']].map(([k,n])=><label key={k} className="flex gap-2 items-center text-xs border rounded p-2"><input type="checkbox" checked={!!data.equipavel?.[k]} onChange={e=>updateField(`equipavel.${k}`,e.target.checked)}/>{n}</label>)}</div></div>
+                                        <label className="block text-xs font-bold text-gray-600">Características<textarea value={data.caracteristicas||''} onChange={e=>updateField('caracteristicas',e.target.value)} rows="5" className="mt-1 w-full border rounded p-2"/></label>
+                                        <div className="border-2 border-teal-200 rounded-lg overflow-hidden">
+                                            <div className="bg-teal-50 px-3 py-2 flex items-center justify-between gap-3">
+                                                <div><h3 className="font-title font-bold text-teal-900">🎒 Inventário / Mochila</h3><p className="text-[10px] text-gray-500">Itens guardados pelo personagem que não estão equipados.</p></div>
+                                                <button type="button" onClick={()=>addToArray('inventario',{nome:'',quantidade:1,notas:''})} className="shrink-0 bg-teal-700 text-white rounded px-3 py-1.5 text-xs font-bold">+ Item</button>
+                                            </div>
+                                            <div className="p-3 space-y-2">
+                                                {(data.inventario||[]).length === 0 && <div className="text-xs text-gray-400 italic text-center py-3">Nenhum item guardado.</div>}
+                                                {(data.inventario||[]).map((it,i)=><div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_90px_1.4fr_32px] gap-2 border rounded p-2 bg-gray-50">
+                                                    <input value={it.nome||''} onChange={e=>updateArrayField('inventario',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Item"/>
+                                                    <input type="number" min="0" value={it.quantidade??1} onChange={e=>updateArrayField('inventario',i,'quantidade',Number(e.target.value))} className="border rounded p-2 text-xs" placeholder="Qtd."/>
+                                                    <input value={it.notas||''} onChange={e=>updateArrayField('inventario',i,'notas',e.target.value)} className="border rounded p-2 text-xs" placeholder="Descrição / efeito / observação"/>
+                                                    <button type="button" onClick={()=>removeFromArray('inventario',i)} className="text-red-600 font-bold text-lg">×</button>
+                                                </div>)}
+                                            </div>
+                                        </div>
+                                        <label className="block text-xs font-bold text-gray-600">Mochila & Anotações<textarea value={data.mochila||''} onChange={e=>updateField('mochila',e.target.value)} rows="5" className="mt-1 w-full border rounded p-2" placeholder="Anotações gerais, itens especiais, lembretes..."/></label>
+                                    </div>
+                                )}
+
+                                {fabulaTab === 'classes' && (
+                                    <div className="space-y-5 animate-fade-in-up">
+                                        <div className="flex justify-between"><h2 className="font-title font-bold text-xl text-teal-900">✨ Classes & Poderes</h2><button onClick={()=>addToArray('classes',{nome:'',nivel:1,beneficios:'',poderes:[]})} className="bg-teal-700 text-white rounded px-3 py-1.5 text-xs font-bold">+ Classe</button></div>
+                                        {(data.classes||[]).map((cl,ci)=><div key={ci} className="border-2 border-teal-200 rounded-lg overflow-hidden"><div className="bg-teal-50 p-3 grid grid-cols-[1fr_90px_34px] gap-2"><input value={cl.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 font-bold" placeholder="Classe"/><input type="number" min="1" value={cl.nivel||1} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nivel=Number(e.target.value);updateField('classes',arr)}} className="border rounded p-2"/><button onClick={()=>removeFromArray('classes',ci)} className="text-red-600">×</button></div><div className="p-3 space-y-3"><textarea value={cl.beneficios||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].beneficios=e.target.value;updateField('classes',arr)}} className="w-full border rounded p-2 text-xs" rows="2" placeholder="Benefícios gratuitos / observações"/><div className="space-y-2">{(cl.poderes||[]).map((p,pi)=><div key={pi} className="grid grid-cols-1 md:grid-cols-[1fr_90px_2fr_30px] gap-2"><input value={p.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="Poder"/><input value={p.nivel||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nivel=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="NP"/><input value={p.desc||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].desc=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="Efeito / lembrete"/><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.splice(pi,1);updateField('classes',arr)}} className="text-red-600">×</button></div>)}</div><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.push({nome:'',nivel:'',desc:''});updateField('classes',arr)}} className="text-xs font-bold text-teal-800">+ Poder</button></div></div>)}
+                                        <div className="border-t pt-4"><div className="flex justify-between mb-2"><h3 className="font-title font-bold text-teal-900">Poderes Heroicos</h3><button onClick={()=>addToArray('poderesHeroicos',{nome:'',desc:''})} className="text-xs font-bold text-teal-800">+ Poder Heroico</button></div>{(data.poderesHeroicos||[]).map((p,i)=><div key={i} className="grid grid-cols-[1fr_2fr_32px] gap-2 mb-2"><input value={p.nome||''} onChange={e=>updateArrayField('poderesHeroicos',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Nome"/><input value={p.desc||''} onChange={e=>updateArrayField('poderesHeroicos',i,'desc',e.target.value)} className="border rounded p-2 text-xs" placeholder="Efeito / lembrete"/><button onClick={()=>removeFromArray('poderesHeroicos',i)} className="text-red-600">×</button></div>)}</div>
+                                    </div>
+                                )}
+
+                                {fabulaTab === 'extra-magia' && <FabulaMagicPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-arcanos' && <FabulaArcanosPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-mnemosfera' && <FabulaMnemosferaPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-receitas' && <FabulaReceitasPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-anotacoes' && <FabulaNotasPanel data={data} updateField={updateField} />}
+
+                                <div className="mt-8 rounded border border-teal-200 bg-teal-50 p-3 text-[10px] text-teal-900">Prévia de implementação no PJ Lite. Interface própria e não oficial, em adaptação para uso com as regras de Fabula Ultima.</div>
+                            </div>
+
+                            {showFabulaExtras && ReactDOM.createPortal(
+                                <div className="fixed inset-0 z-[150] bg-black/60 p-4 flex items-center justify-center"><div className="bg-white w-full max-w-lg rounded-lg shadow-2xl border-2 border-teal-700 overflow-hidden"><div className="bg-teal-800 text-white p-3 flex justify-between"><div><h3 className="font-title font-bold">Fichas Extras</h3><p className="text-[10px] text-teal-100">Ative só o que este personagem precisa.</p></div><button onClick={()=>setShowFabulaExtras(false)} className="text-2xl">×</button></div><div className="p-4 space-y-2">{FABULA_EXTRA_OPTIONS.map(opt=>{const active=(data.extrasAtivos||[]).includes(opt.id);return <label key={opt.id} className={`flex items-start gap-3 border-2 rounded p-3 cursor-pointer ${active?'border-teal-600 bg-teal-50':'border-gray-200'}`}><input type="checkbox" checked={active} onChange={e=>{let arr=[...(data.extrasAtivos||[])]; if(e.target.checked){if(!arr.includes(opt.id))arr.push(opt.id)}else arr=arr.filter(x=>x!==opt.id); updateField('extrasAtivos',arr); if(e.target.checked)setFabulaTab(`extra-${opt.id}`)}} className="mt-1"/><div><div className="font-bold text-sm">{opt.icon} {opt.nome}</div><div className="text-xs text-gray-500">{opt.desc}</div></div></label>})}<div className="pt-2 flex justify-end"><button onClick={()=>setShowFabulaExtras(false)} className="bg-teal-800 text-white px-4 py-2 rounded font-bold text-xs">Concluir</button></div></div></div></div>, document.body
+                            )}
+                        </div>
+                    )}
+
                     {/* Editor D&D 5E */}
                     {isDnd && data.type === 'pc' && (
                         <div className="bg-white font-dnd">
                             {/* Abas mobile D&D 5e */}
-                            <div className="md:hidden grid grid-cols-4 bg-[#f3eadc] border-b border-[#c9ad92] sticky top-0 z-20 shadow-sm">
+                            <div className="md:hidden grid grid-cols-3 bg-[#f3eadc] border-b border-[#c9ad92] sticky top-0 z-20 shadow-sm">
                                 {[
-                                    { id: 'status', label: 'Perfil' },
-                                    { id: 'pericias', label: 'Atributos' },
+                                    { id: 'status', label: 'Perfil & Atributos' },
                                     { id: 'equipamento', label: 'Combate' },
                                     { id: 'recursos', label: 'Recursos' }
                                 ].map(tab => (
@@ -1754,7 +2254,7 @@
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* D&D Col 1: Atributos e Perícias */}
-                                <div className={`${mobileTab === 'pericias' ? 'block' : 'hidden md:block'} space-y-4`}>
+                                <div className={`${mobileTab === 'status' ? 'block' : 'hidden md:block'} space-y-4`}>
                                     <div className="flex gap-4">
                                         <div className="flex flex-col gap-2 w-20">
                                             {['for','des','con','int','sab','car'].map(attr => (
@@ -1984,6 +2484,30 @@
                     )}
 
                     {/* Editor D&D 5E Bestiário */}
+
+                    {isFabula && data.type !== 'pc' && (
+                        <div className="p-4 md:p-7 space-y-6 fabula-threat-editor">
+                            <div className="grid md:grid-cols-[1.4fr_1fr] gap-4">
+                                <div className="fabula-panel border-2 border-teal-200 rounded-lg p-4 bg-teal-50 space-y-3">
+                                    <div className="grid sm:grid-cols-2 gap-3"><label className="text-xs font-bold text-teal-900">Nome<input value={data.nome||''} onChange={e=>updateField('nome',e.target.value)} className="mt-1 w-full border rounded p-2"/></label><label className="text-xs font-bold text-teal-900">Tipo<select value={data.tipoNpc||'Ameaça'} onChange={e=>updateField('tipoNpc',e.target.value)} className="mt-1 w-full border rounded p-2"><option>Ameaça</option><option>PNJ</option><option>Vilão</option></select></label></div>
+                                    <div className="grid grid-cols-3 gap-3"><label className="text-xs font-bold">Nível<input type="number" min="5" max="60" value={data.nivel||5} onChange={e=>updateField('nivel',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label><label className="text-xs font-bold">Patente<select value={data.patente||'Soldado'} onChange={e=>updateField('patente',e.target.value)} className="mt-1 w-full border rounded p-2"><option>Soldado</option><option>Elite</option><option>Campeão</option></select></label><label className="text-xs font-bold">Espécie<select value={data.especie||'Humanoide'} onChange={e=>updateField('especie',e.target.value)} className="mt-1 w-full border rounded p-2">{['Construto','Demônio','Elemental','Fera','Humanoide','Monstro','Morto-vivo','Planta'].map(x=><option key={x}>{x}</option>)}</select></label></div>
+                                    <label className="text-xs font-bold block">Descrição<textarea value={data.descricao||''} onChange={e=>updateField('descricao',e.target.value)} rows="2" className="mt-1 w-full border rounded p-2"/></label><label className="text-xs font-bold block">Traços<textarea value={data.tracos||''} onChange={e=>updateField('tracos',e.target.value)} rows="2" className="mt-1 w-full border rounded p-2" placeholder="Ex.: agressivo, astuto, territorial..."/></label>
+                                </div>
+                                <div className="fabula-panel border-2 border-teal-200 rounded-lg p-4 bg-white"><h3 className="font-title font-bold text-teal-900 mb-3">📊 Atributos</h3><div className="grid grid-cols-2 gap-2">{[['des','DES'],['ast','AST'],['vig','VIG'],['von','VON']].map(([k,n])=><label key={k} className="fabula-chip border rounded p-2 text-xs font-bold">{n}<select value={data.atributos?.[k]||'d8'} onChange={e=>updateField(`atributos.${k}`,e.target.value)} className="mt-1 w-full border rounded p-2">{['d6','d8','d10','d12'].map(d=><option key={d}>{d}</option>)}</select></label>)}</div></div>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-6 gap-2">{[['pvAtual','PV Atual'],['pvMax','PV Máx.'],['pmAtual','PM Atual'],['pmMax','PM Máx.'],['iniciativa','Iniciativa'],['defesa','Defesa']].map(([k,n])=><label key={k} className="fabula-chip border rounded p-2 text-[10px] font-bold">{n}<input type="number" value={data.status?.[k]??0} onChange={e=>updateField(`status.${k}`,Number(e.target.value))} className="mt-1 w-full border rounded p-1.5"/></label>)}</div>
+                            <div className="grid md:grid-cols-[1fr_220px] gap-3"><div className="fabula-panel border rounded-lg p-3 bg-white"><h3 className="font-title font-bold text-teal-900 mb-2">🛡️ Afinidades a Dano</h3><div className="grid grid-cols-3 sm:grid-cols-5 gap-2">{[['fisico','Físico'],['ar','Ar'],['raio','Raio'],['trevas','Trevas'],['terra','Terra'],['fogo','Fogo'],['gelo','Gelo'],['luz','Luz'],['veneno','Veneno']].map(([k,n])=><label key={k} className="text-[10px] font-bold">{n}<select value={data.afinidades?.[k]||''} onChange={e=>updateField(`afinidades.${k}`,e.target.value)} className="mt-1 w-full border rounded p-1"><option value="">—</option><option>VU</option><option>RE</option><option>IM</option><option>AB</option></select></label>)}</div></div><div className="fabula-panel border rounded-lg p-3 bg-white"><label className="text-xs font-bold text-teal-900">Defesa Mágica<input type="number" value={data.status?.defesaMagica??0} onChange={e=>updateField('status.defesaMagica',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>{data.tipoNpc==='Vilão'&&<label className="text-xs font-bold text-amber-800 block mt-3">Pontos de Ultima<input type="number" min="0" value={data.pontosUltima||0} onChange={e=>updateField('pontosUltima',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>}</div></div>
+                            <div className="fabula-panel border rounded-lg overflow-hidden"><div className="bg-teal-50 p-3 flex justify-between"><h3 className="font-title font-bold text-teal-900">⚔️ Ataques Básicos</h3><button onClick={()=>addToArray('ataques',{nome:'',tipo:'Corpo a corpo',teste:'',dano:'',tipoDano:'',efeito:''})} className="bg-teal-700 text-white px-2 py-1 rounded text-xs font-bold">+ Ataque</button></div><div className="p-3 space-y-2">{(data.ataques||[]).map((a,i)=><div key={i} className="grid sm:grid-cols-6 gap-2 border rounded p-2 bg-gray-50"><input value={a.nome||''} onChange={e=>updateArrayField('ataques',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Nome"/><select value={a.tipo||'Corpo a corpo'} onChange={e=>updateArrayField('ataques',i,'tipo',e.target.value)} className="border rounded p-2 text-xs"><option>Corpo a corpo</option><option>À distância</option></select><input value={a.teste||''} onChange={e=>updateArrayField('ataques',i,'teste',e.target.value)} className="border rounded p-2 text-xs" placeholder="DES + VIG +1"/><input value={a.dano||''} onChange={e=>updateArrayField('ataques',i,'dano',e.target.value)} className="border rounded p-2 text-xs" placeholder="RA + 10"/><input value={a.tipoDano||''} onChange={e=>updateArrayField('ataques',i,'tipoDano',e.target.value)} className="border rounded p-2 text-xs" placeholder="Físico"/><button onClick={()=>removeFromArray('ataques',i)} className="text-red-600 font-bold">×</button><textarea value={a.efeito||''} onChange={e=>updateArrayField('ataques',i,'efeito',e.target.value)} rows="2" className="sm:col-span-6 border rounded p-2 text-xs" placeholder="Efeito especial (opcional)"/></div>)}</div></div>
+                            <div className="grid lg:grid-cols-2 gap-4">
+                                <FabulaThreatList title="🔮 Feitiços" path="feiticos" items={data.feiticos||[]} add={()=>addToArray('feiticos',{nome:'',teste:'',pm:0,alvo:'',duracao:'',efeito:''})} remove={removeFromArray} update={updateArrayField} spell />
+                                <FabulaThreatList title="✨ Poderes" path="poderes" items={data.poderes||[]} add={()=>addToArray('poderes',{nome:'',desc:''})} remove={removeFromArray} update={updateArrayField} />
+                                <FabulaThreatList title="🎬 Outras Ações" path="outrasAcoes" items={data.outrasAcoes||[]} add={()=>addToArray('outrasAcoes',{nome:'',desc:''})} remove={removeFromArray} update={updateArrayField} />
+                                <FabulaThreatList title="📜 Regras Especiais" path="regrasEspeciais" items={data.regrasEspeciais||[]} add={()=>addToArray('regrasEspeciais',{nome:'',desc:''})} remove={removeFromArray} update={updateArrayField} />
+                            </div>
+                            <div className="rounded border border-teal-200 bg-teal-50 p-3 text-[10px] text-teal-900">A ficha segue a estrutura de leitura do bestiário: nível/espécie, traços, atributos, PV/PM/Iniciativa, Defesas, Afinidades, ataques, feitiços e regras especiais.</div>
+                        </div>
+                    )}
+
                     {isDnd && data.type === 'ameaca' && (
                         <div className="p-4 md:p-8 flex flex-col lg:flex-row gap-8 bg-gray-100 font-dnd">
                             {/* Lado Esquerdo: Formulário */}
@@ -2148,7 +2672,7 @@
                     )}
 
                     {/* Editor Dragonbane (Intacto) */}
-                    {!isDnd && (
+                    {!isDnd && !isFabula && (
                         data.type === 'pc' ? (
                             <React.Fragment>
                                 {/* Mobile Tabs for PC */}
