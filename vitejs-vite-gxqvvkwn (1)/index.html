@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite - v0.6.4v Alpha</title>
+    <title>PJ Lite — Fichas de RPG | v0.6.4v Alpha</title>
+    <meta name="description" content="PJ Lite é uma ferramenta leve para criar, organizar e compartilhar fichas de personagens de RPG. Suporte a Dragonbane, D&amp;D 5e e Fabula Ultima.">
+    <meta name="application-name" content="PJ Lite">
+    <meta name="theme-color" content="#111827">
+
+    <!-- Prévia ao compartilhar o link -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PJ Lite">
+    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.4v Alpha">
+    <meta property="og:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve. Dragonbane, D&amp;D 5e e Fabula Ultima.">
+    <meta property="og:locale" content="pt_BR">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.4v Alpha">
+    <meta name="twitter:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM -->
@@ -1201,7 +1215,7 @@
             const [fabulaTab, setFabulaTab] = useState('perfil');
             const [showFabulaExtras, setShowFabulaExtras] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
-            const [guideTab, setGuideTab] = useState('import');
+            const [guideTab, setGuideTab] = useState('inicio');
 
             // Organização e segurança — v0.6.4
             const [searchQuery, setSearchQuery] = useState('');
@@ -1723,37 +1737,22 @@
                                     <span className="text-red-500">◆</span> PJ Lite
                                 </span>
                             </div>
-                            {/* Personagens */}
-                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-                                <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
-                                <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
-                                    <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
-                                        <SVGIcons.Palette />
-                                        <select value={theme} onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer">
-                                            <option value="default">Tema: Padrão</option>
-                                            <option value="classic">Tema: Clássico DB</option>
-                                            <option value="dnd">Tema: Dungeons & Dragons</option>
-                                            <option value="fabula">Tema: Fabula Ultima</option>
-                                            <option value="dark">Tema: Modo Escuro</option>
-                                            <option value="custom">Tema: Custom...</option>
-                                        </select>
-                                    </div>
-                                    <button onClick={() => { setShowGuideModal(true); }} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded shadow transition-colors font-bold text-sm">
-                                        <SVGIcons.HelpCircle /> Guias e Tutoriais
-                                    </button>
-                                    <button onClick={openCodeImport} className="flex justify-center items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm" title="Colar código texto">
-                                        <SVGIcons.Code /> Colar Código
-                                    </button>
-                                    <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
-                                        <SVGIcons.Upload /> ZIP/JSON
-                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
-                                    </label>
-                                    <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
-                                        <SVGIcons.Plus /> Novo Personagem
-                                    </button>
+                            <div className="mb-4 flex flex-wrap items-center gap-2 no-print">
+                                <div className="flex items-center gap-1 bg-gray-200 border border-gray-300 rounded px-2 py-1.5 shadow-sm">
+                                    <SVGIcons.Palette />
+                                    <select value={theme} onChange={(e) => { if (e.target.value === 'custom') setShowCustomBgModal(true); else setTheme(e.target.value); }} className="bg-transparent text-gray-700 font-bold text-xs outline-none cursor-pointer">
+                                        <option value="default">Tema: Padrão</option>
+                                        <option value="classic">Tema: Clássico DB</option>
+                                        <option value="dnd">Tema: Dungeons & Dragons</option>
+                                        <option value="fabula">Tema: Fabula Ultima</option>
+                                        <option value="dark">Tema: Modo Escuro</option>
+                                        <option value="custom">Tema: Custom...</option>
+                                    </select>
                                 </div>
+                                <button onClick={() => { setGuideTab('inicio'); setShowGuideModal(true); }} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded shadow transition-colors font-bold text-sm">
+                                    <SVGIcons.HelpCircle /> Guias e Tutoriais
+                                </button>
                             </div>
-
                             <div className="mb-6 rounded border-2 border-[#922610] bg-[#fdf1dc] shadow-sm overflow-hidden">
                                 <div className={`px-4 ${newsCollapsed ? 'py-2' : 'py-3'} flex items-center justify-between gap-3`}>
                                     <div className="min-w-0">
@@ -1778,6 +1777,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Personagens */}
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                                <h1 className="text-3xl font-title font-bold text-dragon-dark border-b-4 border-red-800 pb-2">Meus Personagens</h1>
+                                <div className="flex flex-wrap gap-2 w-full md:w-auto justify-center items-center">
+                                    <button onClick={openCodeImport} className="flex justify-center items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm" title="Colar código texto">
+                                        <SVGIcons.Code /> Colar Código
+                                    </button>
+                                    <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Upload /> ZIP/JSON
+                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                    </label>
+                                    <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
+                                        <SVGIcons.Plus /> Novo Personagem
+                                    </button>
+                                </div>
+                            </div>
+
+
 
                             <div className="mb-5 no-print">
                                 <div className="flex items-center gap-2 max-w-2xl">
@@ -2235,25 +2253,59 @@
                         
                         {showGuideModal && ReactDOM.createPortal(
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
-                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-2xl border-2 border-gray-800 overflow-hidden animate-fade-in-up flex flex-col">
+                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-4xl border-2 border-gray-800 overflow-hidden animate-fade-in-up flex flex-col">
                                     <div className="bg-gray-800 text-white p-3 flex justify-between items-center shrink-0">
                                         <h2 className="font-title font-bold text-lg uppercase">Guias e Tutoriais</h2>
                                         <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2">&times;</button>
                                     </div>
                                     <div className="flex bg-gray-200 border-b border-gray-300 shrink-0 overflow-x-auto">
-                                        <button onClick={() => setGuideTab('import')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'import' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Importar/Exportar</button>
+                                        <button onClick={() => setGuideTab('inicio')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'inicio' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Começando</button>
+                                        <button onClick={() => setGuideTab('import')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'import' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Salvar & Compartilhar</button>
                                         <button onClick={() => setGuideTab('fichas_db')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'fichas_db' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Fichas DB</button>
                                         <button onClick={() => setGuideTab('ameacas_db')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'ameacas_db' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Ameaças e PNJs</button>
                                         <button onClick={() => setGuideTab('dnd5e')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'dnd5e' ? 'border-orange-600 text-orange-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>D&D 5e</button>
                                         <button onClick={() => setGuideTab('fabula')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'fabula' ? 'border-teal-600 text-teal-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Fabula Ultima</button>
                                     </div>
-                                    <div className="p-6 bg-gray-50 text-sm text-gray-700 overflow-y-auto max-h-[60vh] scrollbar-thin">
+                                    <div className="p-6 bg-gray-50 text-sm text-gray-700 overflow-y-auto max-h-[70vh] scrollbar-thin">
+                                        {guideTab === 'inicio' && (
+                                            <div className="space-y-5">
+                                                <div className="bg-slate-900 text-white rounded-lg p-5">
+                                                    <div className="text-[10px] font-bold uppercase tracking-widest text-slate-300 mb-1">Primeiros passos</div>
+                                                    <h3 className="font-title font-bold text-xl mb-2">👋 Bem-vindo ao PJ Lite</h3>
+                                                    <p className="text-sm text-slate-200">O PJ Lite é uma ficha digital para organizar personagens sem transformar a mesa em um programa complicado. Você pode preencher aos poucos, salvar no navegador e usar os guias abaixo sempre que tiver dúvida.</p>
+                                                </div>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    <div className="bg-white border rounded-lg p-4"><strong>1. Crie ou escolha um modelo</strong><p className="text-xs mt-1">Clique em <strong>Novo Personagem</strong>, escolha o sistema e comece em branco ou use um modelo quando disponível. Modelos são úteis para entender como uma ficha preenchida costuma ficar.</p></div>
+                                                    <div className="bg-white border rounded-lg p-4"><strong>2. Preencha primeiro o essencial</strong><p className="text-xs mt-1">Comece por nome, conceito, atributos e recursos principais. Não tente preencher todos os campos de uma vez: habilidades, inventário e detalhes podem ser adicionados depois.</p></div>
+                                                    <div className="bg-white border rounded-lg p-4"><strong>3. Salve durante a criação</strong><p className="text-xs mt-1">O salvamento automático ajuda, mas o botão <strong>Salvar</strong> continua útil para criar um ponto de histórico. Antes de limpar o navegador ou trocar de computador, faça também um backup.</p></div>
+                                                    <div className="bg-white border rounded-lg p-4"><strong>4. Use a ficha durante a sessão</strong><p className="text-xs mt-1">Deixe na tela só o que precisa consultar. A <strong>Ficha Chat</strong> cria versões em texto para enviar ao mestre ou grupo sem copiar campo por campo.</p></div>
+                                                </div>
+                                                <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 space-y-2">
+                                                    <h3 className="font-bold text-amber-900">🧭 Se você nunca jogou RPG</h3>
+                                                    <p className="text-xs">Uma ficha é o resumo do seu personagem. <strong>Atributos</strong> representam capacidades gerais; <strong>perícias</strong> mostram coisas que ele sabe fazer; <strong>PV</strong> normalmente acompanham sua resistência; habilidades, poderes e magias descrevem recursos especiais. Cada sistema usa esses conceitos de uma forma diferente, então consulte a aba específica do jogo que estiver usando.</p>
+                                                    <p className="text-xs">O PJ Lite ajuda a <strong>registrar e consultar</strong> essas informações. Ele não substitui o livro de regras nem decide automaticamente tudo que acontece em jogo.</p>
+                                                </div>
+                                                <div className="bg-white border rounded-lg p-4">
+                                                    <h3 className="font-bold text-gray-900 mb-2">🖱️ O que cada botão principal faz?</h3>
+                                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                                        <div><strong>Novo Personagem:</strong> cria uma nova ficha.</div><div><strong>Temas:</strong> muda somente a aparência do PJ Lite.</div>
+                                                        <div><strong>Colar Código:</strong> importa uma ficha compartilhada como texto.</div><div><strong>ZIP/JSON:</strong> importa backups em arquivo.</div>
+                                                        <div><strong>★ Favorito:</strong> facilita encontrar fichas importantes.</div><div><strong>⚙ Filtros:</strong> filtra por sistema e muda a ordenação.</div>
+                                                        <div><strong>💬 Ficha Chat:</strong> copia a ficha em um formato legível.</div><div><strong>🕘 Histórico:</strong> recupera versões salvas anteriormente.</div>
+                                                    </div>
+                                                </div>
+                                                <div className="bg-sky-50 border border-sky-200 rounded-lg p-4"><strong className="text-sky-900">Dica para iniciantes:</strong><p className="text-xs mt-1">Se surgir um aviso de <strong>Revisão rápida</strong>, ele é apenas um lembrete de campos importantes que talvez tenham ficado vazios. Você ainda pode continuar usando a ficha normalmente.</p></div>
+                                            </div>
+                                        )}
+
                                         {guideTab === 'import' && (
                                             <div className="space-y-5">
-                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">💾 Como salvar sem perder sua ficha</h3><p>O botão <strong>Salvar</strong> guarda a ficha no navegador. Como esses dados ficam no Local Storage, limpar os dados do navegador pode apagar suas fichas. Para backup, use <strong>ZIP/JSON</strong>.</p></div>
-                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">📦 ZIP/JSON: backup completo</h3><p>Use para guardar e transferir a ficha com seus dados. Imagens adicionadas à ficha permanecem no JSON exportado. Para importar, extraia o JSON do ZIP e selecione-o no botão ZIP/JSON.</p></div>
-                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">🔗 Código: compartilhamento rápido</h3><p>O Código compacta a ficha em texto para copiar e colar em outro dispositivo. Para manter o código leve, o retrato/avatar não é incluído.</p></div>
-                                                <div className="bg-white border rounded p-4"><h3 className="font-bold text-gray-900 mb-2">💬 Copiar Ficha</h3><p>Gera uma versão em texto dos principais dados para WhatsApp, Discord ou outros chats.</p></div>
+                                                <div className="bg-blue-50 border border-blue-200 rounded p-4"><h3 className="font-title font-bold text-blue-900 mb-2">💾 Salvar, fazer backup e compartilhar</h3><p className="text-xs">Existem formas diferentes de guardar a mesma ficha. Para quem está começando, a regra mais simples é: <strong>Salvar</strong> para o uso diário, <strong>ZIP/JSON</strong> para backup e <strong>Código</strong> para mandar rapidamente uma ficha para outra pessoa.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">1. Salvar no navegador</h3><p>O botão <strong>Salvar</strong> guarda a ficha no armazenamento local do navegador. O autosave também tenta registrar alterações enquanto você edita.</p><p className="text-xs text-gray-500"><strong>Importante:</strong> dados locais não são uma nuvem. Limpar os dados do navegador, usar modo anônimo ou trocar de computador pode fazer a ficha deixar de aparecer naquele dispositivo.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">2. ZIP/JSON: sua cópia de segurança</h3><p>Use o backup em arquivo antes de formatar o computador, limpar o navegador ou fazer mudanças importantes. Guarde uma cópia em um local que você reconheça.</p><p className="text-xs"><strong>Para importar:</strong> use o botão ZIP/JSON e escolha o arquivo JSON compatível. Depois confira se nome, sistema e dados principais apareceram corretamente.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">3. Código: compartilhamento rápido</h3><p>O Código transforma a ficha em uma sequência de texto. É útil para enviar pelo chat e importar em outro navegador.</p><p className="text-xs text-gray-500">Retratos não entram no código compacto, para evitar textos gigantes. Se a imagem for importante, prefira backup em arquivo.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">4. Ficha Chat: mostrar, não importar</h3><p>A Ficha Chat cria uma versão legível para Discord, Telegram, WhatsApp ou anotações. Ela serve para <strong>consulta</strong>, não para restaurar uma ficha.</p><p className="text-xs">Você pode escolher <strong>Completa</strong>, <strong>Simples</strong>, <strong>Resumida</strong> ou <strong>Habilidades & Magias</strong>, dependendo do que o grupo precisa ver.</p></div>
+                                                <div className="bg-amber-50 border border-amber-300 rounded p-4"><h3 className="font-bold text-amber-900 mb-2">✅ Rotina segura recomendada</h3><p className="text-xs">Durante a sessão: salve normalmente. Depois de mudanças importantes: salve novamente. De tempos em tempos: faça um backup em arquivo e guarde fora do navegador.</p></div>
                                             </div>
                                         )}
 
@@ -2268,6 +2320,8 @@
                                                     <div className="bg-white border rounded p-4"><strong>5. Habilidades e Magias</strong><p className="text-xs mt-1">Adicione uma entrada para cada habilidade ou magia. Coloque nome, descrição e custo em PD/Nível quando aplicável.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>6. Inventário</strong><p className="text-xs mt-1">Finalize com moedas, equipamentos, consumíveis e itens miúdos. Salve a ficha e gere a Ficha Chat se quiser consultar pelo celular.</p></div>
                                                 </div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📘 Como ler a ficha durante o jogo</h3><p className="text-xs">Quando o Mestre pedir um teste, procure primeiro o atributo ou perícia relacionada. Em combate, mantenha à vista PV, PD, armadura, movimento e arma usada. Habilidades e magias podem ser consultadas somente quando forem necessárias.</p><p className="text-xs text-gray-500">Você não precisa decorar a ficha inteira. A ideia é saber em qual seção procurar cada informação.</p></div>
+                                                <div className="bg-emerald-50 border border-emerald-200 rounded p-4"><h3 className="font-bold text-emerald-900 mb-2">🌱 Primeiro personagem?</h3><p className="text-xs">Se estiver inseguro, use um modelo pronto e compare campo por campo com o livro. Depois duplique a ficha e altere nome, profissão, atributos, perícias e equipamento. Isso ajuda a aprender a estrutura sem começar de uma tela totalmente vazia.</p></div>
                                                 <div className="p-4 bg-gray-100 border rounded"><h3 className="font-title font-bold mb-2">Material oficial de Dragonbane</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o livro de regras.</p><a href="https://triaeditora.com.br/loja/d20/dragonbane-livro-de-regras-pdf/" target="_blank" rel="noopener noreferrer" className="inline-block bg-emerald-800 hover:bg-emerald-700 text-white px-4 py-2 rounded font-bold text-xs">Obter o PDF oficial na Tria Editora ↗</a></div>
                                             </div>
                                         )}
@@ -2307,6 +2361,7 @@
                                                     <p className="text-xs"><strong>Vilões:</strong> use o campo de Pontos de Ultima quando o antagonista funcionar como vilão. Para criar rápido, comece com um modelo e ajuste o nível, atributos e poderes conforme a função do inimigo.</p>
                                                 </div>
 
+                                                <div className="bg-amber-50 border border-amber-300 rounded p-4 space-y-2"><h3 className="font-bold text-amber-900">🌱 Se é sua primeira vez como Mestre</h3><p className="text-xs">Você não precisa criar cada inimigo do zero. Use um modelo, altere apenas os números e habilidades que realmente aparecerão na cena e teste a criatura em um encontro simples. Para personagens secundários, uma ficha curta costuma ser mais fácil de administrar do que uma ficha cheia.</p><p className="text-xs">Nomeie habilidades de forma clara e escreva efeitos de modo que você consiga entendê-los rapidamente no meio do combate.</p></div>
                                                 <div className="bg-white border rounded p-4">
                                                     <h3 className="font-bold text-gray-900 mb-2">✅ Fluxo rápido recomendado</h3>
                                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
@@ -2329,6 +2384,8 @@
                                                     <div className="bg-white border rounded p-4"><strong>5. Magias</strong><p className="text-xs mt-1">Se o personagem conjura, configure os espaços de 1º a 9º nível e adicione as magias com nome, nível e descrição.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>6. Equipamento</strong><p className="text-xs mt-1">Registre inventário, moedas, proficiências e idiomas. Revise a aba Recursos e salve quando estiver satisfeito.</p></div>
                                                 </div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📘 Para não se perder em D&D</h3><p className="text-xs">A ficha tem muitos números, mas durante a maior parte do jogo você consulta poucas áreas: modificadores de atributos, perícias, CA, PV, ataques e recursos da classe. Magias e características ficam como referência quando forem usadas.</p><p className="text-xs"><strong>Proficiência:</strong> quando um campo indicar que o personagem é proficiente, registre isso na ficha em vez de tentar memorizar. <strong>PV temporários</strong> ficam separados dos PV normais e <strong>Dados de Vida</strong> também possuem campo próprio.</p></div>
+                                                <div className="bg-orange-50 border border-orange-200 rounded p-4"><h3 className="font-bold text-[#922610] mb-2">🌱 Dica para a primeira ficha</h3><p className="text-xs">Preencha primeiro o que sua classe realmente usa. Um personagem sem magia pode deixar a área de magias de lado; um conjurador pode preencher primeiro as magias mais usadas e completar o restante depois.</p></div>
                                                 <div className="p-4 bg-orange-50 border border-orange-300 rounded"><h3 className="font-title font-bold text-[#922610] mb-2">D&D 5e / SRD 5.2</h3><p className="text-xs">A implementação está em adaptação contínua. O PJ Lite não é um produto oficial da Wizards of the Coast.</p></div>
                                             </div>
                                         )}
@@ -2345,6 +2402,8 @@
                                                     <div className="bg-white border rounded p-4"><strong>6. Fichas Extras</strong><p className="text-xs mt-1">Abra <strong>＋ Fichas Extras</strong> e habilite somente o que o conceito precisa: Magia & Rituais, Arcanos, Mnemosfera, Receitas ou Anotações. Desativar um extra apenas o esconde; os dados permanecem salvos.</p></div>
                                                 </div>
                                                 <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">🧭 Ordem rápida para uma ficha nova</h3><p className="text-xs">Conceito → Atributos → PV/PM/PI → Classes → Equipamento → Extras → Laços → Revisão → Salvar.</p><p className="text-xs text-gray-500">Se estiver aprendendo o sistema, os modelos prontos são uma boa referência de como os campos se conectam.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📘 Entendendo os recursos principais</h3><p className="text-xs"><strong>PV</strong> acompanham a condição física do personagem, <strong>PM</strong> alimentam várias capacidades e <strong>PI</strong> representam uma reserva abstrata de consumíveis e utilidades. A ficha mantém esses valores separados para que você possa atualizar apenas o recurso usado.</p><p className="text-xs"><strong>Pontos de Fabula</strong>, nível, EXP e Zênites têm funções diferentes; evite colocar tudo no mesmo campo ou usar PI como inventário comum.</p></div>
+                                                <div className="bg-teal-50 border border-teal-200 rounded p-4"><h3 className="font-bold text-teal-900 mb-2">🌱 Primeiro personagem em Fabula Ultima?</h3><p className="text-xs">Comece com poucas classes e poderes já escolhidos no livro e habilite apenas as Fichas Extras de que realmente precisar. A consulta rápida de PI na aba Equipamentos existe justamente para evitar procurar a tabela toda vez durante a sessão.</p></div>
                                                 <div className="p-4 bg-teal-50 border border-teal-300 rounded"><h3 className="font-title font-bold text-teal-900 mb-2">Material oficial de Fabula Ultima</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o Livro Básico. Consulte as regras completas e apoie a publicação oficial brasileira:</p><a href="https://jamboeditora.com.br/produto/fabula-ultima-livro-basico/" target="_blank" rel="noopener noreferrer" className="inline-block bg-teal-800 hover:bg-teal-700 text-white px-4 py-2 rounded font-bold text-xs">Obter Fabula Ultima — Livro Básico na Jambô ↗</a></div>
                                             </div>
                                         )}
