@@ -327,6 +327,107 @@
         }
 
 
+
+        /* ==============================================================
+         * REFINO GLOBAL DE TEMAS — v0.6.0
+         * ============================================================== */
+        body { transition: background-color .25s ease, color .25s ease; }
+        body .max-w-6xl, body .max-w-5xl, body .bg-white, body input, body textarea, body select, body button {
+            transition: background-color .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+
+        /* Padrão PJ Lite: neutro, limpo e um pouco mais moderno. */
+        body.theme-default { background:#e7ebef !important; background-image:linear-gradient(160deg,#eef1f4,#dfe5ea) !important; }
+        body.theme-default .max-w-6xl, body.theme-default .max-w-5xl, body.theme-default .bg-white { background:#ffffff !important; color:#20262d !important; }
+        body.theme-default .bg-gray-50, body.theme-default .bg-gray-100 { background:#f5f7f9 !important; }
+        body.theme-default input, body.theme-default textarea, body.theme-default select { background:#fff !important; border-color:#c5cdd6 !important; color:#20262d !important; }
+        body.theme-default input:focus, body.theme-default textarea:focus, body.theme-default select:focus { border-color:#64748b !important; box-shadow:0 0 0 2px rgba(100,116,139,.12) !important; }
+        body.theme-default .bg-dragon-dark { background:#202a35 !important; color:#fff !important; }
+        body.theme-default .shadow, body.theme-default .shadow-sm, body.theme-default .shadow-md, body.theme-default .shadow-lg { box-shadow:0 5px 18px rgba(31,41,55,.12) !important; }
+
+        /* Dragonbane clássico: pergaminho mais limpo e contraste consistente. */
+        body.theme-classic {
+            background-color:#d7ceba !important;
+            background-image: radial-gradient(circle at 15% 0%, rgba(78,59,45,.10), transparent 34%), linear-gradient(135deg, rgba(255,255,255,.16), transparent 55%);
+        }
+        body.theme-classic .max-w-6xl, body.theme-classic .max-w-5xl, body.theme-classic .bg-white { background-color:#fbf7ed !important; color:#2d2925 !important; }
+        body.theme-classic .bg-gray-50, body.theme-classic .bg-gray-100, body.theme-classic .bg-gray-200 { background-color:#f1eadc !important; color:#3a332d !important; }
+        body.theme-classic .text-gray-900, body.theme-classic .text-gray-800, body.theme-classic .text-gray-700 { color:#332b26 !important; }
+        body.theme-classic .text-gray-600, body.theme-classic .text-gray-500 { color:#675c52 !important; }
+        body.theme-classic input, body.theme-classic textarea, body.theme-classic select { background:#fffdf8 !important; color:#2e2925 !important; border-color:#b8a388 !important; }
+        body.theme-classic input:focus, body.theme-classic textarea:focus, body.theme-classic select:focus { border-color:#315f54 !important; box-shadow:0 0 0 2px rgba(49,95,84,.12) !important; }
+        body.theme-classic .bg-dragon-dark { background:#234b42 !important; }
+        body.theme-classic .text-red-800, body.theme-classic .text-red-700, body.theme-classic .text-red-600 { color:#7d2e27 !important; }
+
+        /* D&D: mantém o tom de pergaminho, mas reduz áreas lavadas. */
+        body.theme-dnd .bg-white { background-color:#fff8ea !important; color:#30251f !important; }
+        body.theme-dnd .bg-gray-50, body.theme-dnd .bg-gray-100, body.theme-dnd .bg-gray-200 { background-color:#f7ead6 !important; color:#3b2e27 !important; }
+        body.theme-dnd .text-gray-900, body.theme-dnd .text-gray-800, body.theme-dnd .text-gray-700 { color:#34241d !important; }
+        body.theme-dnd .text-gray-600, body.theme-dnd .text-gray-500 { color:#755f51 !important; }
+        body.theme-dnd input, body.theme-dnd textarea, body.theme-dnd select { background:#fffdf8 !important; color:#2f241f !important; border-color:#c7aa8d !important; }
+        body.theme-dnd input:focus, body.theme-dnd textarea:focus, body.theme-dnd select:focus { border-color:#922610 !important; box-shadow:0 0 0 2px rgba(146,38,16,.13) !important; }
+        body.theme-dnd .bg-red-50, body.theme-dnd .bg-red-50\/30, body.theme-dnd .bg-red-50\/50 { background:#f7ded6 !important; }
+
+        /* Fabula Ultima: visual claro, leve e coerente com as fichas teal. */
+        body.theme-fabula { background-image: radial-gradient(circle at 12% 8%, rgba(62,150,143,.16), transparent 30%), radial-gradient(circle at 88% 0%, rgba(240,190,83,.12), transparent 28%), linear-gradient(160deg,#d8efeb,#edf5f2 62%,#d8e9e7) !important; }
+        body.theme-fabula .bg-white { background:#f9fffd !important; color:#17383b !important; }
+        body.theme-fabula .bg-gray-50, body.theme-fabula .bg-gray-100, body.theme-fabula .bg-gray-200 { background:#eaf5f2 !important; color:#20474a !important; }
+        body.theme-fabula input, body.theme-fabula textarea, body.theme-fabula select { background:#fbfffe !important; color:#18383b !important; border-color:#8abdb7 !important; }
+        body.theme-fabula .bg-dragon-dark { background:#276e6b !important; color:#fff !important; }
+        body.theme-fabula .shadow, body.theme-fabula .shadow-sm, body.theme-fabula .shadow-md, body.theme-fabula .shadow-lg { box-shadow:0 5px 18px rgba(27,88,84,.13) !important; }
+
+        /* Modo escuro: superfícies, modais, abas e estados de hover revisados. */
+        body.theme-dark { background:#090f1b !important; color:#e6edf7 !important; }
+        body.theme-dark .max-w-6xl, body.theme-dark .max-w-5xl { background:#121c2b !important; border-color:#394b62 !important; }
+        body.theme-dark .bg-white { background:#162233 !important; color:#e7edf5 !important; }
+        body.theme-dark .bg-gray-50 { background:#1b293c !important; color:#e6edf7 !important; }
+        body.theme-dark .bg-gray-100, body.theme-dark .bg-gray-200 { background:#223247 !important; color:#eef3f8 !important; }
+        body.theme-dark .bg-gray-300 { background:#2b3c52 !important; color:#f2f6fa !important; }
+        body.theme-dark .bg-\[\#fdf1dc\] { background:#2c241e !important; color:#f7e8d4 !important; }
+        body.theme-dark .bg-\[\#f3eadc\] { background:#29231e !important; color:#f4e6d7 !important; }
+        body.theme-dark .text-gray-900, body.theme-dark .text-gray-800, body.theme-dark .text-gray-700, body.theme-dark .text-black { color:#f1f5f9 !important; }
+        body.theme-dark .text-gray-600, body.theme-dark .text-gray-500 { color:#bac6d6 !important; }
+        body.theme-dark .text-gray-400 { color:#98a7ba !important; }
+        body.theme-dark input, body.theme-dark textarea, body.theme-dark select { background:#0c1524 !important; color:#f4f7fb !important; border-color:#53667f !important; caret-color:#fff !important; }
+        body.theme-dark input:focus, body.theme-dark textarea:focus, body.theme-dark select:focus { background:#0f1b2d !important; border-color:#8aa0ba !important; box-shadow:0 0 0 2px rgba(148,163,184,.14) !important; }
+        body.theme-dark input[type="color"] { background:#162233 !important; padding:2px !important; }
+        body.theme-dark input[type="range"] { accent-color:#94a3b8; }
+        body.theme-dark button.bg-gray-200, body.theme-dark .bg-gray-200 { border-color:#40536c !important; }
+        body.theme-dark .hover\:bg-gray-50:hover, body.theme-dark .hover\:bg-gray-100:hover, body.theme-dark .hover\:bg-gray-200:hover, body.theme-dark .hover\:bg-gray-300:hover { background:#31445d !important; color:#fff !important; }
+        body.theme-dark .hover\:bg-red-50:hover { background:#4a2023 !important; }
+        body.theme-dark .hover\:bg-black:hover { background:#020617 !important; }
+        body.theme-dark .border, body.theme-dark .border-b, body.theme-dark .border-t { border-color:#40536a; }
+        body.theme-dark .bg-black\/60 { background-color:rgba(2,6,23,.78) !important; }
+        body.theme-dark .fabula-panel { background:#132b2d !important; border-color:#347b76 !important; }
+        body.theme-dark .fabula-chip { background:#1d373a !important; border-color:#4d8e88 !important; }
+        body.theme-dark ::selection { background:#475569; color:#fff; }
+        body.theme-dark * { scrollbar-color:#52677f #0b1422; }
+
+        /* Tema personalizado: usa variáveis para aplicar o estilo de forma global, não só nos cartões. */
+        body.theme-custom {
+            --custom-window-color:#ffffff;
+            --custom-bar-color:#1f2937;
+            --custom-accent-color:#7f1d1d;
+            --custom-text-color:#1f2937;
+            --custom-opacity:.95;
+            --custom-overlay:.18;
+            --custom-blur:5px;
+            position:relative;
+            color:var(--custom-text-color) !important;
+            background-color:#222 !important;
+        }
+        body.theme-custom .max-w-6xl, body.theme-custom .max-w-5xl, body.theme-custom .bg-white {
+            color:var(--custom-text-color) !important;
+            border-color:color-mix(in srgb, var(--custom-accent-color) 45%, #d1d5db) !important;
+        }
+        body.theme-custom .bg-dragon-dark { background-color:var(--custom-bar-color) !important; color:white !important; }
+        body.theme-custom .border-dragon-dark { border-color:var(--custom-accent-color) !important; }
+        body.theme-custom .text-dragon-dark, body.theme-custom .text-red-800 { color:var(--custom-accent-color) !important; }
+        body.theme-custom input, body.theme-custom textarea, body.theme-custom select { border-color:color-mix(in srgb, var(--custom-accent-color) 40%, #cbd5e1) !important; }
+        body.theme-custom input:focus, body.theme-custom textarea:focus, body.theme-custom select:focus { border-color:var(--custom-accent-color) !important; box-shadow:0 0 0 2px color-mix(in srgb, var(--custom-accent-color) 18%, transparent) !important; }
+        body.theme-custom .shadow, body.theme-custom .shadow-sm, body.theme-custom .shadow-md, body.theme-custom .shadow-lg { box-shadow:0 6px 22px rgba(0,0,0,.22) !important; }
+        body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:rgba(248,250,252,.78) !important; }
+
         /* Impressão / PDF — v0.6.0 */
         @media print {
             body { background: #fff !important; padding: 0 !important; color: #111 !important; }
@@ -351,11 +452,15 @@
         const CUSTOM_WIN_COLOR_KEY = 'dragonbane_custom_win_color';
         const CUSTOM_BAR_COLOR_KEY = 'dragonbane_custom_bar_color';
         const CUSTOM_OPACITY_KEY = 'dragonbane_custom_opacity';
+        const CUSTOM_ACCENT_COLOR_KEY = 'pjlite_custom_accent_color';
+        const CUSTOM_TEXT_COLOR_KEY = 'pjlite_custom_text_color';
+        const CUSTOM_OVERLAY_KEY = 'pjlite_custom_overlay';
+        const CUSTOM_BLUR_KEY = 'pjlite_custom_blur';
         const HISTORY_STORAGE_KEY = 'pjlite_item_history_v1';
         const SCHEMA_VERSION = 4;
 
         const UPDATE_LOG = [
-            { versao: '0.6.0v Alpha', descricao: 'Pacote de Organização e Segurança refinado: autosave com indicador, busca e filtros discretos, favoritos, campanhas, duplicação, backup geral em área própria, histórico local de versões, impressão e dashboard mais limpo.' },
+            { versao: '0.6.0v Alpha', descricao: 'Pacote de Organização e Segurança refinado, com revisão visual dos temas: modo escuro corrigido, temas Dragonbane/D&D/Fabula mais consistentes e Tema Personalizado ampliado com destaque, texto, opacidade, escurecimento do fundo e desfoque.' },
             { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
             { versao: '0.5.6v Alpha', descricao: 'Prévia de Fabula Ultima ampliada: tema escuro refinado, ficha de Ameaça/PNJ com estrutura de bestiário, modelos prontos de personagens Press Start, inventário dinâmico e Fichas Extras. D&D mobile mantém Perfil e Atributos unificados.' },
             { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
@@ -1070,6 +1175,10 @@
             const [customWinColor, setCustomWinColor] = useState(() => { try { return localStorage.getItem(CUSTOM_WIN_COLOR_KEY) || '#ffffff'; } catch { return '#ffffff'; } });
             const [customBarColor, setCustomBarColor] = useState(() => { try { return localStorage.getItem(CUSTOM_BAR_COLOR_KEY) || '#1a1a1a'; } catch { return '#1a1a1a'; } });
             const [customOpacity, setCustomOpacity] = useState(() => { try { return localStorage.getItem(CUSTOM_OPACITY_KEY) || '0.93'; } catch { return '0.93'; } });
+            const [customAccentColor, setCustomAccentColor] = useState(() => { try { return localStorage.getItem(CUSTOM_ACCENT_COLOR_KEY) || '#7f1d1d'; } catch { return '#7f1d1d'; } });
+            const [customTextColor, setCustomTextColor] = useState(() => { try { return localStorage.getItem(CUSTOM_TEXT_COLOR_KEY) || '#1f2937'; } catch { return '#1f2937'; } });
+            const [customOverlay, setCustomOverlay] = useState(() => { try { return localStorage.getItem(CUSTOM_OVERLAY_KEY) || '0.18'; } catch { return '0.18'; } });
+            const [customBlur, setCustomBlur] = useState(() => { try { return localStorage.getItem(CUSTOM_BLUR_KEY) || '5'; } catch { return '5'; } });
 
             const [showCustomBgModal, setShowCustomBgModal] = useState(false);
             const [showUrlInput, setShowUrlInput] = useState(false);
@@ -1104,19 +1213,20 @@
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
-                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'fabula' ? 'theme-fabula' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : ''}`;
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'fabula' ? 'theme-fabula' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : 'theme-default'}`;
             }, [theme]);
 
             useEffect(() => {
                 if (theme === 'custom' && customBgUrl) {
-                    document.body.style.backgroundImage = `url(${customBgUrl})`;
+                    const shade = Math.max(0, Math.min(0.85, Number(customOverlay) || 0));
+                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,${shade}), rgba(0,0,0,${shade})), url(${customBgUrl})`;
                     document.body.style.backgroundSize = 'cover';
                     document.body.style.backgroundPosition = 'center';
                     document.body.style.backgroundAttachment = 'fixed';
                 } else {
                     document.body.style.backgroundImage = '';
                 }
-            }, [theme, customBgUrl]);
+            }, [theme, customBgUrl, customOverlay]);
 
             useEffect(() => {
                 try { localStorage.setItem(CUSTOM_WIN_COLOR_KEY, customWinColor); } catch {}
@@ -1130,6 +1240,22 @@
                 try { localStorage.setItem(CUSTOM_OPACITY_KEY, customOpacity); } catch {}
             }, [customOpacity]);
 
+            useEffect(() => { try { localStorage.setItem(CUSTOM_ACCENT_COLOR_KEY, customAccentColor); } catch {} }, [customAccentColor]);
+            useEffect(() => { try { localStorage.setItem(CUSTOM_TEXT_COLOR_KEY, customTextColor); } catch {} }, [customTextColor]);
+            useEffect(() => { try { localStorage.setItem(CUSTOM_OVERLAY_KEY, customOverlay); } catch {} }, [customOverlay]);
+            useEffect(() => { try { localStorage.setItem(CUSTOM_BLUR_KEY, customBlur); } catch {} }, [customBlur]);
+
+            useEffect(() => {
+                if (theme !== 'custom') return;
+                document.body.style.setProperty('--custom-window-color', customWinColor);
+                document.body.style.setProperty('--custom-bar-color', customBarColor);
+                document.body.style.setProperty('--custom-accent-color', customAccentColor);
+                document.body.style.setProperty('--custom-text-color', customTextColor);
+                document.body.style.setProperty('--custom-opacity', customOpacity);
+                document.body.style.setProperty('--custom-overlay', customOverlay);
+                document.body.style.setProperty('--custom-blur', `${customBlur}px`);
+            }, [theme, customWinColor, customBarColor, customAccentColor, customTextColor, customOpacity, customOverlay, customBlur]);
+
             // Autosave com debounce: evita perder alterações sem gravar a cada tecla imediatamente.
             useEffect(() => {
                 if (view !== 'editor' || !data) return;
@@ -1141,12 +1267,12 @@
             const getWindowStyle = () => {
                 if (theme !== 'custom') return {};
                 const [r, g, b] = hexToRgb(customWinColor);
-                return { backgroundColor: `rgba(${r}, ${g}, ${b}, ${customOpacity})`, backdropFilter: 'blur(5px)' };
+                return { backgroundColor: `rgba(${r}, ${g}, ${b}, ${customOpacity})`, color: customTextColor, backdropFilter: `blur(${customBlur}px)`, WebkitBackdropFilter: `blur(${customBlur}px)` };
             };
 
             const getBarStyle = () => {
                 if (theme !== 'custom') return {};
-                return { backgroundColor: customBarColor, color: '#ffffff' };
+                return { backgroundColor: customBarColor, color: '#ffffff', borderColor: customAccentColor };
             };
 
             const showToast = (msg) => {
@@ -1969,11 +2095,26 @@
 
                                         <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das janelas</label><input type="color" value={customWinColor} onChange={e => setCustomWinColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
                                         <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das barras</label><input type="color" value={customBarColor} onChange={e => setCustomBarColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
+                                        <div className="grid grid-cols-2 gap-3 border-t pt-3">
+                                            <div><label className="text-[10px] font-bold text-gray-700 block mb-1">Cor de destaque</label><input type="color" value={customAccentColor} onChange={e => setCustomAccentColor(e.target.value)} className="w-full h-9 rounded cursor-pointer" /></div>
+                                            <div><label className="text-[10px] font-bold text-gray-700 block mb-1">Cor do texto</label><input type="color" value={customTextColor} onChange={e => setCustomTextColor(e.target.value)} className="w-full h-9 rounded cursor-pointer" /></div>
+                                        </div>
                                         <div className="border-t pt-3">
                                             <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Opacidade das janelas</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOpacity) * 100)}%</span></div>
                                             <input type="range" min="0.45" max="1" step="0.05" value={customOpacity} onChange={e => setCustomOpacity(e.target.value)} className="w-full" />
                                         </div>
-                                        <button style={getBarStyle()} onClick={() => setShowCustomBgModal(false)} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm mt-3">Concluir</button>
+                                        <div className="border-t pt-3">
+                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Escurecer fundo</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOverlay) * 100)}%</span></div>
+                                            <input type="range" min="0" max="0.65" step="0.05" value={customOverlay} onChange={e => setCustomOverlay(e.target.value)} className="w-full" />
+                                        </div>
+                                        <div className="border-t pt-3">
+                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Desfoque das janelas</label><span className="text-[10px] text-gray-500">{customBlur}px</span></div>
+                                            <input type="range" min="0" max="18" step="1" value={customBlur} onChange={e => setCustomBlur(e.target.value)} className="w-full" />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <button type="button" onClick={() => { setCustomWinColor('#ffffff'); setCustomBarColor('#1f2937'); setCustomAccentColor('#7f1d1d'); setCustomTextColor('#1f2937'); setCustomOpacity('0.95'); setCustomOverlay('0.18'); setCustomBlur('5'); }} className="border border-gray-300 hover:bg-gray-50 py-2 rounded font-bold text-xs">Restaurar cores</button>
+                                            <button style={getBarStyle()} onClick={() => { setTheme('custom'); setShowCustomBgModal(false); }} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm">Concluir</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>, document.body
