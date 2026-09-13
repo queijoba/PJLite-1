@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite — Fichas de RPG | v0.6.4v Alpha</title>
+    <title>PJ Lite — Fichas de RPG | v0.6.5v Alpha</title>
     <meta name="description" content="PJ Lite é uma ferramenta leve para criar, organizar e compartilhar fichas de personagens de RPG. Suporte a Dragonbane, D&amp;D 5e e Fabula Ultima.">
     <meta name="application-name" content="PJ Lite">
     <meta name="theme-color" content="#111827">
@@ -11,12 +11,12 @@
     <!-- Prévia ao compartilhar o link -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PJ Lite">
-    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.4v Alpha">
+    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.5v Alpha">
     <meta property="og:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve. Dragonbane, D&amp;D 5e e Fabula Ultima.">
     <meta property="og:locale" content="pt_BR">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.4v Alpha">
+    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.5v Alpha">
     <meta name="twitter:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -343,7 +343,7 @@
 
 
         /* ==============================================================
-         * REFINO GLOBAL DE TEMAS — v0.6.4
+         * REFINO GLOBAL DE TEMAS — v0.6.5
          * ============================================================== */
         body { transition: background-color .25s ease, color .25s ease; }
         body .max-w-6xl, body .max-w-5xl, body .bg-white, body input, body textarea, body select, body button {
@@ -442,7 +442,7 @@
         body.theme-custom .shadow, body.theme-custom .shadow-sm, body.theme-custom .shadow-md, body.theme-custom .shadow-lg { box-shadow:0 6px 22px rgba(0,0,0,.22) !important; }
         body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:rgba(248,250,252,.78) !important; }
 
-        /* Polimento geral — v0.6.4 */
+        /* Polimento geral — v0.6.5 */
         textarea { field-sizing: content; min-height: 4.5rem; }
         .pj-mobile-tabs { scrollbar-width: thin; overscroll-behavior-x: contain; }
         .pj-card-compact { transition: transform .15s ease, box-shadow .15s ease; }
@@ -456,10 +456,10 @@
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
-    <div id="root"></div>
+    <div id="root"><div style="max-width:760px;margin:48px auto;padding:24px;border:1px solid #cbd5e1;border-radius:12px;background:#fff;color:#1f2937;font-family:Arial,sans-serif;box-shadow:0 8px 30px rgba(0,0,0,.08)"><strong>PJ Lite está carregando…</strong><p style="margin:8px 0 0;font-size:14px;line-height:1.5">Se esta mensagem permanecer, uma biblioteca externa não pôde ser carregada. Verifique sua conexão e recarregue a página. Suas fichas salvas localmente não são apagadas por isso.</p></div></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
         const STORAGE_KEY = 'dragonbane_saved_characters';
         const THREAT_STORAGE_KEY = 'dragonbane_saved_threats'; 
@@ -477,7 +477,8 @@
         const SCHEMA_VERSION = 4;
 
         const UPDATE_LOG = [
-            { versao: '0.6.4v Alpha', descricao: 'Revisão geral e polimento final da linha 0.6: barra de novidades minimizável, acesso rápido ao canal de anúncios no Telegram, Ficha Chat em quatro modos, interface enxuta, Equipamentos e consulta rápida de PI em Fabula Ultima, temas refinados e melhorias de organização e segurança.' },
+            { versao: '0.6.5v Alpha', descricao: 'Revisão de estabilidade e correção de bugs: salvamento seguro ao voltar, histórico e autosave ajustados, importação ZIP/JSON e por Código mais robusta, Ficha Chat revisada, restauração segura de equipamentos de Fabula Ultima, Desfazer mais preciso, otimização de imagens, tratamento de limite de armazenamento e melhorias no Tema Personalizado e carregamento por CDN.' },
+            { versao: '0.6.4v Alpha', descricao: 'Revisão geral e polimento final da linha 0.6: barra de novidades minimizável, acesso rápido ao canal de anúncios no Telegram, Ficha Chat em quatro modos, interface enxuta, Equipamentos e consulta rápida de PI em Fabula Ultima, temas refinados, importação ZIP/JSON revisada e correções de estabilidade em autosave, histórico, desfazer e armazenamento local.' },
             { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
             { versao: '0.5.6v Alpha', descricao: 'Prévia de Fabula Ultima ampliada: tema escuro refinado, ficha de Ameaça/PNJ com estrutura de bestiário, modelos prontos de personagens Press Start, inventário dinâmico e Fichas Extras. D&D mobile mantém Perfil e Atributos unificados.' },
             { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
@@ -814,6 +815,39 @@
             return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
         };
 
+        // Reduz imagens locais antes de armazená-las no localStorage.
+        // Isso diminui bastante a chance de exceder a cota do navegador.
+        const optimizeImageFile = (file, maxDimension = 900, quality = 0.82) => new Promise((resolve, reject) => {
+            if (!file || !String(file.type || '').startsWith('image/')) return reject(new Error('Arquivo de imagem inválido'));
+            if (file.size > 12 * 1024 * 1024) return reject(new Error('Imagem muito grande'));
+            const reader = new FileReader();
+            reader.onerror = () => reject(new Error('Não foi possível ler a imagem'));
+            reader.onload = () => {
+                const original = reader.result;
+                if (file.type === 'image/svg+xml') return resolve(original);
+                const img = new Image();
+                img.onerror = () => resolve(original);
+                img.onload = () => {
+                    try {
+                        const largest = Math.max(img.width || 1, img.height || 1);
+                        if (largest <= maxDimension && file.size <= 450 * 1024) return resolve(original);
+                        const scale = Math.min(1, maxDimension / largest);
+                        const width = Math.max(1, Math.round(img.width * scale));
+                        const height = Math.max(1, Math.round(img.height * scale));
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        if (!ctx) return resolve(original);
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const optimized = canvas.toDataURL('image/webp', quality);
+                        resolve(optimized && optimized.length < String(original).length ? optimized : original);
+                    } catch { resolve(original); }
+                };
+                img.src = original;
+            };
+            reader.readAsDataURL(file);
+        });
+
         const generateChatText = (item) => {
             const sys = item.system || 'dragonbane';
             const safe = (value, fallback = '-') => value !== undefined && value !== null && value !== '' ? value : fallback;
@@ -846,13 +880,36 @@
                 text += `🛡️ Defesa: ${safe(st.defesa)} | ✨ Def. Mágica: ${safe(st.defesaMagica)} | ⚡ Iniciativa: ${safe(st.iniciativa,0)}\n`;
                 text += `🌟 Pontos de Fabula: ${safe(st.fabula,0)} | Nível: ${safe(item.nivel,5)} | EXP: ${safe(item.experiencia,0)}\n`;
                 const classes=(item.classes||[]).filter(c=>hasText(c.nome));
-                if(classes.length){ text += `\n✨ CLASSES & PODERES\n\n`; classes.forEach(c=>{ text += `• ${c.nome} — Nível ${safe(c.nivel,1)}\n`; (c.poderes||[]).filter(p=>hasText(p.nome)).forEach(p=>text += `  ✦ ${p.nome}${p.nivel?` (${p.nivel})`:''}${hasText(p.desc)?` — ${compactText(p.desc)}`:''}\n`); }); }
+                if(classes.length){ text += `\n✨ CLASSES & PODERES\n\n`; classes.forEach(c=>{ text += `• ${c.nome} — Nível ${safe(c.nivel,1)}\n`; if(hasText(c.beneficios)) text += `  Benefícios: ${compactText(c.beneficios)}\n`; (c.poderes||[]).filter(p=>hasText(p.nome)||hasText(p.desc)).forEach(p=>text += `  ✦ ${safe(p.nome,'Poder')}${p.nivel?` (${p.nivel})`:''}${hasText(p.desc)?` — ${compactText(p.desc)}`:''}\n`); }); }
                 const equips=(item.equipamentos||[]).filter(e=>hasText(e.nome));
                 if(equips.length){ text += `\n⚔️ EQUIPAMENTO\n\n`; equips.forEach(e=>text += `• ${e.slot}: ${e.nome}${hasText(e.descricao)?` — ${compactText(e.descricao)}`:''}\n`); }
                 if((item.lacos||[]).length){ text += `\n🤝 LAÇOS\n\n`; item.lacos.filter(l=>hasText(l.alvo)).forEach(l=>text += `• ${l.alvo} (${safe(l.forca,1)}): ${safe(l.emocoes)}\n`); }
                 const invFabula=(item.inventario||[]).filter(it=>hasText(it?.nome));
                 if(invFabula.length || hasText(item.mochila) || Number(item.zenites)>0){ text += `\n🎒 INVENTÁRIO / MOCHILA\n\n`; if(Number(item.zenites)>0) text += `Zênites: ${item.zenites}z\n`; invFabula.forEach(it=>text += `• ${it.nome}${Number(it.quantidade||1)!==1?` x${it.quantidade}`:''}${hasText(it.notas)?` — ${compactText(it.notas)}`:''}\n`); if(hasText(item.mochila)) text += `${invFabula.length?'\n':''}${bulletsFromText(item.mochila)}\n`; }
-                if((item.extrasAtivos||[]).length) text += `\n📚 Fichas extras: ${(item.extrasAtivos||[]).map(id => FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id).join(', ')}\n`;
+                const heroic=(item.poderesHeroicos||[]).filter(p=>hasText(p?.nome) || hasText(p?.desc));
+                if(heroic.length){ text += `\n🌟 PODERES HEROICOS\n\n`; heroic.forEach(p=>text += `• ${safe(p.nome,'Poder Heroico')}${hasText(p.desc)?` — ${compactText(p.desc)}`:''}\n`); }
+                if(hasText(item.caracteristicas)){ text += `\n✨ CARACTERÍSTICAS\n\n${compactText(item.caracteristicas)}\n`; }
+                const profs=[]; const eqp=item.equipavel||{};
+                if(eqp.armaduraMarcial) profs.push('Armaduras marciais'); if(eqp.escudoMarcial) profs.push('Escudos marciais'); if(eqp.armaCorpoMarcial) profs.push('Armas marciais corpo a corpo'); if(eqp.armaDistanciaMarcial) profs.push('Armas marciais à distância');
+                if(profs.length) text += `\n🛡️ PROFICIÊNCIAS DE EQUIPAMENTO\n${profs.join(' | ')}\n`;
+
+                const ex=item.extras||{}; const magia=ex.magia||{};
+                const disciplinas=(magia.disciplinas||[]).filter(hasText); const feiticos=(magia.feiticos||[]).filter(f=>hasText(f?.nome)); const rituais=(magia.rituais||[]).filter(r=>hasText(r?.nome)||hasText(r?.desc));
+                if(disciplinas.length || feiticos.length || rituais.length){
+                    text += `\n🔮 MAGIAS & RITUAIS\n\n`;
+                    if(disciplinas.length) text += `Disciplinas: ${disciplinas.join(', ')}\n`;
+                    feiticos.forEach(f=>text += `• ${f.nome}${hasText(f.pm)?` — ${f.pm} PM`:''}${hasText(f.alvos)?` | Alvos: ${f.alvos}`:''}${hasText(f.duracao)?` | Duração: ${f.duracao}`:''}${hasText(f.desc)?`\n  ${compactText(f.desc)}`:''}\n`);
+                    rituais.forEach(r=>text += `• Ritual: ${safe(r.nome,'Sem nome')}${hasText(r.desc)?` — ${compactText(r.desc)}`:''}\n`);
+                }
+                const arcanos=(ex.arcanos?.lista||[]).filter(a=>hasText(a?.nome)||hasText(a?.dominios)||hasText(a?.fundir)||hasText(a?.dispensar));
+                if(arcanos.length){ text += `\n🌟 ARCANOS\n\n`; arcanos.forEach(a=>{ text += `• ${safe(a.nome,'Arcano')}${hasText(a.dominios)?` — Domínios: ${a.dominios}`:''}\n`; if(hasText(a.fundir)) text += `  Fundir: ${compactText(a.fundir)}\n`; if(hasText(a.dispensar)) text += `  Dispensar: ${compactText(a.dispensar)}\n`; }); }
+                const mn=ex.mnemosfera||{};
+                if(hasText(mn.nome)||hasText(mn.classe)||(mn.poderes||[]).some(p=>hasText(p?.nome))||hasText(mn.poderHeroico)){ text += `\n🧠 MNEMOSFERA\n\n`; text += `${safe(mn.nome,'Mnemosfera')} | Classe: ${safe(mn.classe)} | Nível ${safe(mn.nivel,1)}\n`; (mn.poderes||[]).filter(p=>hasText(p?.nome)).forEach(p=>text += `• ${p.nome}${hasText(p.nivel)?` (${p.nivel})`:''}\n`); if(hasText(mn.poderHeroico)) text += `Poder Heroico: ${compactText(mn.poderHeroico)}\n`; }
+                const rec=ex.receitas||{}; const ing=rec.ingredientes||{}; const ingLines=Object.entries(ing).filter(([,v])=>hasText(v));
+                if(hasText(rec.maxIngredientes)||ingLines.length||hasText(rec.combinacoes)||hasText(rec.notas)){ text += `\n🍳 RECEITAS\n\n`; if(hasText(rec.maxIngredientes)) text += `Máx. ingredientes: ${rec.maxIngredientes}\n`; ingLines.forEach(([k,v])=>text += `• ${k.charAt(0).toUpperCase()+k.slice(1)}: ${compactText(v)}\n`); if(hasText(rec.combinacoes)) text += `Combinações & efeitos: ${compactText(rec.combinacoes)}\n`; if(hasText(rec.notas)) text += `Notas: ${compactText(rec.notas)}\n`; }
+                const notes=ex.anotacoes||{};
+                if(hasText(notes.regras)||hasText(notes.notas)){ text += `\n📝 ANOTAÇÕES EXTRAS\n\n`; if(hasText(notes.regras)) text += `Regras/Peculiaridades: ${compactText(notes.regras)}\n`; if(hasText(notes.notas)) text += `Anotações: ${compactText(notes.notas)}\n`; }
+                if((item.extrasAtivos||[]).length) text += `\n📚 Fichas extras ativas: ${(item.extrasAtivos||[]).map(id => FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id).join(', ')}\n`;
                 return text.trim();
             }
 
@@ -1217,7 +1274,7 @@
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('inicio');
 
-            // Organização e segurança — v0.6.4
+            // Organização e segurança — v0.6.5
             const [searchQuery, setSearchQuery] = useState('');
             const [systemFilter, setSystemFilter] = useState('all');
             const [sortMode, setSortMode] = useState('recent');
@@ -1231,6 +1288,8 @@
             const [newsCollapsed, setNewsCollapsed] = useState(() => { try { return localStorage.getItem(NEWS_COLLAPSED_KEY) === '1'; } catch { return false; } });
 
             const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
+
+            const toastTimerRef = useRef(null);
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
@@ -1283,7 +1342,10 @@
             useEffect(() => {
                 if (view !== 'editor' || !data) return;
                 setSaveStatus('pending');
-                const timer = setTimeout(() => { try { saveToLocal(data, true); } catch { setSaveStatus('error'); } }, 1400);
+                const timer = setTimeout(() => {
+                    const ok = saveToLocal(data, true);
+                    if (!ok) setSaveStatus('error');
+                }, 1400);
                 return () => clearTimeout(timer);
             }, [data, view]);
 
@@ -1298,56 +1360,86 @@
                 return { backgroundColor: customBarColor, color: '#ffffff', borderColor: customAccentColor };
             };
 
-            const showToast = (msg) => {
+            const showToast = (msg, options = {}) => {
+                if (!options.keepUndo) setUndoState(null);
                 setToastMsg(msg);
-                setTimeout(() => setToastMsg(''), 3000);
+                if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+                toastTimerRef.current = setTimeout(() => setToastMsg(''), 3000);
             };
 
             const getHistory = () => { try { return JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)) || {}; } catch { return {}; } };
-            const pushHistorySnapshot = (item) => {
+            const stripHeavyHistoryMedia = (item) => {
+                const clone = JSON.parse(JSON.stringify(item || {}));
+                if (clone?.bio?.imagem && String(clone.bio.imagem).startsWith('data:')) clone.bio.imagem = '';
+                if (clone?.imagem && String(clone.imagem).startsWith('data:')) clone.imagem = '';
+                return clone;
+            };
+            const historySignature = (item) => {
+                try {
+                    const clone = stripHeavyHistoryMedia(item);
+                    if (clone.meta) delete clone.meta.updatedAt;
+                    return JSON.stringify(clone);
+                } catch { return ''; }
+            };
+            const pushHistorySnapshot = (item, nextItem = null) => {
                 if (!item?.id) return;
                 try {
+                    if (nextItem && historySignature(item) === historySignature(nextItem)) return;
                     const history = getHistory();
                     const list = Array.isArray(history[item.id]) ? history[item.id] : [];
-                    const snapshot = { at: new Date().toISOString(), data: JSON.parse(JSON.stringify(item)) };
+                    if (list[0]?.data && historySignature(list[0].data) === historySignature(item)) return;
+                    const snapshot = { at: new Date().toISOString(), data: stripHeavyHistoryMedia(item) };
                     history[item.id] = [snapshot, ...list].slice(0, 5);
                     localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
                 } catch {}
             };
 
             const saveToLocal = (itemData, silent = false) => {
-                let savingData = normalizeMetaItem(itemData);
-                const now = new Date().toISOString();
-                savingData.dataVersion = SCHEMA_VERSION;
-                savingData.meta.createdAt = savingData.meta.createdAt || now;
-                savingData.meta.updatedAt = now;
-                setSaveStatus('saving');
-                if (!savingData.id) savingData.id = Date.now().toString();
-                if (!savingData.system) savingData.system = 'dragonbane';
-                
-                const type = savingData.type || 'pc';
+                try {
+                    let savingData = normalizeMetaItem(itemData);
+                    savingData = normalizeDndPcData(savingData);
+                    savingData = normalizeFabulaPcData(savingData);
+                    savingData = normalizeFabulaThreatData(savingData);
+                    const now = new Date().toISOString();
+                    savingData.dataVersion = SCHEMA_VERSION;
+                    savingData.meta.createdAt = savingData.meta.createdAt || now;
+                    savingData.meta.updatedAt = now;
+                    setSaveStatus('saving');
+                    if (!savingData.id) savingData.id = Date.now().toString();
+                    if (!savingData.system) savingData.system = 'dragonbane';
+                    const type = savingData.type || 'pc';
 
-                if (type === 'pc') {
-                    let chars = getSavedCharacters();
-                    const index = chars.findIndex(c => c.id === savingData.id);
-                    if (index >= 0) { if (!silent) pushHistorySnapshot(chars[index]); chars[index] = savingData; }
-                    else chars.push(savingData);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
-                    setSavedChars(chars);
-                    if (!silent) showToast(savingData.system === 'fabula' ? "Personagem Fabula salvo!" : "Personagem salvo!");
-                } else {
-                    let threats = getSavedThreats();
-                    const index = threats.findIndex(t => t.id === savingData.id);
-                    if (index >= 0) { if (!silent) pushHistorySnapshot(threats[index]); threats[index] = savingData; }
-                    else threats.push(savingData);
-                    localStorage.setItem(THREAT_STORAGE_KEY, JSON.stringify(threats));
-                    setSavedThreats(threats);
-                    if (!silent) showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : savingData.system === 'fabula' ? 'Ameaça / PNJ Fabula salvo!' : type === 'pnj' ? "PNJ salvo!" : "Ameaça salva!");
+                    if (type === 'pc') {
+                        let chars = getSavedCharacters();
+                        const index = chars.findIndex(c => c.id === savingData.id);
+                        const previous = index >= 0 ? chars[index] : null;
+                        if (index >= 0) chars[index] = savingData; else chars.push(savingData);
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
+                        if (previous) pushHistorySnapshot(previous, savingData);
+                        setSavedChars(chars);
+                        if (!silent) showToast(savingData.system === 'fabula' ? 'Personagem Fabula salvo!' : 'Personagem salvo!');
+                    } else {
+                        let threats = getSavedThreats();
+                        const index = threats.findIndex(t => t.id === savingData.id);
+                        const previous = index >= 0 ? threats[index] : null;
+                        if (index >= 0) threats[index] = savingData; else threats.push(savingData);
+                        localStorage.setItem(THREAT_STORAGE_KEY, JSON.stringify(threats));
+                        if (previous) pushHistorySnapshot(previous, savingData);
+                        setSavedThreats(threats);
+                        if (!silent) showToast(savingData.system === 'dnd5e' ? 'Estatística Salva!' : savingData.system === 'fabula' ? 'Ameaça / PNJ Fabula salvo!' : type === 'pnj' ? 'PNJ salvo!' : 'Ameaça salva!');
+                    }
+
+                    if (!silent && (!data.id || data.id === savingData.id)) setData(savingData);
+                    setSaveStatus('saved');
+                    setTimeout(() => setSaveStatus(''), 1800);
+                    return true;
+                } catch (error) {
+                    console.error('Falha ao salvar no armazenamento local:', error);
+                    setSaveStatus('error');
+                    if (!silent) showToast('Não foi possível salvar. O armazenamento do navegador pode estar cheio.');
+                    else showToast('Autosave falhou: libere espaço ou exporte um backup.');
+                    return false;
                 }
-                
-                if (!silent && (!data.id || data.id === savingData.id)) setData(savingData);
-                setSaveStatus('saved');
-                setTimeout(() => setSaveStatus(''), 1800);
             };
 
             const duplicateItem = (item, isThreat = false) => {
@@ -1375,7 +1467,7 @@
             };
 
             const exportFullBackup = () => {
-                const payload = { pjLiteBackup: true, version: '0.6.4v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
+                const payload = { pjLiteBackup: true, version: '0.6.5v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
                 const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
@@ -1407,9 +1499,17 @@
 
             const restoreHistorySnapshot = (snapshot) => {
                 if (!snapshot?.data) return;
-                setData(normalizeMetaItem(snapshot.data));
+                let restored = normalizeMetaItem(snapshot.data);
+                restored = normalizeDndPcData(restored);
+                restored = normalizeFabulaPcData(restored);
+                restored = normalizeFabulaThreatData(restored);
+                // Retratos enviados pelo dispositivo não são duplicados no histórico para economizar espaço.
+                if (restored?.bio && !restored.bio.imagem && data?.bio?.imagem) restored.bio.imagem = data.bio.imagem;
+                if (!restored?.imagem && data?.imagem) restored.imagem = data.imagem;
+                if (!saveToLocal(restored, true)) return;
+                setData(restored);
                 setShowHistoryModal(false);
-                showToast('Versão anterior carregada. Clique em Salvar para confirmar.');
+                showToast('Versão anterior restaurada e salva.');
             };
 
             const filterAndSortItems = (items) => {
@@ -1444,12 +1544,17 @@
             const filterChatText = (raw, sections) => {
                 if (!raw) return '';
                 const mapHeading = (line) => {
-                    const u = line.toUpperCase();
-                    if (/STATUS|ATRIBUTOS|CONDIÇÕES|AFINIDADES/.test(u)) return 'status';
-                    if (/ATAQUES|EQUIPAMENTO|COMBATE|PERÍCIAS PRINCIPAIS/.test(u)) return 'combate';
-                    if (/PODERES|CARACTERÍSTICAS|MAGIAS|FEITIÇOS|CLASSES/.test(u)) return 'poderes';
-                    if (/INVENTÁRIO|MOCHILA/.test(u)) return 'inventario';
-                    if (/INTERPRETAÇÃO|LAÇOS/.test(u)) return 'interpretacao';
+                    const rawLine = String(line || '').trim();
+                    if (!rawLine) return null;
+                    const startsWithSectionIcon = /^[📊⚙⚔🗡✨🔮🎒🤝🎭🧬📚⚡🛡👑🌟🧠🍳📝🎯]/u.test(rawLine);
+                    const plainUpperHeading = /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9][A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9 &/(),.\-]{2,}$/u.test(rawLine);
+                    if (!startsWithSectionIcon && !plainUpperHeading) return null;
+                    const u = rawLine.toUpperCase();
+                    if (/STATUS|ATRIBUTOS|CONDIÇÕES|AFINIDADES|DERIVADOS|ESTATÍSTICAS|PERÍCIAS/.test(u)) return 'status';
+                    if (/ATAQUES|ARMAS|AÇÕES|REAÇÕES|EQUIPAMENTO|COMBATE|DEFESA/.test(u)) return 'combate';
+                    if (/PODERES|CARACTERÍSTICAS|MAGIAS|FEITIÇOS|CLASSES|HABILIDADES|ARCANOS|MNEMOSFERA|PROFICIÊNCIAS DE EQUIPAMENTO/.test(u)) return 'poderes';
+                    if (/INVENTÁRIO|MOCHILA|RECEITAS/.test(u)) return 'inventario';
+                    if (/INTERPRETAÇÃO|LAÇOS|ANOTAÇÕES EXTRAS/.test(u)) return 'interpretacao';
                     return null;
                 };
                 const lines = raw.split('\n');
@@ -1499,8 +1604,13 @@
             };
 
             const undoLastRemoval = () => {
-                if (!undoState?.data) return;
-                setData(undoState.data);
+                if (!undoState || undoState.kind !== 'array-remove') return;
+                const newData = JSON.parse(JSON.stringify(data));
+                const list = Array.isArray(newData[undoState.arrayName]) ? newData[undoState.arrayName] : [];
+                const pos = Math.max(0, Math.min(Number(undoState.index) || 0, list.length));
+                list.splice(pos, 0, JSON.parse(JSON.stringify(undoState.item)));
+                newData[undoState.arrayName] = list;
+                setData(newData);
                 setUndoState(null);
                 showToast('Remoção desfeita.');
             };
@@ -1586,12 +1696,32 @@
             };
             
             const removeFromArray = (arrayName, index) => {
-                const before = JSON.parse(JSON.stringify(data));
                 const newData = JSON.parse(JSON.stringify(data));
-                newData[arrayName] = newData[arrayName].filter((_, i) => i !== index);
-                setUndoState({ data: before, label: 'item removido' });
+                const current = Array.isArray(newData[arrayName]) ? newData[arrayName] : [];
+                const removed = current[index];
+                if (removed === undefined) return;
+                newData[arrayName] = current.filter((_, i) => i !== index);
+                setUndoState({ kind: 'array-remove', arrayName, index, item: JSON.parse(JSON.stringify(removed)), label: 'item removido' });
                 setData(newData);
-                showToast('Item removido.');
+                showToast('Item removido.', { keepUndo: true });
+            };
+
+            const restoreFabulaEquipmentSlots = () => {
+                const current = Array.isArray(data.equipamentos) ? JSON.parse(JSON.stringify(data.equipamentos)) : [];
+                const basic = JSON.parse(JSON.stringify(initialFabulaPcData.equipamentos));
+                const existing = new Set(current.map(e => String(e?.slot || '').trim().toLowerCase()));
+                const missing = basic.filter(e => !existing.has(String(e.slot).trim().toLowerCase()));
+                if (!missing.length) { showToast('Os quatro slots básicos já estão presentes.'); return; }
+                updateField('equipamentos', [...current, ...missing]);
+                showToast(`${missing.length} slot${missing.length > 1 ? 's' : ''} básico${missing.length > 1 ? 's' : ''} restaurado${missing.length > 1 ? 's' : ''} sem apagar equipamentos.`);
+            };
+
+            const returnToDashboard = () => {
+                if (view === 'editor' && data) {
+                    const ok = saveToLocal(data, true);
+                    if (!ok) { showToast('Não foi possível sair: salve um backup ou libere espaço no navegador.'); return; }
+                }
+                setView('dashboard');
             };
 
             /* Dragonbane Específicos */
@@ -1663,26 +1793,46 @@
                 } catch (error) { showToast("Erro ao exportar o arquivo ZIP."); console.error(error); }
             };
 
-            const handleImport = (event) => {
-                const file = event.target.files[0];
+            const normalizeImportedSheet = (importedData) => {
+                if (!importedData || typeof importedData !== 'object' || Array.isArray(importedData)) throw new Error('Formato de ficha inválido');
+                if (importedData.pjLiteBackup) throw new Error('Este arquivo é um backup geral; use Backup & Restauração.');
+                const clone = JSON.parse(JSON.stringify(importedData));
+                if (!clone.system) clone.system = 'dragonbane';
+                if (!clone.type) clone.type = 'pc';
+                const allIds = new Set([...getSavedCharacters(), ...getSavedThreats()].map(x => x.id));
+                if (!clone.id || allIds.has(clone.id)) clone.id = `${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+                let normalizedData = normalizeMetaItem(clone);
+                normalizedData = normalizeDndPcData(normalizedData);
+                normalizedData = normalizeFabulaPcData(normalizedData);
+                normalizedData = normalizeFabulaThreatData(normalizedData);
+                return normalizedData;
+            };
+
+            const handleImport = async (event) => {
+                const file = event.target.files?.[0];
+                event.target.value = '';
                 if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    try {
-                        const importedData = JSON.parse(e.target.result);
-                        if(!importedData.id) importedData.id = Date.now().toString();
-                        if(!importedData.system) importedData.system = 'dragonbane';
-                        if (typeof importedData !== 'object' || Array.isArray(importedData)) throw new Error('Formato de ficha inválido');
-                        let normalizedData = normalizeDndPcData(importedData);
-                        normalizedData = normalizeFabulaPcData(normalizedData);
-                        normalizedData = normalizeFabulaThreatData(normalizedData);
-                        saveToLocal(normalizedData);
-                        setData(normalizedData);
-                        setView('editor');
-                    } catch (error) { showToast("Erro: Arquivo inválido. Certifique-se de extrair o .ZIP."); }
-                };
-                reader.readAsText(file);
-                event.target.value = ''; 
+                try {
+                    let text = '';
+                    const isZip = /\.zip$/i.test(file.name || '') || /zip/i.test(file.type || '');
+                    if (isZip) {
+                        const zip = await JSZip.loadAsync(file);
+                        const entries = Object.values(zip.files).filter(entry => !entry.dir && /\.json$/i.test(entry.name));
+                        if (!entries.length) throw new Error('O ZIP não contém uma ficha JSON.');
+                        text = await entries[0].async('string');
+                    } else {
+                        text = await file.text();
+                    }
+                    const importedData = JSON.parse(text);
+                    const normalizedData = normalizeImportedSheet(importedData);
+                    if (!saveToLocal(normalizedData)) throw new Error('Não foi possível salvar a ficha importada.');
+                    setData(normalizedData);
+                    setView('editor');
+                    showToast(isZip ? 'Ficha importada diretamente do ZIP!' : 'Ficha JSON importada com sucesso!');
+                } catch (error) {
+                    console.error(error);
+                    showToast(error?.message || 'Erro: arquivo de ficha inválido.');
+                }
             };
 
             const openCodeExport = (itemToExport) => {
@@ -1698,17 +1848,18 @@
             const handleCodeImport = () => {
                 try {
                     const decompressed = LZString.decompressFromBase64(codeModal.code.trim());
-                    if (!decompressed) throw new Error("Código inválido");
+                    if (!decompressed) throw new Error('Código inválido');
                     const importedData = JSON.parse(decompressed);
-                    if(!importedData.id) importedData.id = Date.now().toString();
-                    let normalizedData = normalizeDndPcData(importedData);
-                    normalizedData = normalizeFabulaPcData(normalizedData);
-                    saveToLocal(normalizedData);
+                    const normalizedData = normalizeImportedSheet(importedData);
+                    if (!saveToLocal(normalizedData)) throw new Error('Não foi possível salvar a ficha importada.');
                     setData(normalizedData);
                     setView('editor');
                     setCodeModal({ isOpen: false, mode: 'import', code: '' });
-                    showToast("Ficha importada com sucesso via código!");
-                } catch (err) { showToast("Erro: Código de ficha inválido ou corrompido."); }
+                    showToast('Ficha importada com sucesso via código!');
+                } catch (err) {
+                    console.error(err);
+                    showToast(err?.message || 'Erro: Código de ficha inválido ou corrompido.');
+                }
             };
 
             const copyToClipboard = () => {
@@ -1725,7 +1876,7 @@
             const renderHistoryModal = () => {
                 if (!showHistoryModal) return null;
                 const list = data?.id ? (getHistory()[data.id] || []) : [];
-                return <div className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-4 no-print"><div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-lg p-5"><div className="flex justify-between items-center mb-4"><div><h3 className="font-title font-bold text-xl">🕘 Histórico local</h3><p className="text-xs text-gray-500">Até 5 versões anteriores salvas manualmente.</p></div><button onClick={()=>setShowHistoryModal(false)} className="text-xl font-bold">×</button></div>{list.length===0?<p className="text-sm text-gray-500 italic">Ainda não há versões anteriores desta ficha.</p>:<div className="space-y-2">{list.map((snap,i)=><button key={i} onClick={()=>restoreHistorySnapshot(snap)} className="w-full text-left border rounded p-3 hover:bg-gray-50"><strong>Versão {i+1}</strong><br/><span className="text-xs text-gray-500">{new Date(snap.at).toLocaleString('pt-BR')}</span></button>)}</div>}</div></div>;
+                return <div className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-4 no-print"><div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-lg p-5"><div className="flex justify-between items-center mb-4"><div><h3 className="font-title font-bold text-xl">🕘 Histórico local</h3><p className="text-xs text-gray-500">Até 5 versões anteriores do conteúdo. Retratos enviados não são duplicados no histórico para economizar espaço.</p></div><button onClick={()=>setShowHistoryModal(false)} className="text-xl font-bold">×</button></div>{list.length===0?<p className="text-sm text-gray-500 italic">Ainda não há versões anteriores desta ficha.</p>:<div className="space-y-2">{list.map((snap,i)=><button key={i} onClick={()=>restoreHistorySnapshot(snap)} className="w-full text-left border rounded p-3 hover:bg-gray-50"><strong>Versão {i+1}</strong><br/><span className="text-xs text-gray-500">{new Date(snap.at).toLocaleString('pt-BR')}</span></button>)}</div>}</div></div>;
             };
 
             if (view === 'dashboard') {
@@ -1748,6 +1899,7 @@
                                         <option value="dark">Tema: Modo Escuro</option>
                                         <option value="custom">Tema: Custom...</option>
                                     </select>
+                                    {theme === 'custom' && <button type="button" onClick={() => setShowCustomBgModal(true)} className="ml-1 px-1.5 py-0.5 rounded border border-gray-400 text-[10px] font-bold hover:bg-white" title="Editar Tema Custom" aria-label="Editar Tema Custom">⚙</button>}
                                 </div>
                                 <button onClick={() => { setGuideTab('inicio'); setShowGuideModal(true); }} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.HelpCircle /> Guias e Tutoriais
@@ -1757,7 +1909,7 @@
                                 <div className={`px-4 ${newsCollapsed ? 'py-2' : 'py-3'} flex items-center justify-between gap-3`}>
                                     <div className="min-w-0">
                                         <div className="font-title font-bold text-[#922610] flex items-center gap-2">
-                                            <span>✨ Novidade — Fabula Ultima e polimentos da v0.6.4v Alpha</span>
+                                            <span>✨ Novidade — Revisão de estabilidade da v0.6.5v Alpha</span>
                                             {newsCollapsed && <span className="hidden sm:inline text-[10px] font-body font-bold uppercase tracking-widest text-[#922610]/70">minimizado</span>}
                                         </div>
                                         {!newsCollapsed && (
@@ -1770,7 +1922,7 @@
                                         )}
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
-                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">v0.6.4v Alpha</span>}
+                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">v0.6.5v Alpha</span>}
                                         <button onClick={() => setNewsCollapsed(v => !v)} className="bg-white/80 hover:bg-white text-[#922610] border border-[#c46b58] rounded px-2.5 py-1 text-xs font-bold shadow-sm" title={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'} aria-label={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'}>
                                             {newsCollapsed ? '＋' : '−'}
                                         </button>
@@ -1787,7 +1939,7 @@
                                     </button>
                                     <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
                                         <SVGIcons.Upload /> ZIP/JSON
-                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                        <input type="file" accept=".json,.zip,application/json,application/zip,application/x-zip-compressed" className="hidden" onChange={handleImport} />
                                     </label>
                                     <button onClick={() => { setCreateTarget('pc'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-red-800 hover:bg-red-700 text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                         <SVGIcons.Plus /> Novo Personagem
@@ -1878,7 +2030,7 @@
                                     </button>
                                     <label className="cursor-pointer flex justify-center items-center gap-1 bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded shadow transition-colors font-bold text-sm">
                                         <SVGIcons.Upload /> ZIP/JSON
-                                        <input type="file" accept=".json" className="hidden" onChange={handleImport} />
+                                        <input type="file" accept=".json,.zip,application/json,application/zip,application/x-zip-compressed" className="hidden" onChange={handleImport} />
                                     </label>
                                     <button onClick={() => { setCreateTarget('threat'); setShowSystemModal(true); }} className="flex justify-center items-center gap-1 bg-gray-800 hover:bg-black text-white px-4 py-2 rounded shadow transition-colors font-bold text-sm">
                                         <SVGIcons.Plus /> Criar Ameaça/PNJ
@@ -2195,7 +2347,7 @@
 
                                             <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark text-white py-2 px-3 rounded block text-center font-bold text-xs">
                                                 <span className="inline-flex items-center justify-center gap-1"><SVGIcons.Upload/> Carregar imagem</span>
-                                                <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files[0]; if(f){ const r=new FileReader(); r.onload=(ev)=>{setCustomBgUrl(ev.target.result);localStorage.setItem(CUSTOM_BG_KEY,ev.target.result);setTheme('custom');setCustomBgLink('');}; r.readAsDataURL(f); } e.target.value=''; }} />
+                                                <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const f = e.target.files[0]; e.target.value=''; if(!f) return; try { const img = await optimizeImageFile(f, 1920, 0.78); localStorage.setItem(CUSTOM_BG_KEY, img); setCustomBgUrl(img); setTheme('custom'); setCustomBgLink(''); showToast('Fundo otimizado e aplicado.'); } catch(err) { console.error(err); showToast('Não foi possível usar esta imagem. Tente uma imagem menor.'); } }} />
                                             </label>
 
                                             <div className="flex items-center gap-2 text-[9px] uppercase font-bold text-gray-400"><span className="h-px bg-gray-300 flex-1"></span>ou URL<span className="h-px bg-gray-300 flex-1"></span></div>
@@ -2208,19 +2360,18 @@
                                                     onKeyDown={e => {
                                                         if (e.key === 'Enter' && customBgLink.trim()) {
                                                             const url = customBgLink.trim();
-                                                            setCustomBgUrl(url);
-                                                            localStorage.setItem(CUSTOM_BG_KEY, url);
-                                                            setTheme('custom');
+                                                            try { localStorage.setItem(CUSTOM_BG_KEY, url); setCustomBgUrl(url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); }
+                                                            catch(err) { console.error(err); showToast('Não foi possível salvar o fundo personalizado.'); }
                                                         }
                                                     }}
                                                     placeholder="https://site.com/imagem.jpg"
                                                     className="flex-1 min-w-0 border rounded px-2 py-2 text-xs outline-none focus:border-gray-500"
                                                 />
-                                                <button type="button" onClick={() => { const url=customBgLink.trim(); if(!url) return; setCustomBgUrl(url); localStorage.setItem(CUSTOM_BG_KEY,url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); }} className="bg-gray-800 hover:bg-black text-white px-3 rounded text-xs font-bold">Aplicar</button>
+                                                <button type="button" onClick={() => { const url=customBgLink.trim(); if(!url) return; try { localStorage.setItem(CUSTOM_BG_KEY,url); setCustomBgUrl(url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); } catch(err) { console.error(err); showToast('Não foi possível salvar o fundo personalizado.'); } }} className="bg-gray-800 hover:bg-black text-white px-3 rounded text-xs font-bold">Aplicar</button>
                                             </div>
 
                                             {customBgUrl && (
-                                                <button type="button" onClick={() => { setCustomBgUrl(''); setCustomBgLink(''); localStorage.removeItem(CUSTOM_BG_KEY); }} className="w-full border border-red-300 text-red-700 hover:bg-red-50 py-1.5 rounded text-[10px] font-bold">Remover imagem de fundo</button>
+                                                <button type="button" onClick={() => { setCustomBgUrl(''); setCustomBgLink(''); try { localStorage.removeItem(CUSTOM_BG_KEY); } catch {} }} className="w-full border border-red-300 text-red-700 hover:bg-red-50 py-1.5 rounded text-[10px] font-bold">Remover imagem de fundo</button>
                                             )}
                                         </div>
 
@@ -2472,7 +2623,7 @@
                 <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-gray-500'} transition-all duration-300`}>
                     <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`no-print p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
                         <div className="flex items-center gap-4">
-                            <button onClick={() => setView('dashboard')} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
+                            <button onClick={returnToDashboard} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className="font-title font-bold text-lg md:text-xl tracking-wider uppercase">
@@ -2548,7 +2699,7 @@
                                                 <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                                     {!showUrlInput ? (
                                                         <React.Fragment>
-                                                            <label className="cursor-pointer bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">Upload<input type="file" accept="image/*" className="hidden" onChange={e=>{const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=x=>updateField('bio.imagem',x.target.result); r.readAsDataURL(f); e.target.value='';}}/></label>
+                                                            <label className="cursor-pointer bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 w-24 text-center shadow">Upload<input type="file" accept="image/*" className="hidden" onChange={async e=>{const f=e.target.files[0]; e.target.value=''; if(!f)return; try{updateField('bio.imagem',await optimizeImageFile(f,720,0.82));}catch(err){console.error(err);showToast('Não foi possível usar esta imagem.');}}}/></label>
                                                             <button type="button" onClick={()=>setShowUrlInput(true)} className="bg-white text-black px-3 py-1.5 rounded text-xs font-bold hover:bg-gray-200 w-24 shadow">Usar URL</button>
                                                             {data.bio?.imagem && <button type="button" onClick={()=>updateField('bio.imagem','')} className="bg-red-600 text-white px-3 py-1.5 rounded text-xs font-bold hover:bg-red-700 w-24 shadow">Remover</button>}
                                                         </React.Fragment>
@@ -2597,7 +2748,7 @@
                                 {fabulaTab === 'combate' && (
                                     <div className="space-y-6 animate-fade-in-up">
                                         <div>
-                                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3"><h2 className="font-title font-bold text-xl text-teal-900">🎒 Equipamentos</h2><div className="flex flex-wrap gap-2"><button type="button" onClick={()=>addToArray('equipamentos',{slot:'Outro',nome:'',descricao:''})} className="text-xs font-bold bg-teal-700 text-white rounded px-3 py-1.5">+ Equipamento</button><button type="button" onClick={()=>updateField('equipamentos',JSON.parse(JSON.stringify(initialFabulaPcData.equipamentos)))} className="text-xs font-bold border border-teal-300 text-teal-800 rounded px-3 py-1.5 bg-white" title="Restaura os quatro espaços básicos da ficha">Restaurar slots básicos</button></div></div>
+                                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3"><h2 className="font-title font-bold text-xl text-teal-900">🎒 Equipamentos</h2><div className="flex flex-wrap gap-2"><button type="button" onClick={()=>addToArray('equipamentos',{slot:'Outro',nome:'',descricao:''})} className="text-xs font-bold bg-teal-700 text-white rounded px-3 py-1.5">+ Equipamento</button><button type="button" onClick={restoreFabulaEquipmentSlots} className="text-xs font-bold border border-teal-300 text-teal-800 rounded px-3 py-1.5 bg-white" title="Adiciona apenas os slots básicos que estiverem faltando, sem apagar equipamentos">Restaurar slots básicos</button></div></div>
                                             <div className="space-y-2">
                                                 {(data.equipamentos||[]).length===0 && <div className="text-xs text-gray-400 italic text-center py-4 border border-dashed rounded">Nenhum equipamento cadastrado. Use “+ Equipamento” ou restaure os slots básicos.</div>}
                                                 {(data.equipamentos||[]).map((eq,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[150px_1fr_2fr_36px] gap-2 border rounded p-2 bg-gray-50 items-center"><input value={eq.slot||''} onChange={e=>updateArrayField('equipamentos',i,'slot',e.target.value)} className="border rounded p-2 text-xs font-bold min-w-0" placeholder="Slot"/><input value={eq.nome||''} onChange={e=>updateArrayField('equipamentos',i,'nome',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Item equipado"/><input value={eq.descricao||''} onChange={e=>updateArrayField('equipamentos',i,'descricao',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Precisão, dano, defesa, qualidade..."/><button type="button" onClick={()=>removeFromArray('equipamentos',i)} className="text-red-600 hover:text-red-800 font-bold text-lg rounded hover:bg-red-50 h-9" title="Excluir equipamento" aria-label={`Excluir equipamento ${eq.nome||i+1}`}>×</button></div>)}
@@ -2708,13 +2859,12 @@
                                                             type="file"
                                                             accept="image/*"
                                                             className="hidden"
-                                                            onChange={(e) => {
+                                                            onChange={async (e) => {
                                                                 const file = e.target.files[0];
-                                                                if (!file) return;
-                                                                const reader = new FileReader();
-                                                                reader.onload = (ev) => updateField('bio.imagem', ev.target.result);
-                                                                reader.readAsDataURL(file);
                                                                 e.target.value = '';
+                                                                if (!file) return;
+                                                                try { updateField('bio.imagem', await optimizeImageFile(file, 720, 0.82)); }
+                                                                catch (err) { console.error(err); showToast('Não foi possível usar esta imagem.'); }
                                                             }}
                                                         />
                                                     </label>
@@ -3242,7 +3392,7 @@
                                                 <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                                     {!showUrlInput ? (
                                                         <React.Fragment>
-                                                            <label className="cursor-pointer bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg">Upload<input type="file" accept="image/*" className="hidden" onChange={(e) => { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { updateField('bio.imagem', e.target.result); }; reader.readAsDataURL(file); }} /></label>
+                                                            <label className="cursor-pointer bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg">Upload<input type="file" accept="image/*" className="hidden" onChange={async (e) => { const file = e.target.files[0]; e.target.value=''; if (!file) return; try { updateField('bio.imagem', await optimizeImageFile(file, 720, 0.82)); } catch(err) { console.error(err); showToast('Não foi possível usar esta imagem.'); } }} /></label>
                                                             <button onClick={() => setShowUrlInput(true)} className="bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg">Usar URL</button>
                                                             {data.bio?.imagem && ( <button onClick={() => updateField('bio.imagem', '')} className="bg-red-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-red-700 w-28 text-center mt-2 shadow-lg">Remover</button> )}
                                                         </React.Fragment>
