@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite — Fichas de RPG | v0.6.5v Alpha</title>
-    <meta name="description" content="PJ Lite é uma ferramenta leve para criar, organizar e compartilhar fichas de personagens de RPG. Suporte a Dragonbane, D&amp;D 5e e Fabula Ultima.">
+    <title>PJ Lite — Fichas de RPG | v0.6.7v Alpha</title>
+    <meta name="description" content="PJ Lite é uma ferramenta leve para criar, organizar e compartilhar fichas de personagens de RPG. Suporte a Dragonbane, D&amp;D 5e, Fabula Ultima e teste avançado de O Som das Seis.">
     <meta name="application-name" content="PJ Lite">
     <meta name="theme-color" content="#111827">
 
     <!-- Prévia ao compartilhar o link -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PJ Lite">
-    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.5v Alpha">
-    <meta property="og:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve. Dragonbane, D&amp;D 5e e Fabula Ultima.">
+    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.7v Alpha">
+    <meta property="og:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve. Dragonbane, D&amp;D 5e, Fabula Ultima e O Som das Seis.">
     <meta property="og:locale" content="pt_BR">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.5v Alpha">
+    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.7v Alpha">
     <meta name="twitter:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -108,6 +108,31 @@
         body.theme-dnd input, body.theme-dnd textarea, body.theme-dnd select { border-color: #c9a98f; }
         body.theme-dnd .bg-gray-50, body.theme-dnd .bg-gray-100 { background-color: #fffaf2 !important; }
         
+
+        /* --- TEMA O SOM DAS SEIS --- */
+        body.theme-som6 {
+            background-color: #d8c29b !important;
+            background-image: radial-gradient(circle at top, rgba(126, 35, 20, 0.12), transparent 40%), linear-gradient(180deg, #e7d4b0 0%, #d4b589 100%) !important;
+        }
+        body.theme-som6 .max-w-6xl, body.theme-som6 .max-w-5xl {
+            background-color: #f5ebd3 !important;
+            border-color: #6f261e !important;
+        }
+        body.theme-som6 .bg-dragon-dark {
+            background-color: #6f261e !important;
+            color: #fff6e8 !important;
+        }
+        body.theme-som6 .border-dragon-dark { border-color: #6f261e !important; }
+        body.theme-som6 input, body.theme-som6 textarea, body.theme-som6 select { border-color: #b89b73 !important; }
+        body.theme-som6 .bg-gray-50, body.theme-som6 .bg-gray-100 { background-color: #fbf3e4 !important; }
+        body.theme-som6 .text-gray-700, body.theme-som6 .text-gray-800, body.theme-som6 .text-gray-900 { color: #3f2b1d !important; }
+        body.theme-som6 .bg-gray-200 { background-color: #ead8b8 !important; }
+        body.theme-som6 .bg-gray-300 { background-color: #ddc49c !important; }
+        body.theme-som6 .border-gray-200, body.theme-som6 .border-gray-300 { border-color: #c8ab80 !important; }
+        body.theme-som6 .text-red-900, body.theme-som6 .text-red-950, body.theme-som6 .text-red-800 { color: #7b241c !important; }
+        body.theme-som6 .bg-red-900, body.theme-som6 .bg-red-950, body.theme-som6 .bg-red-800, body.theme-som6 .bg-[#922610] { background-color: #7b241c !important; color: #fff6e8 !important; }
+        body.theme-som6 .bg-amber-50, body.theme-som6 .bg-amber-100, body.theme-som6 .bg-amber-200 { background-color: #f1e0bf !important; }
+        body.theme-som6 .text-stone-500, body.theme-som6 .text-stone-600, body.theme-som6 .text-gray-500, body.theme-som6 .text-gray-600 { color: #6d5742 !important; }
 
         /* --- TEMA MODO ESCURO --- */
         body.theme-dark { background-color: #111827 !important; color: #e5e7eb !important; }
@@ -399,9 +424,21 @@
         body.theme-dark .bg-gray-300 { background:#2b3c52 !important; color:#f2f6fa !important; }
         body.theme-dark .bg-\[\#fdf1dc\] { background:#2c241e !important; color:#f7e8d4 !important; }
         body.theme-dark .bg-\[\#f3eadc\] { background:#29231e !important; color:#f4e6d7 !important; }
+        body.theme-dark .bg-\[\#f8edd7\] { background:#261a15 !important; color:#f5e8d5 !important; }
+        body.theme-dark .bg-\[\#f8edd7\] .text-red-950,
+        body.theme-dark .bg-\[\#f8edd7\] .text-red-900,
+        body.theme-dark .bg-\[\#f8edd7\] .text-red-800 { color:#f4aaa0 !important; }
+        body.theme-dark .bg-\[\#f8edd7\] .text-gray-700,
+        body.theme-dark .bg-\[\#f8edd7\] .text-gray-600,
+        body.theme-dark .bg-\[\#f8edd7\] .text-stone-600 { color:#ead9c2 !important; }
         body.theme-dark .text-gray-900, body.theme-dark .text-gray-800, body.theme-dark .text-gray-700, body.theme-dark .text-black { color:#f1f5f9 !important; }
         body.theme-dark .text-gray-600, body.theme-dark .text-gray-500 { color:#bac6d6 !important; }
         body.theme-dark .text-gray-400 { color:#98a7ba !important; }
+
+        /* Correção de contraste: painéis de pergaminho no modo escuro */
+        body.theme-dark .bg-\[\#f8edd7\] a:not(.bg-red-900):not(.bg-red-950) { color:#f2b8ad !important; }
+        body.theme-dark .bg-\[\#f8edd7\] .border-red-900 { border-color:#a94a45 !important; }
+
         body.theme-dark input, body.theme-dark textarea, body.theme-dark select { background:#0c1524 !important; color:#f4f7fb !important; border-color:#53667f !important; caret-color:#fff !important; }
         body.theme-dark input:focus, body.theme-dark textarea:focus, body.theme-dark select:focus { background:#0f1b2d !important; border-color:#8aa0ba !important; box-shadow:0 0 0 2px rgba(148,163,184,.14) !important; }
         body.theme-dark input[type="color"] { background:#162233 !important; padding:2px !important; }
@@ -442,7 +479,71 @@
         body.theme-custom .shadow, body.theme-custom .shadow-sm, body.theme-custom .shadow-md, body.theme-custom .shadow-lg { box-shadow:0 6px 22px rgba(0,0,0,.22) !important; }
         body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:rgba(248,250,252,.78) !important; }
 
-        /* Polimento geral — v0.6.5 */
+        /* O Som das Seis — teste avançado de integração na linha 0.6 */
+        .som6-paper { background: linear-gradient(180deg, #efe7c9 0%, #e8ddba 100%); }
+        .som6-sheet { color:#1b1712; }
+        .som6-logo { font-family: Georgia, 'Times New Roman', serif; font-weight: 900; text-transform: uppercase; letter-spacing: -.055em; color:#0c0b0a; line-height:.84; text-shadow:0 1px 0 rgba(255,255,255,.25); }
+        .som6-frame { background:#0c0b0a; border:2px solid #0c0b0a; padding:8px; box-shadow:0 1px 0 rgba(255,255,255,.25) inset; }
+        .som6-frame-cut { border-radius:18px 4px 18px 4px; }
+        .som6-cream { background:#f3ebcf; border:1px solid #ccbf97; color:#17130f; }
+        .som6-section { border: 1px solid #c8b98d; background: rgba(248,240,211,.97); box-shadow: 0 1px 3px rgba(52,35,20,.08); }
+        .som6-title { color: #7f1d1d; letter-spacing: .035em; }
+        .som6-label { font-size: 9px; line-height: 1; font-weight: 900; text-transform: uppercase; letter-spacing: .065em; color: #5b4934; }
+        .som6-frame .som6-label { color:#efe4bd; }
+        .som6-frame input, .som6-frame textarea, .som6-frame select { background:#fbf7e8 !important; color:#17130f !important; border-color:#b5aa88 !important; }
+        .som6-pip { width:24px; height:24px; border:2px solid #16120f; border-radius:7px; background:#f6efd5; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; transition:.12s ease; }
+        .som6-pip.active { background:#8b1e16; border-color:#4b100c; color:white; box-shadow:inset 0 0 0 2px rgba(255,255,255,.18); }
+        .som6-pip:hover { transform:translateY(-1px); }
+        .som6-mini-input { min-height:34px !important; padding:.35rem .45rem !important; }
+        .som6-compact-textarea { min-height:42px !important; }
+        .som6-stat-box { background:#f3ebcf; border-radius:12px 3px 12px 3px; padding:7px; }
+        .som6-table-row { background:#f8f1d8; border:1px solid #cabd98; }
+        .som6-portrait { background:#f3ebcf; border:2px solid #15110e; border-radius:13px 3px 13px 3px; overflow:hidden; box-shadow:0 1px 0 rgba(255,255,255,.2) inset; }
+        .som6-portrait-img { width:100%; height:100%; object-fit:cover; display:block; }
+        .som6-portrait-empty { min-height:106px; display:flex; align-items:center; justify-content:center; padding:.5rem; text-align:center; font:900 10px/1.15 Georgia,serif; text-transform:uppercase; letter-spacing:.08em; color:#765c43; }
+        .som6-portrait-actions { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:5px; }
+        .som6-portrait-actions button, .som6-portrait-actions label { min-height:24px; display:flex; align-items:center; justify-content:center; border-radius:6px; font-size:9px; font-weight:900; cursor:pointer; }
+        .som6-dark-note { color:#6c5a45; }
+
+        /* Modo escuro próprio: mantém a identidade de papel/envelhecido sem virar um bloco cinza. */
+        body.theme-dark .som6-paper { background:radial-gradient(circle at top, #28140f 0, #160e0b 38%, #0c0908 100%) !important; }
+        body.theme-dark .som6-sheet { color:#f4e8cf !important; }
+        body.theme-dark .som6-logo { color:#f1dfb8 !important; text-shadow:0 1px 0 #000 !important; }
+        body.theme-dark .som6-frame { background:#090706 !important; border-color:#4d2a22 !important; box-shadow:0 0 0 1px rgba(181,109,82,.16), 0 8px 20px rgba(0,0,0,.22) !important; }
+        body.theme-dark .som6-section { background:#211612 !important; border-color:#6d4938 !important; color:#f4e8cf !important; }
+        body.theme-dark .som6-cream, body.theme-dark .som6-stat-box, body.theme-dark .som6-table-row { background:#2a1d17 !important; border-color:#6b4c3b !important; color:#f4e8cf !important; }
+        body.theme-dark .som6-label { color:#d9b995 !important; }
+        body.theme-dark .som6-frame .som6-label { color:#e9cfaa !important; }
+        body.theme-dark .som6-title { color:#f0a69a !important; }
+        body.theme-dark .som6-pip { background:#1b1411 !important; border-color:#b38f70 !important; color:#ead8b8 !important; }
+        body.theme-dark .som6-pip.active { background:#8f241d !important; border-color:#e0a895 !important; color:#fff8e8 !important; }
+        body.theme-dark .som6-sheet input,
+        body.theme-dark .som6-sheet textarea,
+        body.theme-dark .som6-sheet select { background:#181210 !important; color:#f8ecd4 !important; border-color:#725443 !important; }
+        body.theme-dark .som6-sheet input::placeholder,
+        body.theme-dark .som6-sheet textarea::placeholder { color:#a88f78 !important; opacity:1; }
+        body.theme-dark .som6-sheet .bg-white { background:#1a1310 !important; color:#f4e8cf !important; }
+        body.theme-dark .som6-sheet .bg-red-50 { background:#3a1714 !important; color:#f7ddd2 !important; }
+        body.theme-dark .som6-sheet .bg-stone-800 { background:#5a3128 !important; color:#fff7e8 !important; }
+        body.theme-dark .som6-sheet .text-stone-500,
+        body.theme-dark .som6-sheet .text-gray-500 { color:#bda98f !important; }
+        body.theme-dark .som6-sheet .text-stone-600,
+        body.theme-dark .som6-sheet .text-gray-600 { color:#d7c5aa !important; }
+        body.theme-dark .som6-sheet .text-red-800,
+        body.theme-dark .som6-sheet .text-red-900,
+        body.theme-dark .som6-sheet .text-red-950 { color:#f1aa9e !important; }
+        body.theme-dark .som6-sheet .border-stone-300,
+        body.theme-dark .som6-sheet .border-stone-400,
+        body.theme-dark .som6-sheet .border-red-800 { border-color:#74503f !important; }
+        body.theme-dark .som6-portrait { background:#211713 !important; border-color:#815948 !important; }
+        body.theme-dark .som6-portrait-empty { color:#c9ad8b !important; }
+        body.theme-dark .som6-dark-note { color:#c4ad8d !important; }
+        body.theme-dark .som6-paper .pj-mobile-tabs { background:#170806 !important; border-color:#6f261e !important; }
+        body.theme-dark .som6-paper .pj-mobile-tabs button { color:#f4dfbd !important; }
+        body.theme-dark .som6-paper .pj-mobile-tabs button.bg-red-900 { background:#6f201a !important; }
+        @media (max-width: 767px) { .som6-pip { width:22px; height:22px; border-radius:6px; } .som6-portrait-empty{min-height:92px;} }
+
+        /* Polimento geral — linha 0.6 */
         textarea { field-sizing: content; min-height: 4.5rem; }
         .pj-mobile-tabs { scrollbar-width: thin; overscroll-behavior-x: contain; }
         .pj-card-compact { transition: transform .15s ease, box-shadow .15s ease; }
@@ -474,22 +575,18 @@
         const CUSTOM_BLUR_KEY = 'pjlite_custom_blur';
         const HISTORY_STORAGE_KEY = 'pjlite_item_history_v1';
         const NEWS_COLLAPSED_KEY = 'pjlite_news_collapsed_v1';
-        const SCHEMA_VERSION = 5;
+        const SCHEMA_VERSION = 6;
 
         const UPDATE_LOG = [
+            { versao: '0.6.7v Alpha', descricao: 'O Som das Seis entra em teste avançado dentro da linha 0.6: ficha principal compacta inspirada no PDF oficial, aba separada de Montaria, retrato por upload ou URL, tema próprio do sistema, modo escuro refinado, revisões de layout e guias ampliados com suporte para iniciantes e link para o material original.' },
             { versao: '0.6.5v Alpha', descricao: 'Revisão de estabilidade e fechamento da adaptação de Fabula Ultima: salvamento seguro ao voltar, histórico/autosave e importações revisados, Ficha Chat refinada, modelos Press Start reorganizados, nova Ficha Extra de Projetos, equipamentos e PI consolidados, além de melhorias de armazenamento, imagens, temas e carregamento por CDN.' },
             { versao: '0.6.4v Alpha', descricao: 'Revisão geral e polimento final da linha 0.6: barra de novidades minimizável, acesso rápido ao canal de anúncios no Telegram, Ficha Chat em quatro modos, interface enxuta, Equipamentos e consulta rápida de PI em Fabula Ultima, temas refinados, importação ZIP/JSON revisada e correções de estabilidade em autosave, histórico, desfazer e armazenamento local.' },
             { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
-            { versao: '0.5.6v Alpha', descricao: 'Prévia de Fabula Ultima ampliada: tema escuro refinado, ficha de Ameaça/PNJ com estrutura de bestiário, modelos prontos de personagens Press Start, inventário dinâmico e Fichas Extras. D&D mobile mantém Perfil e Atributos unificados.' },
-            { versao: '0.5.5 Alpha', descricao: 'Aprimoramentos de interface e preparação da navegação responsiva para as fichas dos sistemas em adaptação.' },
-            { versao: '0.5.4v Alpha', descricao: 'Expansão da adaptação de D&D 5e (2024): correção do modelo de Mago, novo organizador em abas para Características/Talentos e Magias, listas dinâmicas com adicionar/remover, melhorias em Ataques, novo Tema Dungeons & Dragons, modelos prontos de personagens Dragonbane, guias revisados e créditos do projeto.' },
-            { versao: '0.5.3 Alpha', descricao: 'Aprimoramentos internos de compatibilidade das fichas D&D e preparação da interface para novos recursos do sistema em adaptação.' },
-            { versao: '0.5.2 Alpha', descricao: 'Adição de retrato na Ficha de Personagem D&D 5e com Upload, URL e Remover, seguindo a mesma experiência de avatar do Dragonbane. O retrato permanece salvo na ficha e nos arquivos ZIP, mas continua fora dos Códigos LZ-String para manter o compartilhamento leve.' },
+            { versao: '0.5.6v Alpha', descricao: 'Fichas mobile com abas, temas expandidos, Modo Escuro aprimorado, Ficha Chat revisada, modelos de Dragonbane e início da integração de Fabula Ultima.' },
+            { versao: '0.5.4v Alpha', descricao: 'Correções do Mago de D&D, lista dinâmica de Características & Talentos, nova organização de magias, Guia ampliado e identidade PJ Lite.' },
             { versao: '0.5.1 Alpha', descricao: 'Ajustes no layout "Sobre o Projeto", restauração da caixa DMLite e reorganização completa das abas de Guias e Tutoriais.' },
-            { versao: '0.5.0 Alpha', descricao: 'Integração completa de Fichas de Personagem (PC) e Blocos de Estatística (Bestiário) de D&D 5e (2024). Automação total de modificadores de habilidade e perícias. Suporte ao formato nativo do SRD 5.2.' },
-            { versao: '0.4.0 Alpha', descricao: 'Remoção do modo de impressão (instável) e adição da cópia da Ficha Completa como Texto para envio no WhatsApp/Discord. Renomeação do App.' },
-            { versao: '0.3.8 Alpha', descricao: 'Adição de Códigos de Ficha (Seeds via LZ-String) para copiar/colar rapidamente.' },
-            { versao: '0.3.0v', descricao: 'Adição do módulo do Mestre com gestão de PNJs, Criação Rápida de PNJs e Ameaças.' }
+            { versao: '0.5.0 Alpha', descricao: 'Primeira versão pública do PJ Lite, com foco inicial em Dragonbane.' }
+    
         ];
 
         /* ==============================================================
@@ -763,6 +860,108 @@
             { ...JSON.parse(JSON.stringify(initialFabulaThreatData)), nome:'Cactonto', nivel:15, patente:'Soldado', especie:'Planta', descricao:'Cacto monstruoso territorial, ótimo como exemplo de criatura básica.', tracos:'Assustador, enorme, sensível à água, territorial', atributos:{des:'d8',ast:'d6',vig:'d12',von:'d6'}, status:{pvAtual:90,pvMax:90,pmAtual:55,pmMax:55,iniciativa:7,defesa:8,defesaMagica:6}, afinidades:{...initialFabulaThreatData.afinidades}, ataques:[{nome:'Abraço Perfurador',tipo:'Corpo a corpo',teste:'VIG + VIG +1',dano:'RA + 10',tipoDano:'Físico',efeito:''},{nome:'Barragem de Espinhos',tipo:'À distância',teste:'DES + VIG +1',dano:'RA + 5',tipoDano:'Físico',efeito:''}], feiticos:[{nome:'Drenar Umidade',teste:'VIG + VON +1',pm:10,alvo:'Uma criatura',duracao:'Instantânea',efeito:'Causa [RA + 15] de dano de veneno e recupera PV igual à metade dos PV perdidos pelo alvo.'}], outrasAcoes:[{nome:'Seiva de Cactonto',desc:'Recupera-se das condições fraco e lento e usa Barragem de Espinhos como ataque livre.'}], regrasEspeciais:[{nome:'Planta',desc:'Imune às condições abalado, atordoado e enfurecido.'}] }
         ];
 
+
+        /* ==============================================================
+         * O SOM DAS SEIS — PRIMEIRA PRÉVIA PJ LITE
+         * Regras do sistema por Ramon Mineiro — CC BY-SA 4.0 conforme livro.
+         * ============================================================== */
+        const SOM6_ANTECEDENTES = [
+            ['combate','Combate'], ['negocios','Negócios'], ['montaria','Montaria'], ['tradicao','Tradição'],
+            ['labuta','Labuta'], ['exploracao','Exploração'], ['roubo','Roubo'], ['medicina','Medicina']
+        ];
+        const SOM6_HABILIDADES = [
+            'LIGHT MY FIRE','LET’S DANCE','FORTUNATE SON','DON’T STOP BELIEVING','IMMIGRANT SONG','GIMME SHELTER',
+            'ANOTHER ONE BITES THE DUST','RIDERS ON THE STORM','BORN TO BE WILD','SMOKE ON THE WATER','UNDER PRESSURE',
+            'HEARTBREAKER','BARRACUDA','SWEET EMOTION','CRAZY TRAIN','CARRY ON MY WAYWARD SON','WAR PIGS','ACE OF SPADES',
+            'A HORSE WITH NO NAME','I WANT TO HOLD YOUR HAND','PARANOID','RAMBLE ON','AQUALUNG','MORE THAN A FEELING'
+        ];
+        const SOM6_LEVELS = [
+            { nivel:1, xp:0, bonus:'Habilidades iniciais' },
+            { nivel:2, xp:10, bonus:'+1d6 PV • +1 ponto de Antecedente' },
+            { nivel:3, xp:20, bonus:'+1 Atributo • +1 Habilidade' },
+            { nivel:4, xp:30, bonus:'+1 Atributo • +1 Habilidade • +1 ponto de Antecedente' },
+            { nivel:5, xp:45, bonus:'+1d6 PV • +1 Atributo' },
+            { nivel:6, xp:60, bonus:'+1d6 PV • +1 Atributo • +1 Habilidade • +1 ponto de Antecedente' }
+        ];
+
+        const Som6Pips = ({ value=0, onChange, max=5, title='' }) => {
+            const current = Math.max(0, Math.min(max, Number(value) || 0));
+            return <div className="flex flex-wrap gap-1" title={title}>{Array.from({length:max},(_,idx)=>{const n=idx+1;return <button key={n} type="button" aria-label={`${title || 'Valor'} ${n}`} onClick={()=>onChange(current===n ? 0 : n)} className={`som6-pip ${current>=n?'active':''}`}>{current>=n?'•':''}</button>})}</div>;
+        };
+
+        const initialSom6PcData = {
+            id:'', system:'somdas6', type:'pc',
+            bio:{ nome:'', jogador:'', apelido:'', passado:'', aparencia:'', imagem:'' },
+            nivel:1, xp:0, dinheiro:150, recompensa:0,
+            atributos:{ fisico:0, intelecto:0, coragem:0, agilidade:0 },
+            status:{ pvAtual:6, pvMax:6, defesa:5, iniciativa:1, acoes:1 },
+            antecedentes:{ combate:0, labuta:0, negocios:0, montaria:0, tradicao:0, exploracao:0, roubo:0, medicina:0 },
+            habilidades:[{nome:'',desc:''},{nome:'',desc:''}],
+            tormento:{ tipo:'', desc:'' },
+            reputacao:{ valor:0, titulo:'', notas:'' },
+            cartasSina:[{carta:'',usada:false},{carta:'',usada:false}],
+            armas:[], inventario:[],
+            montaria:{ ativa:false, nome:'', tipo:'Cavalo', potencia:0, vigor:0, resistencia:0, pvAtual:0, pvMax:0, defesa:5, dano:'', fidelidade:0, itens:[], notas:'' },
+            anotacoes:''
+        };
+
+        const initialSom6PdjData = {
+            id:'', system:'somdas6', type:'ameaca', nome:'', tipoPdj:'Comum', np:1, descricao:'',
+            status:{ pvAtual:6, pvMax:6, defesa:5, acoes:1, iniciativaBonus:1, ataqueBonus:1 },
+            armas:[], habilidades:[], notas:''
+        };
+
+        const normalizeSom6PcData = (item) => {
+            const clone = JSON.parse(JSON.stringify(item || {}));
+            if (clone.system !== 'somdas6' || clone.type !== 'pc') return clone;
+            clone.bio = { ...initialSom6PcData.bio, ...(clone.bio || {}) };
+            clone.atributos = { ...initialSom6PcData.atributos, ...(clone.atributos || {}) };
+            clone.status = { ...initialSom6PcData.status, ...(clone.status || {}) };
+            clone.antecedentes = { ...initialSom6PcData.antecedentes, ...(clone.antecedentes || {}) };
+            clone.habilidades = Array.isArray(clone.habilidades) ? clone.habilidades.map(h=>({nome:'',desc:'',...(h||{})})) : [];
+            clone.tormento = { ...initialSom6PcData.tormento, ...(clone.tormento || {}) };
+            clone.reputacao = { ...initialSom6PcData.reputacao, ...(clone.reputacao || {}) };
+            clone.cartasSina = Array.isArray(clone.cartasSina) ? clone.cartasSina.slice(0,2).map(c=>({carta:'',usada:false,...(c||{})})) : [];
+            while (clone.cartasSina.length < 2) clone.cartasSina.push({carta:'',usada:false});
+            clone.armas = Array.isArray(clone.armas) ? clone.armas.map(a=>({nome:'',dano:'',municaoAtual:'',municaoMax:'',recarga:'',notas:'',...(a||{})})) : [];
+            clone.inventario = Array.isArray(clone.inventario) ? clone.inventario.map(i=>{const it={nome:'',quantidade:1,notas:'',...(i||{})}; if(it.qtd !== undefined && (i?.quantidade === undefined || i?.quantidade === null)) it.quantidade=Number(it.qtd||0); delete it.qtd; return it;}) : [];
+            clone.montaria = { ...initialSom6PcData.montaria, ...(clone.montaria || {}) }; if ((clone.montaria.vigor === undefined || clone.montaria.vigor === null) && clone.montaria.resistencia !== undefined) clone.montaria.vigor = Number(clone.montaria.resistencia || 0); clone.montaria.itens = Array.isArray(clone.montaria.itens) ? clone.montaria.itens.map(x=>({nome:'',...(typeof x==='string'?{nome:x}:(x||{}))})) : [];
+            clone.nivel = Math.max(1, Math.min(6, Number(clone.nivel || 1)));
+            clone.xp = Number(clone.xp || 0); clone.dinheiro = Number(clone.dinheiro ?? 150); clone.recompensa = Number(clone.recompensa || 0);
+            return { ...JSON.parse(JSON.stringify(initialSom6PcData)), ...clone, bio:clone.bio, atributos:clone.atributos, status:clone.status, antecedentes:clone.antecedentes, tormento:clone.tormento, reputacao:clone.reputacao, montaria:clone.montaria, habilidades:clone.habilidades, cartasSina:clone.cartasSina, armas:clone.armas, inventario:clone.inventario };
+        };
+
+        const normalizeSom6PdjData = (item) => {
+            const clone = JSON.parse(JSON.stringify(item || {}));
+            if (clone.system !== 'somdas6' || clone.type === 'pc') return clone;
+            clone.type = 'ameaca';
+            clone.status = { ...initialSom6PdjData.status, ...(clone.status || {}) };
+            clone.armas = Array.isArray(clone.armas) ? clone.armas.map(a=>({nome:'',dano:'',notas:'',...(a||{})})) : [];
+            clone.habilidades = Array.isArray(clone.habilidades) ? clone.habilidades.map(h=>({nome:'',desc:'',...(h||{})})) : [];
+            clone.np = Math.max(1, Math.min(6, Number(clone.np || 1)));
+            return { ...JSON.parse(JSON.stringify(initialSom6PdjData)), ...clone, status:clone.status, armas:clone.armas, habilidades:clone.habilidades };
+        };
+
+        const MODELOS_SOM6_PC = [
+            {
+                ...JSON.parse(JSON.stringify(initialSom6PcData)),
+                bio:{...initialSom6PcData.bio,nome:'Pistoleira Errante',apelido:'A Raposa',passado:'Vive de cidade em cidade, resolvendo problemas que a lei prefere ignorar.'},
+                atributos:{fisico:1,intelecto:1,coragem:1,agilidade:1},
+                status:{pvAtual:12,pvMax:12,defesa:5,iniciativa:2,acoes:2},
+                antecedentes:{combate:2,labuta:0,negocios:1,montaria:1,tradicao:0,exploracao:0,roubo:0,medicina:0},
+                habilidades:[{nome:'LIGHT MY FIRE',desc:'+1 em testes com revólver; o dano também pode se beneficiar da Agilidade conforme a habilidade.'},{nome:'PARANOID',desc:'+1 nos resultados de Iniciativa e a personagem não é pega desprevenida.'}],
+                tormento:{tipo:'Vingança',desc:'Busca quem destruiu sua antiga gangue.'},
+                reputacao:{valor:0,titulo:'Desconhecida',notas:'Ainda está construindo seu nome na Fronteira.'},
+                armas:[{nome:'Revólver',dano:'1d6',municaoAtual:6,municaoMax:6,recarga:'2 ações',notas:''}],
+                inventario:[{nome:'Coldre de munição',quantidade:1,notas:'Munição de reserva.'}],
+                dinheiro:140
+            }
+        ];
+        const MODELOS_SOM6_PDJ = [
+            { ...JSON.parse(JSON.stringify(initialSom6PdjData)), nome:'Capanga Ralé', np:2, descricao:'Capanga comum, geralmente encontrado em bando.', status:{pvAtual:11,pvMax:11,defesa:5,acoes:2,iniciativaBonus:2,ataqueBonus:2}, armas:[{nome:'Revólver',dano:'1d6',notas:''}] },
+            { ...JSON.parse(JSON.stringify(initialSom6PdjData)), nome:'Pistoleiro Veterano', np:4, descricao:'Pistoleiro perigoso e rápido no gatilho.', status:{pvAtual:23,pvMax:23,defesa:5,acoes:4,iniciativaBonus:4,ataqueBonus:4}, armas:[{nome:'Revólver',dano:'1d6',notas:'Pode martelar o cão com penalidade apropriada.'}] }
+        ];
+
         /* Helpers D&D 5e */
         const getDndAbilityMod = (score) => Math.floor((score - 10) / 2);
         const formatDndMod = (mod) => mod >= 0 ? `+${mod}` : `${mod}`;
@@ -885,6 +1084,39 @@
                 return clean.split('\n').map(v => v.trim()).filter(Boolean).map(v => `• ${v}`).join('\n');
             };
             let text = '';
+
+            // ==========================================================
+            // O SOM DAS SEIS — PERSONAGEM / PDJ
+            // ==========================================================
+            if (sys === 'somdas6' && item.type === 'pc') {
+                const b=item.bio||{}, a=item.atributos||{}, s=item.status||{}, ant=item.antecedentes||{};
+                text += `🤠 PERSONAGEM: ${safe(b.nome,'Sem Nome')}\n\n`;
+                text += addIf('Jogador', b.jogador); text += addIf('Apelido', b.apelido);
+                text += `Nível ${safe(item.nivel,1)} | XP ${safe(item.xp,0)} | $${safe(item.dinheiro,0)} | Recompensa: $${safe(item.recompensa,0)}\n`;
+                if (hasText(b.passado)) text += `Passado: ${compactText(b.passado)}\n`;
+                text += `\n📊 ATRIBUTOS & STATUS\n\nFísico ${safe(a.fisico,0)} | Intelecto ${safe(a.intelecto,0)} | Coragem ${safe(a.coragem,0)} | Agilidade ${safe(a.agilidade,0)}\n`;
+                text += `PV ${safe(s.pvAtual,0)}/${safe(s.pvMax,0)} | Defesa ${safe(s.defesa,5)} | Iniciativa ${safe(s.iniciativa,1)} | Ações ${safe(s.acoes,1)}\n`;
+                text += `\n📚 ANTECEDENTES\n\n`;
+                SOM6_ANTECEDENTES.forEach(([id,nome])=>text += `${nome}: ${safe(ant[id],0)}${id==='medicina'?'':' | '}${['montaria','medicina'].includes(id)?'\n':''}`);
+                const armas=(item.armas||[]).filter(x=>hasText(x?.nome)); const inv=(item.inventario||[]).filter(x=>hasText(x?.nome));
+                if(armas.length||inv.length){ text += `\n⚔️ COMBATE & EQUIPAMENTO\n\n`; armas.forEach(x=>text += `• ${x.nome} — ${safe(x.dano,'dano ?')}${hasText(x.municaoMax)?` | Munição ${safe(x.municaoAtual,0)}/${x.municaoMax}`:''}${hasText(x.recarga)?` | Recarga ${x.recarga}`:''}${hasText(x.notas)?` — ${compactText(x.notas)}`:''}\n`); inv.forEach(x=>text += `• ${x.nome}${Number(x.quantidade||1)!==1?` x${x.quantidade}`:''}${hasText(x.notas)?` — ${compactText(x.notas)}`:''}\n`); }
+                const hab=(item.habilidades||[]).filter(h=>hasText(h?.nome)||hasText(h?.desc));
+                if(hab.length){ text += `\n✨ HABILIDADES\n\n`; hab.forEach(h=>text += `• ${safe(h.nome,'Habilidade')}${hasText(h.desc)?` — ${compactText(h.desc)}`:''}\n`); }
+                text += `\n🎭 TORMENTO & REPUTAÇÃO\n\nTormento: ${safe(item.tormento?.tipo)}${hasText(item.tormento?.desc)?` — ${compactText(item.tormento.desc)}`:''}\nReputação: ${safe(item.reputacao?.titulo,'Neutra')} (${Number(item.reputacao?.valor||0)>0?'+':''}${safe(item.reputacao?.valor,0)})${hasText(item.reputacao?.notas)?` — ${compactText(item.reputacao.notas)}`:''}\n`;
+                const cards=(item.cartasSina||[]).filter(c=>hasText(c?.carta)); if(cards.length){ text += `\n🃏 CARTAS DE SINA\n\n`; cards.forEach((c,i)=>text += `• Carta ${i+1}: ${c.usada?'Usada':'Disponível'}${hasText(c.carta)?` — ${c.carta}`:''}\n`); }
+                if(item.montaria?.ativa){ const m=item.montaria; text += `\n🐎 MONTARIA\n\n${safe(m.nome,'Sem nome')} (${safe(m.tipo,'Montaria')}) | Potência ${safe(m.potencia,0)} | Resistência ${safe(m.resistencia,0)} | PV ${safe(m.pvAtual,0)}/${safe(m.pvMax,0)} | Fidelidade ${safe(m.fidelidade,0)}\n`; if(hasText(m.notas)) text += `${compactText(m.notas)}\n`; }
+                if(hasText(item.anotacoes)) text += `\n📝 ANOTAÇÕES\n\n${compactText(item.anotacoes)}\n`;
+                return text.trim();
+            }
+            if (sys === 'somdas6' && item.type !== 'pc') {
+                const s=item.status||{};
+                text += `🤠 PDJ: ${safe(item.nome,'Sem Nome')}\n\nNP: ${safe(item.np,1)} | Tipo: ${safe(item.tipoPdj,'Comum')}\nPV ${safe(s.pvAtual,0)}/${safe(s.pvMax,0)} | Defesa ${safe(s.defesa,5)} | Ações ${safe(s.acoes,1)} | Bônus Ataque ${safe(s.ataqueBonus,1)} | Bônus Iniciativa ${safe(s.iniciativaBonus,1)}\n`;
+                if(hasText(item.descricao)) text += `Descrição: ${compactText(item.descricao)}\n`;
+                const armas=(item.armas||[]).filter(a=>hasText(a?.nome)); if(armas.length){ text += `\n⚔️ ATAQUES & ARMAS\n`; armas.forEach(a=>text += `• ${a.nome} — ${safe(a.dano)}${hasText(a.notas)?` — ${compactText(a.notas)}`:''}\n`); }
+                const hab=(item.habilidades||[]).filter(h=>hasText(h?.nome)||hasText(h?.desc)); if(hab.length){ text += `\n✨ HABILIDADES\n`; hab.forEach(h=>text += `• ${safe(h.nome,'Habilidade')}${hasText(h.desc)?` — ${compactText(h.desc)}`:''}\n`); }
+                if(hasText(item.notas)) text += `\n📝 ANOTAÇÕES\n${compactText(item.notas)}\n`;
+                return text.trim();
+            }
 
             // ==========================================================
             // FABULA ULTIMA — PERSONAGEM (RESUMO DE CHAT)
@@ -1301,13 +1533,15 @@
             const [showDndModelModal, setShowDndModelModal] = useState(false);
             const [showDbModelModal, setShowDbModelModal] = useState(false);
             const [showFabulaModelModal, setShowFabulaModelModal] = useState(false);
+            const [showSom6ModelModal, setShowSom6ModelModal] = useState(false);
             const [dndPcTab, setDndPcTab] = useState('caracteristicas');
             const [fabulaTab, setFabulaTab] = useState('perfil');
+            const [som6Tab, setSom6Tab] = useState('perfil');
             const [showFabulaExtras, setShowFabulaExtras] = useState(false);
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('inicio');
 
-            // Organização e segurança — v0.6.5
+            // Organização e segurança — linha 0.6
             const [searchQuery, setSearchQuery] = useState('');
             const [systemFilter, setSystemFilter] = useState('all');
             const [sortMode, setSortMode] = useState('recent');
@@ -1326,7 +1560,7 @@
 
             useEffect(() => {
                 try { localStorage.setItem(THEME_PREF_KEY, theme); } catch {}
-                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'fabula' ? 'theme-fabula' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : 'theme-default'}`;
+                document.body.className = `font-body text-gray-800 antialiased p-4 md:p-8 ${theme === 'classic' ? 'theme-classic' : theme === 'dnd' ? 'theme-dnd' : theme === 'fabula' ? 'theme-fabula' : theme === 'som6' ? 'theme-som6' : theme === 'dark' ? 'theme-dark' : theme === 'custom' ? 'theme-custom' : 'theme-default'}`;
             }, [theme]);
 
             useEffect(() => {
@@ -1433,6 +1667,8 @@
                     savingData = normalizeDndPcData(savingData);
                     savingData = normalizeFabulaPcData(savingData);
                     savingData = normalizeFabulaThreatData(savingData);
+                    savingData = normalizeSom6PcData(savingData);
+                    savingData = normalizeSom6PdjData(savingData);
                     const now = new Date().toISOString();
                     savingData.dataVersion = SCHEMA_VERSION;
                     savingData.meta.createdAt = savingData.meta.createdAt || now;
@@ -1450,7 +1686,7 @@
                         localStorage.setItem(STORAGE_KEY, JSON.stringify(chars));
                         if (previous) pushHistorySnapshot(previous, savingData);
                         setSavedChars(chars);
-                        if (!silent) showToast(savingData.system === 'fabula' ? 'Personagem Fabula salvo!' : 'Personagem salvo!');
+                        if (!silent) showToast(savingData.system === 'fabula' ? 'Personagem Fabula salvo!' : savingData.system === 'somdas6' ? 'Personagem de O Som das Seis salvo!' : 'Personagem salvo!');
                     } else {
                         let threats = getSavedThreats();
                         const index = threats.findIndex(t => t.id === savingData.id);
@@ -1500,7 +1736,7 @@
             };
 
             const exportFullBackup = () => {
-                const payload = { pjLiteBackup: true, version: '0.6.5v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
+                const payload = { pjLiteBackup: true, version: '0.6.7v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
                 const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
@@ -1536,6 +1772,8 @@
                 restored = normalizeDndPcData(restored);
                 restored = normalizeFabulaPcData(restored);
                 restored = normalizeFabulaThreatData(restored);
+                restored = normalizeSom6PcData(restored);
+                restored = normalizeSom6PdjData(restored);
                 // Retratos enviados pelo dispositivo não são duplicados no histórico para economizar espaço.
                 if (restored?.bio && !restored.bio.imagem && data?.bio?.imagem) restored.bio.imagem = data.bio.imagem;
                 if (!restored?.imagem && data?.imagem) restored.imagem = data.imagem;
@@ -1552,7 +1790,7 @@
                     if (systemFilter !== 'all' && sys !== systemFilter) return false;
                     if (onlyFavorites && !item.meta?.favorite) return false;
                     if (!q) return true;
-                    const hay = [item.bio?.nome, item.nome, item.bio?.classe, item.bio?.profissao, item.bio?.identidade, item.meta?.campanha, sys].filter(Boolean).join(' ').toLowerCase();
+                    const hay = [item.bio?.nome, item.nome, item.bio?.classe, item.bio?.profissao, item.bio?.identidade, item.bio?.apelido, item.tormento?.tipo, item.reputacao?.titulo, item.meta?.campanha, sys].filter(Boolean).join(' ').toLowerCase();
                     return hay.includes(q);
                 }).sort((a,b) => {
                     if (sortMode === 'name') return String(a.bio?.nome || a.nome || '').localeCompare(String(b.bio?.nome || b.nome || ''), 'pt-BR');
@@ -1569,6 +1807,7 @@
                 if (item.type === 'pc') {
                     if (item.system === 'dnd5e' && Number(item.status?.pvMax || 0) <= 0) warnings.push('Defina os PV máximos.');
                     if (item.system === 'fabula' && Number(item.status?.pvMax || 0) <= 0) warnings.push('Defina os PV máximos.');
+                    if (item.system === 'somdas6' && Number(item.status?.pvMax || 0) <= 0) warnings.push('Defina os PV máximos.');
                     if ((item.system || 'dragonbane') === 'dragonbane' && Number(item.status?.pv?.max || 0) <= 0) warnings.push('Defina os PV máximos.');
                 }
                 return warnings;
@@ -1583,11 +1822,11 @@
                     const plainUpperHeading = /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9][A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9 &/(),.\-]{2,}$/u.test(rawLine);
                     if (!startsWithSectionIcon && !plainUpperHeading) return null;
                     const u = rawLine.toUpperCase();
-                    if (/STATUS|ATRIBUTOS|CONDIÇÕES|AFINIDADES|DERIVADOS|ESTATÍSTICAS|PERÍCIAS/.test(u)) return 'status';
+                    if (/STATUS|ATRIBUTOS|CONDIÇÕES|AFINIDADES|DERIVADOS|ESTATÍSTICAS|PERÍCIAS|ANTECEDENTES/.test(u)) return 'status';
                     if (/ATAQUES|ARMAS|AÇÕES|REAÇÕES|EQUIPAMENTO|COMBATE|DEFESA/.test(u)) return 'combate';
-                    if (/PODERES|CARACTERÍSTICAS|MAGIAS|FEITIÇOS|CLASSES|HABILIDADES|ARCANOS|MNEMOSFERA|PROFICIÊNCIAS DE EQUIPAMENTO/.test(u)) return 'poderes';
-                    if (/INVENTÁRIO|MOCHILA|RECEITAS|PROJETOS/.test(u)) return 'inventario';
-                    if (/INTERPRETAÇÃO|LAÇOS|ANOTAÇÕES EXTRAS/.test(u)) return 'interpretacao';
+                    if (/PODERES|CARACTERÍSTICAS|MAGIAS|FEITIÇOS|CLASSES|HABILIDADES|ARCANOS|MNEMOSFERA|PROFICIÊNCIAS DE EQUIPAMENTO|CARTAS DE SINA/.test(u)) return 'poderes';
+                    if (/INVENTÁRIO|MOCHILA|RECEITAS|PROJETOS|MONTARIA/.test(u)) return 'inventario';
+                    if (/INTERPRETAÇÃO|LAÇOS|ANOTAÇÕES EXTRAS|TORMENTO|REPUTAÇÃO|ANOTAÇÕES/.test(u)) return 'interpretacao';
                     return null;
                 };
                 const lines = raw.split('\n');
@@ -1655,9 +1894,12 @@
                     normalized = normalizeDndPcData(normalized);
                     normalized = normalizeFabulaPcData(normalized);
                     normalized = normalizeFabulaThreatData(normalized);
+                    normalized = normalizeSom6PcData(normalized);
+                    normalized = normalizeSom6PdjData(normalized);
                     setData(normalized);
                     setDndPcTab('caracteristicas');
                     setFabulaTab('perfil');
+                    setSom6Tab('perfil');
                     setView('editor');
                 }
             };
@@ -1667,7 +1909,9 @@
                 if (threat) {
                     let normalized = normalizeMetaItem(threat);
                     normalized = normalizeFabulaThreatData(normalized);
+                    normalized = normalizeSom6PdjData(normalized);
                     setData(normalized);
+                    setSom6Tab('perfil');
                     setView('editor');
                 }
             };
@@ -1677,15 +1921,19 @@
                 templateData = normalizeDndPcData(templateData);
                 templateData = normalizeFabulaPcData(templateData);
                 templateData = normalizeFabulaThreatData(templateData);
+                templateData = normalizeSom6PcData(templateData);
+                templateData = normalizeSom6PdjData(templateData);
                 templateData.id = Date.now().toString();
                 setData(templateData);
                 setShowThreatModal(false);
                 setShowDndModelModal(false);
                 setShowDbModelModal(false);
                 setShowFabulaModelModal(false);
+                setShowSom6ModelModal(false);
                 setCreateTarget(null);
                 setDndPcTab('caracteristicas');
                 setFabulaTab('perfil');
+                setSom6Tab('perfil');
                 setView('editor');
             };
 
@@ -1838,6 +2086,8 @@
                 normalizedData = normalizeDndPcData(normalizedData);
                 normalizedData = normalizeFabulaPcData(normalizedData);
                 normalizedData = normalizeFabulaThreatData(normalizedData);
+                normalizedData = normalizeSom6PcData(normalizedData);
+                normalizedData = normalizeSom6PdjData(normalizedData);
                 return normalizedData;
             };
 
@@ -1929,6 +2179,7 @@
                                         <option value="classic">Tema: Clássico DB</option>
                                         <option value="dnd">Tema: Dungeons & Dragons</option>
                                         <option value="fabula">Tema: Fabula Ultima</option>
+                                        <option value="som6">Tema: O Som das Seis</option>
                                         <option value="dark">Tema: Modo Escuro</option>
                                         <option value="custom">Tema: Custom...</option>
                                     </select>
@@ -1942,12 +2193,12 @@
                                 <div className={`px-4 ${newsCollapsed ? 'py-2' : 'py-3'} flex items-center justify-between gap-3`}>
                                     <div className="min-w-0">
                                         <div className="font-title font-bold text-[#922610] flex items-center gap-2">
-                                            <span>✨ Novidade — Fabula Ultima consolidado na v0.6.5v Alpha</span>
+                                            <span>🤠 Novidade — O Som das Seis e novos polimentos da v0.6.7 Alpha</span>
                                             {newsCollapsed && <span className="hidden sm:inline text-[10px] font-body font-bold uppercase tracking-widest text-[#922610]/70">minimizado</span>}
                                         </div>
                                         {!newsCollapsed && (
                                             <div className="mt-1 space-y-2">
-                                                <p className="text-xs text-gray-700">Nesta revisão, Fabula Ultima recebeu o fechamento da ficha principal: modelos Press Start reorganizados, Projetos como ficha extra, Equipamentos e PI consolidados e revisão de compatibilidade. A v0.6.5 também mantém as correções de estabilidade, Ficha Chat com quatro modos e melhorias de organização.</p>
+                                                <p className="text-xs text-gray-700">A v0.6.7 Alpha consolida o teste avançado de O Som das Seis: ficha compacta inspirada no PDF oficial, retrato do personagem, aba separada de Montaria, melhorias no modo escuro, novo tema do sistema e guias mais completos para iniciantes.</p>
                                                 <a href="https://t.me/boost/Baianoviado" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs font-bold text-sky-700 hover:text-sky-900 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-full px-3 py-1.5 shadow-sm transition-colors">
                                                     <span>✈</span> Acompanhe anúncios e próximas novidades no Telegram ↗
                                                 </a>
@@ -1955,7 +2206,7 @@
                                         )}
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
-                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">v0.6.5v Alpha</span>}
+                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">linha 0.6 • teste</span>}
                                         <button onClick={() => setNewsCollapsed(v => !v)} className="bg-white/80 hover:bg-white text-[#922610] border border-[#c46b58] rounded px-2.5 py-1 text-xs font-bold shadow-sm" title={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'} aria-label={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'}>
                                             {newsCollapsed ? '＋' : '−'}
                                         </button>
@@ -1994,7 +2245,7 @@
                                 {showFilters && (
                                     <div style={getWindowStyle()} className="mt-2 max-w-2xl bg-white border border-gray-200 rounded-lg shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
                                         <select value={systemFilter} onChange={e=>setSystemFilter(e.target.value)} className="border rounded px-2 py-2 text-xs bg-white">
-                                            <option value="all">Todos os sistemas</option><option value="dragonbane">Dragonbane</option><option value="dnd5e">D&D 5e</option><option value="fabula">Fabula Ultima</option>
+                                            <option value="all">Todos os sistemas</option><option value="dragonbane">Dragonbane</option><option value="dnd5e">D&D 5e</option><option value="fabula">Fabula Ultima</option><option value="somdas6">O Som das Seis</option>
                                         </select>
                                         <select value={sortMode} onChange={e=>setSortMode(e.target.value)} className="border rounded px-2 py-2 text-xs bg-white">
                                             <option value="recent">Mais recentes</option><option value="name">Nome A–Z</option><option value="system">Por sistema</option>
@@ -2014,10 +2265,11 @@
                                     {filterAndSortItems(savedChars).map(char => {
                                         const isDnd = char.system === 'dnd5e';
                                         const isFabula = char.system === 'fabula';
+                                        const isSom6 = char.system === 'somdas6';
                                         return (
-                                        <div key={char.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-dragon-dark'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
-                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-700' : 'bg-dragon-dark'}`}>
-                                                {isDnd ? 'D&D 5e' : isFabula ? 'Fabula Ultima' : 'Dragonbane'}
+                                        <div key={char.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : isSom6 ? 'border-red-900' : 'border-dragon-dark'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
+                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-700' : isSom6 ? 'bg-red-900' : 'bg-dragon-dark'}`}>
+                                                {isDnd ? 'D&D 5e' : isFabula ? 'Fabula Ultima' : isSom6 ? 'O Som das Seis' : 'Dragonbane'}
                                             </div>
                                             <div className={`${dashboardView==='list'?'flex flex-1 min-w-0 h-24 border-r':'flex h-28 border-b'} border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors`} onClick={() => loadCharacter(char.id)}>
                                                 <div className="w-28 shrink-0 bg-gray-200 border-r border-gray-300">
@@ -2028,11 +2280,11 @@
                                                     )}
                                                 </div>
                                                 <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                    <h3 className={`font-title font-bold text-lg truncate ${isDnd ? 'text-[#922610]' : isFabula ? 'text-teal-800' : 'text-red-900'}`}>{char.bio?.nome || 'Sem Nome'}</h3>
+                                                    <h3 className={`font-title font-bold text-lg truncate ${isDnd ? 'text-[#922610]' : isFabula ? 'text-teal-800' : isSom6 ? 'text-red-900' : 'text-red-900'}`}>{char.bio?.nome || 'Sem Nome'}</h3>
                                                     <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
-                                                        {isDnd ? `${char.bio?.linhagem || '?'} • ${char.bio?.classe || '?'}` : isFabula ? `${char.bio?.identidade || 'Sem identidade'} • ${char.bio?.tema || 'Sem tema'}` : `${char.bio?.ancestralidade || '?'} • ${char.bio?.profissao || '?'}`}
+                                                        {isDnd ? `${char.bio?.linhagem || '?'} • ${char.bio?.classe || '?'}` : isFabula ? `${char.bio?.identidade || 'Sem identidade'} • ${char.bio?.tema || 'Sem tema'}` : isSom6 ? `${char.bio?.apelido || 'Sem apelido'} • ${char.tormento?.tipo || 'Sem tormento'}` : `${char.bio?.ancestralidade || '?'} • ${char.bio?.profissao || '?'}`}
                                                     </p>
-                                                    <p className="text-[10px] text-gray-500 mt-2 truncate italic">Nível {isFabula ? (char.nivel || 5) : (char.bio?.nivel || 1)}</p>
+                                                    <p className="text-[10px] text-gray-500 mt-2 truncate italic">Nível {isFabula ? (char.nivel || 5) : isSom6 ? (char.nivel || 1) : (char.bio?.nivel || 1)}</p>
                                                     {char.meta?.campanha && <p className="text-[10px] text-indigo-600 mt-1 truncate font-bold">📁 {char.meta.campanha}</p>}
                                                     {char.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(char.meta.updatedAt).toLocaleString('pt-BR')}</p>}
                                                 </div>
@@ -2081,15 +2333,15 @@
                                     {filterAndSortItems(savedThreats).map(threat => {
                                         const sys = threat.system || 'dragonbane';
                                         return (
-                                        <div key={threat.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : sys === 'fabula' ? 'border-teal-700' : 'border-gray-500'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
-                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${sys === 'dnd5e' ? 'bg-[#922610]' : sys === 'fabula' ? 'bg-teal-700' : threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
-                                                {sys === 'dnd5e' ? 'D&D 5e (Stat Block)' : sys === 'fabula' ? 'Fabula Ultima' : threat.type === 'pnj' ? 'PNJ (DB)' : 'Monstro (DB)'}
+                                        <div key={threat.id} style={getWindowStyle()} className={`pj-card-compact bg-white rounded-md shadow-lg border-2 ${sys === 'dnd5e' ? 'border-[#922610]' : sys === 'fabula' ? 'border-teal-700' : sys === 'somdas6' ? 'border-red-900' : 'border-gray-500'} overflow-hidden flex ${dashboardView==='list'?'flex-row items-stretch':'flex-col'} relative`}>
+                                            <div className={`absolute top-0 right-0 text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-bl shadow-sm z-10 ${sys === 'dnd5e' ? 'bg-[#922610]' : sys === 'fabula' ? 'bg-teal-700' : sys === 'somdas6' ? 'bg-red-900' : threat.type === 'pnj' ? 'bg-blue-800' : 'bg-red-900'}`}>
+                                                {sys === 'dnd5e' ? 'D&D 5e (Stat Block)' : sys === 'fabula' ? 'Fabula Ultima' : sys === 'somdas6' ? 'O Som das Seis • PDJ' : threat.type === 'pnj' ? 'PNJ (DB)' : 'Monstro (DB)'}
                                             </div>
                                             <div className={`${dashboardView==='list'?'flex flex-1 min-w-0 h-24 border-r':'flex h-24 border-b'} border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors`} onClick={() => loadThreat(threat.id)}>
                                                 <div className="p-3 flex-1 overflow-hidden flex flex-col justify-center">
-                                                    <h3 className={`font-title font-bold text-lg truncate ${sys === 'dnd5e' ? 'text-[#7a200d]' : sys === 'fabula' ? 'text-teal-800' : 'text-gray-900'}`}>{threat.nome || 'Sem Nome'}</h3>
+                                                    <h3 className={`font-title font-bold text-lg truncate ${sys === 'dnd5e' ? 'text-[#7a200d]' : sys === 'fabula' ? 'text-teal-800' : sys === 'somdas6' ? 'text-red-900' : 'text-gray-900'}`}>{threat.nome || 'Sem Nome'}</h3>
                                                     <p className="text-xs text-gray-600 font-bold uppercase mt-1 truncate">
-                                                        {sys === 'dnd5e' ? `${threat.tamanho} ${threat.tipo}` : sys === 'fabula' ? `Nível ${threat.nivel || 5} • ${threat.patente || 'Soldado'} • ${threat.especie || '?'}` : threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
+                                                        {sys === 'dnd5e' ? `${threat.tamanho} ${threat.tipo}` : sys === 'fabula' ? `Nível ${threat.nivel || 5} • ${threat.patente || 'Soldado'} • ${threat.especie || '?'}` : sys === 'somdas6' ? `NP ${threat.np || 1} • ${threat.tipoPdj || 'Comum'} • ${threat.status?.acoes || 1} ação(ões)` : threat.type === 'pnj' ? `${threat.ancestralidade || '?'} • ${threat.profissao || '?'}` : `Ferocidade ${threat.ferocidade} • ${threat.tamanho}`}
                                                     </p>
                                                     {threat.meta?.campanha && <p className="text-[10px] text-indigo-600 mt-1 truncate font-bold">📁 {threat.meta.campanha}</p>}
                                                     {threat.meta?.updatedAt && <p className="text-[9px] text-gray-400 mt-1">Editado: {new Date(threat.meta.updatedAt).toLocaleString('pt-BR')}</p>}
@@ -2202,11 +2454,42 @@
                                                 <p className="text-xs text-gray-500">{createTarget === 'pc' ? 'Personagem + modelos prontos' : 'Ameaça / PNJ + bestiário'}</p>
                                             </div>
                                         </div>
+
+                                        <div onClick={() => { setShowSystemModal(false); setShowSom6ModelModal(true); }} className="bg-white border-2 border-gray-300 hover:border-red-900 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
+                                            <div className="w-14 h-14 bg-red-900 group-hover:bg-red-950 text-amber-50 rounded flex items-center justify-center font-bold font-title text-xl shadow-inner transition-colors">S6</div>
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2"><h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">O Som das Seis</h3><span className="bg-amber-100 text-red-900 text-[9px] font-bold uppercase px-2 py-0.5 rounded">Teste 0.6.7</span></div>
+                                                <p className="text-xs text-gray-500">{createTarget === 'pc' ? 'Faroeste • personagem, Sina e montaria' : 'PDJs simplificados por Nível de Poder'}</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>, document.body
                         )}
 
+
+                        {showSom6ModelModal && ReactDOM.createPortal(
+                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
+                                <div className="bg-[#f8edd7] rounded-sm shadow-2xl w-full max-w-3xl border-2 border-red-900 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
+                                    <div className="bg-red-950 text-amber-50 p-3 flex justify-between items-center shrink-0">
+                                        <div><h2 className="font-title font-bold text-lg">Criar em O Som das Seis</h2><p className="text-[10px] text-amber-100">Teste avançado do sistema no PJ Lite</p></div>
+                                        <button onClick={() => { setShowSom6ModelModal(false); setCreateTarget(null); }} className="text-amber-100 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
+                                    </div>
+                                    <div className="p-6 flex-1 overflow-y-auto space-y-6">
+                                        {createTarget === 'pc' ? <>
+                                            <div><h3 className="font-title font-bold text-red-950 border-b-2 border-red-200 pb-1 mb-3">Personagem</h3>
+                                                <div onClick={() => loadTemplate(initialSom6PcData)} className="bg-white border-2 border-stone-300 hover:border-red-900 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-red-900 text-amber-50 rounded flex items-center justify-center text-xl">🤠</div><div><h3 className="font-bold text-sm">Novo Personagem</h3><p className="text-xs text-gray-500">Comece uma ficha em branco.</p></div></div>
+                                            </div>
+                                            <div><h3 className="font-title font-bold text-red-950 border-b-2 border-red-200 pb-1 mb-3">Exemplo preenchido</h3>{MODELOS_SOM6_PC.map((m,i)=><div key={i} onClick={()=>loadTemplate(m)} className="bg-white border-2 border-amber-200 hover:border-red-900 rounded p-3 cursor-pointer"><div className="font-bold text-red-950">{m.bio.nome}</div><div className="text-xs text-gray-500">{m.bio.apelido} • {m.tormento.tipo}</div></div>)}</div>
+                                        </> : <>
+                                            <div><h3 className="font-title font-bold text-red-950 border-b-2 border-red-200 pb-1 mb-3">PDJ em Branco</h3><div onClick={()=>loadTemplate(initialSom6PdjData)} className="bg-white border-2 border-stone-300 hover:border-red-900 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-red-950 text-amber-50 rounded flex items-center justify-center text-xl">☠</div><div><h3 className="font-bold text-sm">Novo PDJ</h3><p className="text-xs text-gray-500">Use NP 1–6 e registre só o que importa.</p></div></div></div>
+                                            <div><h3 className="font-title font-bold text-red-950 border-b-2 border-red-200 pb-1 mb-3">Modelos rápidos</h3><div className="grid sm:grid-cols-2 gap-3">{MODELOS_SOM6_PDJ.map((m,i)=><div key={i} onClick={()=>loadTemplate(m)} className="bg-white border-2 border-amber-200 hover:border-red-900 rounded p-3 cursor-pointer"><div className="font-bold text-red-950">{m.nome}</div><div className="text-xs text-gray-500">NP {m.np} • PV {m.status.pvMax} • {m.status.acoes} ações</div></div>)}</div></div>
+                                        </>}
+                                        <div className="text-[10px] text-stone-600 border-t border-stone-300 pt-3">Regras de <strong>O Som das Seis</strong> por Ramon Mineiro. A adaptação de regras desta ficha segue a licença CC BY-SA 4.0 indicada no livro. <a href="https://www.rpgplanet.com.br/o-som-das-seis" target="_blank" rel="noopener noreferrer" className="underline font-semibold">Material original ↗</a>.</div>
+                                    </div>
+                                </div>
+                            </div>, document.body
+                        )}
 
                         {showFabulaModelModal && ReactDOM.createPortal(
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
@@ -2449,6 +2732,7 @@
                                         <button onClick={() => setGuideTab('ameacas_db')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'ameacas_db' ? 'border-gray-800 text-gray-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Ameaças e PNJs</button>
                                         <button onClick={() => setGuideTab('dnd5e')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'dnd5e' ? 'border-orange-600 text-orange-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>D&D 5e</button>
                                         <button onClick={() => setGuideTab('fabula')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'fabula' ? 'border-teal-600 text-teal-900 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Fabula Ultima</button>
+                                        <button onClick={() => setGuideTab('som6')} className={`flex-1 py-2.5 px-4 text-xs font-bold uppercase text-center border-b-4 transition-colors whitespace-nowrap ${guideTab === 'som6' ? 'border-red-900 text-red-950 bg-white' : 'border-transparent text-gray-500 hover:bg-gray-300'}`}>Som das Seis</button>
                                     </div>
                                     <div className="p-6 bg-gray-50 text-sm text-gray-700 overflow-y-auto max-h-[70vh] scrollbar-thin">
                                         {guideTab === 'inicio' && (
@@ -2591,6 +2875,26 @@
                                                 <div className="p-4 bg-teal-50 border border-teal-300 rounded"><h3 className="font-title font-bold text-teal-900 mb-2">Material oficial de Fabula Ultima</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o Livro Básico. Consulte as regras completas e apoie a publicação oficial brasileira:</p><a href="https://jamboeditora.com.br/produto/fabula-ultima-livro-basico/" target="_blank" rel="noopener noreferrer" className="inline-block bg-teal-800 hover:bg-teal-700 text-white px-4 py-2 rounded font-bold text-xs">Obter Fabula Ultima — Livro Básico na Jambô ↗</a></div>
                                             </div>
                                         )}
+
+                                        {guideTab === 'som6' && (
+                                            <div className="space-y-5">
+                                                <div className="bg-[#f8edd7] border border-red-900 rounded p-4"><div className="text-[10px] font-bold uppercase text-red-800 mb-1">v0.6.7 Alpha • Velho Oeste</div><h3 className="font-title font-bold text-red-950 mb-2">🤠 O Som das Seis — começando a ficha</h3><p className="text-xs">A proposta da ficha é manter o sistema rápido: registrar os números, Tormento, Cartas de Sina e equipamento sem transformar o PJ Lite em um VTT ou rolador. A tela principal reúne quase tudo em uma única folha, e a Montaria fica separada para não poluir a consulta.</p></div>
+                                                <div className="grid sm:grid-cols-2 gap-3">
+                                                    <div className="bg-white border rounded p-4"><strong>1. Conceito do personagem</strong><p className="text-xs mt-1">Comece pelo nome, jogador, apelido, aparência e retrato. Pense em quem essa pessoa era antes de virar protagonista no Velho Oeste: um pistoleiro, um ex-soldado, uma médica itinerante, um apostador ou alguém perseguido pelo passado.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Distribua os valores entre Físico, Intelecto, Coragem e Agilidade. Eles influenciam a forma como a personagem resiste, age e encara perigos. Se ainda estiver aprendendo, preencha primeiro os valores-base e refine o resto depois.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Antecedentes</strong><p className="text-xs mt-1">Combate, Labuta, Negócios, Montaria, Tradição, Exploração, Roubo e Medicina funcionam como áreas de experiência. No 1º nível, distribua <strong>4 pontos</strong> entre eles, com máximo de 2 em um mesmo Antecedente. Eles ajudam a contar de onde o personagem veio.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>4. Recursos da ficha</strong><p className="text-xs mt-1">Preencha PV, Defesa, Iniciativa, Ações, Dinheiro, Recompensa, Nível e XP. Como parte do sistema depende da mesa e das escolhas da Juíza, o PJ Lite deixa esses campos editáveis em vez de forçar automação.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Habilidades</strong><p className="text-xs mt-1">No 1º nível, a personagem começa com duas Habilidades. Cadastre o nome e um resumo do efeito para facilitar a consulta durante a sessão. Sempre que possível, escreva em poucas linhas o gatilho e o benefício.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Tormento & Cartas de Sina</strong><p className="text-xs mt-1">O Tormento representa uma cicatriz, dever, vício, segredo ou trauma. Quando isso complica a história, a Juíza pode conceder Cartas de Sina. A ficha acomoda as duas cartas máximas da sessão e permite marcar se já foram usadas.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>7. Armas & inventário</strong><p className="text-xs mt-1">Registre armas com dano, munição e recarga. O inventário foi mantido compacto para combinar com o espírito do sistema: leve o que realmente importa para a cena, sem transformar a ficha em planilha.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>8. Montaria</strong><p className="text-xs mt-1">Se a personagem tiver cavalo ou outra montaria, use a aba própria. Ela registra Potência, Vigor, Vida, Defesa, Dano, Fidelidade e itens carregados, seguindo a lógica da segunda página da ficha editável.</p></div>
+                                                </div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900 mb-2">📈 Progressão e uso em mesa</h3><p className="text-xs">Registre Nível e XP na ficha. A consulta rápida mostra os marcos de 0, 10, 20, 30, 45 e 60 XP e os bônus indicados no livro.</p><p className="text-xs">No fim de cada sessão, o livro sugere até cinco perguntas para conceder XP, ligadas a sobrevivência, dinheiro, passado, reputação e ajudar alguém. A Ficha Chat também pode ser usada para mandar rapidamente o resumo do personagem ao grupo ou à Juíza.</p></div>
+                                                <div className="bg-red-50 border border-red-200 rounded p-4"><h3 className="font-bold text-red-950 mb-2">☠ PDJs</h3><p className="text-xs">Os PDJs foram mantidos propositalmente simples. Escolha o Nível de Poder (NP 1–6), registre PV, Defesa, Ações, bônus de ataque/iniciativa, armas e habilidades. Isso deixa a consulta rápida para a Juíza sem transformar todo inimigo em uma ficha de jogador completa.</p></div>
+                                                <div className="p-4 bg-[#f8edd7] border border-red-900 rounded"><h3 className="font-title font-bold text-red-950 mb-2">Material original de O Som das Seis</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o livro. Para consultar o material original e apoiar o sistema, use a página oficial do jogo:</p><a href="https://www.rpgplanet.com.br/o-som-das-seis" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-900 hover:bg-red-950 text-amber-50 px-4 py-2 rounded font-bold text-xs">Abrir página oficial de O Som das Seis ↗</a></div>
+                                                <div className="bg-stone-100 border rounded p-4 text-xs"><strong>Crédito das regras:</strong> O Som das Seis, por Ramon Mineiro. O livro informa que as regras estão sob Creative Commons Atribuição-CompartilhaIgual 4.0 Internacional. Esta ficha é uma adaptação independente no PJ Lite.</div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>, document.body
@@ -2650,17 +2954,18 @@
 
             const isDnd = data.system === 'dnd5e';
             const isFabula = data.system === 'fabula';
-            const topBarColor = isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-800' : (data.type === 'pnj' ? 'bg-blue-900' : data.type === 'ameaca' ? 'bg-red-900' : 'bg-dragon-dark');
+            const isSom6 = data.system === 'somdas6';
+            const topBarColor = isDnd ? 'bg-[#922610]' : isFabula ? 'bg-teal-800' : isSom6 ? 'bg-red-950' : (data.type === 'pnj' ? 'bg-blue-900' : data.type === 'ameaca' ? 'bg-red-900' : 'bg-dragon-dark');
 
             return (
-                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : 'border-gray-500'} transition-all duration-300`}>
-                    <div style={(isDnd || isFabula) ? {} : getBarStyle()} className={`no-print p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
+                <div style={getWindowStyle()} className={`max-w-6xl mx-auto bg-white rounded-sm shadow-xl border-2 ${isDnd ? 'border-[#922610]' : isFabula ? 'border-teal-700' : isSom6 ? 'border-red-900' : 'border-gray-500'} transition-all duration-300`}>
+                    <div style={(isDnd || isFabula || isSom6) ? {} : getBarStyle()} className={`no-print p-3 flex flex-wrap justify-between items-center rounded-t-sm gap-2 text-white ${topBarColor}`}>
                         <div className="flex items-center gap-4">
                             <button onClick={returnToDashboard} className="flex items-center gap-1 transition-colors text-sm font-bold text-gray-300 hover:text-white">
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className="font-title font-bold text-lg md:text-xl tracking-wider uppercase">
-                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : isFabula ? (data.type === 'pc' ? 'FABULA ULTIMA • PERSONAGEM • PRÉVIA' : 'FABULA ULTIMA • AMEAÇA / PNJ • PRÉVIA') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
+                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : isFabula ? (data.type === 'pc' ? 'FABULA ULTIMA • PERSONAGEM • INTEGRADO' : 'FABULA ULTIMA • AMEAÇA / PNJ • INTEGRADO') : isSom6 ? (data.type === 'pc' ? 'O SOM DAS SEIS • PERSONAGEM • EM TESTE' : 'O SOM DAS SEIS • PDJ • EM TESTE') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
@@ -2851,373 +3156,149 @@
                         </div>
                     )}
 
-                    {/* Editor D&D 5E */}
-                    {isDnd && data.type === 'pc' && (
-                        <div className="bg-white font-dnd">
-                            {/* Abas mobile D&D 5e */}
-                            <div className="md:hidden grid grid-cols-3 bg-[#f3eadc] border-b border-[#c9ad92] sticky top-0 z-20 shadow-sm">
-                                {[
-                                    { id: 'status', label: 'Perfil & Atributos' },
-                                    { id: 'equipamento', label: 'Combate' },
-                                    { id: 'recursos', label: 'Recursos' }
-                                ].map(tab => (
-                                    <button
-                                        key={tab.id}
-                                        type="button"
-                                        onClick={() => setMobileTab(tab.id)}
-                                        className={`py-3 px-1 text-[9px] font-bold uppercase text-center border-b-4 transition-colors ${mobileTab === tab.id ? 'border-[#922610] text-[#922610] bg-white' : 'border-transparent text-gray-500'}`}
-                                    >
-                                        {tab.label}
-                                    </button>
-                                ))}
+                    {/* O Som das Seis — Personagem (teste linha 0.6) */}
+                    {isSom6 && data.type === 'pc' && (
+                        <div className="som6-paper">
+                            <div className="pj-mobile-tabs flex overflow-x-auto bg-red-950 text-amber-50 border-b border-red-900 sticky top-0 z-20 shadow-sm">
+                                {[['perfil','Ficha'],['montaria','Montaria']].map(([id,label])=><button key={id} onClick={()=>setSom6Tab(id)} className={`shrink-0 px-5 py-3 text-[10px] font-bold uppercase border-b-4 ${som6Tab===id?'border-amber-300 bg-red-900':'border-transparent opacity-75'}`}>{label}</button>)}
                             </div>
+                            <div className="p-3 md:p-5">
+                                {som6Tab!=='montaria' && <div className="som6-sheet max-w-5xl mx-auto space-y-3 animate-fade-in-up">
+                                    <div className="flex items-end justify-between gap-3 px-1">
+                                        <div className="som6-logo text-3xl sm:text-5xl">O Som das Seis</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-widest text-red-900 text-right">Ficha em teste • linha 0.6</div>
+                                    </div>
 
-                            <div className="p-4 md:p-8 space-y-6">
-                            {/* Header D&D */}
-                            <div className={`${mobileTab === 'status' ? 'flex' : 'hidden md:flex'} flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-4`}>
-                                {/* Retrato D&D 5e - mesma experiência do Dragonbane */}
-                                <div className="flex flex-col items-center gap-2 shrink-0 w-full md:w-36">
-                                    <div className="w-32 h-32 md:w-36 md:h-36 border-2 border-[#922610] rounded bg-gray-100 relative group overflow-hidden flex items-center justify-center shadow-sm">
-                                        {data.bio?.imagem ? (
-                                            <img src={data.bio.imagem} alt="Avatar" className="w-full h-full object-cover" />
-                                        ) : (
-                                            <span className="text-gray-400 text-sm font-bold uppercase text-center px-4">Retrato</span>
-                                        )}
+                                    <div className="som6-frame som6-frame-cut">
+                                        <div className="grid grid-cols-[98px_1fr] sm:grid-cols-[118px_1fr_108px] gap-2 items-stretch">
+                                            <div className="min-w-0">
+                                                <div className="som6-portrait h-[112px] sm:h-[132px] relative group">
+                                                    {data.bio?.imagem ? <img src={data.bio.imagem} alt={`Retrato de ${data.bio?.nome||'personagem'}`} className="som6-portrait-img"/> : <div className="som6-portrait-empty">retrato<br/>da personagem</div>}
+                                                </div>
+                                                {!showUrlInput ? <div className="som6-portrait-actions">
+                                                    <label className="bg-amber-50 text-stone-900 border border-stone-400 hover:bg-white" title="Enviar imagem">Upload<input type="file" accept="image/*" className="hidden" onChange={async e=>{const f=e.target.files?.[0];e.target.value='';if(!f)return;try{updateField('bio.imagem',await optimizeImageFile(f,720,0.82));showToast('Retrato atualizado!');}catch(err){console.error(err);showToast('Não foi possível usar esta imagem.');}}}/></label>
+                                                    <button type="button" onClick={()=>setShowUrlInput(true)} className="bg-stone-800 text-white border border-stone-700 hover:bg-black">URL</button>
+                                                    {data.bio?.imagem && <button type="button" onClick={()=>updateField('bio.imagem','')} className="col-span-2 bg-red-900 text-white border border-red-950 hover:bg-red-800">Remover</button>}
+                                                </div> : <div className="mt-1 space-y-1">
+                                                    <input type="url" value={tempUrl} onChange={e=>setTempUrl(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&tempUrl.trim()){updateField('bio.imagem',tempUrl.trim());setTempUrl('');setShowUrlInput(false);}}} className="w-full border rounded px-1.5 py-1 text-[9px]" placeholder="https://..."/>
+                                                    <div className="grid grid-cols-2 gap-1"><button type="button" onClick={()=>{if(tempUrl.trim()){updateField('bio.imagem',tempUrl.trim());setTempUrl('');setShowUrlInput(false);}}} className="rounded bg-red-900 text-white text-[9px] font-bold py-1">Aplicar</button><button type="button" onClick={()=>{setTempUrl('');setShowUrlInput(false)}} className="rounded bg-stone-600 text-white text-[9px] font-bold py-1">Voltar</button></div>
+                                                </div>}
+                                            </div>
+                                            <div className="som6-stat-box min-w-0">
+                                                <span className="font-serif font-black text-lg">nome</span><input value={data.bio?.nome||''} onChange={e=>updateField('bio.nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-lg font-bold"/>
+                                                <div className="grid grid-cols-2 gap-1 mt-2 sm:hidden"><label><span className="som6-label !text-stone-600">nível</span><input type="number" min="1" max="6" value={data.nivel||1} onChange={e=>updateField('nivel',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></label><label><span className="som6-label !text-stone-600">jogador</span><input value={data.bio?.jogador||''} onChange={e=>updateField('bio.jogador',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-xs"/></label></div>
+                                                <label className="hidden sm:block mt-2"><span className="som6-label !text-stone-600">jogador</span><input value={data.bio?.jogador||''} onChange={e=>updateField('bio.jogador',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-xs" placeholder="Nome de quem joga"/></label>
+                                            </div>
+                                            <div className="som6-stat-box hidden sm:block"><span className="font-serif font-black text-lg">nível</span><input type="number" min="1" max="6" value={data.nivel||1} onChange={e=>updateField('nivel',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center text-lg font-black"/><div className="mt-2"><span className="som6-label !text-stone-600">XP</span><input type="number" min="0" value={data.xp||0} onChange={e=>updateField('xp',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center"/></div></div>
+                                        </div>
+                                    </div>
 
-                                        <div className={`absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-2 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
-                                            {!showUrlInput ? (
-                                                <React.Fragment>
-                                                    <label className="cursor-pointer bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg">
-                                                        Upload
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            className="hidden"
-                                                            onChange={async (e) => {
-                                                                const file = e.target.files[0];
-                                                                e.target.value = '';
-                                                                if (!file) return;
-                                                                try { updateField('bio.imagem', await optimizeImageFile(file, 720, 0.82)); }
-                                                                catch (err) { console.error(err); showToast('Não foi possível usar esta imagem.'); }
-                                                            }}
-                                                        />
-                                                    </label>
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => setShowUrlInput(true)}
-                                                        className="bg-white text-black px-4 py-2 rounded text-sm font-bold hover:bg-gray-200 w-28 text-center shadow-lg"
-                                                    >
-                                                        Usar URL
-                                                    </button>
-
-                                                    {data.bio?.imagem && (
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                updateField('bio.imagem', '');
-                                                                setTempUrl('');
-                                                                setShowUrlInput(false);
-                                                            }}
-                                                            className="bg-red-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-red-700 w-28 text-center mt-2 shadow-lg"
-                                                        >
-                                                            Remover
-                                                        </button>
-                                                    )}
-                                                </React.Fragment>
-                                            ) : (
-                                                <div className="flex flex-col gap-2 w-full px-3 items-center">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Cole a URL aqui"
-                                                        value={tempUrl}
-                                                        onChange={(e) => setTempUrl(e.target.value)}
-                                                        onKeyDown={(e) => {
-                                                            if (e.key === 'Enter' && tempUrl.trim()) {
-                                                                updateField('bio.imagem', tempUrl.trim());
-                                                                setTempUrl('');
-                                                                setShowUrlInput(false);
-                                                            }
-                                                        }}
-                                                        className="w-full p-2 text-xs outline-none rounded text-black"
-                                                    />
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                if (!tempUrl.trim()) return;
-                                                                updateField('bio.imagem', tempUrl.trim());
-                                                                setTempUrl('');
-                                                                setShowUrlInput(false);
-                                                            }}
-                                                            className="bg-green-700 text-white px-3 py-1.5 text-xs rounded font-bold hover:bg-green-600"
-                                                        >
-                                                            OK
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => {
-                                                                setShowUrlInput(false);
-                                                                setTempUrl('');
-                                                            }}
-                                                            className="bg-gray-500 text-white px-3 py-1.5 text-xs rounded font-bold hover:bg-gray-600"
-                                                        >
-                                                            Voltar
-                                                        </button>
+                                    <div className="grid lg:grid-cols-[0.88fr_1.42fr] gap-3 items-stretch">
+                                        <div className="space-y-3">
+                                            <div className="grid grid-cols-[1fr_92px] gap-3">
+                                                <div className="som6-frame som6-frame-cut">
+                                                    <div className="text-center font-serif font-black text-amber-50 mb-2">atributos</div>
+                                                    <div className="space-y-2.5">
+                                                        {[['fisico','físico'],['agilidade','agilidade'],['intelecto','intelecto'],['coragem','coragem']].map(([k,n])=><div key={k} className="flex items-center justify-between gap-2"><span className="font-serif font-black text-amber-50 text-sm sm:text-base">{n}</span><Som6Pips value={data.atributos?.[k]||0} onChange={v=>updateField(`atributos.${k}`,v)} title={n}/></div>)}
                                                     </div>
                                                 </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <span className="text-[9px] uppercase font-bold text-gray-400">Retrato do personagem</span>
-                                </div>
-
-                                <div className="flex-1 w-full">
-                                    <input type="text" value={data.bio?.nome} onChange={e => updateField('bio.nome', e.target.value)} placeholder="Nome do Personagem" className="w-full text-3xl font-title font-bold outline-none text-[#922610]" />
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-sm w-full mt-3">
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Classe</label><input type="text" value={data.bio?.classe} onChange={e => updateField('bio.classe', e.target.value)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Nível</label><input type="number" value={data.bio?.nivel} onChange={e => updateField('bio.nivel', parseInt(e.target.value)||1)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Linhagem/Espécie</label><input type="text" value={data.bio?.linhagem} onChange={e => updateField('bio.linhagem', e.target.value)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Antecedente</label><input type="text" value={data.bio?.antecedente} onChange={e => updateField('bio.antecedente', e.target.value)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Alinhamento</label><input type="text" value={data.bio?.alinhamento} onChange={e => updateField('bio.alinhamento', e.target.value)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">XP</label><input type="number" value={data.bio?.xp} onChange={e => updateField('bio.xp', parseInt(e.target.value)||0)} className="w-full outline-none font-bold" /></div>
-                                        <div className="border-b border-[#922610]/50 lg:col-span-2"><label className="text-[10px] uppercase font-bold text-gray-500 block">Jogador</label><input type="text" value={data.bio?.jogador} onChange={e => updateField('bio.jogador', e.target.value)} className="w-full outline-none font-bold" /></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                {/* D&D Col 1: Atributos e Perícias */}
-                                <div className={`${mobileTab === 'status' ? 'block' : 'hidden md:block'} space-y-4`}>
-                                    <div className="flex gap-4">
-                                        <div className="flex flex-col gap-2 w-20">
-                                            {['for','des','con','int','sab','car'].map(attr => (
-                                                <div key={attr} className="border-2 border-[#922610] rounded-lg p-2 text-center relative bg-gray-50 shadow-sm">
-                                                    <div className="text-[9px] font-bold uppercase text-[#922610]">{attr}</div>
-                                                    <input type="number" value={data.atributos[attr]} onChange={e => updateField(`atributos.${attr}`, parseInt(e.target.value)||10)} className="w-full text-center text-xl font-bold bg-transparent outline-none" />
-                                                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border border-gray-400 rounded-full w-8 h-5 flex items-center justify-center text-xs font-bold shadow-sm">
-                                                        {formatDndMod(getDndAbilityMod(data.atributos[attr]))}
-                                                    </div>
+                                                <div className="space-y-3">
+                                                    <div className="som6-frame som6-frame-cut"><div className="som6-stat-box text-center"><div className="font-serif font-black">vida</div><div className="grid grid-cols-2 gap-1 mt-1"><input type="number" value={data.status?.pvAtual??0} onChange={e=>updateField('status.pvAtual',Number(e.target.value))} className="w-full border rounded som6-mini-input text-center font-bold" title="PV atual"/><input type="number" value={data.status?.pvMax??0} onChange={e=>updateField('status.pvMax',Number(e.target.value))} className="w-full border rounded som6-mini-input text-center font-bold" title="PV máximo"/></div><div className="text-[8px] uppercase mt-1 opacity-60">atual / máx.</div></div></div>
+                                                    <div className="som6-frame som6-frame-cut"><div className="som6-stat-box text-center"><div className="font-serif font-black">defesa</div><input type="number" value={data.status?.defesa??5} onChange={e=>updateField('status.defesa',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center text-lg font-black"/></div></div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                        <div className="flex-1 flex flex-col gap-3">
-                                            <div className="border-2 border-gray-300 rounded p-2 flex items-center gap-3 bg-white">
-                                                <div className="w-8 h-8 rounded-full border-2 border-[#922610] flex items-center justify-center font-bold text-[#922610]">+{getProficiencyBonus(data.bio?.nivel || 1)}</div>
-                                                <div className="text-xs font-bold uppercase">Bônus de Proficiência</div>
-                                            </div>
-                                            
-                                            <div className="border border-gray-300 rounded p-2 bg-white space-y-1">
-                                                <div className="text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Testes de Resistência</div>
-                                                {['for','des','con','int','sab','car'].map(attr => {
-                                                    const isProf = data.proficienciasResistencia[attr];
-                                                    const total = getDndAbilityMod(data.atributos[attr]) + (isProf ? getProficiencyBonus(data.bio?.nivel || 1) : 0);
-                                                    return (
-                                                        <div key={attr} className="flex items-center gap-2 text-xs">
-                                                            <input type="checkbox" checked={isProf} onChange={e => updateField(`proficienciasResistencia.${attr}`, e.target.checked)} className="cursor-pointer" />
-                                                            <span className="w-6 text-center border-b font-bold">{formatDndMod(total)}</span>
-                                                            <span className="uppercase">{attr}</span>
-                                                        </div>
-                                                    )
-                                                })}
                                             </div>
 
-                                            <div className="border border-gray-300 rounded p-2 bg-white space-y-1">
-                                                <div className="text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Perícias</div>
-                                                {DND_SKILLS_LIST.map((sk, index) => {
-                                                    const pericia = data.pericias.find(p => p.id === sk.id) || { prof: 0 };
-                                                    const attrMod = getDndAbilityMod(data.atributos[sk.attr]);
-                                                    const profBonus = getProficiencyBonus(data.bio?.nivel || 1);
-                                                    const total = attrMod + (pericia.prof === 1 ? profBonus : pericia.prof === 2 ? profBonus * 2 : 0);
-                                                    
-                                                    const toggleProf = () => {
-                                                        const pList = [...data.pericias];
-                                                        const pIdx = pList.findIndex(p => p.id === sk.id);
-                                                        if(pIdx > -1) pList[pIdx].prof = pList[pIdx].prof === 0 ? 1 : pList[pIdx].prof === 1 ? 2 : 0;
-                                                        updateField('pericias', pList);
-                                                    };
-                                                    
-                                                    return (
-                                                        <div key={sk.id} className="flex items-center gap-2 text-xs hover:bg-gray-50">
-                                                            <button onClick={toggleProf} className={`w-3 h-3 rounded-full border border-gray-500 shrink-0 ${pericia.prof === 1 ? 'bg-black' : pericia.prof === 2 ? 'bg-red-600 border-red-600' : 'bg-white'}`}></button>
-                                                            <span className="w-6 text-center border-b font-bold shrink-0">{formatDndMod(total)}</span>
-                                                            <span className="truncate flex-1">{sk.nome} <span className="text-[9px] text-gray-400">({sk.attr.toUpperCase()})</span></span>
-                                                        </div>
-                                                    )
-                                                })}
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">iniciativa</div><input type="number" value={data.status?.iniciativa??1} onChange={e=>updateField('status.iniciativa',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></div></div>
+                                                <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">ações</div><input type="number" min="1" value={data.status?.acoes??1} onChange={e=>updateField('status.acoes',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></div></div>
+                                            </div>
+
+                                            <div className="som6-frame som6-frame-cut">
+                                                <div className="som6-cream rounded-xl p-3">
+                                                    <div className="flex items-center justify-between gap-2 mb-2"><div className="font-serif font-black text-center flex-1">antecedentes</div><span className="text-[8px] font-bold uppercase text-red-900">4 pontos iniciais</span></div>
+                                                    <div className="space-y-2">{SOM6_ANTECEDENTES.map(([id,nome])=><div key={id} className="flex items-center justify-between gap-2"><span className="font-serif font-black text-sm">{nome.toLowerCase()}</span><Som6Pips value={data.antecedentes?.[id]??0} onChange={v=>updateField(`antecedentes.${id}`,v)} title={nome}/></div>)}</div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                {/* D&D Col 2: Combate, HP, Ataques */}
-                                <div className={`${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'} space-y-4`}>
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
-                                            <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Classe de Armadura</div>
-                                            <input type="number" value={data.status?.ca} onChange={e => updateField('status.ca', parseInt(e.target.value)||10)} className="w-full text-center text-3xl font-bold bg-transparent outline-none text-[#922610]" />
-                                        </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
-                                            <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Iniciativa</div>
-                                            <input type="text" value={data.status?.iniciativa} onChange={e => updateField('status.iniciativa', e.target.value)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mt-1" />
-                                        </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
-                                            <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Deslocamento</div>
-                                            <input type="text" value={data.status?.deslocamento} onChange={e => updateField('status.deslocamento', e.target.value)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mt-1" />
-                                        </div>
-                                    </div>
+                                        <div className="space-y-3">
+                                            <div className="grid sm:grid-cols-2 gap-3">
+                                                <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">tormento</div><select value={data.tormento?.tipo||''} onChange={e=>updateField('tormento.tipo',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-xs"><option value="">Tipo...</option>{['Vingança','Fugindo','Vício','Segredo','Doença','Dever'].map(x=><option key={x}>{x}</option>)}</select><textarea rows="2" value={data.tormento?.desc||''} onChange={e=>updateField('tormento.desc',e.target.value)} className="w-full border rounded p-2 mt-1 text-xs som6-compact-textarea" placeholder="Descreva o Tormento..."/></div></div>
+                                                <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">recompensa</div><div className="flex items-center gap-1 mt-1"><span className="font-black">$</span><input type="number" min="0" value={data.recompensa??0} onChange={e=>updateField('recompensa',Number(e.target.value))} className="w-full border rounded som6-mini-input font-bold"/></div><div className="mt-2 sm:hidden"><span className="som6-label !text-stone-600">XP</span><input type="number" min="0" value={data.xp||0} onChange={e=>updateField('xp',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1"/></div></div></div>
+                                            </div>
 
-                                    <div className="border-2 border-gray-300 rounded bg-white overflow-hidden shadow-sm">
-                                        <div className="bg-gray-100 p-2 border-b flex justify-between items-center text-xs uppercase font-bold text-gray-600">Pontos de Vida <span className="font-normal text-[10px]">Máx: <input type="number" value={data.status?.pvMax} onChange={e => updateField('status.pvMax', parseInt(e.target.value)||0)} className="w-10 border-b outline-none bg-transparent font-bold text-right" /></span></div>
-                                        <div className="p-4 text-center">
-                                            <input type="number" value={data.status?.pvAtual} onChange={e => updateField('status.pvAtual', parseInt(e.target.value)||0)} className="w-full text-center text-5xl font-black bg-transparent outline-none text-green-700" />
-                                        </div>
-                                        <div className="bg-gray-50 p-2 border-t flex justify-between items-center text-[10px] uppercase font-bold text-gray-500">Temporários <input type="number" value={data.status?.pvTemp} onChange={e => updateField('status.pvTemp', parseInt(e.target.value)||0)} className="w-12 text-center border-b outline-none bg-transparent text-sm text-black" /></div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
-                                            <div className="text-[10px] uppercase font-bold text-gray-500 mb-1 border-b pb-1">Dados de Vida</div>
-                                            <input type="text" value={data.status?.dadosVida} onChange={e => updateField('status.dadosVida', e.target.value)} className="w-full text-center text-lg font-bold bg-transparent outline-none mt-1" />
-                                        </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
-                                            <div className="text-[10px] uppercase font-bold text-gray-500 mb-1 border-b pb-1">Testes de Morte</div>
-                                            <div className="flex flex-col gap-1 mt-1">
-                                                <div className="flex justify-between items-center text-[10px]"><span className="text-gray-500 font-bold uppercase">Sucessos</span><div className="flex gap-1">{[0,1,2].map(i => <input key={'s'+i} type="checkbox" checked={data.testesMorte.sucessos[i]} onChange={e => { const v = [...data.testesMorte.sucessos]; v[i] = e.target.checked; updateField('testesMorte.sucessos', v); }} />)}</div></div>
-                                                <div className="flex justify-between items-center text-[10px]"><span className="text-gray-500 font-bold uppercase">Falhas</span><div className="flex gap-1">{[0,1,2].map(i => <input key={'f'+i} type="checkbox" checked={data.testesMorte.falhas[i]} onChange={e => { const v = [...data.testesMorte.falhas]; v[i] = e.target.checked; updateField('testesMorte.falhas', v); }} />)}</div></div>
+                                            <div className="som6-frame som6-frame-cut h-full">
+                                                <div className="som6-cream rounded-xl p-3 h-full">
+                                                    <div className="flex justify-between items-center gap-2 mb-2"><div className="font-serif font-black text-lg">habilidades</div><button onClick={()=>updateField('habilidades',[...(data.habilidades||[]),{nome:'',desc:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋ habilidade</button></div>
+                                                    <div className="space-y-2">{(data.habilidades||[]).map((h,i)=><div key={i} className="grid grid-cols-[1fr_auto] gap-1 som6-table-row rounded p-2"><div><input list="som6-habs" value={h.nome||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],nome:e.target.value};updateField('habilidades',x)}} className="w-full border rounded som6-mini-input text-xs font-black" placeholder={`Habilidade ${i+1}`}/>{i===0&&<datalist id="som6-habs">{SOM6_HABILIDADES.map(n=><option key={n} value={n}/>)}</datalist>}<textarea rows="2" value={h.desc||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],desc:e.target.value};updateField('habilidades',x)}} className="w-full border rounded p-1.5 mt-1 text-[11px] som6-compact-textarea" placeholder="Resumo do efeito"/></div><button onClick={()=>updateField('habilidades',(data.habilidades||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black px-1 self-start" title="Remover">×</button></div>)}</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 min-w-0">
-                                        <div className="flex justify-between items-center border-b pb-1 mb-2 gap-2">
-                                            <h3 className="font-bold text-sm uppercase text-gray-600">Ataques</h3>
-                                            <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold shrink-0"><SVGIcons.Plus/> Adic.</button>
-                                        </div>
-                                        <div className="space-y-2 min-w-0">
-                                            {(data.ataques || []).map((atk, idx) => (
-                                                <div key={idx} className="grid grid-cols-12 gap-1.5 items-end bg-gray-50 p-1.5 rounded border min-w-0">
-                                                    <div className="col-span-12 sm:col-span-5 min-w-0">
-                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Ataque</label>
-                                                        <input type="text" value={atk?.nome || ''} placeholder="Nome do ataque" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs font-bold" />
-                                                    </div>
-                                                    <div className="col-span-4 sm:col-span-2 min-w-0">
-                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5 text-center">Bônus</label>
-                                                        <input type="text" value={atk?.bonus || ''} placeholder="+0" onChange={e => updateArrayField('ataques', idx, 'bonus', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs text-center" />
-                                                    </div>
-                                                    <div className="col-span-4 sm:col-span-2 min-w-0">
-                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5 text-center">Dano</label>
-                                                        <input type="text" value={atk?.dano || ''} placeholder="1d6" onChange={e => updateArrayField('ataques', idx, 'dano', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs text-center font-bold" />
-                                                    </div>
-                                                    <div className="col-span-3 sm:col-span-2 min-w-0">
-                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Tipo</label>
-                                                        <input type="text" value={atk?.tipo || ''} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-[10px]" />
-                                                    </div>
-                                                    <div className="col-span-1 flex justify-end pb-0.5">
-                                                        <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 p-0.5" title="Remover ataque"><SVGIcons.Trash/></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Inventário e Moedas</h3>
-                                        <div className="grid grid-cols-5 gap-1 mb-2 text-center text-[10px] font-bold text-gray-500 uppercase">
-                                            <div><div className="bg-yellow-700/10 rounded mb-1">PC</div><input type="number" value={data.moedas.pc} onChange={e => updateField('moedas.pc', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
-                                            <div><div className="bg-gray-400/10 rounded mb-1">PP</div><input type="number" value={data.moedas.pp} onChange={e => updateField('moedas.pp', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
-                                            <div><div className="bg-blue-300/10 rounded mb-1">PE</div><input type="number" value={data.moedas.pe} onChange={e => updateField('moedas.pe', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
-                                            <div><div className="bg-yellow-400/20 rounded mb-1">PO</div><input type="number" value={data.moedas.po} onChange={e => updateField('moedas.po', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
-                                            <div><div className="bg-gray-300/30 rounded mb-1">PL</div><input type="number" value={data.moedas.pl} onChange={e => updateField('moedas.pl', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
-                                        </div>
-                                        <textarea rows="4" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border rounded p-2 text-xs bg-gray-50 resize-y outline-none" placeholder="Equipamento de aventura..."></textarea>
-                                    </div>
-                                </div>
-
-                                {/* D&D Col 3: Roleplay e Magias */}
-                                <div className={`${mobileTab === 'recursos' ? 'block' : 'hidden md:block'} space-y-4`}>
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm flex flex-col gap-2 p-2">
-                                        <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.tracosPersonalidade} onChange={e => updateField('tracosPersonalidade', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Traços de Personalidade..."></textarea></div>
-                                        <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.ideais} onChange={e => updateField('ideais', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Ideais..."></textarea></div>
-                                        <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.vinculos} onChange={e => updateField('vinculos', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Vínculos..."></textarea></div>
-                                        <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.defeitos} onChange={e => updateField('defeitos', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Defeitos..."></textarea></div>
+                                    <div className="grid md:grid-cols-[1fr_230px] gap-3">
+                                        <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">reputação</div><div className="grid sm:grid-cols-[110px_1fr] gap-2 mt-1"><select value={data.reputacao?.valor??0} onChange={e=>updateField('reputacao.valor',Number(e.target.value))} className="border rounded som6-mini-input text-xs"><option value={-1}>-1 Má</option><option value={0}>0 Neutra</option><option value={1}>+1 Boa</option></select><input value={data.reputacao?.titulo||''} onChange={e=>updateField('reputacao.titulo',e.target.value)} className="border rounded som6-mini-input text-xs" placeholder="Como é conhecida?"/></div></div></div>
+                                        <div className="som6-frame som6-frame-cut"><div className="som6-stat-box"><div className="font-serif font-black">U$</div><input type="number" step="0.5" value={data.dinheiro??150} onChange={e=>updateField('dinheiro',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-right font-black"/></div></div>
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm overflow-hidden">
-                                        <div className="flex border-b bg-gray-100">
-                                            <button type="button" onClick={() => setDndPcTab('caracteristicas')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'caracteristicas' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Características & Talentos</button>
-                                            <button type="button" onClick={() => setDndPcTab('magias')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'magias' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Magias</button>
+                                    <div className="som6-frame som6-frame-cut">
+                                        <div className="som6-cream rounded-xl p-3">
+                                            <div className="flex justify-between items-center gap-2"><div><div className="font-serif font-black text-lg">equipamento</div><div className="text-[9px] text-stone-600">Armas mantêm dano, munição e recarga; outros itens ficam logo abaixo.</div></div><button onClick={()=>updateField('armas',[...(data.armas||[]),{nome:'',dano:'',municaoAtual:'',municaoMax:'',recarga:'',notas:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋ arma</button></div>
+                                            <div className="hidden md:grid grid-cols-[1.25fr_.65fr_.8fr_.7fr_1.2fr_26px] gap-1 text-[8px] font-black uppercase mt-2 px-1"><span>arma</span><span>dano</span><span>munição</span><span>recarga</span><span>notas</span><span></span></div>
+                                            <div className="space-y-1 mt-1">{(data.armas||[]).map((a,i)=><div key={i} className="som6-table-row rounded p-1.5 grid grid-cols-2 md:grid-cols-[1.25fr_.65fr_.8fr_.7fr_1.2fr_26px] gap-1"><input value={a.nome||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],nome:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="Arma"/><input value={a.dano||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],dano:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="Dano"/><input value={`${a.municaoAtual??''}${a.municaoAtual!==''&&a.municaoMax!==''?'/':''}${a.municaoMax??''}`} onChange={e=>{const [at='',mx='']=e.target.value.split('/');const x=[...(data.armas||[])];x[i]={...x[i],municaoAtual:at,municaoMax:mx};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="6/6"/><input value={a.recarga||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],recarga:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="2 ações"/><input value={a.notas||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],notas:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs col-span-2 md:col-span-1" placeholder="Modificações / notas"/><button onClick={()=>updateField('armas',(data.armas||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div>
+                                            <div className="mt-3 pt-3 border-t border-stone-400/50 flex justify-between items-center"><div className="font-serif font-black">outros itens</div><button onClick={()=>updateField('inventario',[...(data.inventario||[]),{nome:'',quantidade:1,notas:''}])} className="bg-stone-800 text-white rounded px-2 py-1 text-[10px] font-bold">＋ item</button></div>
+                                            <div className="space-y-1 mt-1">{(data.inventario||[]).map((it,i)=><div key={i} className="som6-table-row rounded p-1.5 grid grid-cols-[1fr_64px_1.2fr_26px] gap-1"><input value={it.nome||''} onChange={e=>{const x=[...(data.inventario||[])];x[i]={...x[i],nome:e.target.value};updateField('inventario',x)}} className="border rounded som6-mini-input text-xs" placeholder="Item"/><input type="number" min="0" value={it.quantidade??1} onChange={e=>{const x=[...(data.inventario||[])];x[i]={...x[i],quantidade:Number(e.target.value)};updateField('inventario',x)}} className="border rounded som6-mini-input text-xs"/><input value={it.notas||''} onChange={e=>{const x=[...(data.inventario||[])];x[i]={...x[i],notas:e.target.value};updateField('inventario',x)}} className="border rounded som6-mini-input text-xs" placeholder="Notas"/><button onClick={()=>updateField('inventario',(data.inventario||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div>
                                         </div>
-
-                                        {dndPcTab === 'caracteristicas' ? (
-                                            <div className="p-2">
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <span className="text-[10px] text-gray-500">Habilidades de classe, talentos e traços.</span>
-                                                    <button type="button" onClick={() => addToArray('caracteristicas', { nome: '', desc: '' })} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    {(!data.caracteristicas || data.caracteristicas.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma característica adicionada.</p>}
-                                                    {(Array.isArray(data.caracteristicas) ? data.caracteristicas : []).map((carac, idx) => (
-                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
-                                                            <div className="flex-1 space-y-1">
-                                                                <input type="text" value={carac?.nome || ''} onChange={e => updateArrayField('caracteristicas', idx, 'nome', e.target.value)} className="w-full bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da característica ou talento" />
-                                                                <textarea rows="2" value={carac?.desc || ''} onChange={e => updateArrayField('caracteristicas', idx, 'desc', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Descrição, uso, limite, efeito..." />
-                                                            </div>
-                                                            <button type="button" onClick={() => removeFromArray('caracteristicas', idx)} className="text-red-500 hover:text-red-700"><SVGIcons.Trash/></button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="p-2">
-                                                <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Espaços de Magia — Atual / Máx.</div>
-                                                <div className="grid grid-cols-3 gap-1 mb-3">
-                                                    {[1,2,3,4,5,6,7,8,9].map(lvl => {
-                                                        const slot = data.magias?.slots?.[lvl] || { atual: 0, max: 0 };
-                                                        return (
-                                                            <div key={lvl} className="flex border rounded overflow-hidden text-[9px] bg-gray-50">
-                                                                <div className="bg-gray-200 px-1 py-1 font-bold text-gray-700 flex items-center justify-center border-r">N{lvl}</div>
-                                                                <input type="number" min="0" value={slot.atual ?? 0} onChange={e => updateField(`magias.slots.${lvl}.atual`, parseInt(e.target.value)||0)} className="w-7 text-center outline-none bg-transparent" />
-                                                                <span className="text-gray-400 py-1">/</span>
-                                                                <input type="number" min="0" value={slot.max ?? 0} onChange={e => updateField(`magias.slots.${lvl}.max`, parseInt(e.target.value)||0)} className="w-7 text-center outline-none bg-transparent font-bold text-[#922610]" />
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </div>
-                                                <div className="flex justify-between items-center border-t pt-2 mb-2">
-                                                    <span className="text-[10px] text-gray-500">Lista de magias conhecidas/preparadas.</span>
-                                                    <button type="button" onClick={() => { const list = Array.isArray(data.magias?.lista) ? data.magias.lista : []; updateField('magias.lista', [...list, { nome: '', nivel: '', desc: '' }]); }} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    {(!Array.isArray(data.magias?.lista) || data.magias.lista.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma magia adicionada.</p>}
-                                                    {(Array.isArray(data.magias?.lista) ? data.magias.lista : []).map((magia, idx) => (
-                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
-                                                            <div className="flex-1">
-                                                                <div className="flex gap-2 mb-1">
-                                                                    <input type="text" value={magia?.nome || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], nome:e.target.value}; updateField('magias.lista', list); }} className="flex-1 min-w-0 bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da magia" />
-                                                                    <input type="text" value={magia?.nivel || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], nivel:e.target.value}; updateField('magias.lista', list); }} className="w-16 bg-transparent border-b outline-none text-[10px] text-center" placeholder="Nível" />
-                                                                </div>
-                                                                <textarea rows="2" value={magia?.desc || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], desc:e.target.value}; updateField('magias.lista', list); }} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Notas, duração, alcance ou efeito..." />
-                                                            </div>
-                                                            <button type="button" onClick={() => { const list=data.magias.lista.filter((_,i)=>i!==idx); updateField('magias.lista', list); }} className="text-red-500 hover:text-red-700"><SVGIcons.Trash/></button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        )}
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Outras Proficiências / Idiomas</h3>
-                                        <textarea rows="3" value={data.outrasProficiencias} onChange={e => updateField('outrasProficiencias', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none"></textarea>
+                                    <div className="grid lg:grid-cols-[.85fr_1.15fr] gap-3">
+                                        <div className="som6-section rounded-lg p-3"><div className="flex justify-between items-center"><h3 className="font-title font-bold som6-title text-sm">🂠 Cartas de Sina</h3><span className="text-[9px] text-stone-500">máx. 2 por sessão</span></div><div className="grid grid-cols-2 gap-2 mt-2">{(data.cartasSina||[]).map((c,i)=><div key={i} className="border rounded bg-white p-2"><input value={c.carta||''} onChange={e=>{const x=[...(data.cartasSina||[])];x[i]={...x[i],carta:e.target.value};updateField('cartasSina',x)}} className="w-full border rounded som6-mini-input text-xs" placeholder={`Carta ${i+1}`}/><label className="mt-1 flex items-center gap-1 text-[10px] font-bold"><input type="checkbox" checked={!!c.usada} onChange={e=>{const x=[...(data.cartasSina||[])];x[i]={...x[i],usada:e.target.checked};updateField('cartasSina',x)}}/> usada</label></div>)}</div><div className="text-[9px] mt-2 text-stone-600">Uma Carta de Sina pode refazer um teste ou reduzir em 1d6 um dano recebido.</div></div>
+                                        <div className="som6-section rounded-lg p-3"><div className="flex justify-between items-center"><h3 className="font-title font-bold som6-title text-sm">Detalhes & anotações</h3><span className="text-[9px] text-stone-500">opcional</span></div><div className="grid sm:grid-cols-2 gap-2 mt-2"><input value={data.bio?.aparencia||''} onChange={e=>updateField('bio.aparencia',e.target.value)} className="border rounded som6-mini-input text-xs" placeholder="Aparência / traços visuais"/><input value={data.bio?.apelido||''} onChange={e=>updateField('bio.apelido',e.target.value)} className="border rounded som6-mini-input text-xs" placeholder="Apelido"/><textarea rows="2" value={data.bio?.passado||''} onChange={e=>updateField('bio.passado',e.target.value)} className="border rounded p-2 text-xs som6-compact-textarea" placeholder="Passado"/><textarea rows="2" value={data.anotacoes||''} onChange={e=>updateField('anotacoes',e.target.value)} className="border rounded p-2 text-xs som6-compact-textarea" placeholder="Anotações"/></div></div>
                                     </div>
-                                </div>
-                            </div>
+
+                                    <details className="som6-section rounded-lg"><summary className="cursor-pointer p-3 text-xs font-bold som6-title">📈 Consulta de progressão</summary><div className="px-3 pb-3 grid sm:grid-cols-2 md:grid-cols-3 gap-1 text-[10px]">{SOM6_LEVELS.map(x=><div key={x.nivel} className="border rounded bg-white p-2"><strong>Nv.{x.nivel} — {x.xp} XP</strong><br/>{x.bonus}</div>)}</div></details>
+                                    <div className="text-[9px] text-stone-500 text-center pt-1">O Som das Seis — regras por Ramon Mineiro • integração em teste no PJ Lite • regras sob CC BY-SA 4.0 conforme o livro.</div>
+                                </div>}
+
+                                {som6Tab==='montaria' && <div className="som6-sheet max-w-5xl mx-auto space-y-3 animate-fade-in-up">
+                                    <div className="flex items-end justify-between gap-3 px-1"><div className="som6-logo text-3xl sm:text-5xl">Seu Cavalo</div><label className="text-xs font-bold flex items-center gap-2"><input type="checkbox" checked={!!data.montaria?.ativa} onChange={e=>updateField('montaria.ativa',e.target.checked)}/> possui montaria</label></div>
+                                    {!data.montaria?.ativa ? <div className="som6-section rounded-xl p-6 text-center"><div className="text-3xl mb-2">🐎</div><div className="font-title font-bold som6-title">Nenhuma montaria ativa</div><p className="text-xs text-stone-600 mt-1">Marque “possui montaria” para abrir a ficha do animal.</p></div> : <>
+                                        <div className="som6-frame som6-frame-cut"><div className="grid grid-cols-[1fr_120px] gap-2"><div className="som6-stat-box"><div className="font-serif font-black">nome</div><input value={data.montaria?.nome||''} onChange={e=>updateField('montaria.nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 font-bold"/></div><div className="som6-stat-box"><div className="font-serif font-black">fidelidade</div><input type="number" min="0" max="4" value={data.montaria?.fidelidade??0} onChange={e=>updateField('montaria.fidelidade',Math.max(0,Math.min(4,Number(e.target.value))))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></div></div></div>
+                                        <div className="grid lg:grid-cols-[.9fr_.75fr_1fr] gap-3">
+                                            <div className="som6-frame som6-frame-cut"><div className="space-y-4 py-2"><div className="flex items-center justify-between gap-2"><span className="font-serif font-black text-amber-50 text-lg">potência</span><Som6Pips value={data.montaria?.potencia||0} onChange={v=>updateField('montaria.potencia',v)} title="Potência"/></div><div className="flex items-center justify-between gap-2"><span className="font-serif font-black text-amber-50 text-lg">vigor</span><Som6Pips value={data.montaria?.vigor||0} onChange={v=>{updateField('montaria.vigor',v);updateField('montaria.resistencia',v)}} title="Vigor"/></div></div></div>
+                                            <div className="som6-frame som6-frame-cut"><div className="som6-stat-box space-y-2"><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">vida</span><div className="grid grid-cols-2 gap-1"><input type="number" value={data.montaria?.pvAtual??0} onChange={e=>updateField('montaria.pvAtual',Number(e.target.value))} className="border rounded som6-mini-input text-center"/><input type="number" value={data.montaria?.pvMax??0} onChange={e=>updateField('montaria.pvMax',Number(e.target.value))} className="border rounded som6-mini-input text-center"/></div></div><div className="text-[8px] text-right -mt-1">referência da ficha: 1d6 + Vigor</div><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">defesa</span><input type="number" value={data.montaria?.defesa??5} onChange={e=>updateField('montaria.defesa',Number(e.target.value))} className="border rounded som6-mini-input text-center"/></div><div className="text-[8px] text-right -mt-1">referência: 5 + Vigor</div><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">dano</span><input value={data.montaria?.dano||''} onChange={e=>updateField('montaria.dano',e.target.value)} className="border rounded som6-mini-input text-center" placeholder="6 + Potência"/></div></div></div>
+                                            <div className="som6-frame som6-frame-cut"><div className="som6-cream rounded-xl p-3"><div className="flex justify-between items-center"><div className="font-serif font-black">itens no cavalo</div><button onClick={()=>updateField('montaria.itens',[...(data.montaria?.itens||[]),{nome:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋</button></div><div className="space-y-1 mt-2">{(data.montaria?.itens||[]).map((it,i)=><div key={i} className="grid grid-cols-[1fr_22px] gap-1"><input value={it.nome||''} onChange={e=>{const x=[...(data.montaria?.itens||[])];x[i]={...x[i],nome:e.target.value};updateField('montaria.itens',x)}} className="border rounded som6-mini-input text-xs" placeholder="Item"/><button onClick={()=>updateField('montaria.itens',(data.montaria?.itens||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div></div></div>
+                                        </div>
+                                        <div className="som6-frame som6-frame-cut"><div className="som6-cream rounded-xl p-3 space-y-2">{[
+                                            [1,'Antes de mais nada, dê um nome a seu animal. Agora sabe quando você está falando com ele.'],
+                                            [2,'O cavalo corre mais rápido e pode saltar mais longe. Adicione +1 à Potência.'],
+                                            [3,'O cavalo vai até você com um assovio e não permite que outras pessoas o montem.'],
+                                            [4,'Seu cavalo está mais esbelto e forte. Adicione +2 à Potência.']
+                                        ].map(([n,txt])=><button key={n} type="button" onClick={()=>updateField('montaria.fidelidade',n)} className={`w-full text-left flex items-start gap-3 rounded p-2 border ${Number(data.montaria?.fidelidade||0)>=n?'bg-red-50 border-red-800':'bg-white border-stone-300'}`}><span className={`som6-pip shrink-0 ${Number(data.montaria?.fidelidade||0)>=n?'active':''}`}>{Number(data.montaria?.fidelidade||0)>=n?'✓':''}</span><span className="text-xs">{txt}</span></button>)}<textarea rows="2" value={data.montaria?.notas||''} onChange={e=>updateField('montaria.notas',e.target.value)} className="w-full border rounded p-2 text-xs som6-compact-textarea mt-1" placeholder="Notas sobre a montaria..."/></div></div>
+                                    </>}
+                                    <div className="text-[9px] text-stone-500 text-center pt-1">Layout inspirado na ficha editável de O Som das Seis enviada como referência.</div>
+                                </div>}
                             </div>
                         </div>
                     )}
 
-                    {/* Editor D&D 5E Bestiário */}
+                    {isSom6 && data.type !== 'pc' && (
+                        <div className="som6-paper p-3 md:p-5">
+                            <div className="som6-sheet max-w-5xl mx-auto som6-frame som6-frame-cut">
+                                <div className="som6-cream rounded-xl p-3 space-y-3">
+                                    <div className="flex flex-wrap items-end justify-between gap-2"><div><div className="som6-logo text-2xl sm:text-3xl">PDJ</div><div className="text-[9px] font-bold uppercase text-red-900">O Som das Seis • ficha compacta</div></div><span className="text-[9px] text-stone-500">NP 1–6 • resultado 1 no d6 sempre falha</span></div>
+                                    <div className="grid sm:grid-cols-[1.5fr_.7fr_80px] gap-2"><label><span className="som6-label">Nome</span><input value={data.nome||''} onChange={e=>updateField('nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 font-bold"/></label><label><span className="som6-label">Tipo</span><select value={data.tipoPdj||'Comum'} onChange={e=>updateField('tipoPdj',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-xs"><option>Comum</option><option>Importante</option></select></label><label><span className="som6-label">NP</span><input type="number" min="1" max="6" value={data.np||1} onChange={e=>updateField('np',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></label></div>
+                                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">{[['status.pvAtual','PV'],['status.pvMax','PV Máx.'],['status.defesa','Def.'],['status.acoes','Ações'],['status.ataqueBonus','Ataque'],['status.iniciativaBonus','Inic.']].map(([path,label])=>{const k=path.split('.')[1];return <label key={path} className="border rounded bg-white p-1.5"><span className="som6-label">{label}</span><input type="number" value={data.status?.[k]??0} onChange={e=>updateField(path,Number(e.target.value))} className="w-full border-0 p-1 text-center font-bold"/></label>})}</div>
+                                    <textarea rows="2" value={data.descricao||''} onChange={e=>updateField('descricao',e.target.value)} className="w-full border rounded p-2 text-xs som6-compact-textarea" placeholder="Descrição rápida do PDJ..."/>
+                                    <div className="grid lg:grid-cols-2 gap-3">
+                                        <div className="border rounded bg-white p-2"><div className="flex justify-between items-center"><strong className="text-xs uppercase text-red-900">Armas</strong><button onClick={()=>updateField('armas',[...(data.armas||[]),{nome:'',dano:'',notas:''}])} className="bg-red-900 text-white rounded px-2 py-0.5 text-xs font-bold">＋</button></div><div className="space-y-1 mt-2">{(data.armas||[]).map((a,i)=><div key={i} className="grid grid-cols-[1fr_70px_1fr_22px] gap-1"><input value={a.nome||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],nome:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="Arma"/><input value={a.dano||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],dano:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="Dano"/><input value={a.notas||''} onChange={e=>{const x=[...(data.armas||[])];x[i]={...x[i],notas:e.target.value};updateField('armas',x)}} className="border rounded som6-mini-input text-xs" placeholder="Notas"/><button onClick={()=>updateField('armas',(data.armas||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div></div>
+                                        <div className="border rounded bg-white p-2"><div className="flex justify-between items-center"><strong className="text-xs uppercase text-red-900">Habilidades</strong><button onClick={()=>updateField('habilidades',[...(data.habilidades||[]),{nome:'',desc:''}])} className="bg-stone-800 text-white rounded px-2 py-0.5 text-xs font-bold">＋</button></div><div className="space-y-1 mt-2">{(data.habilidades||[]).map((h,i)=><div key={i} className="grid grid-cols-[.8fr_1.3fr_22px] gap-1"><input value={h.nome||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],nome:e.target.value};updateField('habilidades',x)}} className="border rounded som6-mini-input text-xs" placeholder="Habilidade"/><input value={h.desc||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],desc:e.target.value};updateField('habilidades',x)}} className="border rounded som6-mini-input text-xs" placeholder="Efeito"/><button onClick={()=>updateField('habilidades',(data.habilidades||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div></div>
+                                    </div>
+                                    <textarea rows="2" value={data.notas||''} onChange={e=>updateField('notas',e.target.value)} className="w-full border rounded p-2 text-xs som6-compact-textarea" placeholder="Notas, comportamento, objetivo, contatos..."/>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {isFabula && data.type !== 'pc' && (
                         <div className="p-4 md:p-7 space-y-6 fabula-threat-editor">
@@ -3406,7 +3487,7 @@
                     )}
 
                     {/* Editor Dragonbane (Intacto) */}
-                    {!isDnd && !isFabula && (
+                    {!isDnd && !isFabula && !isSom6 && (
                         data.type === 'pc' ? (
                             <React.Fragment>
                                 {/* Mobile Tabs for PC */}
