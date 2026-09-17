@@ -468,16 +468,22 @@
             background-color:#222 !important;
         }
         body.theme-custom .max-w-6xl, body.theme-custom .max-w-5xl, body.theme-custom .bg-white {
+            background-color:var(--custom-window-rgba, rgba(255,255,255,.95)) !important;
             color:var(--custom-text-color) !important;
             border-color:color-mix(in srgb, var(--custom-accent-color) 45%, #d1d5db) !important;
+            backdrop-filter:blur(var(--custom-blur)) !important;
+            -webkit-backdrop-filter:blur(var(--custom-blur)) !important;
         }
-        body.theme-custom .bg-dragon-dark { background-color:var(--custom-bar-color) !important; color:white !important; }
+        body.theme-custom .bg-dragon-dark { background-color:var(--custom-bar-color) !important; color:var(--custom-bar-text, #fff) !important; }
         body.theme-custom .border-dragon-dark { border-color:var(--custom-accent-color) !important; }
         body.theme-custom .text-dragon-dark, body.theme-custom .text-red-800 { color:var(--custom-accent-color) !important; }
         body.theme-custom input, body.theme-custom textarea, body.theme-custom select { border-color:color-mix(in srgb, var(--custom-accent-color) 40%, #cbd5e1) !important; }
         body.theme-custom input:focus, body.theme-custom textarea:focus, body.theme-custom select:focus { border-color:var(--custom-accent-color) !important; box-shadow:0 0 0 2px color-mix(in srgb, var(--custom-accent-color) 18%, transparent) !important; }
         body.theme-custom .shadow, body.theme-custom .shadow-sm, body.theme-custom .shadow-md, body.theme-custom .shadow-lg { box-shadow:0 6px 22px rgba(0,0,0,.22) !important; }
-        body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:rgba(248,250,252,.78) !important; }
+        body.theme-custom .bg-gray-50, body.theme-custom .bg-gray-100 { background-color:color-mix(in srgb, var(--custom-window-color) 90%, var(--custom-accent-color) 10%) !important; color:var(--custom-text-color) !important; }
+        body.theme-custom .bg-gray-200, body.theme-custom .bg-gray-300 { background-color:color-mix(in srgb, var(--custom-window-color) 82%, var(--custom-accent-color) 18%) !important; color:var(--custom-text-color) !important; }
+        body.theme-custom .text-gray-900, body.theme-custom .text-gray-800, body.theme-custom .text-gray-700, body.theme-custom .text-gray-600, body.theme-custom .text-gray-500 { color:var(--custom-text-color) !important; }
+        body.theme-custom ::selection { background:var(--custom-accent-color); color:var(--custom-bar-text, #fff); }
 
         /* O Som das Seis — teste avançado de integração na linha 0.6 */
         .som6-paper { background: linear-gradient(180deg, #efe7c9 0%, #e8ddba 100%); }
@@ -573,12 +579,14 @@
         const CUSTOM_TEXT_COLOR_KEY = 'pjlite_custom_text_color';
         const CUSTOM_OVERLAY_KEY = 'pjlite_custom_overlay';
         const CUSTOM_BLUR_KEY = 'pjlite_custom_blur';
+        const CUSTOM_BG_POSITION_KEY = 'pjlite_custom_bg_position';
+        const CUSTOM_BG_SIZE_KEY = 'pjlite_custom_bg_size';
         const HISTORY_STORAGE_KEY = 'pjlite_item_history_v1';
         const NEWS_COLLAPSED_KEY = 'pjlite_news_collapsed_v1';
         const SCHEMA_VERSION = 6;
 
         const UPDATE_LOG = [
-            { versao: '0.6.7v Alpha', descricao: 'O Som das Seis entra em teste avançado dentro da linha 0.6: ficha principal compacta inspirada no PDF oficial, aba separada de Montaria, retrato por upload ou URL, tema próprio do sistema, modo escuro refinado, revisões de layout e guias ampliados com suporte para iniciantes e link para o material original.' },
+            { versao: '0.6.7v Alpha', descricao: 'O Som das Seis entra em teste avançado dentro da linha 0.6: ficha principal compacta inspirada no PDF oficial, aba separada de Montaria, retrato por upload ou URL, tema próprio do sistema, modo escuro refinado, Tema Personalizado redesenhado com prévia, estilos rápidos e controles de fundo, revisões de layout e guias ampliados com suporte para iniciantes e link para o material original.' },
             { versao: '0.6.5v Alpha', descricao: 'Revisão de estabilidade e fechamento da adaptação de Fabula Ultima: salvamento seguro ao voltar, histórico/autosave e importações revisados, Ficha Chat refinada, modelos Press Start reorganizados, nova Ficha Extra de Projetos, equipamentos e PI consolidados, além de melhorias de armazenamento, imagens, temas e carregamento por CDN.' },
             { versao: '0.6.4v Alpha', descricao: 'Revisão geral e polimento final da linha 0.6: barra de novidades minimizável, acesso rápido ao canal de anúncios no Telegram, Ficha Chat em quatro modos, interface enxuta, Equipamentos e consulta rápida de PI em Fabula Ultima, temas refinados, importação ZIP/JSON revisada e correções de estabilidade em autosave, histórico, desfazer e armazenamento local.' },
             { versao: '0.5.9v Alpha', descricao: 'Fabula Ultima integrado aos Guias e Tutoriais, novo Tema Fabula Ultima, retrato por URL na ficha de personagem e guias passo a passo mais intuitivos para criação de personagens em Dragonbane, D&D 5e e Fabula Ultima.' },
@@ -1037,6 +1045,14 @@
             if (cleaned.length === 3) cleaned = cleaned.split('').map(c => c + c).join('');
             const num = parseInt(cleaned, 16);
             return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+        };
+
+        const readableTextColor = (hex) => {
+            try {
+                const [r,g,b] = hexToRgb(hex || '#000000');
+                const luminance = (0.299*r + 0.587*g + 0.114*b) / 255;
+                return luminance > 0.62 ? '#171717' : '#ffffff';
+            } catch { return '#ffffff'; }
         };
 
         // Reduz imagens locais antes de armazená-las no localStorage.
@@ -1518,6 +1534,8 @@
             const [customTextColor, setCustomTextColor] = useState(() => { try { return localStorage.getItem(CUSTOM_TEXT_COLOR_KEY) || '#1f2937'; } catch { return '#1f2937'; } });
             const [customOverlay, setCustomOverlay] = useState(() => { try { return localStorage.getItem(CUSTOM_OVERLAY_KEY) || '0.18'; } catch { return '0.18'; } });
             const [customBlur, setCustomBlur] = useState(() => { try { return localStorage.getItem(CUSTOM_BLUR_KEY) || '5'; } catch { return '5'; } });
+            const [customBgPosition, setCustomBgPosition] = useState(() => { try { return localStorage.getItem(CUSTOM_BG_POSITION_KEY) || 'center'; } catch { return 'center'; } });
+            const [customBgSize, setCustomBgSize] = useState(() => { try { return localStorage.getItem(CUSTOM_BG_SIZE_KEY) || 'cover'; } catch { return 'cover'; } });
 
             const [showCustomBgModal, setShowCustomBgModal] = useState(false);
             const [showUrlInput, setShowUrlInput] = useState(false);
@@ -1567,13 +1585,15 @@
                 if (theme === 'custom' && customBgUrl) {
                     const shade = Math.max(0, Math.min(0.85, Number(customOverlay) || 0));
                     document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,${shade}), rgba(0,0,0,${shade})), url(${customBgUrl})`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundSize = customBgSize;
+                    document.body.style.backgroundPosition = customBgPosition;
+                    document.body.style.backgroundRepeat = customBgSize === 'auto' ? 'repeat' : 'no-repeat';
                     document.body.style.backgroundAttachment = 'fixed';
                 } else {
                     document.body.style.backgroundImage = '';
+                    document.body.style.backgroundRepeat = '';
                 }
-            }, [theme, customBgUrl, customOverlay]);
+            }, [theme, customBgUrl, customOverlay, customBgPosition, customBgSize]);
 
             useEffect(() => {
                 try { localStorage.setItem(CUSTOM_WIN_COLOR_KEY, customWinColor); } catch {}
@@ -1591,13 +1611,18 @@
             useEffect(() => { try { localStorage.setItem(CUSTOM_TEXT_COLOR_KEY, customTextColor); } catch {} }, [customTextColor]);
             useEffect(() => { try { localStorage.setItem(CUSTOM_OVERLAY_KEY, customOverlay); } catch {} }, [customOverlay]);
             useEffect(() => { try { localStorage.setItem(CUSTOM_BLUR_KEY, customBlur); } catch {} }, [customBlur]);
+            useEffect(() => { try { localStorage.setItem(CUSTOM_BG_POSITION_KEY, customBgPosition); } catch {} }, [customBgPosition]);
+            useEffect(() => { try { localStorage.setItem(CUSTOM_BG_SIZE_KEY, customBgSize); } catch {} }, [customBgSize]);
             useEffect(() => { try { localStorage.setItem('pj_lite_dashboard_view', dashboardView); } catch {} }, [dashboardView]);
             useEffect(() => { try { localStorage.setItem(NEWS_COLLAPSED_KEY, newsCollapsed ? '1' : '0'); } catch {} }, [newsCollapsed]);
 
             useEffect(() => {
                 if (theme !== 'custom') return;
+                const [wr, wg, wb] = hexToRgb(customWinColor);
                 document.body.style.setProperty('--custom-window-color', customWinColor);
+                document.body.style.setProperty('--custom-window-rgba', `rgba(${wr}, ${wg}, ${wb}, ${customOpacity})`);
                 document.body.style.setProperty('--custom-bar-color', customBarColor);
+                document.body.style.setProperty('--custom-bar-text', readableTextColor(customBarColor));
                 document.body.style.setProperty('--custom-accent-color', customAccentColor);
                 document.body.style.setProperty('--custom-text-color', customTextColor);
                 document.body.style.setProperty('--custom-opacity', customOpacity);
@@ -1624,7 +1649,21 @@
 
             const getBarStyle = () => {
                 if (theme !== 'custom') return {};
-                return { backgroundColor: customBarColor, color: '#ffffff', borderColor: customAccentColor };
+                return { backgroundColor: customBarColor, color: readableTextColor(customBarColor), borderColor: customAccentColor };
+            };
+
+            const applyCustomPreset = (preset) => {
+                const presets = {
+                    claro: { win:'#ffffff', bar:'#263241', accent:'#7f1d1d', text:'#1f2937', opacity:'0.95', overlay:'0.18', blur:'5' },
+                    escuro: { win:'#111827', bar:'#070b12', accent:'#b4534b', text:'#f3f4f6', opacity:'0.94', overlay:'0.32', blur:'7' },
+                    pergaminho: { win:'#f3e7c5', bar:'#4a2d1f', accent:'#8a2f22', text:'#33251a', opacity:'0.94', overlay:'0.20', blur:'4' },
+                    floresta: { win:'#e7eee8', bar:'#183a32', accent:'#3f6f5d', text:'#1f312b', opacity:'0.94', overlay:'0.24', blur:'5' },
+                    vinho: { win:'#f5e9e5', bar:'#4f1718', accent:'#8b2e2e', text:'#352120', opacity:'0.94', overlay:'0.22', blur:'5' }
+                };
+                const p = presets[preset];
+                if (!p) return;
+                setCustomWinColor(p.win); setCustomBarColor(p.bar); setCustomAccentColor(p.accent); setCustomTextColor(p.text);
+                setCustomOpacity(p.opacity); setCustomOverlay(p.overlay); setCustomBlur(p.blur);
             };
 
             const showToast = (msg, options = {}) => {
@@ -2181,9 +2220,9 @@
                                         <option value="fabula">Tema: Fabula Ultima</option>
                                         <option value="som6">Tema: O Som das Seis</option>
                                         <option value="dark">Tema: Modo Escuro</option>
-                                        <option value="custom">Tema: Custom...</option>
+                                        <option value="custom">Tema: Personalizado...</option>
                                     </select>
-                                    {theme === 'custom' && <button type="button" onClick={() => setShowCustomBgModal(true)} className="ml-1 px-1.5 py-0.5 rounded border border-gray-400 text-[10px] font-bold hover:bg-white" title="Editar Tema Custom" aria-label="Editar Tema Custom">⚙</button>}
+                                    {theme === 'custom' && <button type="button" onClick={() => setShowCustomBgModal(true)} className="ml-1 px-1.5 py-0.5 rounded border border-gray-400 text-[10px] font-bold hover:bg-white" title="Editar tema personalizado" aria-label="Editar tema personalizado">⚙</button>}
                                 </div>
                                 <button onClick={() => { setGuideTab('inicio'); setShowGuideModal(true); }} className="flex items-center gap-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded shadow transition-colors font-bold text-sm">
                                     <SVGIcons.HelpCircle /> Guias e Tutoriais
@@ -2648,76 +2687,105 @@
                         )}
 
                         {showCustomBgModal && ReactDOM.createPortal(
-                            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
-                                <div className="bg-white rounded-sm shadow-2xl w-full max-w-md border-2 border-dragon-dark overflow-hidden p-6 space-y-4">
-                                    <div className="flex justify-between items-center border-b pb-2">
-                                        <h3 className="font-title font-bold text-lg text-dragon-dark">Tema Personalizado</h3>
-                                        <button onClick={() => setShowCustomBgModal(false)} className="text-gray-400 hover:text-black text-xl font-bold">&times;</button>
+                            <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-3 sm:p-4 transition-opacity">
+                                <div className="bg-white rounded-lg shadow-2xl w-full max-w-3xl border-2 border-dragon-dark overflow-hidden max-h-[92vh] flex flex-col">
+                                    <div className="bg-gray-800 text-white px-4 py-3 flex justify-between items-center shrink-0">
+                                        <div>
+                                            <h3 className="font-title font-bold text-lg">Tema Personalizado</h3>
+                                            <p className="text-[10px] text-gray-300 mt-0.5">Monte um tema próprio e veja o resultado antes de aplicar.</p>
+                                        </div>
+                                        <button onClick={() => setShowCustomBgModal(false)} className="text-gray-300 hover:text-white text-2xl font-bold px-2" aria-label="Fechar tema personalizado">&times;</button>
                                     </div>
-                                    <div className="space-y-4 pt-2">
-                                        <div className="rounded border border-gray-200 bg-gray-50 p-3 space-y-3">
-                                            <div>
-                                                <div className="text-xs font-bold text-gray-800">Imagem de fundo</div>
-                                                <p className="text-[10px] text-gray-500 mt-0.5">Escolha uma imagem do dispositivo ou cole um link direto para uma imagem.</p>
+
+                                    <div className="overflow-y-auto p-4 sm:p-5 bg-gray-50">
+                                        <div className="grid lg:grid-cols-[0.9fr_1.35fr] gap-4 items-start">
+                                            <div className="space-y-4 lg:sticky lg:top-0">
+                                                <div className="rounded-lg border border-gray-300 bg-white p-3 shadow-sm">
+                                                    <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">Prévia ao vivo</div>
+                                                    <div
+                                                        className="rounded-lg border-2 overflow-hidden shadow-md min-h-[180px] flex items-end p-3"
+                                                        style={{
+                                                            borderColor: customAccentColor,
+                                                            backgroundColor: '#2b2b2b',
+                                                            backgroundImage: customBgUrl ? `linear-gradient(rgba(0,0,0,${Math.max(0,Math.min(.85,Number(customOverlay)||0))}), rgba(0,0,0,${Math.max(0,Math.min(.85,Number(customOverlay)||0))})), url(${customBgUrl})` : 'linear-gradient(135deg,#4b5563,#111827)',
+                                                            backgroundSize: customBgSize,
+                                                            backgroundPosition: customBgPosition,
+                                                            backgroundRepeat: customBgSize === 'auto' ? 'repeat' : 'no-repeat'
+                                                        }}
+                                                    >
+                                                        <div className="w-full rounded-lg border shadow-lg overflow-hidden" style={{backgroundColor:customWinColor,color:customTextColor,borderColor:customAccentColor,opacity:Number(customOpacity),backdropFilter:`blur(${customBlur}px)`,WebkitBackdropFilter:`blur(${customBlur}px)`}}>
+                                                            <div className="px-3 py-2 font-bold text-xs" style={{backgroundColor:customBarColor,color:readableTextColor(customBarColor)}}>PJ Lite • Exemplo</div>
+                                                            <div className="p-3 space-y-2">
+                                                                <div className="font-title font-bold text-sm" style={{color:customAccentColor}}>Nome do Personagem</div>
+                                                                <div className="h-8 rounded border px-2 flex items-center text-[10px]" style={{borderColor:customAccentColor}}>Campo da ficha</div>
+                                                                <div className="flex gap-2"><span className="px-2 py-1 rounded text-[9px] font-bold" style={{backgroundColor:customAccentColor,color:readableTextColor(customAccentColor)}}>Destaque</span><span className="text-[9px] self-center">Texto principal</span></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[9px] text-gray-500 mt-2">A prévia é aproximada. Fichas de sistemas podem manter alguns elementos visuais próprios.</p>
+                                                </div>
+
+                                                <div className="rounded-lg border border-gray-300 bg-white p-3 shadow-sm">
+                                                    <div className="text-xs font-bold text-gray-800 mb-2">Estilos rápidos</div>
+                                                    <div className="grid grid-cols-2 gap-2 text-[10px] font-bold">
+                                                        <button type="button" onClick={()=>applyCustomPreset('claro')} className="border rounded py-2 hover:bg-gray-50">☀️ Claro</button>
+                                                        <button type="button" onClick={()=>applyCustomPreset('escuro')} className="border rounded py-2 hover:bg-gray-50">🌙 Escuro</button>
+                                                        <button type="button" onClick={()=>applyCustomPreset('pergaminho')} className="border rounded py-2 hover:bg-gray-50">📜 Pergaminho</button>
+                                                        <button type="button" onClick={()=>applyCustomPreset('floresta')} className="border rounded py-2 hover:bg-gray-50">🌲 Floresta</button>
+                                                        <button type="button" onClick={()=>applyCustomPreset('vinho')} className="border rounded py-2 hover:bg-gray-50 col-span-2">🍷 Vinho</button>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <label style={getBarStyle()} className="cursor-pointer bg-dragon-dark text-white py-2 px-3 rounded block text-center font-bold text-xs">
-                                                <span className="inline-flex items-center justify-center gap-1"><SVGIcons.Upload/> Carregar imagem</span>
-                                                <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const f = e.target.files[0]; e.target.value=''; if(!f) return; try { const img = await optimizeImageFile(f, 1920, 0.78); localStorage.setItem(CUSTOM_BG_KEY, img); setCustomBgUrl(img); setTheme('custom'); setCustomBgLink(''); showToast('Fundo otimizado e aplicado.'); } catch(err) { console.error(err); showToast('Não foi possível usar esta imagem. Tente uma imagem menor.'); } }} />
-                                            </label>
+                                            <div className="space-y-4">
+                                                <div className="rounded-lg border border-gray-300 bg-white p-4 space-y-3 shadow-sm">
+                                                    <div><div className="text-xs font-bold text-gray-800">🖼️ Imagem de fundo</div><p className="text-[10px] text-gray-500 mt-0.5">Use uma imagem do dispositivo ou uma URL direta. Imagens enviadas são reduzidas antes de serem salvas.</p></div>
+                                                    <label style={{backgroundColor:customBarColor,color:readableTextColor(customBarColor)}} className="cursor-pointer py-2 px-3 rounded block text-center font-bold text-xs shadow-sm">
+                                                        <span className="inline-flex items-center justify-center gap-1"><SVGIcons.Upload/> Carregar imagem</span>
+                                                        <input type="file" accept="image/*" className="hidden" onChange={async (e) => { const f=e.target.files[0]; e.target.value=''; if(!f)return; try { const img=await optimizeImageFile(f,1920,0.78); localStorage.setItem(CUSTOM_BG_KEY,img); setCustomBgUrl(img); setTheme('custom'); setCustomBgLink(''); showToast('Fundo otimizado e aplicado.'); } catch(err){ console.error(err); showToast('Não foi possível usar esta imagem. Tente uma imagem menor.'); } }} />
+                                                    </label>
+                                                    <div className="flex items-center gap-2 text-[9px] uppercase font-bold text-gray-400"><span className="h-px bg-gray-300 flex-1"></span>ou URL<span className="h-px bg-gray-300 flex-1"></span></div>
+                                                    <div className="flex gap-2">
+                                                        <input type="url" value={customBgLink} onChange={e=>setCustomBgLink(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&customBgLink.trim()){const url=customBgLink.trim();try{localStorage.setItem(CUSTOM_BG_KEY,url);setCustomBgUrl(url);setTheme('custom');showToast('Imagem de fundo aplicada por URL!');}catch(err){console.error(err);showToast('Não foi possível salvar o fundo personalizado.');}}}} placeholder="https://site.com/imagem.jpg" className="flex-1 min-w-0 border rounded px-2 py-2 text-xs outline-none focus:border-gray-500" />
+                                                        <button type="button" onClick={()=>{const url=customBgLink.trim();if(!url)return;try{localStorage.setItem(CUSTOM_BG_KEY,url);setCustomBgUrl(url);setTheme('custom');showToast('Imagem de fundo aplicada por URL!');}catch(err){console.error(err);showToast('Não foi possível salvar o fundo personalizado.');}}} className="bg-gray-800 hover:bg-black text-white px-3 rounded text-xs font-bold">Aplicar</button>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                        <label className="text-[10px] font-bold text-gray-600">Encaixe<select value={customBgSize} onChange={e=>setCustomBgSize(e.target.value)} className="w-full mt-1 border rounded px-2 py-1.5 text-xs"><option value="cover">Preencher tela</option><option value="contain">Mostrar inteira</option><option value="auto">Tamanho original / repetir</option></select></label>
+                                                        <label className="text-[10px] font-bold text-gray-600">Posição<select value={customBgPosition} onChange={e=>setCustomBgPosition(e.target.value)} className="w-full mt-1 border rounded px-2 py-1.5 text-xs"><option value="center">Centro</option><option value="top">Topo</option><option value="bottom">Base</option><option value="left">Esquerda</option><option value="right">Direita</option></select></label>
+                                                    </div>
+                                                    {customBgUrl && <button type="button" onClick={()=>{setCustomBgUrl('');setCustomBgLink('');try{localStorage.removeItem(CUSTOM_BG_KEY);}catch{}}} className="w-full border border-red-300 text-red-700 hover:bg-red-50 py-1.5 rounded text-[10px] font-bold">Remover imagem de fundo</button>}
+                                                </div>
 
-                                            <div className="flex items-center gap-2 text-[9px] uppercase font-bold text-gray-400"><span className="h-px bg-gray-300 flex-1"></span>ou URL<span className="h-px bg-gray-300 flex-1"></span></div>
+                                                <div className="rounded-lg border border-gray-300 bg-white p-4 space-y-3 shadow-sm">
+                                                    <div><div className="text-xs font-bold text-gray-800">🎨 Cores</div><p className="text-[10px] text-gray-500 mt-0.5">Clique na amostra ou digite um código hexadecimal como <strong>#7f1d1d</strong>.</p></div>
+                                                    <div className="grid sm:grid-cols-2 gap-3">
+                                                        {[
+                                                            ['Janelas',customWinColor,setCustomWinColor],
+                                                            ['Barras',customBarColor,setCustomBarColor],
+                                                            ['Destaque',customAccentColor,setCustomAccentColor],
+                                                            ['Texto',customTextColor,setCustomTextColor]
+                                                        ].map(([label,value,setter])=><div key={label} className="border rounded-lg p-2"><div className="text-[10px] font-bold text-gray-700 mb-1">{label}</div><div className="flex gap-2 items-center"><input type="color" value={value} onChange={e=>setter(e.target.value)} className="w-10 h-9 rounded cursor-pointer shrink-0"/><input key={value} defaultValue={value} onBlur={e=>{const v=e.target.value.trim();if(/^#[0-9a-fA-F]{6}$/.test(v))setter(v.toLowerCase());else e.target.value=value;}} onKeyDown={e=>{if(e.key==='Enter')e.currentTarget.blur();}} className="min-w-0 w-full border rounded px-2 py-1.5 text-xs font-mono uppercase" aria-label={`Cor ${label}`}/></div></div>)}
+                                                    </div>
+                                                </div>
 
-                                            <div className="flex gap-2">
-                                                <input
-                                                    type="url"
-                                                    value={customBgLink}
-                                                    onChange={e => setCustomBgLink(e.target.value)}
-                                                    onKeyDown={e => {
-                                                        if (e.key === 'Enter' && customBgLink.trim()) {
-                                                            const url = customBgLink.trim();
-                                                            try { localStorage.setItem(CUSTOM_BG_KEY, url); setCustomBgUrl(url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); }
-                                                            catch(err) { console.error(err); showToast('Não foi possível salvar o fundo personalizado.'); }
-                                                        }
-                                                    }}
-                                                    placeholder="https://site.com/imagem.jpg"
-                                                    className="flex-1 min-w-0 border rounded px-2 py-2 text-xs outline-none focus:border-gray-500"
-                                                />
-                                                <button type="button" onClick={() => { const url=customBgLink.trim(); if(!url) return; try { localStorage.setItem(CUSTOM_BG_KEY,url); setCustomBgUrl(url); setTheme('custom'); showToast('Imagem de fundo aplicada por URL!'); } catch(err) { console.error(err); showToast('Não foi possível salvar o fundo personalizado.'); } }} className="bg-gray-800 hover:bg-black text-white px-3 rounded text-xs font-bold">Aplicar</button>
+                                                <div className="rounded-lg border border-gray-300 bg-white p-4 space-y-4 shadow-sm">
+                                                    <div className="text-xs font-bold text-gray-800">✨ Transparência e efeitos</div>
+                                                    <div><div className="flex items-center justify-between mb-1"><label className="text-[10px] font-bold text-gray-700">Opacidade das janelas</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOpacity)*100)}%</span></div><input type="range" min="0.45" max="1" step="0.05" value={customOpacity} onChange={e=>setCustomOpacity(e.target.value)} className="w-full"/></div>
+                                                    <div><div className="flex items-center justify-between mb-1"><label className="text-[10px] font-bold text-gray-700">Escurecer fundo</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOverlay)*100)}%</span></div><input type="range" min="0" max="0.65" step="0.05" value={customOverlay} onChange={e=>setCustomOverlay(e.target.value)} className="w-full"/></div>
+                                                    <div><div className="flex items-center justify-between mb-1"><label className="text-[10px] font-bold text-gray-700">Desfoque das janelas</label><span className="text-[10px] text-gray-500">{customBlur}px</span></div><input type="range" min="0" max="18" step="1" value={customBlur} onChange={e=>setCustomBlur(e.target.value)} className="w-full"/></div>
+                                                </div>
+
+                                                <div className="grid sm:grid-cols-[1fr_1.3fr] gap-2">
+                                                    <button type="button" onClick={()=>{applyCustomPreset('claro');setCustomBgPosition('center');setCustomBgSize('cover');}} className="border border-gray-300 hover:bg-white py-2.5 rounded font-bold text-xs">Restaurar aparência</button>
+                                                    <button style={{backgroundColor:customBarColor,color:readableTextColor(customBarColor),borderColor:customAccentColor}} onClick={()=>{setTheme('custom');setShowCustomBgModal(false);}} className="w-full border py-2.5 rounded font-bold text-sm shadow">✓ Aplicar tema personalizado</button>
+                                                </div>
                                             </div>
-
-                                            {customBgUrl && (
-                                                <button type="button" onClick={() => { setCustomBgUrl(''); setCustomBgLink(''); try { localStorage.removeItem(CUSTOM_BG_KEY); } catch {} }} className="w-full border border-red-300 text-red-700 hover:bg-red-50 py-1.5 rounded text-[10px] font-bold">Remover imagem de fundo</button>
-                                            )}
-                                        </div>
-
-                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das janelas</label><input type="color" value={customWinColor} onChange={e => setCustomWinColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
-                                        <div className="flex items-center justify-between border-t pt-3"><label className="text-xs font-bold text-gray-700">Cor das barras</label><input type="color" value={customBarColor} onChange={e => setCustomBarColor(e.target.value)} className="w-10 h-8 rounded cursor-pointer" /></div>
-                                        <div className="grid grid-cols-2 gap-3 border-t pt-3">
-                                            <div><label className="text-[10px] font-bold text-gray-700 block mb-1">Cor de destaque</label><input type="color" value={customAccentColor} onChange={e => setCustomAccentColor(e.target.value)} className="w-full h-9 rounded cursor-pointer" /></div>
-                                            <div><label className="text-[10px] font-bold text-gray-700 block mb-1">Cor do texto</label><input type="color" value={customTextColor} onChange={e => setCustomTextColor(e.target.value)} className="w-full h-9 rounded cursor-pointer" /></div>
-                                        </div>
-                                        <div className="border-t pt-3">
-                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Opacidade das janelas</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOpacity) * 100)}%</span></div>
-                                            <input type="range" min="0.45" max="1" step="0.05" value={customOpacity} onChange={e => setCustomOpacity(e.target.value)} className="w-full" />
-                                        </div>
-                                        <div className="border-t pt-3">
-                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Escurecer fundo</label><span className="text-[10px] text-gray-500">{Math.round(Number(customOverlay) * 100)}%</span></div>
-                                            <input type="range" min="0" max="0.65" step="0.05" value={customOverlay} onChange={e => setCustomOverlay(e.target.value)} className="w-full" />
-                                        </div>
-                                        <div className="border-t pt-3">
-                                            <div className="flex items-center justify-between mb-1"><label className="text-xs font-bold text-gray-700">Desfoque das janelas</label><span className="text-[10px] text-gray-500">{customBlur}px</span></div>
-                                            <input type="range" min="0" max="18" step="1" value={customBlur} onChange={e => setCustomBlur(e.target.value)} className="w-full" />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            <button type="button" onClick={() => { setCustomWinColor('#ffffff'); setCustomBarColor('#1f2937'); setCustomAccentColor('#7f1d1d'); setCustomTextColor('#1f2937'); setCustomOpacity('0.95'); setCustomOverlay('0.18'); setCustomBlur('5'); }} className="border border-gray-300 hover:bg-gray-50 py-2 rounded font-bold text-xs">Restaurar cores</button>
-                                            <button style={getBarStyle()} onClick={() => { setTheme('custom'); setShowCustomBgModal(false); }} className="w-full bg-dragon-dark text-white py-2 rounded font-bold text-sm">Concluir</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>, document.body
                         )}
-                        
+
                         {showGuideModal && ReactDOM.createPortal(
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
                                 <div className="bg-white rounded-sm shadow-2xl w-full max-w-4xl border-2 border-gray-800 overflow-hidden animate-fade-in-up flex flex-col">
