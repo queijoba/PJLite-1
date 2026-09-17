@@ -756,6 +756,244 @@
             .db-bio { padding:10px !important; }
         }
 
+
+        /* D&D 5e — teste visual inspirado na ficha clássica */
+        .dnd-paper {
+            position:relative;
+            background:
+                linear-gradient(180deg,rgba(255,255,255,.96),rgba(248,248,246,.96)),
+                repeating-linear-gradient(0deg,rgba(0,0,0,.014) 0 1px,transparent 1px 4px) !important;
+            color:#242424;
+        }
+        .dnd-sheet { position:relative; }
+        .dnd-sheet::before {
+            content:"";
+            position:absolute; inset:10px;
+            pointer-events:none;
+            border:1px solid rgba(52,52,52,.09);
+            box-shadow:inset 0 0 28px rgba(0,0,0,.025);
+        }
+        .dnd-header {
+            position:relative;
+            border-bottom:3px double #282828 !important;
+            padding-bottom:16px !important;
+        }
+        .dnd-brand-row { display:flex; align-items:baseline; gap:8px; margin-bottom:3px; }
+        .dnd-brand-mark {
+            font-family:Georgia,'Times New Roman',serif;
+            font-size:1.05rem; font-weight:900; line-height:1;
+            letter-spacing:-.04em; color:#922610;
+        }
+        .dnd-brand-name {
+            font-family:Georgia,'Times New Roman',serif;
+            font-weight:900; font-size:.73rem; letter-spacing:.035em;
+            text-transform:uppercase; color:#1f1f1f;
+        }
+        .dnd-name {
+            font-family:Georgia,'Times New Roman',serif !important;
+            letter-spacing:-.025em;
+            border-bottom:2px solid #282828 !important;
+            padding:2px 4px 5px !important;
+            color:#222 !important;
+        }
+        .dnd-bio-grid > div {
+            position:relative;
+            padding:5px 7px 4px;
+            border:1px solid #757575 !important;
+            border-radius:9px 2px 9px 2px;
+            background:rgba(255,255,255,.72);
+            min-height:46px;
+        }
+        .dnd-bio-grid input { border:0 !important; background:transparent !important; box-shadow:none !important; padding:0 !important; }
+        .dnd-bio-grid label { color:#555 !important; }
+        .dnd-portrait {
+            border:3px double #2c2c2c !important;
+            border-radius:16px 3px 16px 3px !important;
+            background:#eee !important;
+            box-shadow:0 0 0 3px #fff,0 0 0 4px #aaa,0 4px 12px rgba(0,0,0,.12) !important;
+        }
+        .dnd-layout { gap:1rem !important; }
+        .dnd-column {
+            border:1px solid rgba(45,45,45,.17);
+            background:rgba(255,255,255,.48);
+            border-radius:15px 3px 15px 3px;
+            padding:10px;
+        }
+        .dnd-ability-card {
+            border:2px solid #595959 !important;
+            border-radius:15px 4px 15px 4px !important;
+            background:#f7f7f5 !important;
+            min-height:78px;
+            box-shadow:inset 0 0 0 2px #fff,0 1px 4px rgba(0,0,0,.08) !important;
+        }
+        .dnd-ability-card::before,
+        .dnd-ability-card::after {
+            content:""; position:absolute; width:9px; height:9px;
+            border:1px solid #777; background:#fff; transform:rotate(45deg);
+        }
+        .dnd-ability-card::before { left:-5px; top:50%; }
+        .dnd-ability-card::after { right:-5px; top:50%; }
+        .dnd-ability-card .dnd-ability-name { color:#333 !important; letter-spacing:.04em; }
+        .dnd-mod-bubble {
+            background:#fff !important; border:2px solid #6a6a6a !important;
+            width:36px !important; height:24px !important; border-radius:50% !important;
+            box-shadow:0 1px 2px rgba(0,0,0,.08) !important;
+        }
+        .dnd-panel {
+            border:2px solid #676767 !important;
+            border-radius:14px 3px 14px 3px !important;
+            background:#fff !important;
+            box-shadow:inset 0 0 0 2px #f2f2f2,0 1px 4px rgba(0,0,0,.06) !important;
+        }
+        .dnd-panel-title {
+            font-family:Georgia,'Times New Roman',serif;
+            font-weight:900; text-transform:uppercase; letter-spacing:.035em;
+            color:#333 !important;
+        }
+        .dnd-prof-badge {
+            border:2px solid #555 !important;
+            background:#fff !important; color:#222 !important;
+            box-shadow:inset 0 0 0 2px #eee;
+        }
+        .dnd-skill-dot {
+            border:1.5px solid #4e4e4e !important;
+            background:#fff !important;
+            box-shadow:none !important;
+        }
+        .dnd-skill-dot.prof { background:#2b2b2b !important; border-color:#2b2b2b !important; }
+        .dnd-skill-dot.expert { background:#922610 !important; border-color:#922610 !important; box-shadow:inset 0 0 0 2px #fff !important; }
+        .dnd-combat-stat {
+            position:relative; min-height:92px;
+            border:3px double #5e5e5e !important;
+            border-radius:18px 4px 18px 4px !important;
+            background:#fafafa !important;
+            box-shadow:inset 0 0 0 3px #fff,0 2px 5px rgba(0,0,0,.06) !important;
+        }
+        .dnd-combat-stat input { color:#242424 !important; }
+        .dnd-ac-card { clip-path:polygon(9% 0,91% 0,100% 12%,100% 88%,91% 100%,9% 100%,0 88%,0 12%); }
+        .dnd-hp-card {
+            border:3px double #5d5d5d !important;
+            border-radius:18px 4px 18px 4px !important;
+            background:#fff !important;
+            box-shadow:inset 0 0 0 3px #f7f7f7 !important;
+        }
+        .dnd-hp-card .dnd-hp-current { color:#922610 !important; }
+        .dnd-small-stat {
+            border:2px solid #6a6a6a !important;
+            border-radius:12px 3px 12px 3px !important;
+            background:#fff !important;
+        }
+        .dnd-sheet input[type="checkbox"] {
+            -webkit-appearance:none; appearance:none;
+            width:14px; height:14px; margin:0;
+            border:1.6px solid #555; border-radius:50%; background:#fff;
+            display:inline-grid; place-content:center; cursor:pointer;
+        }
+        .dnd-sheet input[type="checkbox"]::after {
+            content:""; width:7px; height:7px; border-radius:50%; background:#922610;
+            transform:scale(0); transition:transform .08s ease;
+        }
+        .dnd-sheet input[type="checkbox"]:checked::after { transform:scale(1); }
+        .dnd-section-card {
+            border:2px solid #666 !important;
+            border-radius:13px 3px 13px 3px !important;
+            background:#fff !important;
+            box-shadow:inset 0 0 0 2px #f2f2f2 !important;
+        }
+        .dnd-section-head {
+            font-family:Georgia,'Times New Roman',serif;
+            text-transform:uppercase; letter-spacing:.035em;
+            color:#333 !important; font-weight:900;
+        }
+        .dnd-add-btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:4px;
+            min-height:25px; padding:0 9px; border-radius:7px 2px 7px 2px;
+            background:linear-gradient(180deg,#a72c20,#861f17) !important;
+            color:#fff !important; border:1px solid #64150f !important;
+            font-size:10px; font-weight:900; box-shadow:0 1px 2px rgba(0,0,0,.14);
+        }
+        .dnd-add-btn svg { width:11px; height:11px; }
+        .dnd-traits-card > div,
+        .dnd-feature-card,
+        .dnd-spell-row {
+            border:1px solid #8b8b8b !important;
+            border-radius:11px 3px 11px 3px !important;
+            background:#fbfbfa !important;
+        }
+        .dnd-tabbar { background:#ececeb !important; border-bottom:2px solid #5d5d5d !important; }
+        .dnd-tabbar button { font-family:Georgia,'Times New Roman',serif; letter-spacing:.025em; }
+        .dnd-tabbar button.dnd-tab-active { background:#922610 !important; color:white !important; }
+        .dnd-spell-slot {
+            border:1px solid #737373 !important; border-radius:8px 2px 8px 2px !important;
+            background:#fafafa !important;
+        }
+        .dnd-spell-slot > div { background:#2c2c2c !important; color:#fff !important; }
+
+        body.theme-dnd .dnd-paper {
+            background:linear-gradient(180deg,#fffaf2,#f3e6d3) !important;
+        }
+        body.theme-dnd .dnd-column { background:rgba(255,250,242,.72) !important; }
+        body.theme-dnd .dnd-panel,
+        body.theme-dnd .dnd-section-card,
+        body.theme-dnd .dnd-ability-card,
+        body.theme-dnd .dnd-combat-stat,
+        body.theme-dnd .dnd-hp-card,
+        body.theme-dnd .dnd-small-stat { border-color:#8f4a38 !important; }
+
+        body.theme-dark .dnd-paper {
+            background:radial-gradient(circle at top,#1d2024 0,#101316 50%,#090b0d 100%) !important;
+            color:#ece8df !important;
+        }
+        body.theme-dark .dnd-sheet::before { border-color:rgba(255,255,255,.06); }
+        body.theme-dark .dnd-header { border-color:#777 !important; }
+        body.theme-dark .dnd-brand-name, body.theme-dark .dnd-name { color:#f3eee6 !important; }
+        body.theme-dark .dnd-bio-grid > div,
+        body.theme-dark .dnd-column,
+        body.theme-dark .dnd-panel,
+        body.theme-dark .dnd-section-card,
+        body.theme-dark .dnd-ability-card,
+        body.theme-dark .dnd-combat-stat,
+        body.theme-dark .dnd-hp-card,
+        body.theme-dark .dnd-small-stat,
+        body.theme-dark .dnd-traits-card > div,
+        body.theme-dark .dnd-feature-card,
+        body.theme-dark .dnd-spell-row,
+        body.theme-dark .dnd-spell-slot { background:#171b1f !important; border-color:#727980 !important; color:#ece8df !important; box-shadow:none !important; }
+        body.theme-dark .dnd-portrait { background:#171b1f !important; border-color:#81878c !important; box-shadow:0 0 0 3px #0e1012,0 0 0 4px #555 !important; }
+        body.theme-dark .dnd-ability-card::before, body.theme-dark .dnd-ability-card::after { background:#171b1f !important; border-color:#8c9399 !important; }
+        body.theme-dark .dnd-mod-bubble, body.theme-dark .dnd-prof-badge { background:#101316 !important; color:#f3eee6 !important; border-color:#8b9298 !important; }
+        body.theme-dark .dnd-panel-title, body.theme-dark .dnd-section-head, body.theme-dark .dnd-ability-name { color:#e5ded3 !important; }
+        body.theme-dark .dnd-skill-dot { background:#0e1114 !important; border-color:#a0a6ab !important; }
+        body.theme-dark .dnd-skill-dot.prof { background:#e7e2d8 !important; border-color:#e7e2d8 !important; }
+        body.theme-dark .dnd-skill-dot.expert { background:#c54b3f !important; border-color:#c54b3f !important; }
+        body.theme-dark .dnd-sheet input[type="checkbox"] { background:#0f1215 !important; border-color:#9ca2a8 !important; }
+        body.theme-dark .dnd-sheet input[type="checkbox"]::after { background:#ef7468 !important; }
+        body.theme-dark .dnd-tabbar { background:#20252a !important; border-color:#727980 !important; }
+        body.theme-dark .dnd-spell-slot > div { background:#353b41 !important; }
+        body.theme-dark .dnd-hp-card .dnd-hp-current { color:#f07166 !important; }
+        body.theme-dark .dnd-sheet input, body.theme-dark .dnd-sheet textarea, body.theme-dark .dnd-sheet select { color:#f1ece4 !important; }
+
+        body.theme-custom .dnd-paper { background:var(--custom-window-rgba,rgba(255,255,255,.95)) !important; color:var(--custom-text-color) !important; }
+        body.theme-custom .dnd-column,
+        body.theme-custom .dnd-panel,
+        body.theme-custom .dnd-section-card,
+        body.theme-custom .dnd-ability-card,
+        body.theme-custom .dnd-combat-stat,
+        body.theme-custom .dnd-hp-card,
+        body.theme-custom .dnd-small-stat,
+        body.theme-custom .dnd-traits-card > div,
+        body.theme-custom .dnd-feature-card,
+        body.theme-custom .dnd-spell-row { background:color-mix(in srgb,var(--custom-window-color) 92%,var(--custom-accent-color) 8%) !important; color:var(--custom-text-color) !important; border-color:color-mix(in srgb,var(--custom-accent-color) 55%,#777) !important; }
+        body.theme-custom .dnd-brand-mark { color:var(--custom-accent-color) !important; }
+        body.theme-custom .dnd-add-btn, body.theme-custom .dnd-tabbar button.dnd-tab-active { background:var(--custom-bar-color) !important; color:var(--custom-bar-text,#fff) !important; border-color:var(--custom-accent-color) !important; }
+
+        @media (max-width:767px) {
+            .dnd-column { border:0; padding:0; background:transparent; }
+            .dnd-sheet::before { display:none; }
+            .dnd-ability-card { min-height:72px; }
+            .dnd-brand-row { justify-content:center; }
+        }
+
         /* O Som das Seis — teste avançado de integração na linha 0.6 */
         .som6-paper { background: linear-gradient(180deg, #efe7c9 0%, #e8ddba 100%); }
         .som6-sheet { color:#1b1712; }
@@ -3676,7 +3914,7 @@
 
                     {/* Editor D&D 5E */}
                     {isDnd && data.type === 'pc' && (
-                        <div className="bg-white font-dnd">
+                        <div className="dnd-paper font-dnd">
                             {/* Abas mobile D&D 5e */}
                             <div className="md:hidden grid grid-cols-3 bg-[#f3eadc] border-b border-[#c9ad92] sticky top-0 z-20 shadow-sm">
                                 {[
@@ -3695,12 +3933,12 @@
                                 ))}
                             </div>
 
-                            <div className="p-4 md:p-8 space-y-6">
+                            <div className="dnd-sheet p-4 md:p-8 space-y-6">
                             {/* Header D&D */}
-                            <div className={`${mobileTab === 'status' ? 'flex' : 'hidden md:flex'} flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-4`}>
+                            <div className={`${mobileTab === 'status' ? 'flex' : 'hidden md:flex'} dnd-header flex-col md:flex-row gap-5 border-b-2 border-[#922610] pb-4`}>
                                 {/* Retrato D&D 5e - mesma experiência do Dragonbane */}
                                 <div className="flex flex-col items-center gap-2 shrink-0 w-full md:w-36">
-                                    <div className="w-32 h-32 md:w-36 md:h-36 border-2 border-[#922610] rounded bg-gray-100 relative group overflow-hidden flex items-center justify-center shadow-sm">
+                                    <div className="dnd-portrait w-32 h-32 md:w-36 md:h-36 border-2 border-[#922610] rounded bg-gray-100 relative group overflow-hidden flex items-center justify-center shadow-sm">
                                         {data.bio?.imagem ? (
                                             <img src={data.bio.imagem} alt="Avatar" className="w-full h-full object-cover" />
                                         ) : (
@@ -3796,8 +4034,9 @@
                                 </div>
 
                                 <div className="flex-1 w-full">
-                                    <input type="text" value={data.bio?.nome} onChange={e => updateField('bio.nome', e.target.value)} placeholder="Nome do Personagem" className="w-full text-3xl font-title font-bold outline-none text-[#922610]" />
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 text-sm w-full mt-3">
+                                    <div className="dnd-brand-row"><span className="dnd-brand-mark">D&amp;D 5E</span><span className="dnd-brand-name">Dungeons &amp; Dragons</span></div>
+                                    <input type="text" value={data.bio?.nome} onChange={e => updateField('bio.nome', e.target.value)} placeholder="Nome do Personagem" className="dnd-name w-full text-3xl font-title font-bold outline-none text-[#922610]" />
+                                    <div className="dnd-bio-grid grid grid-cols-2 lg:grid-cols-4 gap-2 text-sm w-full mt-3">
                                         <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Classe</label><input type="text" value={data.bio?.classe} onChange={e => updateField('bio.classe', e.target.value)} className="w-full outline-none font-bold" /></div>
                                         <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Nível</label><input type="number" value={data.bio?.nivel} onChange={e => updateField('bio.nivel', parseInt(e.target.value)||1)} className="w-full outline-none font-bold" /></div>
                                         <div className="border-b border-[#922610]/50"><label className="text-[10px] uppercase font-bold text-gray-500 block">Linhagem/Espécie</label><input type="text" value={data.bio?.linhagem} onChange={e => updateField('bio.linhagem', e.target.value)} className="w-full outline-none font-bold" /></div>
@@ -3809,29 +4048,29 @@
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div className="dnd-layout grid grid-cols-1 lg:grid-cols-3 gap-6">
                                 {/* D&D Col 1: Atributos e Perícias */}
-                                <div className={`${mobileTab === 'status' ? 'block' : 'hidden md:block'} space-y-4`}>
+                                <div className={`${mobileTab === 'status' ? 'block' : 'hidden md:block'} dnd-column space-y-4`}>
                                     <div className="flex gap-4">
                                         <div className="flex flex-col gap-2 w-20">
                                             {['for','des','con','int','sab','car'].map(attr => (
-                                                <div key={attr} className="border-2 border-[#922610] rounded-lg p-2 text-center relative bg-gray-50 shadow-sm">
-                                                    <div className="text-[9px] font-bold uppercase text-[#922610]">{attr}</div>
+                                                <div key={attr} className="dnd-ability-card border-2 border-[#922610] rounded-lg p-2 text-center relative bg-gray-50 shadow-sm">
+                                                    <div className="dnd-ability-name text-[9px] font-bold uppercase text-[#922610]">{attr}</div>
                                                     <input type="number" value={data.atributos[attr]} onChange={e => updateField(`atributos.${attr}`, parseInt(e.target.value)||10)} className="w-full text-center text-xl font-bold bg-transparent outline-none" />
-                                                    <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border border-gray-400 rounded-full w-8 h-5 flex items-center justify-center text-xs font-bold shadow-sm">
+                                                    <div className="dnd-mod-bubble absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white border border-gray-400 rounded-full w-8 h-5 flex items-center justify-center text-xs font-bold shadow-sm">
                                                         {formatDndMod(getDndAbilityMod(data.atributos[attr]))}
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                         <div className="flex-1 flex flex-col gap-3">
-                                            <div className="border-2 border-gray-300 rounded p-2 flex items-center gap-3 bg-white">
-                                                <div className="w-8 h-8 rounded-full border-2 border-[#922610] flex items-center justify-center font-bold text-[#922610]">+{getProficiencyBonus(data.bio?.nivel || 1)}</div>
+                                            <div className="dnd-panel border-2 border-gray-300 rounded p-2 flex items-center gap-3 bg-white">
+                                                <div className="dnd-prof-badge w-8 h-8 rounded-full border-2 border-[#922610] flex items-center justify-center font-bold text-[#922610]">+{getProficiencyBonus(data.bio?.nivel || 1)}</div>
                                                 <div className="text-xs font-bold uppercase">Bônus de Proficiência</div>
                                             </div>
                                             
-                                            <div className="border border-gray-300 rounded p-2 bg-white space-y-1">
-                                                <div className="text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Testes de Resistência</div>
+                                            <div className="dnd-panel border border-gray-300 rounded p-2 bg-white space-y-1">
+                                                <div className="dnd-panel-title text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Testes de Resistência</div>
                                                 {['for','des','con','int','sab','car'].map(attr => {
                                                     const isProf = data.proficienciasResistencia[attr];
                                                     const total = getDndAbilityMod(data.atributos[attr]) + (isProf ? getProficiencyBonus(data.bio?.nivel || 1) : 0);
@@ -3845,8 +4084,8 @@
                                                 })}
                                             </div>
 
-                                            <div className="border border-gray-300 rounded p-2 bg-white space-y-1">
-                                                <div className="text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Perícias</div>
+                                            <div className="dnd-panel border border-gray-300 rounded p-2 bg-white space-y-1">
+                                                <div className="dnd-panel-title text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Perícias</div>
                                                 {DND_SKILLS_LIST.map((sk, index) => {
                                                     const pericia = data.pericias.find(p => p.id === sk.id) || { prof: 0 };
                                                     const attrMod = getDndAbilityMod(data.atributos[sk.attr]);
@@ -3862,7 +4101,7 @@
                                                     
                                                     return (
                                                         <div key={sk.id} className="flex items-center gap-2 text-xs hover:bg-gray-50">
-                                                            <button onClick={toggleProf} className={`w-3 h-3 rounded-full border border-gray-500 shrink-0 ${pericia.prof === 1 ? 'bg-black' : pericia.prof === 2 ? 'bg-red-600 border-red-600' : 'bg-white'}`}></button>
+                                                            <button onClick={toggleProf} className={`dnd-skill-dot w-3 h-3 rounded-full border border-gray-500 shrink-0 ${pericia.prof === 1 ? 'prof' : pericia.prof === 2 ? 'expert' : ''}`}></button>
                                                             <span className="w-6 text-center border-b font-bold shrink-0">{formatDndMod(total)}</span>
                                                             <span className="truncate flex-1">{sk.nome} <span className="text-[9px] text-gray-400">({sk.attr.toUpperCase()})</span></span>
                                                         </div>
@@ -3874,36 +4113,36 @@
                                 </div>
 
                                 {/* D&D Col 2: Combate, HP, Ataques */}
-                                <div className={`${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'} space-y-4`}>
+                                <div className={`${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'} dnd-column space-y-4`}>
                                     <div className="grid grid-cols-3 gap-2">
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
+                                        <div className="dnd-combat-stat dnd-ac-card border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Classe de Armadura</div>
                                             <input type="number" value={data.status?.ca} onChange={e => updateField('status.ca', parseInt(e.target.value)||10)} className="w-full text-center text-3xl font-bold bg-transparent outline-none text-[#922610]" />
                                         </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
+                                        <div className="dnd-combat-stat border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Iniciativa</div>
                                             <input type="text" value={data.status?.iniciativa} onChange={e => updateField('status.iniciativa', e.target.value)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mt-1" />
                                         </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
+                                        <div className="dnd-combat-stat border-2 border-gray-300 bg-white p-2 rounded text-center flex flex-col items-center shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Deslocamento</div>
                                             <input type="text" value={data.status?.deslocamento} onChange={e => updateField('status.deslocamento', e.target.value)} className="w-full text-center text-2xl font-bold bg-transparent outline-none mt-1" />
                                         </div>
                                     </div>
 
-                                    <div className="border-2 border-gray-300 rounded bg-white overflow-hidden shadow-sm">
+                                    <div className="dnd-hp-card border-2 border-gray-300 rounded bg-white overflow-hidden shadow-sm">
                                         <div className="bg-gray-100 p-2 border-b flex justify-between items-center text-xs uppercase font-bold text-gray-600">Pontos de Vida <span className="font-normal text-[10px]">Máx: <input type="number" value={data.status?.pvMax} onChange={e => updateField('status.pvMax', parseInt(e.target.value)||0)} className="w-10 border-b outline-none bg-transparent font-bold text-right" /></span></div>
                                         <div className="p-4 text-center">
-                                            <input type="number" value={data.status?.pvAtual} onChange={e => updateField('status.pvAtual', parseInt(e.target.value)||0)} className="w-full text-center text-5xl font-black bg-transparent outline-none text-green-700" />
+                                            <input type="number" value={data.status?.pvAtual} onChange={e => updateField('status.pvAtual', parseInt(e.target.value)||0)} className="dnd-hp-current w-full text-center text-5xl font-black bg-transparent outline-none text-green-700" />
                                         </div>
                                         <div className="bg-gray-50 p-2 border-t flex justify-between items-center text-[10px] uppercase font-bold text-gray-500">Temporários <input type="number" value={data.status?.pvTemp} onChange={e => updateField('status.pvTemp', parseInt(e.target.value)||0)} className="w-12 text-center border-b outline-none bg-transparent text-sm text-black" /></div>
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
+                                        <div className="dnd-small-stat border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1 border-b pb-1">Dados de Vida</div>
                                             <input type="text" value={data.status?.dadosVida} onChange={e => updateField('status.dadosVida', e.target.value)} className="w-full text-center text-lg font-bold bg-transparent outline-none mt-1" />
                                         </div>
-                                        <div className="border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
+                                        <div className="dnd-small-stat border-2 border-gray-300 bg-white p-2 rounded flex flex-col shadow-sm">
                                             <div className="text-[10px] uppercase font-bold text-gray-500 mb-1 border-b pb-1">Testes de Morte</div>
                                             <div className="flex flex-col gap-1 mt-1">
                                                 <div className="flex justify-between items-center text-[10px]"><span className="text-gray-500 font-bold uppercase">Sucessos</span><div className="flex gap-1">{[0,1,2].map(i => <input key={'s'+i} type="checkbox" checked={data.testesMorte.sucessos[i]} onChange={e => { const v = [...data.testesMorte.sucessos]; v[i] = e.target.checked; updateField('testesMorte.sucessos', v); }} />)}</div></div>
@@ -3915,7 +4154,7 @@
                                     <div className="border border-gray-300 rounded bg-white shadow-sm p-2 min-w-0">
                                         <div className="flex justify-between items-center border-b pb-1 mb-2 gap-2">
                                             <h3 className="font-bold text-sm uppercase text-gray-600">Ataques</h3>
-                                            <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="text-[10px] bg-gray-200 px-2 py-1 rounded font-bold shrink-0"><SVGIcons.Plus/> Adic.</button>
+                                            <button onClick={() => addToArray('ataques', { nome: '', bonus: '', dano: '', tipo: '' })} className="dnd-add-btn shrink-0"><SVGIcons.Plus/> Adic.</button>
                                         </div>
                                         <div className="space-y-2 min-w-0">
                                             {(data.ataques || []).map((atk, idx) => (
@@ -3944,8 +4183,8 @@
                                         </div>
                                     </div>
                                     
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Inventário e Moedas</h3>
+                                    <div className="dnd-section-card border border-gray-300 rounded bg-white shadow-sm p-2">
+                                        <h3 className="dnd-section-head font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Inventário e Moedas</h3>
                                         <div className="grid grid-cols-5 gap-1 mb-2 text-center text-[10px] font-bold text-gray-500 uppercase">
                                             <div><div className="bg-yellow-700/10 rounded mb-1">PC</div><input type="number" value={data.moedas.pc} onChange={e => updateField('moedas.pc', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
                                             <div><div className="bg-gray-400/10 rounded mb-1">PP</div><input type="number" value={data.moedas.pp} onChange={e => updateField('moedas.pp', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
@@ -3958,30 +4197,30 @@
                                 </div>
 
                                 {/* D&D Col 3: Roleplay e Magias */}
-                                <div className={`${mobileTab === 'recursos' ? 'block' : 'hidden md:block'} space-y-4`}>
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm flex flex-col gap-2 p-2">
+                                <div className={`${mobileTab === 'recursos' ? 'block' : 'hidden md:block'} dnd-column space-y-4`}>
+                                    <div className="dnd-traits-card dnd-section-card border border-gray-300 rounded bg-white shadow-sm flex flex-col gap-2 p-2">
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.tracosPersonalidade} onChange={e => updateField('tracosPersonalidade', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Traços de Personalidade..."></textarea></div>
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.ideais} onChange={e => updateField('ideais', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Ideais..."></textarea></div>
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.vinculos} onChange={e => updateField('vinculos', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Vínculos..."></textarea></div>
                                         <div className="bg-gray-50 border p-2 rounded"><textarea rows="2" value={data.defeitos} onChange={e => updateField('defeitos', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Defeitos..."></textarea></div>
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm overflow-hidden">
-                                        <div className="flex border-b bg-gray-100">
-                                            <button type="button" onClick={() => setDndPcTab('caracteristicas')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'caracteristicas' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Características & Talentos</button>
-                                            <button type="button" onClick={() => setDndPcTab('magias')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'magias' ? 'bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Magias</button>
+                                    <div className="dnd-section-card border border-gray-300 rounded bg-white shadow-sm overflow-hidden">
+                                        <div className="dnd-tabbar flex border-b bg-gray-100">
+                                            <button type="button" onClick={() => setDndPcTab('caracteristicas')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'caracteristicas' ? 'dnd-tab-active bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Características & Talentos</button>
+                                            <button type="button" onClick={() => setDndPcTab('magias')} className={`flex-1 px-2 py-2 text-[10px] md:text-xs font-bold uppercase transition-colors ${dndPcTab === 'magias' ? 'dnd-tab-active bg-[#922610] text-white' : 'text-gray-600 hover:bg-gray-200'}`}>Magias</button>
                                         </div>
 
                                         {dndPcTab === 'caracteristicas' ? (
                                             <div className="p-2">
                                                 <div className="flex justify-between items-center mb-2">
                                                     <span className="text-[10px] text-gray-500">Habilidades de classe, talentos e traços.</span>
-                                                    <button type="button" onClick={() => addToArray('caracteristicas', { nome: '', desc: '' })} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                                    <button type="button" onClick={() => addToArray('caracteristicas', { nome: '', desc: '' })} className="dnd-add-btn"><SVGIcons.Plus/> Adic.</button>
                                                 </div>
                                                 <div className="space-y-2">
                                                     {(!data.caracteristicas || data.caracteristicas.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma característica adicionada.</p>}
                                                     {(Array.isArray(data.caracteristicas) ? data.caracteristicas : []).map((carac, idx) => (
-                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
+                                                        <div key={idx} className="dnd-feature-card border rounded bg-gray-50 p-2 flex gap-2 items-start">
                                                             <div className="flex-1 space-y-1">
                                                                 <input type="text" value={carac?.nome || ''} onChange={e => updateArrayField('caracteristicas', idx, 'nome', e.target.value)} className="w-full bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da característica ou talento" />
                                                                 <textarea rows="2" value={carac?.desc || ''} onChange={e => updateArrayField('caracteristicas', idx, 'desc', e.target.value)} className="w-full bg-transparent outline-none text-xs resize-y" placeholder="Descrição, uso, limite, efeito..." />
@@ -3998,7 +4237,7 @@
                                                     {[1,2,3,4,5,6,7,8,9].map(lvl => {
                                                         const slot = data.magias?.slots?.[lvl] || { atual: 0, max: 0 };
                                                         return (
-                                                            <div key={lvl} className="flex border rounded overflow-hidden text-[9px] bg-gray-50">
+                                                            <div key={lvl} className="dnd-spell-slot flex border rounded overflow-hidden text-[9px] bg-gray-50">
                                                                 <div className="bg-gray-200 px-1 py-1 font-bold text-gray-700 flex items-center justify-center border-r">N{lvl}</div>
                                                                 <input type="number" min="0" value={slot.atual ?? 0} onChange={e => updateField(`magias.slots.${lvl}.atual`, parseInt(e.target.value)||0)} className="w-7 text-center outline-none bg-transparent" />
                                                                 <span className="text-gray-400 py-1">/</span>
@@ -4009,12 +4248,12 @@
                                                 </div>
                                                 <div className="flex justify-between items-center border-t pt-2 mb-2">
                                                     <span className="text-[10px] text-gray-500">Lista de magias conhecidas/preparadas.</span>
-                                                    <button type="button" onClick={() => { const list = Array.isArray(data.magias?.lista) ? data.magias.lista : []; updateField('magias.lista', [...list, { nome: '', nivel: '', desc: '' }]); }} className="text-[10px] bg-[#922610] text-white px-2 py-1 rounded font-bold flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
+                                                    <button type="button" onClick={() => { const list = Array.isArray(data.magias?.lista) ? data.magias.lista : []; updateField('magias.lista', [...list, { nome: '', nivel: '', desc: '' }]); }} className="dnd-add-btn"><SVGIcons.Plus/> Adic.</button>
                                                 </div>
                                                 <div className="space-y-2">
                                                     {(!Array.isArray(data.magias?.lista) || data.magias.lista.length === 0) && <p className="text-[10px] italic text-gray-400 py-2">Nenhuma magia adicionada.</p>}
                                                     {(Array.isArray(data.magias?.lista) ? data.magias.lista : []).map((magia, idx) => (
-                                                        <div key={idx} className="border rounded bg-gray-50 p-2 flex gap-2 items-start">
+                                                        <div key={idx} className="dnd-spell-row border rounded bg-gray-50 p-2 flex gap-2 items-start">
                                                             <div className="flex-1">
                                                                 <div className="flex gap-2 mb-1">
                                                                     <input type="text" value={magia?.nome || ''} onChange={e => { const list=[...data.magias.lista]; list[idx]={...list[idx], nome:e.target.value}; updateField('magias.lista', list); }} className="flex-1 min-w-0 bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome da magia" />
@@ -4030,8 +4269,8 @@
                                         )}
                                     </div>
 
-                                    <div className="border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
-                                        <h3 className="font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Outras Proficiências / Idiomas</h3>
+                                    <div className="dnd-section-card border border-gray-300 rounded bg-white shadow-sm p-2 flex flex-col">
+                                        <h3 className="dnd-section-head font-bold text-sm uppercase text-gray-600 border-b pb-1 mb-2">Outras Proficiências / Idiomas</h3>
                                         <textarea rows="3" value={data.outrasProficiencias} onChange={e => updateField('outrasProficiencias', e.target.value)} className="w-full bg-gray-50 border rounded p-2 text-xs resize-y outline-none"></textarea>
                                     </div>
                                 </div>
