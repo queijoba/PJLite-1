@@ -502,6 +502,260 @@
         body.theme-custom .text-gray-900, body.theme-custom .text-gray-800, body.theme-custom .text-gray-700, body.theme-custom .text-gray-600, body.theme-custom .text-gray-500 { color:var(--custom-text-color) !important; }
         body.theme-custom ::selection { background:var(--custom-accent-color); color:var(--custom-bar-text, #fff); }
 
+
+
+        /* ==============================================================
+         * DRAGONBANE — TESTE VISUAL DE FICHA COM PERSONALIDADE
+         * Inspirado na ficha oficial enviada como referência, mantendo o PJ Lite.
+         * ============================================================== */
+        .db-paper {
+            position:relative;
+            background:
+                radial-gradient(circle at 8% 4%, rgba(91,69,42,.10), transparent 23%),
+                radial-gradient(circle at 92% 10%, rgba(49,92,78,.08), transparent 22%),
+                linear-gradient(180deg,#eee7d3 0%,#e7ddc3 52%,#e1d4b6 100%) !important;
+            color:#2a241d;
+            overflow:hidden;
+        }
+        .db-paper::before {
+            content:"";
+            position:absolute; inset:0; pointer-events:none;
+            background-image: repeating-linear-gradient(0deg, rgba(90,65,35,.025) 0 1px, transparent 1px 4px);
+            opacity:.45;
+        }
+        .db-sheet { position:relative; z-index:1; }
+        .db-brand {
+            display:grid;
+            grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+            align-items:center;
+            gap:12px;
+            margin-bottom:14px;
+        }
+        .db-brand-line { height:2px; background:linear-gradient(90deg,transparent,#236155 35%,#236155 65%,transparent); }
+        .db-logo {
+            font-family: Georgia,'Times New Roman',serif;
+            font-weight:900;
+            font-size:clamp(2rem,5vw,3.8rem);
+            line-height:.72;
+            letter-spacing:-.075em;
+            text-align:center;
+            color:#e4473f;
+            text-transform:uppercase;
+            text-shadow:0 2px 0 rgba(76,24,20,.13);
+        }
+        .db-logo span { display:block; }
+        .db-brand-sub { margin-top:8px; text-align:center; font-size:9px; font-weight:900; text-transform:uppercase; letter-spacing:.19em; color:#5f5545; }
+
+        .db-bio {
+            border:1px solid #a99778 !important;
+            background:rgba(247,241,221,.78);
+            padding:14px !important;
+            border-radius:16px 4px 16px 4px;
+            box-shadow:0 2px 10px rgba(66,48,27,.08);
+        }
+        .db-portrait {
+            border:3px solid #225f53 !important;
+            border-radius:16px 4px 16px 4px !important;
+            background:#e7dec8 !important;
+            box-shadow:0 0 0 2px #c8b996,0 4px 12px rgba(46,37,28,.14);
+        }
+        .db-sheet input, .db-sheet textarea, .db-sheet select {
+            color:#2b251e;
+        }
+        .db-sheet input[type="checkbox"] {
+            -webkit-appearance:none; appearance:none;
+            width:14px; height:14px; margin:0;
+            border:2px solid #8e7d60; border-radius:3px;
+            background:#fff8e7; display:inline-grid; place-content:center;
+            cursor:pointer; vertical-align:middle;
+            box-shadow:inset 0 1px 0 rgba(255,255,255,.45);
+        }
+        .db-sheet input[type="checkbox"]::after {
+            content:""; width:7px; height:7px; transform:scale(0);
+            transition:transform .08s ease-in-out;
+            background:#25685b; border-radius:1px;
+        }
+        .db-sheet input[type="checkbox"]:checked { border-color:#1b564b; background:#efe3b8; }
+        .db-sheet input[type="checkbox"]:checked::after { transform:scale(1); }
+        .db-add-btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:4px;
+            min-height:26px; padding:0 10px; border-radius:7px 2px 7px 2px;
+            font-size:11px; line-height:1; font-weight:900; white-space:nowrap;
+            border:1px solid rgba(0,0,0,.18); box-shadow:0 1px 3px rgba(0,0,0,.12);
+        }
+        .db-add-btn svg { width:11px; height:11px; flex:none; }
+        .db-add-btn.db-add-red { background:linear-gradient(180deg,#c63a33,#a92520) !important; color:#fff8eb !important; border-color:#7f1612 !important; }
+        .db-add-btn.db-add-neutral { background:linear-gradient(180deg,#687179,#555d65) !important; color:#fff8eb !important; border-color:#434a51 !important; }
+        .db-sheet input:not([type="checkbox"]):not([type="file"]),
+        .db-sheet textarea,
+        .db-sheet select {
+            background-color:rgba(255,252,242,.54) !important;
+            border-color:#a99a7e !important;
+        }
+        .db-sheet input:focus, .db-sheet textarea:focus, .db-sheet select:focus {
+            border-color:#25685b !important;
+            box-shadow:0 0 0 2px rgba(37,104,91,.12) !important;
+        }
+
+        .db-section-title,
+        .db-sheet .bg-dragon-dark {
+            position:relative;
+            background:linear-gradient(180deg,#2d7769 0%,#1f5d52 100%) !important;
+            color:#fff9e8 !important;
+            border:1px solid #153e37 !important;
+            border-radius:8px 2px 8px 2px !important;
+            text-shadow:0 1px 0 rgba(0,0,0,.25);
+            box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 2px 5px rgba(50,44,31,.10);
+        }
+        .db-section-title::before,
+        .db-section-title::after {
+            content:"◆";
+            color:#d6c79f;
+            font-size:9px;
+            align-self:center;
+            opacity:.95;
+        }
+        .db-section-title::before { margin-right:5px; }
+        .db-section-title::after { margin-left:5px; }
+
+        .db-attributes-strip {
+            display:grid;
+            grid-template-columns:repeat(6,minmax(0,1fr));
+            gap:8px;
+            margin:14px 0 10px;
+            padding:12px;
+            border-top:3px solid #26695d;
+            border-bottom:3px solid #26695d;
+            background:linear-gradient(90deg,rgba(35,96,84,.08),rgba(255,255,255,.2),rgba(35,96,84,.08));
+        }
+        .db-attr-medallion { text-align:center; min-width:0; }
+        .db-attr-circle {
+            width:58px; height:58px; margin:0 auto 5px;
+            border-radius:50%;
+            border:4px double #24685b;
+            background:#f8f2df;
+            box-shadow:0 0 0 2px #c5b58f, inset 0 2px 8px rgba(96,72,41,.08);
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+        }
+        .db-attr-circle .db-attr-name { font-size:9px; font-weight:900; text-transform:uppercase; color:#305d54; line-height:1; }
+        .db-attr-circle input { width:46px !important; border:0 !important; background:transparent !important; box-shadow:none !important; font-size:1.35rem !important; font-weight:900; text-align:center; padding:0 !important; }
+        .db-condition {
+            display:inline-flex; align-items:center; gap:4px;
+            font-size:8px; line-height:1; font-weight:900; text-transform:uppercase; letter-spacing:.04em;
+            color:#645847;
+        }
+        .db-condition.active { color:#a22d27; }
+
+        .db-derived-strip {
+            display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-bottom:14px;
+        }
+        .db-derived-box {
+            border:2px solid #25675a; background:rgba(248,241,219,.88); border-radius:9px 2px 9px 2px; padding:6px 8px;
+            text-align:center; box-shadow:inset 0 0 0 1px rgba(255,255,255,.38);
+        }
+        .db-derived-box span { display:block; font-size:8px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:#356157; }
+        .db-derived-box input { width:100%; border:0 !important; border-bottom:1px solid #aa9d83 !important; background:transparent !important; text-align:center; font-weight:900; box-shadow:none !important; }
+
+        .db-layout { gap:1rem !important; }
+        .db-column { border:1px solid rgba(95,78,54,.28); background:rgba(249,244,226,.56); padding:10px; border-radius:12px 3px 12px 3px; }
+        .db-sheet .space-y-1 > .db-skill-row { border-bottom:1px dotted rgba(91,77,55,.23); border-radius:0 !important; padding:.18rem .2rem !important; }
+        .db-skill-row:hover { background:rgba(41,105,91,.08) !important; }
+
+        .db-resource-life,
+        .db-resource-will {
+            border-radius:12px 3px 12px 3px !important;
+            box-shadow:inset 0 0 0 2px rgba(255,255,255,.22),0 2px 6px rgba(0,0,0,.08);
+        }
+        .db-resource-life { background:linear-gradient(180deg,#e75348,#c93731) !important; border-color:#8f201d !important; color:#fff !important; }
+        .db-resource-will { background:linear-gradient(180deg,#318173,#22675c) !important; border-color:#174b43 !important; color:#fff !important; }
+        .db-resource-life *, .db-resource-will * { color:inherit !important; }
+        .db-resource-life input, .db-resource-will input { color:#fff !important; border-color:rgba(255,255,255,.55) !important; background:transparent !important; }
+        .db-death-box { background:rgba(245,238,216,.9) !important; border:2px solid #9a896b !important; border-radius:12px 3px 12px 3px !important; }
+
+        .db-ability-list { display:grid; grid-template-columns:1fr; gap:8px; }
+        .db-ability-card {
+            position:relative;
+            padding:24px 8px 8px !important;
+            border:2px solid #2b6f63 !important;
+            border-radius:9px 2px 9px 2px;
+            background:#f5edd4 !important;
+            box-shadow:inset 0 0 0 1px #cbbd97;
+        }
+        .db-ability-card::before {
+            content:"◆ HABILIDADE  ◆  MAGIA";
+            position:absolute; left:0; right:0; top:0;
+            height:19px; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(180deg,#2e786a,#1f5d52);
+            color:#fff9e8; font-size:8px; font-weight:900; letter-spacing:.08em;
+            border-bottom:1px solid #17443c;
+        }
+        .db-ability-card textarea { min-height:44px !important; background:transparent !important; border:0 !important; border-bottom:1px solid #b7a987 !important; box-shadow:none !important; }
+        .db-ability-card input { background:transparent !important; box-shadow:none !important; }
+
+        .db-armor-card, .db-weapon-card, .db-inventory-box {
+            background:rgba(247,241,221,.88) !important;
+            border-color:#a99a7d !important;
+            border-radius:10px 2px 10px 2px !important;
+        }
+        .db-weapon-card { box-shadow:0 1px 4px rgba(57,43,27,.08) !important; }
+        .db-money-gold { background:#efe0a9 !important; border-color:#c2a55b !important; }
+        .db-money-silver { background:#e4e2da !important; border-color:#aaa79b !important; }
+        .db-money-copper { background:#e9c3a1 !important; border-color:#bd7d51 !important; }
+
+        /* O tema clássico reforça a identidade sem mudar a estrutura. */
+        body.theme-classic .db-paper { background:linear-gradient(180deg,#eee6d2,#e2d5b6) !important; }
+        body.theme-classic .db-section-title, body.theme-classic .db-sheet .bg-dragon-dark { background:linear-gradient(180deg,#2b7466,#1f5d52) !important; }
+
+        /* Modo escuro específico da ficha Dragonbane. */
+        body.theme-dark .db-paper {
+            background:radial-gradient(circle at top,#1d2925 0,#111a18 46%,#0b1110 100%) !important;
+            color:#eee5cf !important;
+        }
+        body.theme-dark .db-paper::before { opacity:.18; }
+        body.theme-dark .db-bio, body.theme-dark .db-column { background:rgba(25,35,31,.92) !important; border-color:#4e746a !important; }
+        body.theme-dark .db-logo { color:#ff6b60 !important; }
+        body.theme-dark .db-brand-sub { color:#c6b99f !important; }
+        body.theme-dark .db-attributes-strip { border-color:#478f80 !important; background:rgba(32,82,72,.16) !important; }
+        body.theme-dark .db-attr-circle { background:#18251f !important; border-color:#5fa292 !important; box-shadow:0 0 0 2px #51665b !important; }
+        body.theme-dark .db-attr-circle .db-attr-name { color:#a9ddcf !important; }
+        body.theme-dark .db-attr-circle input { color:#f3ead8 !important; }
+        body.theme-dark .db-condition { color:#baa98e !important; }
+        body.theme-dark .db-condition.active { color:#ff8a80 !important; }
+        body.theme-dark .db-derived-box, body.theme-dark .db-death-box, body.theme-dark .db-ability-card, body.theme-dark .db-armor-card, body.theme-dark .db-weapon-card, body.theme-dark .db-inventory-box { background:#1a2722 !important; border-color:#53776c !important; color:#eee5cf !important; }
+        body.theme-dark .db-derived-box span { color:#9ed2c4 !important; }
+        body.theme-dark .db-section-title, body.theme-dark .db-sheet .bg-dragon-dark { background:linear-gradient(180deg,#327d6e,#225f54) !important; border-color:#5a9d8f !important; }
+        body.theme-dark .db-ability-card::before { background:linear-gradient(180deg,#327d6e,#225f54) !important; }
+        body.theme-dark .db-sheet input, body.theme-dark .db-sheet textarea, body.theme-dark .db-sheet select { background:#111b18 !important; color:#f1e8d7 !important; border-color:#5b786f !important; }
+        body.theme-dark .db-money-gold { background:#3d351d !important; border-color:#85743b !important; }
+        body.theme-dark .db-money-silver { background:#303331 !important; border-color:#6e756f !important; }
+        body.theme-dark .db-money-copper { background:#3d2b22 !important; border-color:#825d47 !important; }
+        body.theme-dark .db-sheet input[type="checkbox"] { background:#101816 !important; border-color:#7fa396 !important; box-shadow:none !important; }
+        body.theme-dark .db-sheet input[type="checkbox"]::after { background:#9fe3cf !important; }
+        body.theme-dark .db-sheet input[type="checkbox"]:checked { background:#19342d !important; border-color:#95c7b8 !important; }
+        body.theme-dark .db-add-btn.db-add-red { background:linear-gradient(180deg,#d04941,#af2f29) !important; border-color:#7f1e18 !important; }
+        body.theme-dark .db-add-btn.db-add-neutral { background:linear-gradient(180deg,#76818a,#5f6972) !important; border-color:#4c555d !important; }
+
+        /* Tema personalizado mantém a identidade do sistema, mas respeita a cor de barras escolhida. */
+        body.theme-custom .db-paper { background-color:var(--custom-window-rgba,rgba(255,255,255,.95)) !important; color:var(--custom-text-color) !important; }
+        body.theme-custom .db-section-title, body.theme-custom .db-sheet .bg-dragon-dark, body.theme-custom .db-ability-card::before { background:var(--custom-bar-color) !important; color:var(--custom-bar-text,#fff) !important; border-color:var(--custom-accent-color) !important; }
+        body.theme-custom .db-bio, body.theme-custom .db-column, body.theme-custom .db-derived-box, body.theme-custom .db-death-box, body.theme-custom .db-ability-card, body.theme-custom .db-armor-card, body.theme-custom .db-weapon-card, body.theme-custom .db-inventory-box { background:color-mix(in srgb,var(--custom-window-color) 91%,var(--custom-accent-color) 9%) !important; color:var(--custom-text-color) !important; border-color:color-mix(in srgb,var(--custom-accent-color) 45%,#b9a98c) !important; }
+
+
+        @media (min-width: 1024px) {
+            .db-combat-desktop-slot { margin-top: 14px; }
+            .db-combat-desktop-slot > div { margin-top: 0; }
+        }
+
+        @media (max-width: 767px) {
+            .db-brand { grid-template-columns:1fr; }
+            .db-brand-line { display:none; }
+            .db-logo { font-size:2.6rem; }
+            .db-attributes-strip { grid-template-columns:repeat(3,minmax(0,1fr)); }
+            .db-derived-strip { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .db-attr-circle { width:54px; height:54px; }
+            .db-bio { padding:10px !important; }
+        }
+
         /* O Som das Seis — teste avançado de integração na linha 0.6 */
         .som6-paper { background: linear-gradient(180deg, #efe7c9 0%, #e8ddba 100%); }
         .som6-sheet { color:#1b1712; }
@@ -3992,11 +4246,20 @@
                                     ))}
                                 </div>
 
-                                <div className="p-4 md:p-8 space-y-8 bg-white" >
+                                <div className="db-paper db-sheet p-3 md:p-5 space-y-4">
+                                    <div className="db-brand">
+                                        <div className="db-brand-line"></div>
+                                        <div>
+                                            <div className="db-logo"><span>Dragon</span><span>Bane</span></div>
+                                            <div className="db-brand-sub">Ficha de Personagem • teste visual PJ Lite</div>
+                                        </div>
+                                        <div className="db-brand-line"></div>
+                                    </div>
+
                                     {/* Biografia PC */}
-                                    <div className={`flex flex-col md:flex-row gap-6 pb-6 border-b-2 border-gray-300 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
+                                    <div className={`db-bio flex flex-col md:flex-row gap-4 items-start ${mobileTab === 'status' ? 'block' : 'hidden md:flex'}`}>
                                         <div className="flex flex-col items-center gap-2 mx-auto md:mx-0 w-full md:w-auto">
-                                            <div className="w-40 h-40 md:w-48 md:h-48 shrink-0 border-2 border-dragon-dark rounded bg-gray-200 relative group overflow-hidden flex flex-col items-center justify-center">
+                                            <div className="db-portrait w-36 h-36 md:w-40 md:h-40 shrink-0 relative group overflow-hidden flex flex-col items-center justify-center">
                                                 {data.bio?.imagem ? ( <img src={data.bio.imagem} alt="Avatar" className="w-full h-full object-cover" /> ) : ( <span className="text-gray-400 text-sm font-bold uppercase text-center px-4">Retrato</span> )}
                                                 
                                                 <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
@@ -4030,10 +4293,33 @@
                                         </div>
                                     </div>
 
+                                    <div className={`${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
+                                        <div className="db-attributes-strip">
+                                            {Object.keys(data.atributos || {}).map(attr => (
+                                                <div key={`strip-${attr}`} className="db-attr-medallion">
+                                                    <div className="db-attr-circle">
+                                                        <span className="db-attr-name">{attr}</span>
+                                                        <input type="number" value={data.atributos[attr].valor} onChange={e => handleAttributeChange(attr, parseInt(e.target.value)||0)} />
+                                                    </div>
+                                                    <label className={`db-condition ${data.atributos[attr].condicao ? 'active' : ''}`}>
+                                                        <input type="checkbox" checked={data.atributos[attr].condicao} onChange={e => updateField(`atributos.${attr}.condicao`, e.target.checked)} className="cursor-pointer" />
+                                                        {{ for: 'Exausto', con: 'Adoecido', agl: 'Aturdido', int: 'Enraivecido', von: 'Assustado', car: 'Desanimado' }[attr]}
+                                                    </label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="db-derived-strip">
+                                            <div className="db-derived-box"><span>Dano Bônus FOR</span><input value={data.derivados?.danoBonusFor} onChange={e=>updateField('derivados.danoBonusFor',e.target.value)} /></div>
+                                            <div className="db-derived-box"><span>Dano Bônus AGL</span><input value={data.derivados?.danoBonusAgl} onChange={e=>updateField('derivados.danoBonusAgl',e.target.value)} /></div>
+                                            <div className="db-derived-box"><span>Movimento</span><input value={data.derivados?.movimento} onChange={e=>updateField('derivados.movimento',e.target.value)} /></div>
+                                            <div className="db-derived-box"><span>Limite de Sobrecarga</span><input value={data.derivados?.limiteSobrecarga} onChange={e=>updateField('derivados.limiteSobrecarga',e.target.value)} /></div>
+                                        </div>
+                                    </div>
+
                                     {/* Grades e Blocos PC */}
-                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                                        <div className={`lg:col-span-3 space-y-6 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
-                                            <div>
+                                    <div className="db-layout grid grid-cols-1 lg:grid-cols-12">
+                                        <div className={`db-column lg:col-span-4 space-y-4 ${mobileTab === 'status' ? 'block' : 'hidden md:block'}`}>
+                                            <div className="hidden">
                                                 <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm">ATRIBUTOS E CONDIÇÕES</h2>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     {Object.keys(data.atributos || {}).map(attr => (
@@ -4049,7 +4335,7 @@
                                                 </div>
                                             </div>
 
-                                            <div>
+                                            <div className="hidden">
                                                 <div className="flex justify-between items-center mb-1">
                                                     <h2 className="font-title font-bold text-lg">VALORES DERIVADOS</h2>
                                                     <div className="flex gap-1">
@@ -4067,7 +4353,7 @@
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-2">
-                                                <div className="border-2 border-red-800 rounded bg-red-50 p-2 flex flex-col items-center justify-center text-center">
+                                                <div className="db-resource-life border-2 p-2 flex flex-col items-center justify-center text-center">
                                                     <div className="font-title font-bold text-red-900 text-[10px] md:text-[11px] leading-tight uppercase">PONTOS DE VIDA</div>
                                                     <div className="flex items-center justify-center gap-1 mt-2">
                                                         <input type="number" value={data.status?.pv.atual} onChange={e => updateField('status.pv.atual', parseInt(e.target.value)||0)} className="w-8 xl:w-10 text-center text-lg xl:text-xl font-bold border-b-2 border-red-300 bg-transparent outline-none" />
@@ -4075,7 +4361,7 @@
                                                         <input type="number" value={data.status?.pv.max} onChange={e => updateField('status.pv.max', parseInt(e.target.value)||0)} className="w-8 xl:w-10 text-center text-lg xl:text-xl font-bold border-b-2 border-red-300 bg-transparent outline-none" />
                                                     </div>
                                                 </div>
-                                                <div className="border-2 border-blue-800 rounded bg-blue-50 p-2 flex flex-col items-center justify-center text-center">
+                                                <div className="db-resource-will border-2 p-2 flex flex-col items-center justify-center text-center">
                                                     <div className="font-title font-bold text-blue-900 text-[10px] md:text-[11px] leading-tight uppercase">PONTOS DE DET.</div>
                                                     <div className="flex items-center justify-center gap-1 mt-1">
                                                         <input type="number" value={data.status?.pd.atual} onChange={e => updateField('status.pd.atual', parseInt(e.target.value)||0)} className="w-8 xl:w-10 text-center text-lg xl:text-xl font-bold border-b-2 border-blue-300 bg-transparent outline-none" />
@@ -4085,105 +4371,18 @@
                                                 </div>
                                             </div>
 
-                                            <div className="border border-gray-300 p-3 bg-gray-50">
+                                            <div className="db-death-box border p-3">
                                                 <div className="font-title font-bold text-center text-sm mb-2">TESTES DE MORTE</div>
                                                 <div className="flex justify-between items-center mb-1"><span className="text-[10px] font-bold uppercase text-gray-500">Sucessos</span><div className="flex gap-2">{[0, 1, 2].map(i => <input key={`suc-${i}`} type="checkbox" checked={data.status?.testesMorte.sucessos[i]} onChange={e => { const newArr = [...data.status.testesMorte.sucessos]; newArr[i] = e.target.checked; updateField('status.testesMorte.sucessos', newArr); }} className="w-4 h-4 cursor-pointer" />)}</div></div>
                                                 <div className="flex justify-between items-center"><span className="text-[10px] font-bold uppercase text-gray-500">Falhas</span><div className="flex gap-2">{[0, 1, 2].map(i => <input key={`fal-${i}`} type="checkbox" checked={data.status?.testesMorte.falhas[i]} onChange={e => { const newArr = [...data.status.testesMorte.falhas]; newArr[i] = e.target.checked; updateField('status.testesMorte.falhas', newArr); }} className="w-4 h-4 cursor-pointer" />)}</div></div>
                                             </div>
-                                        </div>
 
-                                        <div className={`lg:col-span-5 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
-                                            <div className="flex justify-end mb-3">
-                                                <button onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors">
-                                                    <SVGIcons.Refresh /> Alternar Ordem
-                                                </button>
-                                            </div>
-                                            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6">
-                                                <div className={`flex flex-col ${data.status?.armasPrimeiro ? 'order-2' : 'order-1'}`}>
-                                                    <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3"><span>PERÍCIAS</span><span className="text-[10px] font-normal self-center hidden sm:inline">T: Treinar | Av: Avanço</span></h2>
-                                                    <div className="space-y-1">
-                                                        {(data.periciasBase || []).map((pericia, index) => {
-                                                            const attrValue = data.atributos?.[pericia.attr.toLowerCase()]?.valor || 10;
-                                                            const baseChance = getChanceBase(attrValue);
-                                                            return (
-                                                                <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer" />
-                                                                    <button onClick={() => toggleTreinada('periciasBase', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
-                                                                    <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
-                                                                    <div className="flex flex-col items-center"><input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" /><span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span></div>
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                </div>
-
-                                                <div className={`space-y-6 flex flex-col ${data.status?.armasPrimeiro ? 'order-1' : 'order-2'}`}>
-                                                    <div>
-                                                        <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm flex justify-between px-3"><span>ARMAS <span className="text-[10px] font-normal uppercase">(Perícias)</span></span></h2>
-                                                        <div className="space-y-1">
-                                                            {(data.periciasArmas || []).map((pericia, index) => {
-                                                                const attrValue = data.atributos?.[pericia.attr.toLowerCase()]?.valor || 10;
-                                                                const baseChance = getChanceBase(attrValue);
-                                                                return (
-                                                                    <div key={index} className="flex items-center hover:bg-gray-100 p-1 rounded gap-2">
-                                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer" />
-                                                                        <button onClick={() => toggleTreinada('periciasArmas', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
-                                                                        <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
-                                                                        <div className="flex flex-col items-center"><input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" /><span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span></div>
-                                                                    </div>
-                                                                );
-                                                            })}
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div>
-                                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
-                                                            <h3 className="font-title font-bold text-sm text-gray-700">SECUNDÁRIAS</h3>
-                                                            <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: '', valor: '', avanco: false })} className="text-[10px] bg-gray-500 hover:bg-gray-600 text-white px-2 py-1 rounded flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
-                                                        </div>
-                                                        <div className="space-y-1">
-                                                            {(data.periciasSecundarias || []).map((pericia, index) => (
-                                                                <div key={index} className="flex items-center gap-1 p-1 rounded hover:bg-gray-100">
-                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasSecundarias', index, 'avanco', e.target.checked)} className="cursor-pointer" />
-                                                                    <input type="text" value={pericia.nome} placeholder="Nome" onChange={e => updateArrayField('periciasSecundarias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
-                                                                    <input type="text" value={pericia.attr} placeholder="At" onChange={e => updateArrayField('periciasSecundarias', index, 'attr', e.target.value)} className="w-8 text-center border-b border-gray-400 outline-none bg-transparent text-[10px]" />
-                                                                    <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasSecundarias', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
-                                                                    <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 ml-1"><SVGIcons.Trash/></button>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className={`lg:col-span-4 space-y-6 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
+                                            {/* Desktop: Combate e Inventário ficam logo abaixo dos Testes de Morte */}
+                                            <div className="hidden lg:block space-y-4 db-combat-desktop-slot">
                                             <div>
-                                                <div style={getBarStyle()} className="flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2 rounded-sm">
-                                                    <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
-                                                    <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="text-xs bg-red-700 hover:bg-red-600 text-white px-2 py-1 rounded flex items-center gap-1"><SVGIcons.Plus/> Adic.</button>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    {(data.habilidadesFeiticos || []).map((hab, index) => (
-                                                        <div key={index} className="flex gap-2 items-start mt-2">
-                                                            <div className="flex-1">
-                                                                {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Habilidade / Magia</label>}
-                                                                <textarea rows="2" value={hab.nome} onChange={e => updateArrayField('habilidadesFeiticos', index, 'nome', e.target.value)} className="w-full border border-gray-300 rounded bg-gray-50 outline-none text-sm p-1 resize-y"></textarea>
-                                                            </div>
-                                                            <div className="w-12">
-                                                                {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center mb-1">PD/Nv.</label>}
-                                                                <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm mt-1" />
-                                                            </div>
-                                                            <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 mt-2"><SVGIcons.Trash/></button>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-2 rounded-sm">COMBATE</h2>
+                                                <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-2">COMBATE</h2>
                                                 <div className="space-y-3 mb-4">
-                                                    <div className="border p-1.5 rounded bg-gray-50 space-y-1">
+                                                    <div className="db-armor-card border p-2 space-y-1">
                                                         <div className="flex gap-2 items-end">
                                                             <div className="flex-1"><label className="block text-[10px] font-bold text-gray-500 uppercase">Armadura</label><input type="text" value={data.defesa?.armadura.nome} onChange={e => updateField('defesa.armadura.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" /></div>
                                                             <div className="w-12"><label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label><input type="text" value={data.defesa?.armadura.valor} onChange={e => updateField('defesa.armadura.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" /></div>
@@ -4191,7 +4390,7 @@
                                                         <input type="text" value={data.defesa?.armadura.reves} onChange={e => updateField('defesa.armadura.reves', e.target.value)} className="w-full bg-transparent outline-none text-[11px] text-gray-600 italic border-b border-gray-200" placeholder="Revés..." />
                                                     </div>
 
-                                                    <div className="border p-1.5 rounded bg-gray-50 space-y-1">
+                                                    <div className="db-armor-card border p-2 space-y-1">
                                                         <div className="flex gap-2 items-end">
                                                             <div className="flex-1"><label className="block text-[10px] font-bold text-gray-500 uppercase">Elmo</label><input type="text" value={data.defesa?.elmo.nome} onChange={e => updateField('defesa.elmo.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" /></div>
                                                             <div className="w-12"><label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label><input type="text" value={data.defesa?.elmo.valor} onChange={e => updateField('defesa.elmo.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" /></div>
@@ -4203,11 +4402,11 @@
                                                 <div className="mb-6">
                                                     <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
                                                         <h3 className="font-title font-bold text-sm text-gray-700">ARMAS</h3>
-                                                        <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="text-[10px] bg-gray-500 text-white px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold"><SVGIcons.Plus/> Adic.</button>
+                                                        <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="db-add-btn db-add-neutral"><SVGIcons.Plus/> Adic.</button>
                                                     </div>
                                                     <div className="space-y-3">
                                                         {(data.armas || []).map((arma, index) => (
-                                                            <div key={index} className="border border-gray-300 p-2 rounded bg-gray-50 shadow-sm flex flex-col gap-2">
+                                                            <div key={index} className="db-weapon-card border p-2 shadow-sm flex flex-col gap-2">
                                                                 <div className="flex gap-2 items-end">
                                                                     <div className="flex-1"><label className="block text-[9px] font-bold text-gray-500 uppercase">Arma / Escudo</label><input type="text" value={arma.nome} onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-full border-b border-gray-400 outline-none text-sm font-bold bg-transparent"/></div>
                                                                     <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 mb-1"><SVGIcons.Trash/></button>
@@ -4223,24 +4422,179 @@
                                                     </div>
                                                 </div>
 
-                                                <h2 style={getBarStyle()} className="font-title font-bold text-lg bg-dragon-dark text-white text-center py-1 mb-3 rounded-sm mt-6">INVENTÁRIO</h2>
+                                                <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-3 mt-5">INVENTÁRIO</h2>
                                                 
                                                 <div className="grid grid-cols-3 gap-2 mb-3">
-                                                    <div className="border-2 border-yellow-200 bg-yellow-50 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-yellow-700 uppercase mb-1">Ouro</label><input type="number" value={data.moedas?.ouro} onChange={e => updateField('moedas.ouro', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-yellow-900" /></div>
-                                                    <div className="border-2 border-gray-200 bg-gray-50 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-gray-500 uppercase mb-1">Prata</label><input type="number" value={data.moedas?.prata} onChange={e => updateField('moedas.prata', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-gray-800" /></div>
-                                                    <div className="border-2 border-orange-200 bg-orange-50 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-orange-800 uppercase mb-1">Cobre</label><input type="number" value={data.moedas?.cobre} onChange={e => updateField('moedas.cobre', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-orange-900" /></div>
+                                                    <div className="db-money-gold border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-yellow-700 uppercase mb-1">Ouro</label><input type="number" value={data.moedas?.ouro} onChange={e => updateField('moedas.ouro', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-yellow-900" /></div>
+                                                    <div className="db-money-silver border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-gray-500 uppercase mb-1">Prata</label><input type="number" value={data.moedas?.prata} onChange={e => updateField('moedas.prata', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-gray-800" /></div>
+                                                    <div className="db-money-copper border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-orange-800 uppercase mb-1">Cobre</label><input type="number" value={data.moedas?.cobre} onChange={e => updateField('moedas.cobre', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-orange-900" /></div>
                                                 </div>
 
                                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1 mt-2">Equipamento</label>
-                                                <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none bg-gray-50 resize-y mb-3"></textarea>
+                                                <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="db-inventory-box w-full border-2 p-2 text-sm outline-none resize-y mb-3"></textarea>
                                                 
                                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Itens Miúdos</label>
-                                                <textarea rows="3" value={data.itensMiudos || ''} onChange={e => updateField('itensMiudos', e.target.value)} className="w-full border-2 border-gray-300 rounded p-2 text-sm outline-none bg-gray-50 resize-y"></textarea>
+                                                <textarea rows="3" value={data.itensMiudos || ''} onChange={e => updateField('itensMiudos', e.target.value)} className="db-inventory-box w-full border-2 p-2 text-sm outline-none resize-y"></textarea>
 
                                                 <div className="mt-4 pb-10 md:pb-0">
                                                     <label className="block text-xs font-bold text-gray-500 uppercase">Memento (Item Especial)</label>
                                                     <input type="text" value={data.bio?.memento} onChange={e => updateField('bio.memento', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" />
                                                 </div>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`db-column lg:col-span-4 flex flex-col ${mobileTab === 'pericias' ? 'flex' : 'hidden md:flex'}`}>
+                                            <div className="flex justify-end mb-3">
+                                                <button onClick={() => updateField('status.armasPrimeiro', !data.status?.armasPrimeiro)} className="text-[10px] bg-gray-200 hover:bg-gray-300 text-gray-700 px-2 py-1 rounded flex items-center gap-1 shadow-sm font-bold uppercase transition-colors">
+                                                    <SVGIcons.Refresh /> Alternar Ordem
+                                                </button>
+                                            </div>
+                                            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-6">
+                                                <div className={`flex flex-col ${data.status?.armasPrimeiro ? 'order-2' : 'order-1'}`}>
+                                                    <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-2 px-3 flex justify-between"><span>PERÍCIAS</span><span className="text-[10px] font-normal self-center hidden sm:inline">T: Treinar | Av: Avanço</span></h2>
+                                                    <div className="space-y-1">
+                                                        {(data.periciasBase || []).map((pericia, index) => {
+                                                            const attrValue = data.atributos?.[pericia.attr.toLowerCase()]?.valor || 10;
+                                                            const baseChance = getChanceBase(attrValue);
+                                                            return (
+                                                                <div key={index} className="db-skill-row flex items-center hover:bg-gray-100 p-1 rounded gap-2">
+                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasBase', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                                    <button onClick={() => toggleTreinada('periciasBase', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
+                                                                    <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
+                                                                    <div className="flex flex-col items-center"><input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasBase', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" /><span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span></div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </div>
+
+                                                <div className={`space-y-6 flex flex-col ${data.status?.armasPrimeiro ? 'order-1' : 'order-2'}`}>
+                                                    <div>
+                                                        <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-2 px-3 flex justify-between"><span>ARMAS <span className="text-[10px] font-normal uppercase">(Perícias)</span></span></h2>
+                                                        <div className="space-y-1">
+                                                            {(data.periciasArmas || []).map((pericia, index) => {
+                                                                const attrValue = data.atributos?.[pericia.attr.toLowerCase()]?.valor || 10;
+                                                                const baseChance = getChanceBase(attrValue);
+                                                                return (
+                                                                    <div key={index} className="db-skill-row flex items-center hover:bg-gray-100 p-1 rounded gap-2">
+                                                                        <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasArmas', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                                        <button onClick={() => toggleTreinada('periciasArmas', index)} className={`w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center border ${pericia.treinada ? 'bg-red-800 text-white border-red-800' : 'bg-gray-200 text-gray-500 border-gray-400'}`}>T</button>
+                                                                        <span className="flex-1 font-bold text-sm text-gray-800">{pericia.nome} <span className="text-[10px] text-gray-500 font-normal">({pericia.attr})</span></span>
+                                                                        <div className="flex flex-col items-center"><input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasArmas', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" /><span className="text-[9px] text-gray-500 mt-0.5">Base {baseChance}</span></div>
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div>
+                                                        <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                                            <h3 className="font-title font-bold text-sm text-gray-700">SECUNDÁRIAS</h3>
+                                                            <button onClick={() => addToArray('periciasSecundarias', { nome: '', attr: '', valor: '', avanco: false })} className="db-add-btn db-add-neutral"><SVGIcons.Plus/> Adic.</button>
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            {(data.periciasSecundarias || []).map((pericia, index) => (
+                                                                <div key={index} className="db-skill-row flex items-center gap-1 p-1 rounded hover:bg-gray-100">
+                                                                    <input type="checkbox" checked={pericia.avanco} onChange={e => updateArrayField('periciasSecundarias', index, 'avanco', e.target.checked)} className="cursor-pointer" />
+                                                                    <input type="text" value={pericia.nome} placeholder="Nome" onChange={e => updateArrayField('periciasSecundarias', index, 'nome', e.target.value)} className="flex-1 border-b border-gray-400 outline-none bg-transparent text-sm font-bold min-w-0" />
+                                                                    <input type="text" value={pericia.attr} placeholder="At" onChange={e => updateArrayField('periciasSecundarias', index, 'attr', e.target.value)} className="w-8 text-center border-b border-gray-400 outline-none bg-transparent text-[10px]" />
+                                                                    <input type="number" value={pericia.valor} onChange={e => updateArrayField('periciasSecundarias', index, 'valor', e.target.value)} className="w-10 text-center border-b border-gray-400 outline-none bg-transparent font-bold" />
+                                                                    <button onClick={() => removeFromArray('periciasSecundarias', index)} className="text-red-500 hover:text-red-700 ml-1"><SVGIcons.Trash/></button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`db-column lg:col-span-4 space-y-4 ${mobileTab === 'equipamento' ? 'block' : 'hidden md:block'}`}>
+                                            <div>
+                                                <div style={getBarStyle()} className="db-section-title flex justify-between items-center bg-dragon-dark text-white py-1 px-3 mb-2">
+                                                    <h2 className="font-title font-bold text-lg">HABILIDADES E MAGIAS</h2>
+                                                    <button onClick={() => addToArray('habilidadesFeiticos', { nome: '', fv_nvl: '' })} className="db-add-btn db-add-red"><SVGIcons.Plus/> Adic.</button>
+                                                </div>
+                                                <div className="db-ability-list">
+                                                    {(data.habilidadesFeiticos || []).map((hab, index) => (
+                                                        <div key={index} className="db-ability-card flex gap-2 items-start">
+                                                            <div className="flex-1">
+                                                                {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">Habilidade / Magia</label>}
+                                                                <textarea rows="2" value={hab.nome} onChange={e => updateArrayField('habilidadesFeiticos', index, 'nome', e.target.value)} className="w-full border border-gray-300 rounded bg-gray-50 outline-none text-sm p-1 resize-y"></textarea>
+                                                            </div>
+                                                            <div className="w-12">
+                                                                {index === 0 && <label className="block text-[10px] font-bold text-gray-400 uppercase text-center mb-1">PD/Nv.</label>}
+                                                                <input type="text" value={hab.fv_nvl} onChange={e => updateArrayField('habilidadesFeiticos', index, 'fv_nvl', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-center text-sm mt-1" />
+                                                            </div>
+                                                            <button onClick={() => removeFromArray('habilidadesFeiticos', index)} className="text-red-500 hover:text-red-700 mt-2"><SVGIcons.Trash/></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+<div className="lg:hidden db-combat-mobile-slot">
+                                            <div>
+                                                <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-2">COMBATE</h2>
+                                                <div className="space-y-3 mb-4">
+                                                    <div className="db-armor-card border p-2 space-y-1">
+                                                        <div className="flex gap-2 items-end">
+                                                            <div className="flex-1"><label className="block text-[10px] font-bold text-gray-500 uppercase">Armadura</label><input type="text" value={data.defesa?.armadura.nome} onChange={e => updateField('defesa.armadura.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" /></div>
+                                                            <div className="w-12"><label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label><input type="text" value={data.defesa?.armadura.valor} onChange={e => updateField('defesa.armadura.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" /></div>
+                                                        </div>
+                                                        <input type="text" value={data.defesa?.armadura.reves} onChange={e => updateField('defesa.armadura.reves', e.target.value)} className="w-full bg-transparent outline-none text-[11px] text-gray-600 italic border-b border-gray-200" placeholder="Revés..." />
+                                                    </div>
+
+                                                    <div className="db-armor-card border p-2 space-y-1">
+                                                        <div className="flex gap-2 items-end">
+                                                            <div className="flex-1"><label className="block text-[10px] font-bold text-gray-500 uppercase">Elmo</label><input type="text" value={data.defesa?.elmo.nome} onChange={e => updateField('defesa.elmo.nome', e.target.value)} className="w-full bg-transparent outline-none text-sm font-bold border-b border-gray-300" /></div>
+                                                            <div className="w-12"><label className="block text-[10px] font-bold text-gray-500 uppercase text-center">Val.</label><input type="text" value={data.defesa?.elmo.valor} onChange={e => updateField('defesa.elmo.valor', e.target.value)} className="w-full bg-transparent outline-none text-sm text-center font-bold border-b border-gray-300" /></div>
+                                                        </div>
+                                                        <input type="text" value={data.defesa?.elmo.reves} onChange={e => updateField('defesa.elmo.reves', e.target.value)} className="w-full bg-transparent outline-none text-[11px] text-gray-600 italic border-b border-gray-200" placeholder="Revés..." />
+                                                    </div>
+                                                </div>
+
+                                                <div className="mb-6">
+                                                    <div className="flex justify-between items-center bg-gray-200 py-1 px-3 mb-2 rounded-sm border border-gray-300">
+                                                        <h3 className="font-title font-bold text-sm text-gray-700">ARMAS</h3>
+                                                        <button onClick={() => addToArray('armas', { nome: '', empunhadura: '', alcance: '', dano: '', tracos: '' })} className="db-add-btn db-add-neutral"><SVGIcons.Plus/> Adic.</button>
+                                                    </div>
+                                                    <div className="space-y-3">
+                                                        {(data.armas || []).map((arma, index) => (
+                                                            <div key={index} className="db-weapon-card border p-2 shadow-sm flex flex-col gap-2">
+                                                                <div className="flex gap-2 items-end">
+                                                                    <div className="flex-1"><label className="block text-[9px] font-bold text-gray-500 uppercase">Arma / Escudo</label><input type="text" value={arma.nome} onChange={e => updateArrayField('armas', index, 'nome', e.target.value)} className="w-full border-b border-gray-400 outline-none text-sm font-bold bg-transparent"/></div>
+                                                                    <button onClick={() => removeFromArray('armas', index)} className="text-red-500 hover:text-red-700 mb-1"><SVGIcons.Trash/></button>
+                                                                </div>
+                                                                <div className="grid grid-cols-3 gap-2">
+                                                                    <div><label className="text-[9px] font-bold text-gray-500 uppercase">Empunh.</label><input type="text" value={arma.empunhadura} onChange={e => updateArrayField('armas', index, 'empunhadura', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent"/></div>
+                                                                    <div><label className="text-[9px] font-bold text-gray-500 uppercase">Alcance</label><input type="text" value={arma.alcance} onChange={e => updateArrayField('armas', index, 'alcance', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent"/></div>
+                                                                    <div><label className="text-[9px] font-bold text-gray-500 uppercase">Dano</label><input type="text" value={arma.dano} onChange={e => updateArrayField('armas', index, 'dano', e.target.value)} className="w-full border-b border-gray-300 outline-none text-xs bg-transparent font-bold"/></div>
+                                                                </div>
+                                                                <textarea rows="1" value={arma.tracos} onChange={e => updateArrayField('armas', index, 'tracos', e.target.value)} className="w-full border border-gray-200 rounded outline-none text-xs bg-white p-1 resize-y" placeholder="Traços..."></textarea>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <h2 style={getBarStyle()} className="db-section-title font-title font-bold text-base bg-dragon-dark text-white text-center py-1 mb-3 mt-5">INVENTÁRIO</h2>
+                                                
+                                                <div className="grid grid-cols-3 gap-2 mb-3">
+                                                    <div className="db-money-gold border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-yellow-700 uppercase mb-1">Ouro</label><input type="number" value={data.moedas?.ouro} onChange={e => updateField('moedas.ouro', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-yellow-900" /></div>
+                                                    <div className="db-money-silver border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-gray-500 uppercase mb-1">Prata</label><input type="number" value={data.moedas?.prata} onChange={e => updateField('moedas.prata', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-gray-800" /></div>
+                                                    <div className="db-money-copper border-2 rounded flex flex-col items-center justify-center p-2 shadow-sm"><label className="text-[10px] font-bold text-orange-800 uppercase mb-1">Cobre</label><input type="number" value={data.moedas?.cobre} onChange={e => updateField('moedas.cobre', parseInt(e.target.value) || 0)} className="w-full bg-transparent text-center font-title font-bold text-xl outline-none text-orange-900" /></div>
+                                                </div>
+
+                                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1 mt-2">Equipamento</label>
+                                                <textarea rows="6" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="db-inventory-box w-full border-2 p-2 text-sm outline-none resize-y mb-3"></textarea>
+                                                
+                                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Itens Miúdos</label>
+                                                <textarea rows="3" value={data.itensMiudos || ''} onChange={e => updateField('itensMiudos', e.target.value)} className="db-inventory-box w-full border-2 p-2 text-sm outline-none resize-y"></textarea>
+
+                                                <div className="mt-4 pb-10 md:pb-0">
+                                                    <label className="block text-xs font-bold text-gray-500 uppercase">Memento (Item Especial)</label>
+                                                    <input type="text" value={data.bio?.memento} onChange={e => updateField('bio.memento', e.target.value)} className="w-full border-b border-gray-400 outline-none bg-transparent text-sm italic" />
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
