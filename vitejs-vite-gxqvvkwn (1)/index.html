@@ -913,6 +913,13 @@
             font-size:10px; font-weight:900; box-shadow:0 1px 2px rgba(0,0,0,.14);
         }
         .dnd-add-btn svg { width:11px; height:11px; }
+        .dnd-sync-item {
+            border:1px solid #b8b8b8; background:#fbfbfb; border-radius:8px 2px 8px 2px;
+            padding:7px; box-shadow:0 1px 2px rgba(0,0,0,.05);
+        }
+        .dnd-sync-item.is-synced { border-color:#922610; box-shadow:inset 3px 0 0 #922610,0 1px 2px rgba(0,0,0,.05); }
+        .dnd-sync-badge { display:inline-flex; align-items:center; gap:3px; font-size:8px; font-weight:900; text-transform:uppercase; letter-spacing:.045em; color:#922610; }
+        .dnd-sync-hint { font-size:9px; line-height:1.25; color:#6b7280; }
         .dnd-traits-card > div,
         .dnd-feature-card,
         .dnd-spell-row {
@@ -970,6 +977,10 @@
         body.theme-dark .dnd-sheet input[type="checkbox"]::after { background:#ef7468 !important; }
         body.theme-dark .dnd-tabbar { background:#20252a !important; border-color:#727980 !important; }
         body.theme-dark .dnd-spell-slot > div { background:#353b41 !important; }
+        body.theme-dark .dnd-sync-item { background:#171b1f !important; border-color:#626970 !important; color:#ece8df !important; box-shadow:none !important; }
+        body.theme-dark .dnd-sync-item.is-synced { border-color:#d26b60 !important; box-shadow:inset 3px 0 0 #d26b60 !important; }
+        body.theme-dark .dnd-sync-badge { color:#f09a91 !important; }
+        body.theme-dark .dnd-sync-hint { color:#b6bdc5 !important; }
         body.theme-dark .dnd-hp-card .dnd-hp-current { color:#f07166 !important; }
         body.theme-dark .dnd-sheet input, body.theme-dark .dnd-sheet textarea, body.theme-dark .dnd-sheet select { color:#f1ece4 !important; }
 
@@ -984,6 +995,9 @@
         body.theme-custom .dnd-traits-card > div,
         body.theme-custom .dnd-feature-card,
         body.theme-custom .dnd-spell-row { background:color-mix(in srgb,var(--custom-window-color) 92%,var(--custom-accent-color) 8%) !important; color:var(--custom-text-color) !important; border-color:color-mix(in srgb,var(--custom-accent-color) 55%,#777) !important; }
+        body.theme-custom .dnd-sync-item { background:color-mix(in srgb,var(--custom-window-color) 93%,var(--custom-accent-color) 7%) !important; color:var(--custom-text-color) !important; border-color:color-mix(in srgb,var(--custom-accent-color) 45%,#999) !important; }
+        body.theme-custom .dnd-sync-item.is-synced { box-shadow:inset 3px 0 0 var(--custom-accent-color) !important; border-color:var(--custom-accent-color) !important; }
+        body.theme-custom .dnd-sync-badge { color:var(--custom-accent-color) !important; }
         body.theme-custom .dnd-brand-mark { color:var(--custom-accent-color) !important; }
         body.theme-custom .dnd-add-btn, body.theme-custom .dnd-tabbar button.dnd-tab-active { background:var(--custom-bar-color) !important; color:var(--custom-bar-text,#fff) !important; border-color:var(--custom-accent-color) !important; }
 
@@ -1160,16 +1174,16 @@
             id: '', system: 'dnd5e', type: 'pc',
             bio: { nome: '', classe: '', linhagem: '', antecedente: '', alinhamento: '', xp: 0, nivel: 1, jogador: '', imagem: '' },
             atributos: { for: 10, des: 10, con: 10, int: 10, sab: 10, car: 10 },
-            status: { pvAtual: 10, pvMax: 10, pvTemp: 0, dadosVida: '1d10', ca: 10, iniciativa: '', deslocamento: '9 m' },
+            status: { pvAtual: 10, pvMax: 10, pvTemp: 0, dadosVida: '1d10', ca: 10, iniciativa: '', deslocamento: '9 m', inspiracao: false, percepcaoPassiva: '' },
             testesMorte: { sucessos: [false, false, false], falhas: [false, false, false] },
             proficienciasResistencia: { for: false, des: false, con: false, int: false, sab: false, car: false },
             pericias: DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: 0 })), // 0: Nenhuma, 1: Proficiência, 2: Expertise (Dobro)
             ataques: [{ nome: 'Arma Simples', bonus: '+2', dano: '1d6', tipo: 'Cortante' }],
-            magias: { slots: { 1: { atual: 0, max: 0 }, 2: { atual: 0, max: 0 }, 3: { atual: 0, max: 0 }, 4: { atual: 0, max: 0 }, 5: { atual: 0, max: 0 }, 6: { atual: 0, max: 0 }, 7: { atual: 0, max: 0 }, 8: { atual: 0, max: 0 }, 9: { atual: 0, max: 0 } }, lista: [] },
+            magias: { conjuracao: { habilidade: '', cd: '', ataque: '' }, slots: { 1: { atual: 0, max: 0 }, 2: { atual: 0, max: 0 }, 3: { atual: 0, max: 0 }, 4: { atual: 0, max: 0 }, 5: { atual: 0, max: 0 }, 6: { atual: 0, max: 0 }, 7: { atual: 0, max: 0 }, 8: { atual: 0, max: 0 }, 9: { atual: 0, max: 0 } }, lista: [] },
             caracteristicas: [],
             tracosPersonalidade: '', ideais: '', vinculos: '', defeitos: '',
             outrasProficiencias: '',
-            inventario: '', moedas: { pc: 0, pp: 0, pe: 0, po: 0, pl: 0 }
+            inventario: '', itensSincronizados: [], moedas: { pc: 0, pp: 0, pe: 0, po: 0, pl: 0 }
         };
 
         const initialDndMonsterData = {
@@ -1489,20 +1503,52 @@
             if (clone.system !== 'dnd5e' || clone.type !== 'pc') return clone;
             clone.bio = { ...initialDndPcData.bio, ...(clone.bio || {}) };
             clone.status = { ...initialDndPcData.status, ...(clone.status || {}) };
+            clone.status.inspiracao = !!clone.status.inspiracao;
+            clone.status.percepcaoPassiva = clone.status.percepcaoPassiva ?? '';
             clone.atributos = { ...initialDndPcData.atributos, ...(clone.atributos || {}) };
             clone.proficienciasResistencia = { ...initialDndPcData.proficienciasResistencia, ...(clone.proficienciasResistencia || {}) };
-            clone.pericias = Array.isArray(clone.pericias) ? clone.pericias : JSON.parse(JSON.stringify(initialDndPcData.pericias));
+
+            // Garante que fichas antigas sempre tenham as 18 perícias atuais,
+            // preservando Proficiência/Expertise das entradas já existentes.
+            const oldSkills = Array.isArray(clone.pericias) ? clone.pericias : [];
+            const oldSkillMap = new Map(oldSkills.map(p => [p?.id, p]));
+            clone.pericias = DND_SKILLS_LIST.map(sk => ({ id: sk.id, prof: Math.max(0, Math.min(2, Number(oldSkillMap.get(sk.id)?.prof || 0))) }));
+
+            clone.testesMorte = { ...initialDndPcData.testesMorte, ...(clone.testesMorte || {}) };
+            clone.testesMorte.sucessos = Array.from({length:3}, (_,i) => !!clone.testesMorte?.sucessos?.[i]);
+            clone.testesMorte.falhas = Array.from({length:3}, (_,i) => !!clone.testesMorte?.falhas?.[i]);
+
             clone.ataques = Array.isArray(clone.ataques) ? clone.ataques : [];
             clone.caracteristicas = Array.isArray(clone.caracteristicas)
                 ? clone.caracteristicas
                 : (clone.caracteristicas ? String(clone.caracteristicas).split('\n').filter(Boolean).map(nome => ({ nome, desc: '' })) : []);
+
             const oldMagias = clone.magias || {};
-            clone.magias = { slots: {}, lista: [] };
+            clone.magias = { conjuracao: { ...initialDndPcData.magias.conjuracao, ...(oldMagias.conjuracao || {}) }, slots: {}, lista: [] };
             for (let lvl = 1; lvl <= 9; lvl++) clone.magias.slots[lvl] = { ...initialDndPcData.magias.slots[lvl], ...(oldMagias.slots?.[lvl] || {}) };
             clone.magias.lista = Array.isArray(oldMagias.lista)
                 ? oldMagias.lista
                 : (oldMagias.lista ? String(oldMagias.lista).split('\n').filter(Boolean).map(nome => ({ nome, nivel: '', desc: '' })) : []);
+
             clone.moedas = { ...initialDndPcData.moedas, ...(clone.moedas || {}) };
+            clone.itensSincronizados = Array.isArray(clone.itensSincronizados) ? clone.itensSincronizados.map((it, idx) => ({
+                syncId: it?.syncId || `dnd-item-${clone.id || 'legacy'}-${idx}-${Math.random().toString(36).slice(2,7)}`,
+                nome: it?.nome || '', quantidade: Number(it?.quantidade ?? 1), tipo: it?.tipo || 'Equipamento',
+                bonusAtaque: it?.bonusAtaque || '', dano: it?.dano || '', tipoDano: it?.tipoDano || '', notas: it?.notas || '',
+                sincronizarAtaque: !!it?.sincronizarAtaque
+            })) : [];
+
+            // Repara o vínculo item ↔ ataque. Itens marcados como arma sincronizada
+            // sempre possuem exatamente um ataque ligado por sourceItemId.
+            const activeSyncIds = new Set(clone.itensSincronizados.filter(it => it.sincronizarAtaque && it.tipo === 'Arma').map(it => it.syncId));
+            clone.ataques = clone.ataques.filter(a => !a?.sourceItemId || activeSyncIds.has(a.sourceItemId));
+            clone.itensSincronizados.forEach(it => {
+                if (!it.sincronizarAtaque || it.tipo !== 'Arma') return;
+                const linked = clone.ataques.find(a => a?.sourceItemId === it.syncId);
+                const payload = { nome: it.nome, bonus: it.bonusAtaque, dano: it.dano, tipo: it.tipoDano, sourceItemId: it.syncId };
+                if (linked) Object.assign(linked, payload);
+                else clone.ataques.push(payload);
+            });
             return clone;
         };
 
@@ -2442,6 +2488,10 @@
                 const pos = Math.max(0, Math.min(Number(undoState.index) || 0, list.length));
                 list.splice(pos, 0, JSON.parse(JSON.stringify(undoState.item)));
                 newData[undoState.arrayName] = list;
+                if (newData.system === 'dnd5e' && undoState.arrayName === 'ataques' && undoState.item?.sourceItemId && Array.isArray(newData.itensSincronizados)) {
+                    const linked = newData.itensSincronizados.find(it => it.syncId === undoState.item.sourceItemId);
+                    if (linked) linked.sincronizarAtaque = true;
+                }
                 setData(newData);
                 setUndoState(null);
                 showToast('Remoção desfeita.');
@@ -2525,7 +2575,18 @@
 
             const updateArrayField = (arrayName, index, field, value) => {
                 const newData = JSON.parse(JSON.stringify(data));
+                if (!Array.isArray(newData[arrayName]) || !newData[arrayName][index]) return;
                 newData[arrayName][index][field] = value;
+                if (newData.system === 'dnd5e' && arrayName === 'ataques') {
+                    const atk = newData.ataques[index];
+                    if (atk?.sourceItemId && Array.isArray(newData.itensSincronizados)) {
+                        const linked = newData.itensSincronizados.find(it => it.syncId === atk.sourceItemId);
+                        if (linked) {
+                            const map = { nome: 'nome', bonus: 'bonusAtaque', dano: 'dano', tipo: 'tipoDano' };
+                            if (map[field]) linked[map[field]] = value;
+                        }
+                    }
+                }
                 setData(newData);
             };
 
@@ -2535,6 +2596,43 @@
                 newData[arrayName].push(emptyObj);
                 setData(newData);
             };
+
+            const addDndSyncedItem = () => {
+                const newData = JSON.parse(JSON.stringify(data));
+                if (!Array.isArray(newData.itensSincronizados)) newData.itensSincronizados = [];
+                newData.itensSincronizados.push({ syncId: `dnd-item-${Date.now()}-${Math.random().toString(36).slice(2,6)}`, nome:'', quantidade:1, tipo:'Equipamento', bonusAtaque:'', dano:'', tipoDano:'', notas:'', sincronizarAtaque:false });
+                setData(newData);
+            };
+
+            const updateDndSyncedItem = (index, patch) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                if (!Array.isArray(newData.itensSincronizados) || !newData.itensSincronizados[index]) return;
+                const item = { ...newData.itensSincronizados[index], ...patch };
+                if (!item.syncId) item.syncId = `dnd-item-${Date.now()}-${Math.random().toString(36).slice(2,6)}`;
+                if (item.tipo !== 'Arma') item.sincronizarAtaque = false;
+                newData.itensSincronizados[index] = item;
+                if (!Array.isArray(newData.ataques)) newData.ataques = [];
+                const linkedIndex = newData.ataques.findIndex(a => a?.sourceItemId === item.syncId);
+                if (item.sincronizarAtaque) {
+                    const payload = { nome:item.nome, bonus:item.bonusAtaque, dano:item.dano, tipo:item.tipoDano, sourceItemId:item.syncId };
+                    if (linkedIndex >= 0) newData.ataques[linkedIndex] = { ...newData.ataques[linkedIndex], ...payload };
+                    else newData.ataques.push(payload);
+                } else if (linkedIndex >= 0) {
+                    newData.ataques.splice(linkedIndex, 1);
+                }
+                setData(newData);
+            };
+
+            const removeDndSyncedItem = (index) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const items = Array.isArray(newData.itensSincronizados) ? newData.itensSincronizados : [];
+                const removed = items[index];
+                if (!removed) return;
+                newData.itensSincronizados = items.filter((_,i) => i !== index);
+                if (removed.syncId && Array.isArray(newData.ataques)) newData.ataques = newData.ataques.filter(a => a?.sourceItemId !== removed.syncId);
+                setData(newData);
+                showToast('Item removido. Ataque sincronizado também foi atualizado.');
+            };
             
             const removeFromArray = (arrayName, index) => {
                 const newData = JSON.parse(JSON.stringify(data));
@@ -2542,6 +2640,10 @@
                 const removed = current[index];
                 if (removed === undefined) return;
                 newData[arrayName] = current.filter((_, i) => i !== index);
+                if (newData.system === 'dnd5e' && arrayName === 'ataques' && removed?.sourceItemId && Array.isArray(newData.itensSincronizados)) {
+                    const linked = newData.itensSincronizados.find(it => it.syncId === removed.sourceItemId);
+                    if (linked) linked.sincronizarAtaque = false;
+                }
                 setUndoState({ kind: 'array-remove', arrayName, index, item: JSON.parse(JSON.stringify(removed)), label: 'item removido' });
                 setData(newData);
                 showToast('Item removido.', { keepUndo: true });
@@ -3436,11 +3538,12 @@
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <div className="bg-white border rounded p-4"><strong>1. Identidade</strong><p className="text-xs mt-1">Nome, Jogador, Classe, Nível, Espécie/Linhagem e Antecedente. Você também pode adicionar o retrato por Upload ou URL.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Preencha FOR, DES, CON, INT, SAB e CAR. A ficha calcula os modificadores. Depois marque resistências e níveis de proficiência nas perícias.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>3. Combate</strong><p className="text-xs mt-1">Informe CA, Iniciativa, Deslocamento, PV, PV temporários, Dados de Vida e Testes de Morte. Adicione cada ataque em uma linha própria.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Combate</strong><p className="text-xs mt-1">Informe CA, Iniciativa, Deslocamento, PV, PV temporários, Dados de Vida e Testes de Morte. A ficha também guarda Inspiração e Percepção Passiva. Adicione ataques manualmente ou sincronize uma arma do inventário.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>4. Características</strong><p className="text-xs mt-1">Cadastre talentos, habilidades de classe e traços de espécie separadamente para ficar fácil consultar durante o jogo.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>5. Magias</strong><p className="text-xs mt-1">Se o personagem conjura, configure os espaços de 1º a 9º nível e adicione as magias com nome, nível e descrição.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>6. Equipamento</strong><p className="text-xs mt-1">Registre inventário, moedas, proficiências e idiomas. Revise a aba Recursos e salve quando estiver satisfeito.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Magias</strong><p className="text-xs mt-1">Se o personagem conjura, registre Habilidade Chave, CD do TR e Bônus de Ataque de Magia. Depois configure os espaços de 1º a 9º nível e adicione as magias com nome, nível e descrição.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Equipamento & Itens Sincronizados</strong><p className="text-xs mt-1">Use Itens Sincronizados para nome, quantidade e tipo. Se o item for uma Arma, marque <strong>↔ Ataques</strong>: nome, bônus e dano ficam ligados à lista de Ataques em dois sentidos. O inventário livre continua disponível para anotações e itens que você prefere registrar como texto.</p></div>
                                                 </div>
+                                                <div className="bg-red-50 border border-red-200 rounded p-4"><h3 className="font-bold text-red-900 mb-2">↔ Como funciona a sincronização de armas</h3><p className="text-xs">Crie um item, escolha o tipo <strong>Arma</strong> e ative <strong>↔ Ataques</strong>. O PJ Lite cria um ataque ligado a esse item. Se você mudar nome, bônus, dano ou tipo de dano no inventário, o ataque acompanha; se editar o ataque, o item também acompanha. Desativar a opção ou apagar um dos vínculos não apaga o restante do inventário.</p></div>
                                                 <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📘 Para não se perder em D&D</h3><p className="text-xs">A ficha tem muitos números, mas durante a maior parte do jogo você consulta poucas áreas: modificadores de atributos, perícias, CA, PV, ataques e recursos da classe. Magias e características ficam como referência quando forem usadas.</p><p className="text-xs"><strong>Proficiência:</strong> quando um campo indicar que o personagem é proficiente, registre isso na ficha em vez de tentar memorizar. <strong>PV temporários</strong> ficam separados dos PV normais e <strong>Dados de Vida</strong> também possuem campo próprio.</p></div>
                                                 <div className="bg-orange-50 border border-orange-200 rounded p-4"><h3 className="font-bold text-[#922610] mb-2">🌱 Dica para a primeira ficha</h3><p className="text-xs">Preencha primeiro o que sua classe realmente usa. Um personagem sem magia pode deixar a área de magias de lado; um conjurador pode preencher primeiro as magias mais usadas e completar o restante depois.</p></div>
                                                 <div className="p-4 bg-orange-50 border border-orange-300 rounded"><h3 className="font-title font-bold text-[#922610] mb-2">D&D 5e / SRD 5.2</h3><p className="text-xs">A implementação está em adaptação contínua. O PJ Lite não é um produto oficial da Wizards of the Coast.</p></div>
@@ -4069,6 +4172,17 @@
                                                 <div className="text-xs font-bold uppercase">Bônus de Proficiência</div>
                                             </div>
                                             
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <label className="dnd-panel border border-gray-300 rounded p-2 bg-white flex items-center gap-2 cursor-pointer">
+                                                    <input type="checkbox" checked={!!data.status?.inspiracao} onChange={e=>updateField('status.inspiracao',e.target.checked)} />
+                                                    <span className="text-[10px] font-bold uppercase">Inspiração</span>
+                                                </label>
+                                                <label className="dnd-panel border border-gray-300 rounded p-2 bg-white">
+                                                    <span className="block text-[8px] font-bold uppercase text-gray-500 text-center">Percepção Passiva</span>
+                                                    <input type="number" value={data.status?.percepcaoPassiva ?? ''} onChange={e=>updateField('status.percepcaoPassiva',e.target.value)} placeholder={String(10 + getDndAbilityMod(data.atributos?.sab ?? 10) + (((data.pericias||[]).find(p=>p.id==='percepcao')?.prof||0) * getProficiencyBonus(data.bio?.nivel||1)))} className="w-full text-center bg-transparent outline-none font-bold" title="Deixe vazio para usar como referência o valor calculado mostrado no placeholder" />
+                                                </label>
+                                            </div>
+                                            
                                             <div className="dnd-panel border border-gray-300 rounded p-2 bg-white space-y-1">
                                                 <div className="dnd-panel-title text-[10px] font-bold uppercase text-center border-b border-gray-200 pb-1 mb-1 text-gray-500">Testes de Resistência</div>
                                                 {['for','des','con','int','sab','car'].map(attr => {
@@ -4158,9 +4272,9 @@
                                         </div>
                                         <div className="space-y-2 min-w-0">
                                             {(data.ataques || []).map((atk, idx) => (
-                                                <div key={idx} className="grid grid-cols-12 gap-1.5 items-end bg-gray-50 p-1.5 rounded border min-w-0">
+                                                <div key={idx} className={`grid grid-cols-12 gap-1.5 items-end bg-gray-50 p-1.5 rounded border min-w-0 ${atk?.sourceItemId?'border-[#922610]/60':''}`}>
                                                     <div className="col-span-12 sm:col-span-5 min-w-0">
-                                                        <label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Ataque</label>
+                                                        <div className="flex items-center justify-between gap-1"><label className="block text-[8px] uppercase font-bold text-gray-400 mb-0.5">Ataque</label>{atk?.sourceItemId && <span className="dnd-sync-badge">↔ item</span>}</div>
                                                         <input type="text" value={atk?.nome || ''} placeholder="Nome do ataque" onChange={e => updateArrayField('ataques', idx, 'nome', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-xs font-bold" />
                                                     </div>
                                                     <div className="col-span-4 sm:col-span-2 min-w-0">
@@ -4176,7 +4290,7 @@
                                                         <input type="text" value={atk?.tipo || ''} placeholder="Tipo" onChange={e => updateArrayField('ataques', idx, 'tipo', e.target.value)} className="w-full min-w-0 bg-transparent border-b outline-none text-[10px]" />
                                                     </div>
                                                     <div className="col-span-1 flex justify-end pb-0.5">
-                                                        <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 p-0.5" title="Remover ataque"><SVGIcons.Trash/></button>
+                                                        <button onClick={() => removeFromArray('ataques', idx)} className="text-red-500 hover:text-red-700 p-0.5" title={atk?.sourceItemId?'Remover ataque e desativar sincronização do item':'Remover ataque'}><SVGIcons.Trash/></button>
                                                     </div>
                                                 </div>
                                             ))}
@@ -4192,7 +4306,32 @@
                                             <div><div className="bg-yellow-400/20 rounded mb-1">PO</div><input type="number" value={data.moedas.po} onChange={e => updateField('moedas.po', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
                                             <div><div className="bg-gray-300/30 rounded mb-1">PL</div><input type="number" value={data.moedas.pl} onChange={e => updateField('moedas.pl', parseInt(e.target.value)||0)} className="w-full text-center border-b outline-none text-sm text-black" /></div>
                                         </div>
-                                        <textarea rows="4" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border rounded p-2 text-xs bg-gray-50 resize-y outline-none" placeholder="Equipamento de aventura..."></textarea>
+                                        <div className="border-t pt-2 mt-2">
+                                            <div className="flex items-start justify-between gap-2 mb-2">
+                                                <div><div className="text-[10px] font-bold uppercase text-gray-600">Itens Sincronizados</div><div className="dnd-sync-hint">Cadastre itens de forma estruturada. Armas podem ser sincronizadas com Ataques; alterações feitas em qualquer um dos dois lados são mantidas juntas.</div></div>
+                                                <button type="button" onClick={addDndSyncedItem} className="dnd-add-btn shrink-0"><SVGIcons.Plus/> Item</button>
+                                            </div>
+                                            <div className="space-y-2">
+                                                {(!Array.isArray(data.itensSincronizados) || data.itensSincronizados.length===0) && <div className="text-[10px] italic text-gray-400 border border-dashed rounded p-2 text-center">Nenhum item sincronizado. O inventário livre abaixo continua disponível.</div>}
+                                                {(Array.isArray(data.itensSincronizados)?data.itensSincronizados:[]).map((it,idx)=><div key={it.syncId||idx} className={`dnd-sync-item ${it.sincronizarAtaque?'is-synced':''}`}>
+                                                    <div className="grid grid-cols-[1fr_58px_100px_24px] gap-1 items-end">
+                                                        <label className="min-w-0"><span className="block text-[8px] uppercase font-bold text-gray-400">Item</span><input value={it.nome||''} onChange={e=>updateDndSyncedItem(idx,{nome:e.target.value})} className="w-full min-w-0 bg-transparent border-b outline-none text-xs font-bold" placeholder="Nome"/></label>
+                                                        <label><span className="block text-[8px] uppercase font-bold text-gray-400 text-center">Qtd.</span><input type="number" min="0" value={it.quantidade??1} onChange={e=>updateDndSyncedItem(idx,{quantidade:Number(e.target.value)})} className="w-full bg-transparent border-b outline-none text-xs text-center"/></label>
+                                                        <label><span className="block text-[8px] uppercase font-bold text-gray-400">Tipo</span><select value={it.tipo||'Equipamento'} onChange={e=>updateDndSyncedItem(idx,{tipo:e.target.value})} className="w-full bg-transparent border-b outline-none text-[10px]"><option>Equipamento</option><option>Arma</option><option>Armadura</option><option>Escudo</option><option>Consumível</option><option>Ferramenta</option><option>Outro</option></select></label>
+                                                        <button type="button" onClick={()=>removeDndSyncedItem(idx)} className="text-red-500 hover:text-red-700 pb-1" title="Remover item"><SVGIcons.Trash/></button>
+                                                    </div>
+                                                    {it.tipo==='Arma' && <div className="grid grid-cols-[70px_80px_1fr_auto] gap-1.5 items-end mt-2 pt-2 border-t">
+                                                        <label><span className="block text-[8px] uppercase font-bold text-gray-400 text-center">Bônus</span><input value={it.bonusAtaque||''} onChange={e=>updateDndSyncedItem(idx,{bonusAtaque:e.target.value})} className="w-full bg-transparent border-b outline-none text-xs text-center" placeholder="+0"/></label>
+                                                        <label><span className="block text-[8px] uppercase font-bold text-gray-400 text-center">Dano</span><input value={it.dano||''} onChange={e=>updateDndSyncedItem(idx,{dano:e.target.value})} className="w-full bg-transparent border-b outline-none text-xs text-center font-bold" placeholder="1d8"/></label>
+                                                        <label><span className="block text-[8px] uppercase font-bold text-gray-400">Tipo de dano</span><input value={it.tipoDano||''} onChange={e=>updateDndSyncedItem(idx,{tipoDano:e.target.value})} className="w-full bg-transparent border-b outline-none text-xs" placeholder="Cortante"/></label>
+                                                        <label className="flex items-center gap-1 text-[9px] font-bold cursor-pointer pb-1 whitespace-nowrap"><input type="checkbox" checked={!!it.sincronizarAtaque} onChange={e=>updateDndSyncedItem(idx,{sincronizarAtaque:e.target.checked})}/><span>↔ Ataques</span></label>
+                                                    </div>}
+                                                    <input value={it.notas||''} onChange={e=>updateDndSyncedItem(idx,{notas:e.target.value})} className="w-full bg-transparent border-b outline-none text-[10px] mt-1" placeholder="Notas do item (opcional)"/>
+                                                    {it.sincronizarAtaque && <div className="dnd-sync-badge mt-1">↔ sincronizado com Ataques</div>}
+                                                </div>)}
+                                            </div>
+                                        </div>
+                                        <label className="block mt-2"><span className="text-[9px] font-bold uppercase text-gray-500">Inventário livre / anotações</span><textarea rows="3" value={data.inventario} onChange={e => updateField('inventario', e.target.value)} className="w-full border rounded p-2 text-xs bg-gray-50 resize-y outline-none mt-1" placeholder="Equipamento antigo, tesouro, observações ou itens que você prefere manter em texto..."></textarea></label>
                                     </div>
                                 </div>
 
@@ -4232,6 +4371,11 @@
                                             </div>
                                         ) : (
                                             <div className="p-2">
+                                                <div className="grid grid-cols-3 gap-2 mb-3">
+                                                    <label className="dnd-small-stat border rounded bg-gray-50 p-1.5 text-center"><span className="block text-[8px] uppercase font-bold text-gray-500">Habilidade Chave</span><input value={data.magias?.conjuracao?.habilidade||''} onChange={e=>updateField('magias.conjuracao.habilidade',e.target.value)} className="w-full bg-transparent outline-none text-center text-xs font-bold" placeholder="INT/SAB/CAR"/></label>
+                                                    <label className="dnd-small-stat border rounded bg-gray-50 p-1.5 text-center"><span className="block text-[8px] uppercase font-bold text-gray-500">CD do TR</span><input value={data.magias?.conjuracao?.cd||''} onChange={e=>updateField('magias.conjuracao.cd',e.target.value)} className="w-full bg-transparent outline-none text-center text-sm font-bold" placeholder="13"/></label>
+                                                    <label className="dnd-small-stat border rounded bg-gray-50 p-1.5 text-center"><span className="block text-[8px] uppercase font-bold text-gray-500">Ataque de Magia</span><input value={data.magias?.conjuracao?.ataque||''} onChange={e=>updateField('magias.conjuracao.ataque',e.target.value)} className="w-full bg-transparent outline-none text-center text-sm font-bold" placeholder="+5"/></label>
+                                                </div>
                                                 <div className="text-[10px] uppercase font-bold text-gray-500 mb-1">Espaços de Magia — Atual / Máx.</div>
                                                 <div className="grid grid-cols-3 gap-1 mb-3">
                                                     {[1,2,3,4,5,6,7,8,9].map(lvl => {
