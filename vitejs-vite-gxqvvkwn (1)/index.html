@@ -306,6 +306,280 @@
             margin: 6px 0;
         }
     
+
+        /* --- TESTE VISUAL FABULA ULTIMA --- */
+        .fabula-sheet-shell {
+            background: linear-gradient(180deg,#fcfffe 0%, #edf7f5 100%);
+            border: 2px solid #6aa49d;
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: 0 12px 26px rgba(24,80,78,.10);
+        }
+        .fabula-profile-layout { display:grid; grid-template-columns:1fr; gap:1rem; }
+        @media (min-width: 1024px) { .fabula-profile-layout { grid-template-columns: 210px 1fr; } }
+        .fabula-portrait-frame {
+            width: 176px; height: 176px; margin: 0 auto;
+            border-radius: 22px;
+            border: 3px solid #2d7c79;
+            background: linear-gradient(180deg,#eaf8f4 0%, #d8efea 100%);
+            box-shadow: inset 0 0 0 3px rgba(255,255,255,.75), 0 8px 20px rgba(28,86,83,.13);
+            overflow: hidden; display:flex; align-items:center; justify-content:center; position:relative;
+        }
+        @media (min-width: 1024px) { .fabula-portrait-frame { margin:0; } }
+        .fabula-profile-panel, .fabula-subpanel, .fabula-attr-card, .fabula-track-box, .fabula-small-stat, .fabula-bond-panel {
+            background:#ffffff;
+            border:2px solid #85bcb5;
+            border-radius:18px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 4px 12px rgba(24,80,78,.08);
+        }
+        .fabula-profile-panel { padding: 14px; }
+        .fabula-profile-grid label, .fabula-meta-box {
+            display:block; font-size:11px; font-weight:800; color:#44696b; text-transform:uppercase; letter-spacing:.04em;
+        }
+        .fabula-profile-grid input, .fabula-profile-grid textarea, .fabula-profile-grid select,
+        .fabula-bond-panel input, .fabula-bond-panel textarea, .fabula-bond-panel select,
+        .fabula-attr-card input, .fabula-attr-card textarea, .fabula-attr-card select,
+        .fabula-track-box input, .fabula-small-stat input, .fabula-subpanel input, .fabula-subpanel textarea, .fabula-subpanel select {
+            margin-top:4px; width:100%; border:1px solid #99c6c0 !important; border-radius:10px; padding:8px 10px; background:#fcfffe !important; color:#17393d !important;
+        }
+        .fabula-top-title { font-family: 'Cardo', serif; font-size: 1.35rem; font-weight: 900; color:#1f6463; letter-spacing:.04em; text-transform:uppercase; }
+        .fabula-top-sub { font-size:10px; font-weight:700; text-transform:uppercase; color:#5e8586; letter-spacing:.10em; }
+        .fabula-attr-grid { display:grid; grid-template-columns:repeat(1,minmax(0,1fr)); gap:14px; }
+        @media (min-width: 640px) { .fabula-attr-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media (min-width: 1280px) { .fabula-attr-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+        .fabula-attr-card {
+            padding: 14px;
+            background: linear-gradient(180deg,#163538 0%, #112b2e 100%);
+            border: 1px solid #4aa5a5;
+            border-radius: 18px;
+            box-shadow: inset 0 0 0 1px rgba(118, 210, 201, .20), 0 6px 16px rgba(0,0,0,.14);
+        }
+        .fabula-attr-name {
+            font-family:'Cardo', serif; font-size:1.05rem; font-weight:900; color:#ecfbf9; text-transform:uppercase; letter-spacing:.03em;
+            padding-bottom: 8px; margin-bottom: 10px; border-bottom: 1px solid rgba(117,196,191,.35);
+        }
+        .fabula-die-pair {
+            display:grid; grid-template-columns: 1fr 0.74fr; align-items:center; gap:14px; margin-top:8px;
+        }
+        .fabula-die-slot { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .fabula-die-caption { margin-top:6px; text-align:center; font-size:10px; font-weight:800; text-transform:uppercase; color:#d6f1ed; letter-spacing:.06em; }
+        .fabula-die-shape {
+            --die-size: 88px;
+            width:var(--die-size); height:var(--die-size); margin:0 auto;
+            position:relative; display:flex; align-items:center; justify-content:center;
+            color:#fff; transition:width .15s ease,height .15s ease,transform .15s ease;
+            overflow:hidden; isolation:isolate;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,.18));
+        }
+        .fabula-die-shape::before,
+        .fabula-die-shape::after {
+            content:""; position:absolute; inset:0; pointer-events:none;
+        }
+        .fabula-die-shape.die-current { --die-size:44px; align-self:center; }
+        .fabula-die-shape.die-current .fabula-die-select { font-size:.75rem; }
+        .fabula-die-shape.die-current::before,
+        .fabula-die-shape.die-current::after { opacity:.65; }
+
+        /* Formatos inspirados no ícone de referência de dados poliédricos */
+        .fabula-die-d6 {
+            clip-path: inset(10% round 10%);
+            background: linear-gradient(145deg,#8f5ce3 0%, #7843c8 55%, #6234a7 100%);
+            border: 2px solid #4f237e;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+        }
+        .fabula-die-d6::before {
+            inset: 10%;
+            background:
+                linear-gradient(90deg, transparent 0 49%, rgba(255,255,255,.30) 49.5% 50.5%, transparent 51%),
+                linear-gradient(180deg, transparent 0 49%, rgba(0,0,0,.24) 49.5% 50.5%, transparent 51%);
+            opacity:.9;
+        }
+        .fabula-die-d6::after {
+            inset: 10%;
+            background:
+                linear-gradient(140deg, transparent 0 49%, rgba(255,255,255,.22) 49.5% 50.5%, transparent 51%),
+                linear-gradient(320deg, transparent 0 51%, rgba(0,0,0,.24) 51.5% 52.5%, transparent 53%);
+            opacity:.8;
+        }
+
+        .fabula-die-d8 {
+            clip-path: polygon(50% 0, 96% 50%, 50% 100%, 4% 50%);
+            background: linear-gradient(145deg,#4f79e8 0%, #3f5ecd 55%, #31479d 100%);
+            border: 2px solid #22367f;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+        }
+        .fabula-die-d8::before {
+            background:
+                linear-gradient(90deg, transparent 0 49%, rgba(255,255,255,.26) 49.5% 50.5%, transparent 51%),
+                linear-gradient(180deg, transparent 0 49%, rgba(0,0,0,.22) 49.5% 50.5%, transparent 51%);
+            opacity:.95;
+        }
+        .fabula-die-d8::after {
+            background:
+                linear-gradient(55deg, transparent 0 49%, rgba(255,255,255,.18) 49.5% 50.5%, transparent 51%),
+                linear-gradient(125deg, transparent 0 49%, rgba(0,0,0,.20) 49.5% 50.5%, transparent 51%);
+            opacity:.85;
+        }
+
+        .fabula-die-d10 {
+            clip-path: polygon(50% 0, 74% 10%, 94% 30%, 88% 74%, 50% 100%, 12% 74%, 6% 30%, 26% 10%);
+            background: linear-gradient(145deg,#68d9e9 0%, #42bccf 55%, #2d93a5 100%);
+            border: 2px solid #246c77;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.20);
+        }
+        .fabula-die-d10::before {
+            background:
+                linear-gradient(90deg, transparent 0 49%, rgba(255,255,255,.24) 49.5% 50.5%, transparent 51%),
+                linear-gradient(55deg, transparent 0 49%, rgba(255,255,255,.20) 49.5% 50.5%, transparent 51%),
+                linear-gradient(125deg, transparent 0 49%, rgba(0,0,0,.20) 49.5% 50.5%, transparent 51%);
+            opacity:.9;
+        }
+        .fabula-die-d10::after {
+            background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(0,0,0,.12));
+        }
+
+        .fabula-die-d12 {
+            clip-path: polygon(28% 2%, 72% 2%, 94% 25%, 94% 75%, 72% 98%, 28% 98%, 6% 75%, 6% 25%);
+            background: linear-gradient(145deg,#f2d85a 0%, #e1bf36 55%, #c59e20 100%);
+            border: 2px solid #9e7e14;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.24);
+            color:#2a2312;
+        }
+        .fabula-die-d12::before {
+            inset: 8%;
+            border: 1.6px solid rgba(255,255,255,.62);
+            clip-path: polygon(28% 0, 72% 0, 100% 28%, 100% 72%, 72% 100%, 28% 100%, 0 72%, 0 28%);
+            background:
+                linear-gradient(90deg, transparent 0 49%, rgba(255,255,255,.24) 49.5% 50.5%, transparent 51%),
+                linear-gradient(180deg, transparent 0 49%, rgba(0,0,0,.16) 49.5% 50.5%, transparent 51%);
+            opacity:.9;
+        }
+        .fabula-die-d12::after {
+            inset: 0;
+            background:
+                linear-gradient(55deg, transparent 0 49%, rgba(255,255,255,.16) 49.5% 50.5%, transparent 51%),
+                linear-gradient(125deg, transparent 0 49%, rgba(0,0,0,.12) 49.5% 50.5%, transparent 51%);
+            opacity:.75;
+        }
+
+        .fabula-die-select {
+            appearance:none; -webkit-appearance:none; -moz-appearance:none;
+            position:relative; z-index:2;
+            background:transparent !important; border:none !important; box-shadow:none !important;
+            color:inherit !important; width:100%; height:100%; padding:0 !important; margin:0 !important; text-align:center;
+            text-align-last:center; font-size:1.1rem; font-weight:900; line-height:1; cursor:pointer;
+        }
+        .fabula-die-select option { color:#17393d; }
+        .fabula-conditions-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+        @media (min-width: 768px) { .fabula-conditions-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+        .fabula-condition-chip { display:flex; align-items:center; gap:8px; padding:10px 12px; border:2px solid #c7ddda; border-radius:14px; background:#f8fcfb; font-size:12px; font-weight:800; color:#32595c; }
+        .fabula-condition-chip.active { background:#ffe7e7; border-color:#dc8b8b; color:#8f2d2d; }
+        .fabula-condition-chip input[type=checkbox] { accent-color:#2d7c79; }
+        .fabula-track-grid { display:grid; grid-template-columns:repeat(1,minmax(0,1fr)); gap:12px; }
+        @media (min-width: 640px) { .fabula-track-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media (min-width: 1024px) { .fabula-track-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+        .fabula-track-box { padding:14px; }
+        .fabula-track-title { font-family:'Cardo', serif; font-size:1rem; font-weight:900; color:#1f6463; text-transform:uppercase; }
+        .fabula-small-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+        @media (min-width: 1024px) { .fabula-small-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+        .fabula-small-stat { padding:12px; }
+        .fabula-bond-panel { padding:14px; }
+        .fabula-bond-panel .bond-row { display:grid; grid-template-columns:1fr 80px 1fr 34px; gap:8px; margin-top:8px; }
+        .fabula-bond-panel .bond-row button { color:#b91c1c; font-weight:900; }
+        .fabula-sheet-shell .fabula-panel { border-width:2px !important; border-radius:18px !important; box-shadow: 0 4px 12px rgba(24,80,78,.08); }
+        .fabula-sheet-shell .bg-teal-50 { background:#ecf8f5 !important; }
+        .fabula-sheet-shell .bg-gray-50 { background:#f6fbfa !important; }
+
+        body.theme-dark .fabula-sheet-shell { background: linear-gradient(180deg,#152427 0%, #102023 100%) !important; border-color:#458880 !important; }
+        body.theme-dark .fabula-profile-panel, body.theme-dark .fabula-subpanel, body.theme-dark .fabula-attr-card, body.theme-dark .fabula-track-box, body.theme-dark .fabula-small-stat, body.theme-dark .fabula-bond-panel { background:#172a2d !important; border-color:#447b76 !important; box-shadow:none !important; }
+        body.theme-dark .fabula-profile-grid label, body.theme-dark .fabula-meta-box, body.theme-dark .fabula-die-caption, body.theme-dark .fabula-top-sub { color:#b7d6d1 !important; }
+        body.theme-dark .fabula-top-title, body.theme-dark .fabula-attr-name, body.theme-dark .fabula-track-title { color:#e4fbf8 !important; }
+        body.theme-dark .fabula-profile-grid input, body.theme-dark .fabula-profile-grid textarea, body.theme-dark .fabula-profile-grid select,
+        body.theme-dark .fabula-bond-panel input, body.theme-dark .fabula-bond-panel textarea, body.theme-dark .fabula-bond-panel select,
+        body.theme-dark .fabula-attr-card input, body.theme-dark .fabula-attr-card textarea, body.theme-dark .fabula-attr-card select,
+        body.theme-dark .fabula-track-box input, body.theme-dark .fabula-small-stat input, body.theme-dark .fabula-subpanel input, body.theme-dark .fabula-subpanel textarea, body.theme-dark .fabula-subpanel select { background:#0f1a1c !important; color:#effffd !important; border-color:#4b8f87 !important; }
+        body.theme-dark .fabula-condition-chip { background:#122225 !important; border-color:#355f5f !important; color:#d9f5f0 !important; }
+        body.theme-dark .fabula-condition-chip.active { background:#3c2525 !important; border-color:#9f5d5d !important; color:#ffd2d2 !important; }
+        body.theme-dark .fabula-sheet-shell .bg-teal-50 { background:#183336 !important; }
+        body.theme-dark .fabula-sheet-shell .bg-gray-50 { background:#152427 !important; }
+        body.theme-dark .fabula-portrait-frame { background:linear-gradient(180deg,#183336 0%, #11282a 100%) !important; border-color:#4b8f87 !important; box-shadow:none !important; }
+        body.theme-dark .fabula-die-d12 { color:#f6f0ce; }
+
+        .fabula-action-btn {
+            background: linear-gradient(180deg,#2e8a84,#246c68);
+            color:#fff; border:1px solid #1c5d59; border-radius:12px; padding:8px 12px;
+            font-size:11px; font-weight:800; line-height:1.1; box-shadow:0 3px 8px rgba(17,63,61,.18);
+        }
+        .fabula-soft-btn {
+            background:#ffffff; color:#205d61; border:1px solid #8bbdb7; border-radius:12px; padding:8px 12px;
+            font-size:11px; font-weight:800; line-height:1.1;
+        }
+        .fabula-remove-btn {
+            color:#b42323; font-weight:900; border:1px solid #efc0c0; background:#fff7f7; border-radius:10px;
+            display:flex; align-items:center; justify-content:center; min-height:38px; min-width:34px;
+        }
+        .fabula-note-box {
+            border:1px solid #c8e0dc; background:linear-gradient(180deg,#f8fcfb,#eff8f6); border-radius:14px; padding:12px;
+            color:#30585b; font-size:11px;
+        }
+        .fabula-list-card {
+            border:2px solid #9cc9c3; border-radius:18px; background:#fff; overflow:hidden;
+            box-shadow:0 4px 12px rgba(24,80,78,.07);
+        }
+        .fabula-list-card-head {
+            background:linear-gradient(180deg,#ecf8f5 0%, #dff2ee 100%); padding:12px; border-bottom:1px solid #c9e2de;
+        }
+        .fabula-list-card-body { padding:12px; }
+        .fabula-pill-title {
+            display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:999px;
+            background:linear-gradient(180deg,#1f6667,#184e50); color:#eaf9f7; border:1px solid #124144;
+            font-family:'Cardo',serif; font-size:1rem; font-weight:900; text-transform:uppercase; letter-spacing:.03em;
+        }
+        .fabula-mini-badge {
+            display:inline-flex; align-items:center; justify-content:center; min-width:42px; padding:6px 10px;
+            border-radius:999px; background:linear-gradient(180deg,#f6e5a2,#edd176); color:#52420b; border:1px solid #d4b34d;
+            font-weight:900; font-size:11px;
+        }
+        .fabula-power-row, .fabula-equipment-row, .fabula-hero-row, .fabula-spell-row, .fabula-ritual-row, .fabula-arcano-card {
+            border:1px solid #d6e8e4; border-radius:14px; background:#f9fcfb; padding:10px;
+        }
+        .fabula-input-label { display:block; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:#547d80; margin-bottom:4px; }
+        .fabula-grid-ingredients { display:grid; grid-template-columns:repeat(1,minmax(0,1fr)); gap:10px; }
+        .fabula-move-col { display:flex; flex-direction:column; gap:6px; align-self:stretch; justify-content:center; }
+        .fabula-move-btn {
+            display:inline-flex; align-items:center; justify-content:center; min-height:32px; min-width:32px;
+            border-radius:10px; border:1px solid #b8d7d2; background:#ffffff; color:#245f62; font-weight:900; font-size:12px;
+        }
+        .fabula-check-card {
+            border:1px solid #4a8f8d; border-radius:16px; background:rgba(5,33,37,.18); padding:14px 12px;
+            display:flex; align-items:center; gap:12px; min-height:72px;
+        }
+        .fabula-check-card input[type="checkbox"] { width:18px; height:18px; accent-color:#3b8f89; }
+        .fabula-check-icon {
+            width:34px; height:34px; border-radius:999px; display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(180deg,#2f7d79,#245e5b); color:#eafffb; font-size:16px; flex-shrink:0;
+        }
+        .fabula-check-text { line-height:1.15; color:#e8f5f3; font-size:12px; font-weight:700; }
+        .fabula-two-col-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+        @media (min-width:900px) { .fabula-two-col-grid { grid-template-columns:1fr 1fr; } }
+        @media (min-width:768px) { .fabula-grid-ingredients { grid-template-columns:repeat(5,minmax(0,1fr)); } }
+        .fabula-ingredient-box { border:1px solid #cfe3e0; border-radius:14px; background:#f9fcfb; padding:10px; }
+
+        body.theme-dark .fabula-action-btn { background:linear-gradient(180deg,#3f9d95,#2d756f) !important; border-color:#2a655f !important; color:#f6fffd !important; }
+        body.theme-dark .fabula-soft-btn { background:#173033 !important; border-color:#4f8f89 !important; color:#dcfbf5 !important; }
+        body.theme-dark .fabula-remove-btn { background:#31191b !important; border-color:#86464a !important; color:#ffd2d5 !important; }
+        body.theme-dark .fabula-note-box { background:linear-gradient(180deg,#14282b,#112225) !important; border-color:#3e7573 !important; color:#d7f5f0 !important; }
+        body.theme-dark .fabula-list-card { background:#172a2d !important; border-color:#447b76 !important; box-shadow:none !important; }
+        body.theme-dark .fabula-list-card-head { background:linear-gradient(180deg,#1b3639,#183033) !important; border-color:#315f63 !important; }
+        body.theme-dark .fabula-pill-title { background:linear-gradient(180deg,#285e60,#1f4b4d) !important; color:#e8fffc !important; border-color:#183f40 !important; }
+        body.theme-dark .fabula-mini-badge { background:linear-gradient(180deg,#7c6a2b,#65561f) !important; border-color:#9b8440 !important; color:#fff5c9 !important; }
+        body.theme-dark .fabula-power-row, body.theme-dark .fabula-equipment-row, body.theme-dark .fabula-hero-row, body.theme-dark .fabula-spell-row, body.theme-dark .fabula-ritual-row, body.theme-dark .fabula-arcano-card, body.theme-dark .fabula-ingredient-box { background:#122225 !important; border-color:#355f5f !important; }
+        body.theme-dark .fabula-input-label { color:#a8d4cf !important; }
+        body.theme-dark .fabula-move-btn { background:#183033 !important; border-color:#467874 !important; color:#e3fffb !important; }
+        body.theme-dark .fabula-check-card { background:rgba(8,27,30,.52) !important; border-color:#4a8f8d !important; }
+        body.theme-dark .fabula-check-icon { background:linear-gradient(180deg,#3a8f89,#2a6762) !important; color:#f1fffd !important; }
+        body.theme-dark .fabula-check-text { color:#effffd !important; }
+
         /* Fabula Ultima — reforço de contraste no tema escuro */
         body.theme-dark .bg-teal-50 { background-color: #0f2f2f !important; color: #d5f5f2 !important; }
         body.theme-dark .bg-teal-100 { background-color: #123b3a !important; color: #ccfbf1 !important; }
@@ -2064,18 +2338,18 @@
         function FabulaMagicPanel({ data, updateField }) {
             const ex=data.extras?.magia||{disciplinas:[],feiticos:[],rituais:[]};
             const set=(k,v)=>updateField(`extras.magia.${k}`,v);
-            return <div className="space-y-5 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🔮 Magia & Rituais</h2><label className="block text-xs font-bold">Disciplinas (separe por vírgulas)<input value={(ex.disciplinas||[]).join(', ')} onChange={e=>set('disciplinas',e.target.value.split(',').map(x=>x.trim()).filter(Boolean))} className="mt-1 w-full border rounded p-2" placeholder="Elementalismo, Ritualismo..."/></label><div><div className="flex justify-between mb-2"><h3 className="font-bold text-teal-900">Feitiços</h3><button onClick={()=>set('feiticos',[...(ex.feiticos||[]),{nome:'',pm:'',alvos:'',duracao:'',desc:''}])} className="text-xs font-bold text-teal-800">+ Feitiço</button></div>{(ex.feiticos||[]).map((f,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[1fr_70px_1fr_1fr_30px] gap-2 mb-2"><input value={f.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].nome=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Nome"/><input value={f.pm||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].pm=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="PM"/><input value={f.alvos||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].alvos=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Alvos"/><input value={f.duracao||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].duracao=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Duração"/><button onClick={()=>set('feiticos',ex.feiticos.filter((_,x)=>x!==i))} className="text-red-600">×</button><textarea value={f.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].desc=e.target.value;set('feiticos',a)}} className="md:col-span-5 border rounded p-2 text-xs" placeholder="Efeito / lembrete"/></div>)}</div><div><div className="flex justify-between"><h3 className="font-bold text-teal-900">Rituais</h3><button onClick={()=>set('rituais',[...(ex.rituais||[]),{nome:'',desc:''}])} className="text-xs font-bold text-teal-800">+ Ritual</button></div>{(ex.rituais||[]).map((r,i)=><div key={i} className="grid grid-cols-[1fr_2fr_30px] gap-2 mt-2"><input value={r.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].nome=e.target.value;set('rituais',a)}} className="border rounded p-2 text-xs"/><input value={r.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].desc=e.target.value;set('rituais',a)}} className="border rounded p-2 text-xs"/><button onClick={()=>set('rituais',ex.rituais.filter((_,x)=>x!==i))} className="text-red-600">×</button></div>)}</div></div>;
+            return <div className="space-y-5 animate-fade-in-up fabula-subpanel"><div className="flex flex-wrap justify-between items-center gap-2"><div><div className="fabula-pill-title">🔮 Magia & Rituais</div><p className="text-xs text-gray-500 mt-2">Disciplinas, feitiços preparados e rituais conhecidos.</p></div></div><label className="block"><span className="fabula-input-label">Disciplinas (separe por vírgulas)</span><input value={(ex.disciplinas||[]).join(', ')} onChange={e=>set('disciplinas',e.target.value.split(',').map(x=>x.trim()).filter(Boolean))} className="w-full border rounded p-2" placeholder="Elementalismo, Ritualismo..."/></label><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between items-center"><h3 className="font-title font-bold text-teal-900">Feitiços</h3><button onClick={()=>set('feiticos',[...(ex.feiticos||[]),{nome:'',pm:'',alvos:'',duracao:'',desc:''}])} className="fabula-action-btn">+ Feitiço</button></div><div className="fabula-list-card-body"><div className="fabula-two-col-grid">{(ex.feiticos||[]).length===0&&<div className="text-xs text-gray-400 italic">Nenhum feitiço registrado.</div>}{(ex.feiticos||[]).map((f,i)=><div key={i} className="fabula-spell-row grid grid-cols-[1fr_38px] gap-2 items-start"><div className="space-y-2"><div className="grid grid-cols-1 sm:grid-cols-2 gap-2"><div><div className="fabula-input-label">Nome</div><input value={f.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].nome=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Nome"/></div><div><div className="fabula-input-label">PM</div><input value={f.pm||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].pm=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="PM"/></div><div><div className="fabula-input-label">Alvos</div><input value={f.alvos||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].alvos=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Alvos"/></div><div><div className="fabula-input-label">Duração</div><input value={f.duracao||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].duracao=e.target.value;set('feiticos',a)}} className="border rounded p-2 text-xs" placeholder="Duração"/></div></div><div><div className="fabula-input-label">Efeito / lembrete</div><textarea value={f.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.feiticos));a[i].desc=e.target.value;set('feiticos',a)}} className="w-full border rounded p-2 text-xs" rows="4" placeholder="Efeito / lembrete"/></div></div><div className="fabula-move-col"><button type="button" onClick={()=>moveExtraMagicItem('feiticos',i,-1)} className="fabula-move-btn" title="Mover para cima">↑</button><button type="button" onClick={()=>moveExtraMagicItem('feiticos',i,1)} className="fabula-move-btn" title="Mover para baixo">↓</button><button onClick={()=>set('feiticos',ex.feiticos.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div></div>)}</div></div></div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between items-center"><h3 className="font-title font-bold text-teal-900">Rituais</h3><button onClick={()=>set('rituais',[...(ex.rituais||[]),{nome:'',desc:''}])} className="fabula-action-btn">+ Ritual</button></div><div className="fabula-list-card-body"><div className="fabula-two-col-grid">{(ex.rituais||[]).length===0&&<div className="text-xs text-gray-400 italic">Nenhum ritual registrado.</div>}{(ex.rituais||[]).map((r,i)=><div key={i} className="fabula-ritual-row grid grid-cols-[1fr_38px] gap-2 items-start"><div className="space-y-2"><div><div className="fabula-input-label">Nome</div><input value={r.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].nome=e.target.value;set('rituais',a)}} className="border rounded p-2 text-xs"/></div><div><div className="fabula-input-label">Descrição</div><textarea value={r.desc||''} onChange={e=>{const a=JSON.parse(JSON.stringify(ex.rituais));a[i].desc=e.target.value;set('rituais',a)}} className="w-full border rounded p-2 text-xs" rows="4"/></div></div><div className="fabula-move-col"><button type="button" onClick={()=>moveExtraMagicItem('rituais',i,-1)} className="fabula-move-btn" title="Mover para cima">↑</button><button type="button" onClick={()=>moveExtraMagicItem('rituais',i,1)} className="fabula-move-btn" title="Mover para baixo">↓</button><button onClick={()=>set('rituais',ex.rituais.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div></div>)}</div></div></div></div>;
         }
-        function FabulaArcanosPanel({ data, updateField }) { const lista=data.extras?.arcanos?.lista||[]; const set=v=>updateField('extras.arcanos.lista',v); return <div className="space-y-4 animate-fade-in-up"><div className="flex justify-between"><h2 className="font-title font-bold text-xl text-teal-900">🌟 Arcanos</h2><button onClick={()=>set([...lista,{nome:'',dominios:'',fundir:'',dispensar:''}])} className="text-xs font-bold text-teal-800">+ Arcano</button></div>{lista.map((a,i)=><div key={i} className="border-2 border-teal-200 rounded p-3 space-y-2"><div className="flex gap-2"><input value={a.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].nome=e.target.value;set(x)}} className="flex-1 border rounded p-2 font-bold" placeholder="Nome do Arcano"/><button onClick={()=>set(lista.filter((_,x)=>x!==i))} className="text-red-600">×</button></div><input value={a.dominios||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dominios=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Domínios"/><textarea value={a.fundir||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].fundir=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de fundir"/><textarea value={a.dispensar||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dispensar=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de dispensar"/></div>)}</div>; }
-        function FabulaMnemosferaPanel({ data, updateField }) { const m=data.extras?.mnemosfera||{}; const ps=m.poderes||[]; return <div className="space-y-4 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🧠 Mnemosfera</h2><div className="grid grid-cols-1 md:grid-cols-3 gap-2"><input value={m.nome||''} onChange={e=>updateField('extras.mnemosfera.nome',e.target.value)} className="border rounded p-2" placeholder="Mnemosfera"/><input value={m.classe||''} onChange={e=>updateField('extras.mnemosfera.classe',e.target.value)} className="border rounded p-2" placeholder="Classe"/><input type="number" min="1" value={m.nivel||1} onChange={e=>updateField('extras.mnemosfera.nivel',Number(e.target.value))} className="border rounded p-2"/></div><div>{ps.map((p,i)=><div key={i} className="grid grid-cols-[1fr_90px_30px] gap-2 mb-2"><input value={p.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nome=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Poder"/><input value={p.nivel||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nivel=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Nível"/><button onClick={()=>updateField('extras.mnemosfera.poderes',ps.filter((_,x)=>x!==i))} className="text-red-600">×</button></div>)}<button onClick={()=>updateField('extras.mnemosfera.poderes',[...ps,{nome:'',nivel:''}])} className="text-xs font-bold text-teal-800">+ Poder</button></div><label className="block text-xs font-bold">Poder Heroico<textarea value={m.poderHeroico||''} onChange={e=>updateField('extras.mnemosfera.poderHeroico',e.target.value)} className="mt-1 w-full border rounded p-2"/></label></div>; }
-        function FabulaReceitasPanel({ data, updateField }) { const r=data.extras?.receitas||{}; const ing=r.ingredientes||{}; return <div className="space-y-5 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">🍳 Receitas</h2><label className="text-xs font-bold">Máximo de ingredientes<input value={r.maxIngredientes||''} onChange={e=>updateField('extras.receitas.maxIngredientes',e.target.value)} className="ml-2 border rounded p-2"/></label><div className="grid grid-cols-1 md:grid-cols-5 gap-2">{['amargo','salgado','azedo','doce','umami'].map(k=><label key={k} className="text-xs font-bold capitalize">{k}<textarea value={ing[k]||''} onChange={e=>updateField(`extras.receitas.ingredientes.${k}`,e.target.value)} rows="5" className="mt-1 w-full border rounded p-2 text-xs"/></label>)}</div><label className="block text-xs font-bold">Combinações & efeitos<textarea value={r.combinacoes||''} onChange={e=>updateField('extras.receitas.combinacoes',e.target.value)} rows="8" className="mt-1 w-full border rounded p-2"/></label><label className="block text-xs font-bold">Notas úteis<textarea value={r.notas||''} onChange={e=>updateField('extras.receitas.notas',e.target.value)} rows="4" className="mt-1 w-full border rounded p-2"/></label></div>; }
+        function FabulaArcanosPanel({ data, updateField }) { const lista=data.extras?.arcanos?.lista||[]; const set=v=>updateField('extras.arcanos.lista',v); return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between items-center gap-2"><div><div className="fabula-pill-title">🌟 Arcanos</div><p className="text-xs text-gray-500 mt-2">Registre o nome, domínios e as opções de fundir/dispensar.</p></div><button onClick={()=>set([...lista,{nome:'',dominios:'',fundir:'',dispensar:''}])} className="fabula-action-btn">+ Arcano</button></div>{lista.length===0&&<div className="text-xs text-gray-400 italic">Nenhum arcano registrado.</div>}{lista.map((a,i)=><div key={i} className="fabula-arcano-card space-y-2"><div className="flex gap-2 items-end"><div className="flex-1"><div className="fabula-input-label">Nome do Arcano</div><input value={a.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].nome=e.target.value;set(x)}} className="w-full border rounded p-2 font-bold" placeholder="Nome do Arcano"/></div><button onClick={()=>set(lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><div><div className="fabula-input-label">Domínios</div><input value={a.dominios||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dominios=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Domínios"/></div><div><div className="fabula-input-label">Efeito de fundir</div><textarea value={a.fundir||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].fundir=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de fundir"/></div><div><div className="fabula-input-label">Efeito de dispensar</div><textarea value={a.dispensar||''} onChange={e=>{const x=JSON.parse(JSON.stringify(lista));x[i].dispensar=e.target.value;set(x)}} className="w-full border rounded p-2 text-xs" placeholder="Efeito de dispensar"/></div></div>)}</div>; }
+        function FabulaMnemosferaPanel({ data, updateField }) { const m=data.extras?.mnemosfera||{}; const ps=m.poderes||[]; return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="fabula-pill-title">🧠 Mnemosfera</div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Dados da Mnemosfera</h3></div><div className="fabula-list-card-body space-y-3"><div className="grid grid-cols-1 md:grid-cols-3 gap-2"><div><div className="fabula-input-label">Mnemosfera</div><input value={m.nome||''} onChange={e=>updateField('extras.mnemosfera.nome',e.target.value)} className="border rounded p-2" placeholder="Mnemosfera"/></div><div><div className="fabula-input-label">Classe</div><input value={m.classe||''} onChange={e=>updateField('extras.mnemosfera.classe',e.target.value)} className="border rounded p-2" placeholder="Classe"/></div><div><div className="fabula-input-label">Nível</div><input type="number" min="1" value={m.nivel||1} onChange={e=>updateField('extras.mnemosfera.nivel',Number(e.target.value))} className="border rounded p-2"/></div></div><div className="space-y-2">{ps.map((p,i)=><div key={i} className="fabula-power-row grid grid-cols-[1fr_100px_38px] gap-2 items-end"><div><div className="fabula-input-label">Poder</div><input value={p.nome||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nome=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Poder"/></div><div><div className="fabula-input-label">Nível</div><input value={p.nivel||''} onChange={e=>{const x=JSON.parse(JSON.stringify(ps));x[i].nivel=e.target.value;updateField('extras.mnemosfera.poderes',x)}} className="border rounded p-2 text-xs" placeholder="Nível"/></div><button onClick={()=>updateField('extras.mnemosfera.poderes',ps.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div>)}<button onClick={()=>updateField('extras.mnemosfera.poderes',[...ps,{nome:'',nivel:''}])} className="fabula-soft-btn">+ Poder</button></div><label className="block"><span className="fabula-input-label">Poder Heroico</span><textarea value={m.poderHeroico||''} onChange={e=>updateField('extras.mnemosfera.poderHeroico',e.target.value)} className="w-full border rounded p-2"/></label></div></div></div>; }
+        function FabulaReceitasPanel({ data, updateField }) { const r=data.extras?.receitas||{}; const ing=r.ingredientes||{}; return <div className="space-y-5 animate-fade-in-up fabula-subpanel"><div className="flex flex-wrap items-center justify-between gap-2"><div><div className="fabula-pill-title">🍳 Receitas</div><p className="text-xs text-gray-500 mt-2">Ingredientes, combinações e observações para receitas especiais.</p></div><div className="fabula-mini-badge">Receitas</div></div><label className="block"><span className="fabula-input-label">Máximo de ingredientes</span><input value={r.maxIngredientes||''} onChange={e=>updateField('extras.receitas.maxIngredientes',e.target.value)} className="border rounded p-2 w-full md:max-w-[180px]"/></label><div className="fabula-grid-ingredients">{['amargo','salgado','azedo','doce','umami'].map(k=><label key={k} className="fabula-ingredient-box"><span className="fabula-input-label capitalize">{k}</span><textarea value={ing[k]||''} onChange={e=>updateField(`extras.receitas.ingredientes.${k}`,e.target.value)} rows="5" className="w-full border rounded p-2 text-xs"/></label>)}</div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Combinações & efeitos</h3></div><div className="fabula-list-card-body"><textarea value={r.combinacoes||''} onChange={e=>updateField('extras.receitas.combinacoes',e.target.value)} rows="8" className="w-full border rounded p-2"/></div></div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Notas úteis</h3></div><div className="fabula-list-card-body"><textarea value={r.notas||''} onChange={e=>updateField('extras.receitas.notas',e.target.value)} rows="4" className="w-full border rounded p-2"/></div></div></div>; }
         function FabulaProjetosPanel({ data, updateField }) {
             const lista=data.extras?.projetos?.lista||[];
             const set=v=>updateField('extras.projetos.lista',v);
             const patch=(i,k,v)=>{const x=JSON.parse(JSON.stringify(lista));x[i]={nome:'',descricao:'',custoMaterial:0,progressoAtual:0,progressoNecessario:1,materialEspecial:'',defeito:'',...(x[i]||{}),[k]:v};set(x);};
-            return <div className="space-y-5 animate-fade-in-up"><div className="flex flex-wrap justify-between items-center gap-2"><div><h2 className="font-title font-bold text-xl text-teal-900">🛠️ Projetos</h2><p className="text-xs text-gray-500">Área opcional para Inventores e outras invenções definidas com o Mestre.</p></div><button type="button" onClick={()=>set([...lista,{nome:'',descricao:'',custoMaterial:0,progressoAtual:0,progressoNecessario:1,materialEspecial:'',defeito:''}])} className="bg-teal-700 text-white rounded px-3 py-1.5 text-xs font-bold">+ Projeto</button></div><div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-[11px] text-amber-950"><strong>Consulta rápida:</strong> registre o custo em materiais e o progresso combinado com o Mestre. Pela regra padrão, o progresso necessário corresponde a um centésimo do custo material em zênites (mínimo 1). Um material especial pode ser exigido, e um defeito terrível negociado pode reduzir o custo do projeto.</div>{lista.length===0&&<div className="border border-dashed rounded-lg p-6 text-center text-xs text-gray-400">Nenhum projeto em andamento.</div>}{lista.map((p,i)=><div key={i} className="border-2 border-teal-200 rounded-lg overflow-hidden bg-white"><div className="bg-teal-50 p-3 flex gap-2 items-center"><input value={p.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 text-sm font-bold" placeholder="Nome do projeto / invenção"/><button type="button" onClick={()=>set(lista.filter((_,x)=>x!==i))} className="text-red-600 font-bold text-lg px-2" aria-label={`Remover projeto ${p.nome||i+1}`}>×</button></div><div className="p-3 space-y-3"><textarea value={p.descricao||''} onChange={e=>patch(i,'descricao',e.target.value)} rows="3" className="w-full border rounded p-2 text-xs" placeholder="Efeito, funcionamento e benefícios da invenção..."/><div className="grid grid-cols-1 sm:grid-cols-3 gap-2"><label className="text-[10px] font-bold text-gray-600">Custo material (z)<input type="number" min="0" value={p.custoMaterial??0} onChange={e=>patch(i,'custoMaterial',Number(e.target.value))} className="mt-1 w-full border rounded p-2 text-xs"/></label><label className="text-[10px] font-bold text-gray-600">Progresso atual<input type="number" min="0" value={p.progressoAtual??0} onChange={e=>patch(i,'progressoAtual',Number(e.target.value))} className="mt-1 w-full border rounded p-2 text-xs"/></label><label className="text-[10px] font-bold text-gray-600">Progresso necessário<input type="number" min="1" value={p.progressoNecessario??1} onChange={e=>patch(i,'progressoNecessario',Math.max(1,Number(e.target.value)||1))} className="mt-1 w-full border rounded p-2 text-xs"/></label></div><label className="block text-xs font-bold text-gray-600">Material especial<input value={p.materialEspecial||''} onChange={e=>patch(i,'materialEspecial',e.target.value)} className="mt-1 w-full border rounded p-2 text-xs" placeholder="Ingrediente, peça rara ou objetivo necessário..."/></label><label className="block text-xs font-bold text-gray-600">Defeito / complicação<textarea value={p.defeito||''} onChange={e=>patch(i,'defeito',e.target.value)} rows="2" className="mt-1 w-full border rounded p-2 text-xs" placeholder="Opcional: defeito terrível negociado com o Mestre..."/></label></div></div>)}</div>;
+            return <div className="space-y-5 animate-fade-in-up fabula-subpanel"><div className="flex flex-wrap justify-between items-center gap-2"><div><div className="fabula-pill-title">🛠️ Projetos</div><p className="text-xs text-gray-500 mt-2">Área opcional para Inventores e outras invenções definidas com o Mestre.</p></div><button type="button" onClick={()=>set([...lista,{nome:'',descricao:'',custoMaterial:0,progressoAtual:0,progressoNecessario:1,materialEspecial:'',defeito:''}])} className="fabula-action-btn">+ Projeto</button></div><div className="fabula-note-box"><strong>Consulta rápida:</strong> registre o custo em materiais e o progresso combinado com o Mestre. Pela regra padrão, o progresso necessário corresponde a um centésimo do custo material em zênites (mínimo 1). Um material especial pode ser exigido, e um defeito terrível negociado pode reduzir o custo do projeto.</div>{lista.length===0&&<div className="border border-dashed rounded-lg p-6 text-center text-xs text-gray-400">Nenhum projeto em andamento.</div>}{lista.map((p,i)=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head flex gap-2 items-center"><input value={p.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 text-sm font-bold" placeholder="Nome do projeto / invenção"/><button type="button" onClick={()=>set(lista.filter((_,x)=>x!==i))} className="fabula-remove-btn" aria-label={`Remover projeto ${p.nome||i+1}`}>×</button></div><div className="fabula-list-card-body space-y-3"><label className="block"><span className="fabula-input-label">Descrição</span><textarea value={p.descricao||''} onChange={e=>patch(i,'descricao',e.target.value)} rows="3" className="w-full border rounded p-2 text-xs" placeholder="Efeito, funcionamento e benefícios da invenção..."/></label><div className="grid grid-cols-1 sm:grid-cols-3 gap-2"><label><span className="fabula-input-label">Custo material (z)</span><input type="number" min="0" value={p.custoMaterial??0} onChange={e=>patch(i,'custoMaterial',Number(e.target.value))} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Progresso atual</span><input type="number" min="0" value={p.progressoAtual??0} onChange={e=>patch(i,'progressoAtual',Number(e.target.value))} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Progresso necessário</span><input type="number" min="1" value={p.progressoNecessario??1} onChange={e=>patch(i,'progressoNecessario',Math.max(1,Number(e.target.value)||1))} className="w-full border rounded p-2 text-xs"/></label></div><label className="block"><span className="fabula-input-label">Material especial</span><input value={p.materialEspecial||''} onChange={e=>patch(i,'materialEspecial',e.target.value)} className="w-full border rounded p-2 text-xs" placeholder="Ingrediente, peça rara ou objetivo necessário..."/></label><label className="block"><span className="fabula-input-label">Defeito / complicação</span><textarea value={p.defeito||''} onChange={e=>patch(i,'defeito',e.target.value)} rows="2" className="w-full border rounded p-2 text-xs" placeholder="Opcional: defeito terrível negociado com o Mestre..."/></label></div></div>)}</div>;
         }
-        function FabulaNotasPanel({ data, updateField }) { const n=data.extras?.anotacoes||{}; return <div className="space-y-4 animate-fade-in-up"><h2 className="font-title font-bold text-xl text-teal-900">📝 Anotações Extras</h2><label className="block text-xs font-bold">Regras opcionais / peculiaridades<textarea value={n.regras||''} onChange={e=>updateField('extras.anotacoes.regras',e.target.value)} rows="8" className="mt-1 w-full border rounded p-2"/></label><label className="block text-xs font-bold">Anotações<textarea value={n.notas||''} onChange={e=>updateField('extras.anotacoes.notas',e.target.value)} rows="10" className="mt-1 w-full border rounded p-2"/></label></div>; }
+        function FabulaNotasPanel({ data, updateField }) { const n=data.extras?.anotacoes||{}; return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="fabula-pill-title">📝 Anotações Extras</div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Regras opcionais / peculiaridades</h3></div><div className="fabula-list-card-body"><textarea value={n.regras||''} onChange={e=>updateField('extras.anotacoes.regras',e.target.value)} rows="8" className="w-full border rounded p-2"/></div></div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Anotações</h3></div><div className="fabula-list-card-body"><textarea value={n.notas||''} onChange={e=>updateField('extras.anotacoes.notas',e.target.value)} rows="10" className="w-full border rounded p-2"/></div></div></div>; }
 
 
         const FabulaThreatList = ({ title, path, items, add, remove, update, spell=false }) => (
@@ -2140,6 +2414,21 @@
             const [newsCollapsed, setNewsCollapsed] = useState(() => { try { return localStorage.getItem(NEWS_COLLAPSED_KEY) === '1'; } catch { return false; } });
 
             const [codeModal, setCodeModal] = useState({ isOpen: false, mode: 'export', code: '' });
+
+            const getFabulaDieClass = (die = 'd8') => {
+                const value = String(die || 'd8').toLowerCase();
+                if (value === 'd6') return 'fabula-die-d6';
+                if (value === 'd10') return 'fabula-die-d10';
+                if (value === 'd12') return 'fabula-die-d12';
+                return 'fabula-die-d8';
+            };
+            const renderFabulaDieSelect = (value, onChange, ariaLabel='Dado', size='base') => (
+                <div className={`fabula-die-shape ${getFabulaDieClass(value)} ${size === 'current' ? 'die-current' : 'die-base'}`}>
+                    <select aria-label={ariaLabel} value={value || 'd8'} onChange={onChange} className="fabula-die-select">
+                        {['d6','d8','d10','d12'].map(d => <option key={d}>{d}</option>)}
+                    </select>
+                </div>
+            );
 
             const toastTimerRef = useRef(null);
 
@@ -2597,6 +2886,37 @@
                 setData(newData);
             };
 
+            const moveArrayItem = (arrayName, index, direction) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const arr = Array.isArray(newData[arrayName]) ? newData[arrayName] : null;
+                if (!arr || !arr[index]) return;
+                const newIndex = index + direction;
+                if (newIndex < 0 || newIndex >= arr.length) return;
+                [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+                setData(newData);
+            };
+
+            const moveNestedArrayItem = (arrayName, parentIndex, nestedName, index, direction) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const parentArr = Array.isArray(newData[arrayName]) ? newData[arrayName] : null;
+                const nestedArr = parentArr?.[parentIndex]?.[nestedName];
+                if (!Array.isArray(nestedArr) || !nestedArr[index]) return;
+                const newIndex = index + direction;
+                if (newIndex < 0 || newIndex >= nestedArr.length) return;
+                [nestedArr[index], nestedArr[newIndex]] = [nestedArr[newIndex], nestedArr[index]];
+                setData(newData);
+            };
+
+            const moveExtraMagicItem = (group, index, direction) => {
+                const newData = JSON.parse(JSON.stringify(data));
+                const arr = newData.extras?.magia?.[group];
+                if (!Array.isArray(arr) || !arr[index]) return;
+                const newIndex = index + direction;
+                if (newIndex < 0 || newIndex >= arr.length) return;
+                [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+                setData(newData);
+            };
+
             const addDndSyncedItem = () => {
                 const newData = JSON.parse(JSON.stringify(data));
                 if (!Array.isArray(newData.itensSincronizados)) newData.itensSincronizados = [];
@@ -2821,7 +3141,7 @@
             const renderHistoryModal = () => {
                 if (!showHistoryModal) return null;
                 const list = data?.id ? (getHistory()[data.id] || []) : [];
-                return <div className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-4 no-print"><div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-lg p-5"><div className="flex justify-between items-center mb-4"><div><h3 className="font-title font-bold text-xl">🕘 Histórico local</h3><p className="text-xs text-gray-500">Até 5 versões anteriores do conteúdo. Retratos enviados não são duplicados no histórico para economizar espaço.</p></div><button onClick={()=>setShowHistoryModal(false)} className="text-xl font-bold">×</button></div>{list.length===0?<p className="text-sm text-gray-500 italic">Ainda não há versões anteriores desta ficha.</p>:<div className="space-y-2">{list.map((snap,i)=><button key={i} onClick={()=>restoreHistorySnapshot(snap)} className="w-full text-left border rounded p-3 hover:bg-gray-50"><strong>Versão {i+1}</strong><br/><span className="text-xs text-gray-500">{new Date(snap.at).toLocaleString('pt-BR')}</span></button>)}</div>}</div></div>;
+                return <div className="fixed inset-0 bg-black/60 z-[300] flex items-center justify-center p-4 no-print"><div className="bg-white text-gray-900 rounded-lg shadow-2xl border-2 border-gray-700 w-full max-w-lg p-5"><div className="flex justify-between items-center mb-4"><div><h3 className="font-title font-bold text-xl">🕘 Histórico local</h3><p className="text-xs text-gray-500">Até 5 versões anteriores do conteúdo. Retratos enviados não são duplicados no histórico para economizar espaço.</p></div><button onClick={()=>setShowHistoryModal(false)} className="text-xl font-bold">×</button></div>{list.length===0?<p className="text-sm text-gray-500 italic">Ainda não há versões anteriores desta ficha.</p>:<div className="space-y-3">{list.map((snap,i)=><button key={i} onClick={()=>restoreHistorySnapshot(snap)} className="w-full text-left border rounded p-3 hover:bg-gray-50"><strong>Versão {i+1}</strong><br/><span className="text-xs text-gray-500">{new Date(snap.at).toLocaleString('pt-BR')}</span></button>)}</div>}</div></div>;
             };
 
             if (view === 'dashboard') {
@@ -3058,7 +3378,7 @@
                                             </div>
                                         </details>
                                     </div>
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 fabula-profile-panel"><div className="flex items-end justify-between gap-3 border-b border-teal-200 pb-3"><div><div className="fabula-top-sub">Fabula Ultima</div><div className="fabula-top-title">Ficha de Personagem</div></div><div className="text-right text-[10px] text-gray-500">visual inspirado na ficha em PDF</div></div>
                                         <div className="bg-gray-50 border border-gray-200 rounded p-4">
                                             <h3 className="font-title font-bold text-gray-800 mb-2">Projeto de Código Aberto 🔓</h3>
                                             <p className="text-sm text-gray-700 leading-relaxed mb-2">
@@ -3703,7 +4023,7 @@
 
                     {/* Editor Fabula Ultima — compatibilidade consolidada */}
                     {isFabula && data.type === 'pc' && (
-                        <div className="bg-white">
+                        <div className="bg-white fabula-pdf-editor">
                             <div className="pj-mobile-tabs md:hidden flex overflow-x-auto bg-teal-50 border-b border-teal-200 sticky top-0 z-20 shadow-sm">
                                 {[
                                     {id:'perfil',label:'Perfil & Status'}, {id:'combate',label:'Equipamentos'}, {id:'classes',label:'Classes'},
@@ -3711,7 +4031,7 @@
                                 ].map(tab => <button key={tab.id} onClick={() => setFabulaTab(tab.id)} className={`shrink-0 px-4 py-3 text-[9px] font-bold uppercase border-b-4 ${fabulaTab===tab.id?'border-teal-700 text-teal-900 bg-white':'border-transparent text-gray-500'}`}>{tab.label}</button>)}
                             </div>
 
-                            <div className="p-4 md:p-7 space-y-6">
+                            <div className="p-4 md:p-7 space-y-6 fabula-sheet-shell">
                                 <div className="hidden md:flex flex-wrap gap-2 border-b border-teal-200 pb-3">
                                     {[
                                         {id:'perfil',label:'👤 Perfil & Status'}, {id:'combate',label:'🎒 Equipamentos'}, {id:'classes',label:'✨ Classes'},
@@ -3722,9 +4042,9 @@
                                 <div className="md:hidden flex justify-end"><button onClick={() => setShowFabulaExtras(true)} className="px-3 py-2 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">＋ Fichas Extras</button></div>
 
                                 {fabulaTab === 'perfil' && (
-                                    <div className="grid grid-cols-1 lg:grid-cols-[190px_1fr] gap-5 animate-fade-in-up">
+                                    <div className="fabula-profile-layout animate-fade-in-up">
                                         <div className="space-y-2">
-                                            <div className="w-44 h-44 mx-auto lg:mx-0 rounded-xl border-2 border-teal-700 bg-teal-50 overflow-hidden flex items-center justify-center relative group">
+                                            <div className="fabula-portrait-frame relative group">
                                                 {data.bio?.imagem ? <img src={data.bio.imagem} alt="Retrato" className="w-full h-full object-cover"/> : <span className="text-teal-700 font-bold text-xs uppercase">Retrato</span>}
                                                 <div className={`absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 transition-opacity ${showUrlInput ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100 active:opacity-100'}`}>
                                                     {!showUrlInput ? (
@@ -3746,8 +4066,8 @@
                                             </div>
                                             <p className="text-[10px] text-gray-500 text-center lg:text-left">Passe o mouse/toque no retrato para usar Upload ou URL.</p>
                                         </div>
-                                        <div className="space-y-4">
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="space-y-4 fabula-profile-panel"><div className="flex items-end justify-between gap-3 border-b border-teal-200 pb-3"><div><div className="fabula-top-sub">Fabula Ultima</div><div className="fabula-top-title">Ficha de Personagem</div></div><div className="text-right text-[10px] text-gray-500">visual inspirado na ficha em PDF</div></div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 fabula-profile-grid">
                                                 <label className="md:col-span-2 text-xs font-bold text-gray-600">Nome<input value={data.bio?.nome||''} onChange={e=>updateField('bio.nome',e.target.value)} className="mt-1 w-full border-2 border-teal-200 rounded p-2 text-lg font-bold outline-none focus:border-teal-700"/></label>
                                                 <label className="text-xs font-bold text-gray-600">Jogador<input value={data.bio?.jogador||''} onChange={e=>updateField('bio.jogador',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
                                                 <label className="text-xs font-bold text-gray-600">Identidade<input value={data.bio?.identidade||''} onChange={e=>updateField('bio.identidade',e.target.value)} className="mt-1 w-full border rounded p-2"/></label>
@@ -3757,10 +4077,10 @@
                                                 <label className="text-xs font-bold text-gray-600">Nível<input type="number" min="1" value={data.nivel||1} onChange={e=>updateField('nivel',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>
                                                 <label className="text-xs font-bold text-gray-600">Experiência<input type="number" min="0" value={data.experiencia||0} onChange={e=>updateField('experiencia',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>
                                             </div>
-                                            <label className="text-xs font-bold text-gray-600 block">Traços<textarea value={data.bio?.tracos||''} onChange={e=>updateField('bio.tracos',e.target.value)} rows="3" className="mt-1 w-full border rounded p-2 resize-y" placeholder="Traços que definem o protagonista..."/></label>
-                                            <div className="border-t pt-3">
+                                            <label className="text-xs font-bold text-gray-600 block fabula-profile-grid">Traços<textarea value={data.bio?.tracos||''} onChange={e=>updateField('bio.tracos',e.target.value)} rows="3" className="mt-1 w-full border rounded p-2 resize-y" placeholder="Traços que definem o protagonista..."/></label>
+                                            <div className="fabula-bond-panel">
                                                 <div className="flex justify-between items-center mb-2"><h3 className="font-title font-bold text-teal-900">🤝 Laços</h3><button onClick={()=>addToArray('lacos',{alvo:'',forca:1,emocoes:''})} className="text-xs font-bold bg-teal-700 text-white px-2 py-1 rounded">+ Laço</button></div>
-                                                <div className="space-y-2">{(data.lacos||[]).map((l,i)=><div key={i} className="grid grid-cols-[1fr_70px_1fr_32px] gap-2"><input value={l.alvo||''} onChange={e=>updateArrayField('lacos',i,'alvo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Pessoa / local"/><input type="number" min="1" max="3" value={l.forca||1} onChange={e=>updateArrayField('lacos',i,'forca',Number(e.target.value))} className="border rounded p-2 text-xs"/><input value={l.emocoes||''} onChange={e=>updateArrayField('lacos',i,'emocoes',e.target.value)} className="border rounded p-2 text-xs" placeholder="Afeto, lealdade..."/><button onClick={()=>removeFromArray('lacos',i)} className="text-red-600">×</button></div>)}</div>
+                                                <div className="space-y-2">{(data.lacos||[]).map((l,i)=><div key={i} className="bond-row"><input value={l.alvo||''} onChange={e=>updateArrayField('lacos',i,'alvo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Pessoa / local"/><input type="number" min="1" max="3" value={l.forca||1} onChange={e=>updateArrayField('lacos',i,'forca',Number(e.target.value))} className="border rounded p-2 text-xs"/><input value={l.emocoes||''} onChange={e=>updateArrayField('lacos',i,'emocoes',e.target.value)} className="border rounded p-2 text-xs" placeholder="Afeto, lealdade..."/><button onClick={()=>removeFromArray('lacos',i)} className="text-red-600">×</button></div>)}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -3768,30 +4088,34 @@
 
                                 {fabulaTab === 'perfil' && (
                                     <div className="space-y-6 animate-fade-in-up">
-                                        <div><h2 className="font-title font-bold text-xl text-teal-900 mb-3">📊 Atributos e Condições</h2><div className="grid grid-cols-2 md:grid-cols-4 gap-3">{[['des','Destreza'],['ast','Astúcia'],['vig','Vigor'],['von','Vontade']].map(([k,n])=><div key={k} className="rounded-lg border-2 border-teal-200 bg-teal-50 p-3"><div className="font-bold text-xs text-teal-900 uppercase">{n}</div><div className="grid grid-cols-2 gap-2 mt-2"><select value={data.atributos?.[k]?.base||'d8'} onChange={e=>updateField(`atributos.${k}.base`,e.target.value)} className="border rounded p-2 font-bold">{['d6','d8','d10','d12'].map(d=><option key={d}>{d}</option>)}</select><select value={data.atributos?.[k]?.atual||'d8'} onChange={e=>updateField(`atributos.${k}.atual`,e.target.value)} className="border rounded p-2 font-bold">{['d6','d8','d10','d12'].map(d=><option key={d}>{d}</option>)}</select></div><div className="grid grid-cols-2 text-[9px] text-gray-500 mt-1"><span>Base</span><span>Atual</span></div></div>)}</div></div>
-                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">{Object.keys(initialFabulaPcData.condicoes).map(k=><label key={k} className={`flex items-center gap-2 rounded border p-2 text-xs font-bold ${data.condicoes?.[k]?'bg-rose-100 border-rose-400 text-rose-900':'bg-gray-50'}`}><input type="checkbox" checked={!!data.condicoes?.[k]} onChange={e=>updateField(`condicoes.${k}`,e.target.checked)}/>{k.charAt(0).toUpperCase()+k.slice(1)}</label>)}</div>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{[['pv','PV','❤️'],['pm','PM','🔷'],['pi','PI','🎒']].map(([k,n,ic])=><div key={k} className="border rounded-lg p-3"><div className="font-bold text-sm">{ic} {n}</div><div className="grid grid-cols-2 gap-2 mt-2"><input type="number" value={data.status?.[`${k}Atual`]??0} onChange={e=>updateField(`status.${k}Atual`,Number(e.target.value))} className="border rounded p-2"/><input type="number" value={data.status?.[`${k}Max`]??0} onChange={e=>updateField(`status.${k}Max`,Number(e.target.value))} className="border rounded p-2"/></div><div className="grid grid-cols-2 text-[9px] text-gray-500"><span>Atual</span><span>Máx.</span></div></div>)}<div className="border rounded-lg p-3 bg-amber-50"><div className="font-bold text-sm">🌟 Pontos de Fabula</div><input type="number" min="0" value={data.status?.fabula??0} onChange={e=>updateField('status.fabula',Number(e.target.value))} className="mt-2 w-full border rounded p-2"/></div></div>
-                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">{[['defesa','Defesa'],['defesaMagica','Defesa Mágica'],['iniciativa','Mod. Iniciativa']].map(([k,n])=><label key={k} className="text-xs font-bold text-gray-600">{n}<input type="number" value={data.status?.[k]??0} onChange={e=>updateField(`status.${k}`,Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label>)}<label className="text-xs font-bold text-gray-600">Zênites<input type="number" min="0" value={data.zenites||0} onChange={e=>updateField('zenites',Number(e.target.value))} className="mt-1 w-full border rounded p-2"/></label></div>
+                                        <div className="fabula-subpanel"><h2 className="font-title font-bold text-xl text-teal-900 mb-3">📊 Atributos e Condições</h2><div className="fabula-attr-grid">{[['des','Destreza'],['ast','Astúcia'],['vig','Vigor'],['von','Vontade']].map(([k,n])=><div key={k} className="fabula-attr-card"><div className="fabula-attr-name">{n}</div><div className="fabula-die-pair"><div className="fabula-die-slot">{renderFabulaDieSelect(data.atributos?.[k]?.base||'d8', e=>updateField(`atributos.${k}.base`,e.target.value), `${n} Base`, 'base')}<div className="fabula-die-caption">Base</div></div><div className="fabula-die-slot">{renderFabulaDieSelect(data.atributos?.[k]?.atual||'d8', e=>updateField(`atributos.${k}.atual`,e.target.value), `${n} Atual`, 'current')}<div className="fabula-die-caption">Atual</div></div></div></div>)}</div></div>
+                                        <div className="fabula-conditions-grid">{Object.keys(initialFabulaPcData.condicoes).map(k=><label key={k} className={`fabula-condition-chip ${data.condicoes?.[k]?'active':''}`}><input type="checkbox" checked={!!data.condicoes?.[k]} onChange={e=>updateField(`condicoes.${k}`,e.target.checked)}/>{k.charAt(0).toUpperCase()+k.slice(1)}</label>)}</div>
+                                        <div className="fabula-track-grid">{[['pv','PV','❤️'],['pm','PM','🔷'],['pi','PI','🎒']].map(([k,n,ic])=><div key={k} className="fabula-track-box"><div className="fabula-track-title">{ic} {n}</div><div className="grid grid-cols-2 gap-2 mt-2"><input type="number" value={data.status?.[`${k}Atual`]??0} onChange={e=>updateField(`status.${k}Atual`,Number(e.target.value))}/><input type="number" value={data.status?.[`${k}Max`]??0} onChange={e=>updateField(`status.${k}Max`,Number(e.target.value))}/></div><div className="grid grid-cols-2 text-[9px] text-gray-500 mt-1"><span>Atual</span><span>Máx.</span></div></div>)}<div className="fabula-track-box" style={{background:'linear-gradient(180deg,#fff8e7 0%, #fff2c6 100%)'}}><div className="fabula-track-title">🌟 Pontos de Fabula</div><input type="number" min="0" value={data.status?.fabula??0} onChange={e=>updateField('status.fabula',Number(e.target.value))} className="mt-2"/></div></div>
+                                        <div className="fabula-small-grid">{[['defesa','Defesa'],['defesaMagica','Defesa Mágica'],['iniciativa','Mod. Iniciativa']].map(([k,n])=><label key={k} className="fabula-small-stat"><span className="fabula-meta-box">{n}</span><input type="number" value={data.status?.[k]??0} onChange={e=>updateField(`status.${k}`,Number(e.target.value))}/></label>)}<label className="fabula-small-stat"><span className="fabula-meta-box">Zênites</span><input type="number" min="0" value={data.zenites||0} onChange={e=>updateField('zenites',Number(e.target.value))}/></label></div>
                                     </div>
                                 )}
 
                                 {fabulaTab === 'combate' && (
-                                    <div className="space-y-6 animate-fade-in-up">
-                                        <div>
-                                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3"><h2 className="font-title font-bold text-xl text-teal-900">🎒 Equipamentos</h2><div className="flex flex-wrap gap-2"><button type="button" onClick={()=>addToArray('equipamentos',{slot:'Outro',nome:'',descricao:''})} className="text-xs font-bold bg-teal-700 text-white rounded px-3 py-1.5">+ Equipamento</button><button type="button" onClick={restoreFabulaEquipmentSlots} className="text-xs font-bold border border-teal-300 text-teal-800 rounded px-3 py-1.5 bg-white" title="Adiciona apenas os slots básicos que estiverem faltando, sem apagar equipamentos">Restaurar slots básicos</button></div></div>
-                                            <div className="space-y-2">
-                                                {(data.equipamentos||[]).length===0 && <div className="text-xs text-gray-400 italic text-center py-4 border border-dashed rounded">Nenhum equipamento cadastrado. Use “+ Equipamento” ou restaure os slots básicos.</div>}
-                                                {(data.equipamentos||[]).map((eq,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[150px_1fr_2fr_36px] gap-2 border rounded p-2 bg-gray-50 items-center"><input value={eq.slot||''} onChange={e=>updateArrayField('equipamentos',i,'slot',e.target.value)} className="border rounded p-2 text-xs font-bold min-w-0" placeholder="Slot"/><input value={eq.nome||''} onChange={e=>updateArrayField('equipamentos',i,'nome',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Item equipado"/><input value={eq.descricao||''} onChange={e=>updateArrayField('equipamentos',i,'descricao',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Precisão, dano, defesa, qualidade..."/><button type="button" onClick={()=>removeFromArray('equipamentos',i)} className="text-red-600 hover:text-red-800 font-bold text-lg rounded hover:bg-red-50 h-9" title="Excluir equipamento" aria-label={`Excluir equipamento ${eq.nome||i+1}`}>×</button></div>)}
+                                    <div className="space-y-6 animate-fade-in-up fabula-subpanel">
+                                        <div className="flex flex-wrap items-center justify-between gap-3">
+                                            <div>
+                                                <div className="fabula-pill-title">🎒 Equipamentos & Mochila</div>
+                                                <p className="text-xs text-gray-500 mt-2">Organize itens equipados, proficiências, consumíveis e o inventário geral.</p>
                                             </div>
+                                            <div className="flex flex-wrap gap-2"><button type="button" onClick={()=>addToArray('equipamentos',{slot:'Outro',nome:'',descricao:''})} className="fabula-action-btn">+ Equipamento</button><button type="button" onClick={restoreFabulaEquipmentSlots} className="fabula-soft-btn" title="Adiciona apenas os slots básicos que estiverem faltando, sem apagar equipamentos">Restaurar slots básicos</button></div>
                                         </div>
-                                        <div><h3 className="font-title font-bold text-teal-900 mb-2">Proficiências de equipamento</h3><div className="grid grid-cols-2 md:grid-cols-4 gap-2">{[['armaduraMarcial','Armadura marcial'],['escudoMarcial','Escudo marcial'],['armaCorpoMarcial','Arma corpo a corpo marcial'],['armaDistanciaMarcial','Arma à distância marcial']].map(([k,n])=><label key={k} className="flex gap-2 items-center text-xs border rounded p-2"><input type="checkbox" checked={!!data.equipavel?.[k]} onChange={e=>updateField(`equipavel.${k}`,e.target.checked)}/>{n}</label>)}</div></div>
-                                        <label className="block text-xs font-bold text-gray-600">Características<textarea value={data.caracteristicas||''} onChange={e=>updateField('caracteristicas',e.target.value)} rows="5" className="mt-1 w-full border rounded p-2"/></label>
-                                        <div className="border-2 border-teal-200 rounded-lg overflow-hidden">
-                                            <div className="bg-teal-50 px-3 py-2 flex items-center justify-between gap-3">
+                                        <div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Equipamentos em uso</h3><p className="text-[10px] text-gray-500">Slots equipados, armas, armaduras e acessórios importantes.</p></div><div className="fabula-list-card-body space-y-2">
+                                                {(data.equipamentos||[]).length===0 && <div className="text-xs text-gray-400 italic text-center py-4 border border-dashed rounded">Nenhum equipamento cadastrado. Use “+ Equipamento” ou restaure os slots básicos.</div>}
+                                                {(data.equipamentos||[]).map((eq,i)=><div key={i} className="fabula-equipment-row grid grid-cols-1 md:grid-cols-[150px_1fr_2fr_36px] gap-2 items-center"><div><div className="fabula-input-label">Slot</div><input value={eq.slot||''} onChange={e=>updateArrayField('equipamentos',i,'slot',e.target.value)} className="border rounded p-2 text-xs font-bold min-w-0" placeholder="Slot"/></div><div><div className="fabula-input-label">Item equipado</div><input value={eq.nome||''} onChange={e=>updateArrayField('equipamentos',i,'nome',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Item equipado"/></div><div><div className="fabula-input-label">Descrição / efeito</div><input value={eq.descricao||''} onChange={e=>updateArrayField('equipamentos',i,'descricao',e.target.value)} className="border rounded p-2 text-xs min-w-0" placeholder="Precisão, dano, defesa, qualidade..."/></div><button type="button" onClick={()=>removeFromArray('equipamentos',i)} className="fabula-remove-btn" title="Excluir equipamento" aria-label={`Excluir equipamento ${eq.nome||i+1}`}>×</button></div>)}
+                                            </div></div>
+                                        <div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Proficiências de equipamento</h3><p className="text-[10px] text-gray-500">Marque apenas o que este personagem realmente domina.</p></div><div className="fabula-list-card-body"><div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">{[['armaduraMarcial','🛡️','Armadura marcial'],['escudoMarcial','🧷','Escudo marcial'],['armaCorpoMarcial','⚔️','Arma corpo a corpo marcial'],['armaDistanciaMarcial','🏹','Arma à distância marcial']].map(([k,icon,n])=><label key={k} className="fabula-check-card"><input type="checkbox" checked={!!data.equipavel?.[k]} onChange={e=>updateField(`equipavel.${k}`,e.target.checked)}/><div className="fabula-check-icon">{icon}</div><div className="fabula-check-text">{n}</div></label>)}</div></div></div>
+                                        <label className="block text-xs font-bold text-gray-600 fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Características</h3></div><div className="fabula-list-card-body"><textarea value={data.caracteristicas||''} onChange={e=>updateField('caracteristicas',e.target.value)} rows="5" className="w-full border rounded p-2" placeholder="Regras marcantes, qualidade do equipamento, reações defensivas, etc."/></div></label>
+                                        <div className="fabula-list-card">
+                                            <div className="fabula-list-card-head flex items-center justify-between gap-3">
                                                 <div><h3 className="font-title font-bold text-teal-900">🎒 Inventário / Mochila</h3><p className="text-[10px] text-gray-500">Itens guardados pelo personagem que não estão equipados.</p></div>
-                                                <button type="button" onClick={()=>addToArray('inventario',{nome:'',quantidade:1,notas:''})} className="shrink-0 bg-teal-700 text-white rounded px-3 py-1.5 text-xs font-bold">+ Item</button>
+                                                <button type="button" onClick={()=>addToArray('inventario',{nome:'',quantidade:1,notas:''})} className="fabula-action-btn">+ Item</button>
                                             </div>
-                                            <div className="p-3 space-y-3">
+                                            <div className="fabula-list-card-body space-y-3">
                                                 <details className="rounded-lg border border-teal-200 bg-white overflow-hidden">
                                                     <summary className="cursor-pointer select-none px-3 py-2 text-xs font-bold text-teal-900 bg-teal-50 hover:bg-teal-100">🧪 Consulta rápida de PI — itens consumíveis</summary>
                                                     <div className="p-3 space-y-2">
@@ -3812,23 +4136,23 @@
                                                     </div>
                                                 </details>
                                                 {(data.inventario||[]).length === 0 && <div className="text-xs text-gray-400 italic text-center py-3">Nenhum item guardado.</div>}
-                                                {(data.inventario||[]).map((it,i)=><div key={i} className="grid grid-cols-1 sm:grid-cols-[1fr_90px_1.4fr_32px] gap-2 border rounded p-2 bg-gray-50">
-                                                    <input value={it.nome||''} onChange={e=>updateArrayField('inventario',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Item"/>
-                                                    <input type="number" min="0" value={it.quantidade??1} onChange={e=>updateArrayField('inventario',i,'quantidade',Number(e.target.value))} className="border rounded p-2 text-xs" placeholder="Qtd."/>
-                                                    <input value={it.notas||''} onChange={e=>updateArrayField('inventario',i,'notas',e.target.value)} className="border rounded p-2 text-xs" placeholder="Descrição / efeito / observação"/>
-                                                    <button type="button" onClick={()=>removeFromArray('inventario',i)} className="text-red-600 font-bold text-lg">×</button>
+                                                {(data.inventario||[]).map((it,i)=><div key={i} className="fabula-equipment-row grid grid-cols-1 sm:grid-cols-[1fr_90px_1.4fr_32px] gap-2">
+                                                    <div><div className="fabula-input-label">Item</div><input value={it.nome||''} onChange={e=>updateArrayField('inventario',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Item"/></div>
+                                                    <div><div className="fabula-input-label">Qtd.</div><input type="number" min="0" value={it.quantidade??1} onChange={e=>updateArrayField('inventario',i,'quantidade',Number(e.target.value))} className="border rounded p-2 text-xs" placeholder="Qtd."/></div>
+                                                    <div><div className="fabula-input-label">Notas</div><input value={it.notas||''} onChange={e=>updateArrayField('inventario',i,'notas',e.target.value)} className="border rounded p-2 text-xs" placeholder="Descrição / efeito / observação"/></div>
+                                                    <button type="button" onClick={()=>removeFromArray('inventario',i)} className="fabula-remove-btn">×</button>
                                                 </div>)}
                                             </div>
                                         </div>
-                                        <label className="block text-xs font-bold text-gray-600">Mochila & Anotações<textarea value={data.mochila||''} onChange={e=>updateField('mochila',e.target.value)} rows="5" className="mt-1 w-full border rounded p-2" placeholder="Anotações gerais, itens especiais, lembretes..."/></label>
+                                        <label className="block text-xs font-bold text-gray-600 fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Mochila & Anotações</h3></div><div className="fabula-list-card-body"><textarea value={data.mochila||''} onChange={e=>updateField('mochila',e.target.value)} rows="5" className="w-full border rounded p-2" placeholder="Anotações gerais, itens especiais, lembretes..."/></div></label>
                                     </div>
                                 )}
 
                                 {fabulaTab === 'classes' && (
-                                    <div className="space-y-5 animate-fade-in-up">
-                                        <div className="flex justify-between"><h2 className="font-title font-bold text-xl text-teal-900">✨ Classes & Poderes</h2><button onClick={()=>addToArray('classes',{nome:'',nivel:1,beneficios:'',poderes:[]})} className="bg-teal-700 text-white rounded px-3 py-1.5 text-xs font-bold">+ Classe</button></div>
-                                        {(data.classes||[]).map((cl,ci)=><div key={ci} className="border-2 border-teal-200 rounded-lg overflow-hidden"><div className="bg-teal-50 p-3 grid grid-cols-[1fr_90px_34px] gap-2"><input value={cl.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 font-bold" placeholder="Classe"/><input type="number" min="1" value={cl.nivel||1} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nivel=Number(e.target.value);updateField('classes',arr)}} className="border rounded p-2"/><button onClick={()=>removeFromArray('classes',ci)} className="text-red-600">×</button></div><div className="p-3 space-y-3"><textarea value={cl.beneficios||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].beneficios=e.target.value;updateField('classes',arr)}} className="w-full border rounded p-2 text-xs" rows="2" placeholder="Benefícios gratuitos / observações"/><div className="space-y-2">{(cl.poderes||[]).map((p,pi)=><div key={pi} className="grid grid-cols-1 md:grid-cols-[1fr_90px_2fr_30px] gap-2"><input value={p.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="Poder"/><input value={p.nivel||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nivel=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="NP"/><input value={p.desc||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].desc=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="Efeito / lembrete"/><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.splice(pi,1);updateField('classes',arr)}} className="text-red-600">×</button></div>)}</div><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.push({nome:'',nivel:'',desc:''});updateField('classes',arr)}} className="text-xs font-bold text-teal-800">+ Poder</button></div></div>)}
-                                        <div className="border-t pt-4"><div className="flex justify-between mb-2"><h3 className="font-title font-bold text-teal-900">Poderes Heroicos</h3><button onClick={()=>addToArray('poderesHeroicos',{nome:'',desc:''})} className="text-xs font-bold text-teal-800">+ Poder Heroico</button></div>{(data.poderesHeroicos||[]).map((p,i)=><div key={i} className="grid grid-cols-[1fr_2fr_32px] gap-2 mb-2"><input value={p.nome||''} onChange={e=>updateArrayField('poderesHeroicos',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Nome"/><input value={p.desc||''} onChange={e=>updateArrayField('poderesHeroicos',i,'desc',e.target.value)} className="border rounded p-2 text-xs" placeholder="Efeito / lembrete"/><button onClick={()=>removeFromArray('poderesHeroicos',i)} className="text-red-600">×</button></div>)}</div>
+                                    <div className="space-y-5 animate-fade-in-up fabula-subpanel">
+                                        <div className="flex justify-between items-center gap-3"><div><div className="fabula-pill-title">✨ Classes & Poderes</div><p className="text-xs text-gray-500 mt-2">Classes, níveis, benefícios, poderes e progressão heroica.</p></div><button onClick={()=>addToArray('classes',{nome:'',nivel:1,beneficios:'',poderes:[]})} className="fabula-action-btn">+ Classe</button></div>
+                                        {(data.classes||[]).map((cl,ci)=><div key={ci} className="fabula-list-card"><div className="fabula-list-card-head grid grid-cols-[1fr_90px_38px] gap-2 items-center"><div><div className="fabula-input-label">Classe</div><input value={cl.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 font-bold" placeholder="Classe"/></div><div><div className="fabula-input-label">Nível</div><input type="number" min="1" value={cl.nivel||1} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].nivel=Number(e.target.value);updateField('classes',arr)}} className="border rounded p-2"/></div><button onClick={()=>removeFromArray('classes',ci)} className="fabula-remove-btn">×</button></div><div className="fabula-list-card-body space-y-3"><label className="block"><span className="fabula-input-label">Benefícios gratuitos / observações</span><textarea value={cl.beneficios||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].beneficios=e.target.value;updateField('classes',arr)}} className="w-full border rounded p-2 text-xs" rows="2" placeholder="Benefícios gratuitos / observações"/></label><div className="fabula-two-col-grid">{(cl.poderes||[]).map((p,pi)=><div key={pi} className="fabula-power-row grid grid-cols-[1fr_38px] gap-2 items-start"><div className="space-y-2"><div className="grid grid-cols-1 sm:grid-cols-[1fr_100px] gap-2"><div><div className="fabula-input-label">Poder</div><input value={p.nome||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nome=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="Poder"/></div><div><div className="fabula-input-label">Nível / NP</div><input value={p.nivel||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].nivel=e.target.value;updateField('classes',arr)}} className="border rounded p-2 text-xs" placeholder="NP"/></div></div><div><div className="fabula-input-label">Efeito / lembrete</div><textarea value={p.desc||''} onChange={e=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes[pi].desc=e.target.value;updateField('classes',arr)}} className="w-full border rounded p-2 text-xs" rows="3" placeholder="Efeito / lembrete"/></div></div><div className="fabula-move-col"><button type="button" onClick={()=>moveNestedArrayItem('classes',ci,'poderes',pi,-1)} className="fabula-move-btn" title="Mover para cima">↑</button><button type="button" onClick={()=>moveNestedArrayItem('classes',ci,'poderes',pi,1)} className="fabula-move-btn" title="Mover para baixo">↓</button><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.splice(pi,1);updateField('classes',arr)}} className="fabula-remove-btn">×</button></div></div>)}</div><button onClick={()=>{const arr=JSON.parse(JSON.stringify(data.classes));arr[ci].poderes.push({nome:'',nivel:'',desc:''});updateField('classes',arr)}} className="fabula-soft-btn">+ Poder</button></div></div>)}
+                                        <div className="fabula-list-card"><div className="fabula-list-card-head flex items-center justify-between gap-2"><h3 className="font-title font-bold text-teal-900">Poderes Heroicos</h3><button onClick={()=>addToArray('poderesHeroicos',{nome:'',desc:''})} className="fabula-action-btn">+ Poder Heroico</button></div><div className="fabula-list-card-body space-y-2">{(data.poderesHeroicos||[]).length===0 && <div className="text-xs text-gray-400 italic">Nenhum poder heroico registrado.</div>}{(data.poderesHeroicos||[]).map((p,i)=><div key={i} className="fabula-hero-row grid grid-cols-[1fr_38px] gap-2 items-start"><div className="space-y-2"><div><div className="fabula-input-label">Nome</div><input value={p.nome||''} onChange={e=>updateArrayField('poderesHeroicos',i,'nome',e.target.value)} className="border rounded p-2 text-xs" placeholder="Nome"/></div><div><div className="fabula-input-label">Efeito / lembrete</div><textarea value={p.desc||''} onChange={e=>updateArrayField('poderesHeroicos',i,'desc',e.target.value)} className="w-full border rounded p-2 text-xs" rows="3" placeholder="Efeito / lembrete"/></div></div><div className="fabula-move-col"><button type="button" onClick={()=>moveArrayItem('poderesHeroicos',i,-1)} className="fabula-move-btn" title="Mover para cima">↑</button><button type="button" onClick={()=>moveArrayItem('poderesHeroicos',i,1)} className="fabula-move-btn" title="Mover para baixo">↓</button><button onClick={()=>removeFromArray('poderesHeroicos',i)} className="fabula-remove-btn">×</button></div></div>)}</div></div>
                                     </div>
                                 )}
 
