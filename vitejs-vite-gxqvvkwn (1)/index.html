@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PJ Lite — Fichas de RPG | v0.6.9v Alpha</title>
-    <meta name="description" content="PJ Lite é uma ferramenta leve para criar, organizar e compartilhar fichas de personagens de RPG. Suporte a Dragonbane, D&amp;D 5e, Fabula Ultima e teste avançado de O Som das Seis.">
+    <title>PJ Lite — Fichas de RPG | v0.7.0v Alpha</title>
+    <meta name="description" content="PJ Lite v0.7.0v Alpha é uma ferramenta leve para criar, organizar e compartilhar fichas de RPG. Dragonbane, D&amp;D 5e, Fabula Ultima e O Som das Seis com fichas visuais, guias ampliados e recursos modulares.">
     <meta name="application-name" content="PJ Lite">
     <meta name="theme-color" content="#111827">
 
     <!-- Prévia ao compartilhar o link -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PJ Lite">
-    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.6.9v Alpha">
-    <meta property="og:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve. Dragonbane, D&amp;D 5e, Fabula Ultima e O Som das Seis.">
+    <meta property="og:title" content="PJ Lite — Fichas de RPG | v0.7.0v Alpha">
+    <meta property="og:description" content="PJ Lite v0.7.0v Alpha: fichas de Dragonbane, D&amp;D 5e, Fabula Ultima e O Som das Seis, com interface leve, guias completos e recursos modulares.">
     <meta property="og:locale" content="pt_BR">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.6.9v Alpha">
+    <meta name="twitter:title" content="PJ Lite — Fichas de RPG | v0.7.0v Alpha">
     <meta name="twitter:description" content="Crie, organize e compartilhe fichas de RPG de forma simples e leve.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -1438,7 +1438,7 @@
             .dnd-brand-row { justify-content:center; }
         }
 
-        /* O Som das Seis — teste avançado de integração na linha 0.6 */
+        /* O Som das Seis — integração consolidada na linha 0.7 */
         .som6-paper { background: linear-gradient(180deg, #efe7c9 0%, #e8ddba 100%); }
         .som6-sheet { color:#1b1712; }
         .som6-logo { font-family: Georgia, 'Times New Roman', serif; font-weight: 900; text-transform: uppercase; letter-spacing: -.055em; color:#0c0b0a; line-height:.84; text-shadow:0 1px 0 rgba(255,255,255,.25); }
@@ -1463,6 +1463,13 @@
         .som6-portrait-actions { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:5px; }
         .som6-portrait-actions button, .som6-portrait-actions label { min-height:24px; display:flex; align-items:center; justify-content:center; border-radius:6px; font-size:9px; font-weight:900; cursor:pointer; }
         .som6-dark-note { color:#6c5a45; }
+        .som6-skill-grid { display:grid; grid-template-columns:1fr; gap:8px; }
+        @media (min-width: 1024px) { .som6-skill-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        .som6-skill-card { background:#f8f1d8; border:1px solid #cabd98; border-radius:10px 3px 10px 3px; padding:8px; min-width:0; }
+        .som6-order-col { display:flex; flex-direction:column; gap:4px; align-items:center; }
+        .som6-order-btn { width:26px; height:25px; display:flex; align-items:center; justify-content:center; border:1px solid #b69d79; border-radius:6px; background:#fffaf0; color:#6f261e; font-weight:900; font-size:10px; }
+        .som6-order-btn:disabled { opacity:.28; cursor:not-allowed; }
+        .som6-help-chip { display:inline-flex; align-items:center; gap:4px; padding:3px 7px; border-radius:999px; background:#ead9b8; border:1px solid #cbb38c; color:#654b34; font-size:8px; font-weight:900; text-transform:uppercase; letter-spacing:.04em; }
 
         /* Modo escuro próprio: mantém a identidade de papel/envelhecido sem virar um bloco cinza. */
         body.theme-dark .som6-paper { background:radial-gradient(circle at top, #28140f 0, #160e0b 38%, #0c0908 100%) !important; }
@@ -1497,6 +1504,9 @@
         body.theme-dark .som6-portrait { background:#211713 !important; border-color:#815948 !important; }
         body.theme-dark .som6-portrait-empty { color:#c9ad8b !important; }
         body.theme-dark .som6-dark-note { color:#c4ad8d !important; }
+        body.theme-dark .som6-skill-card { background:#2a1d17 !important; border-color:#6b4c3b !important; }
+        body.theme-dark .som6-order-btn { background:#1b1411 !important; border-color:#7a5745 !important; color:#f1c3a7 !important; }
+        body.theme-dark .som6-help-chip { background:#34241b !important; border-color:#6d4e3c !important; color:#e8cfad !important; }
         body.theme-dark .som6-paper .pj-mobile-tabs { background:#170806 !important; border-color:#6f261e !important; }
         body.theme-dark .som6-paper .pj-mobile-tabs button { color:#f4dfbd !important; }
         body.theme-dark .som6-paper .pj-mobile-tabs button.bg-red-900 { background:#6f201a !important; }
@@ -1617,6 +1627,100 @@
         body.theme-dark .som6-sheet .text-sky-700,
         body.theme-dark .som6-sheet .text-sky-900 { color:#9fd8ef !important; }
 
+    
+
+        /* ==============================================================
+         * FABULA ULTIMA — REFINO VISUAL v0.6.9
+         * ============================================================== */
+        .fabula-material-icons {
+            display:inline-flex; align-items:center; gap:5px; padding:4px 6px;
+            border:1px solid #b7d6d0; border-radius:999px; background:rgba(255,255,255,.72);
+        }
+        .fabula-material-icon {
+            width:25px; height:25px; display:inline-flex; align-items:center; justify-content:center;
+            border-radius:50%; border:1px solid #c4ded9; background:#f9fffd; font-size:13px;
+            box-shadow:0 2px 6px rgba(27,88,84,.08); cursor:help;
+        }
+        .fabula-supplement-card {
+            width:100%; display:grid; grid-template-columns:38px 1fr 26px; align-items:center; gap:10px;
+            border:1px solid #b8d5d0; border-radius:14px; padding:10px 11px; background:#f9fdfc;
+            color:#244e50; text-align:left; transition:.15s ease; box-shadow:0 2px 8px rgba(31,90,86,.05);
+        }
+        .fabula-supplement-card:not(.locked):hover { border-color:#5f9f99; background:#eef8f5; transform:translateY(-1px); }
+        .fabula-supplement-card.active { border-color:#39847e; background:linear-gradient(180deg,#e7f6f2,#dff1ed); box-shadow:inset 0 0 0 1px rgba(57,132,126,.08),0 3px 9px rgba(31,90,86,.08); }
+        .fabula-supplement-card.locked { opacity:.88; cursor:default; }
+        .fabula-supplement-icon { width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid #c8dfdb; font-size:17px; }
+        .fabula-supplement-check { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:1px solid #b4d0cb; color:#5f8888; background:#fff; font-weight:900; }
+        .fabula-supplement-card.active .fabula-supplement-check { background:#2f7c76; border-color:#25665f; color:#fff; }
+        .fabula-supplement-status { font-size:8px; text-transform:uppercase; letter-spacing:.08em; padding:2px 6px; border-radius:999px; background:#d9eee9; color:#2d6e69; }
+
+        body.theme-fabula {
+            background-color:#dbece8 !important;
+            background-image:
+                radial-gradient(circle at 12% 6%, rgba(50,137,130,.18), transparent 28%),
+                radial-gradient(circle at 88% 8%, rgba(219,174,73,.15), transparent 26%),
+                linear-gradient(145deg,#d5ebe7 0%,#edf5f0 52%,#d8e8e5 100%) !important;
+        }
+        body.theme-fabula .fabula-pdf-editor { background:transparent !important; }
+        body.theme-fabula .fabula-sheet-shell {
+            background:linear-gradient(180deg,rgba(255,254,248,.98) 0%,rgba(241,249,246,.98) 100%) !important;
+            border-color:#5d9f99 !important;
+            box-shadow:0 14px 34px rgba(27,88,84,.14), inset 0 0 0 1px rgba(221,184,93,.18) !important;
+        }
+        body.theme-fabula .fabula-tabs-desktop {
+            background:linear-gradient(180deg,#fbfdf9,#edf6f2) !important;
+            border-color:#86b9b2 !important;
+            box-shadow:0 5px 14px rgba(26,86,82,.08) !important;
+        }
+        body.theme-fabula .fabula-tab-btn { background:#fbfffd !important; border-color:#bdd8d3 !important; color:#386b69 !important; }
+        body.theme-fabula .fabula-tab-btn:hover { background:#edf7f4 !important; border-color:#6fa9a2 !important; }
+        body.theme-fabula .fabula-tab-btn.active {
+            background:linear-gradient(180deg,#337f79,#245e5d) !important;
+            border-color:#1c4e4d !important; color:#fffdf4 !important;
+            box-shadow:0 3px 9px rgba(28,77,74,.20), inset 0 -2px 0 rgba(228,190,92,.55) !important;
+        }
+        body.theme-fabula .fabula-profile-panel,
+        body.theme-fabula .fabula-subpanel,
+        body.theme-fabula .fabula-list-card,
+        body.theme-fabula .fabula-track-box,
+        body.theme-fabula .fabula-small-stat,
+        body.theme-fabula .fabula-bond-panel {
+            border-color:#8fbbb5 !important;
+            box-shadow:0 4px 13px rgba(28,86,82,.07) !important;
+        }
+        body.theme-fabula .fabula-list-card-head {
+            background:linear-gradient(180deg,#f2f8f5,#e7f2ee) !important;
+            border-color:#c2dcd7 !important;
+        }
+        body.theme-fabula .fabula-pill-title {
+            background:linear-gradient(180deg,#2f7775,#245d5f) !important;
+            border-color:#1c4b4d !important;
+            color:#fffdf4 !important;
+            box-shadow:inset 0 -2px 0 rgba(230,191,87,.36),0 3px 8px rgba(25,79,76,.13) !important;
+        }
+        body.theme-fabula .fabula-action-btn {
+            background:linear-gradient(180deg,#368c84,#2a716c) !important;
+            border-color:#235f5b !important;
+            box-shadow:0 3px 8px rgba(27,88,84,.16) !important;
+        }
+        body.theme-fabula .fabula-soft-btn {
+            background:#fffdf8 !important; color:#315f60 !important; border-color:#96bdb7 !important;
+        }
+        body.theme-fabula .fabula-material-icons { background:rgba(255,253,247,.88); border-color:#a9cbc4; }
+        body.theme-fabula .fabula-material-icon { background:#fffdf8; border-color:#b9d4cf; }
+        body.theme-fabula .fabula-supplement-card { background:#fffdf9; border-color:#b6d2cd; color:#254d50; }
+        body.theme-fabula .fabula-supplement-card.active { background:linear-gradient(180deg,#eef8f4,#e2f1ec); border-color:#4f948e; }
+        body.theme-fabula .fabula-supplement-icon { background:#fffaf0; border-color:#c8dcd6; }
+
+        body.theme-dark .fabula-material-icons { background:#132629 !important; border-color:#3f7370 !important; }
+        body.theme-dark .fabula-material-icon { background:#183134 !important; border-color:#467c77 !important; }
+        body.theme-dark .fabula-supplement-card { background:#14282b !important; border-color:#365f60 !important; color:#e7fbf8 !important; }
+        body.theme-dark .fabula-supplement-card.active { background:linear-gradient(180deg,#1b3939,#183231) !important; border-color:#5e9a94 !important; }
+        body.theme-dark .fabula-supplement-icon { background:#102124 !important; border-color:#3f706c !important; }
+        body.theme-dark .fabula-supplement-check { background:#102124 !important; border-color:#3f706c !important; color:#b8d8d4 !important; }
+        body.theme-dark .fabula-supplement-card.active .fabula-supplement-check { background:#3a8780 !important; color:#fff !important; }
+        body.theme-dark .fabula-supplement-status { background:#1f4543 !important; color:#c7eeea !important; }
+
     </style>
 </head>
 <body class="font-body text-gray-800 antialiased p-4 md:p-8">
@@ -1643,6 +1747,7 @@
         const SCHEMA_VERSION = 6;
 
         const UPDATE_LOG = [
+            { versao: '0.7.0v Alpha', descricao: 'Marco da linha 0.7: Guias e Tutoriais foram reescritos e ampliados para orientar melhor iniciantes e usuários recorrentes; Fabula Ultima ganhou seleção modular de suplementos e módulos extras por material, mantendo Arcanos, Magia & Rituais e Projetos no Livro Básico; O Som das Seis recebeu revisão visual e de experiência, habilidades mais compactas, reordenação e melhor leitura no desktop e celular; além de revisões gerais de tema, modo escuro, organização, compatibilidade e textos da interface.' },
             { versao: '0.6.9v Alpha', descricao: 'Grande rodada de refinamento visual e usabilidade: Dragonbane, D&D 5e, Fabula Ultima e O Som das Seis ganharam fichas mais próximas de suas identidades originais sem abandonar a proposta Lite. Dragonbane recebeu layout desktop reequilibrado; D&D ganhou visual de ficha clássica e Itens Sincronizados; Fabula Ultima recebeu dados visuais, habilidades e magias em duas colunas, reordenação, consultas rápidas de PI, conjuração, rituais e projetos, além de uma ficha de Ameaça/PNJ mais compacta e intuitiva. Guias e Tutoriais também foram reorganizados para iniciantes.' },
             { versao: '0.6.7v Alpha', descricao: 'O Som das Seis entra em teste avançado dentro da linha 0.6: ficha principal compacta inspirada no PDF oficial, aba separada de Montaria, retrato por upload ou URL, tema próprio do sistema, modo escuro refinado, Tema Personalizado redesenhado com prévia, estilos rápidos e controles de fundo, revisões de layout e guias ampliados com suporte para iniciantes e link para o material original.' },
             { versao: '0.6.5v Alpha', descricao: 'Revisão de estabilidade e fechamento da adaptação de Fabula Ultima: salvamento seguro ao voltar, histórico/autosave e importações revisados, Ficha Chat refinada, modelos Press Start reorganizados, nova Ficha Extra de Projetos, equipamentos e PI consolidados, além de melhorias de armazenamento, imagens, temas e carregamento por CDN.' },
@@ -1750,14 +1855,40 @@
          * FABULA ULTIMA — FICHA PRINCIPAL / COMPATIBILIDADE PJ LITE
          * Interface independente do PJ Lite, com módulos extras opcionais.
          * ============================================================== */
-        const FABULA_EXTRA_OPTIONS = [
-            { id: 'magia', icon: '🔮', nome: 'Magia & Rituais', desc: 'Feitiços, disciplinas e rituais.' },
-            { id: 'arcanos', icon: '🌟', nome: 'Arcanos', desc: 'Vínculos, domínios e efeitos de Arcanos.' },
-            { id: 'mnemosfera', icon: '🧠', nome: 'Mnemosfera', desc: 'Classe, nível, poderes e Poder Heroico.' },
-            { id: 'receitas', icon: '🍳', nome: 'Receitas', desc: 'Ingredientes, sabores, combinações e efeitos.' },
-            { id: 'projetos', icon: '🛠️', nome: 'Projetos', desc: 'Invenções, custo, progresso, materiais especiais e defeitos.' },
-            { id: 'anotacoes', icon: '📝', nome: 'Anotações Extras', desc: 'Regras opcionais, peculiaridades e lembretes.' }
+        const FABULA_SUPPLEMENT_OPTIONS = [
+            { id:'basico', icon:'📘', nome:'Livro Básico', desc:'Estrutura principal da ficha. Sempre ativo.', locked:true },
+            { id:'natural', icon:'🌿', nome:'Atlas: Natural Fantasy', desc:'Acampamento, Jardim, Receitas, Invocações, Comércio, materiais e fabricação.' },
+            { id:'high', icon:'✨', nome:'Atlas: High Fantasy', desc:'Poderes Zero e opções avançadas de alta fantasia.' },
+            { id:'techno', icon:'⚙️', nome:'Atlas: Techno Fantasy', desc:'Tecnosferas, Mnemosfera, veículos e recursos tecnológicos.' },
+            { id:'codex', icon:'🩸', nome:'Codex Extra', desc:'Classes adicionais, peculiaridades e recursos especializados.' }
         ];
+        const FABULA_DEFAULT_SUPPLEMENTS = { basico:true, natural:false, high:false, techno:false, codex:false };
+        const FABULA_EXTRA_OPTIONS = [
+            { id:'magia', icon:'🔮', nome:'Magia & Rituais', desc:'Feitiços, disciplinas e rituais.', source:'basico' },
+            { id:'projetos', icon:'🛠️', nome:'Projetos', desc:'Invenções, custo, progresso, materiais especiais e defeitos.', source:'basico' },
+            { id:'anotacoes', icon:'📝', nome:'Anotações Extras', desc:'Regras opcionais e lembretes livres.', source:'basico' },
+            { id:'peculiaridade', icon:'💠', nome:'Peculiaridade', desc:'Nome, efeito, origem e observações da peculiaridade.', anyAtlas:true },
+            { id:'armaPersonalizada', icon:'⚔️', nome:'Armas Personalizadas', desc:'Armas únicas com teste, dano, categoria e características.', sources:['natural','high','techno'] },
+            { id:'recursosClasse', icon:'🎛️', nome:'Recursos de Classe', desc:'Contadores, cargas e recursos específicos das classes.', anyAtlas:true },
+            { id:'receitas', icon:'🍳', nome:'Receitas', desc:'Ingredientes, sabores, combinações e efeitos do Gourmet.', source:'natural' },
+            { id:'acampamento', icon:'🌙', nome:'Atividades de Acampamento', desc:'Duas atividades e benefícios que duram até o próximo descanso.', source:'natural' },
+            { id:'jardim', icon:'🌱', nome:'Jardim & Magissementes', desc:'Magissemente ativa, relógio de germinação e sementes conhecidas.', source:'natural' },
+            { id:'invocacoes', icon:'🌊', nome:'Invocações & Mananciais', desc:'Mananciais disponíveis e invocações conhecidas.', source:'natural' },
+            { id:'comercio', icon:'💰', nome:'Comércio', desc:'Pontos de Comércio e prosperidade de assentamentos.', source:'natural' },
+            { id:'materiais', icon:'🔨', nome:'Materiais & Fabricação', desc:'Materiais coletados, valor, quantidade e uso em fabricação.', source:'natural' },
+            { id:'poderZero', icon:'💥', nome:'Poderes Zero', desc:'Registre gatilhos e efeitos extraordinários.', source:'high' },
+            { id:'mnemosfera', icon:'🧠', nome:'Mnemosfera', desc:'Classe, nível, poderes e Poder Heroico.', source:'techno' },
+            { id:'tecnosferas', icon:'💿', nome:'Tecnosferas', desc:'Tecnosferas instaladas, tipo, equipamento e efeitos.', source:'techno' },
+            { id:'veiculo', icon:'🚀', nome:'Veículo', desc:'Veículo pessoal ou de grupo, módulos e observações.', source:'techno' },
+            { id:'arcanos', icon:'🌟', nome:'Arcanos', desc:'Vínculos, domínios e efeitos de Arcanos do Livro Básico.', source:'basico' }
+        ];
+        const isFabulaExtraUnlocked = (opt, suplementos={}) => {
+            const src = { ...FABULA_DEFAULT_SUPPLEMENTS, ...(suplementos || {}) };
+            if (opt.source === 'basico') return true;
+            if (Array.isArray(opt.sources)) return opt.sources.some(id => !!src[id]);
+            if (opt.anyAtlas) return !!(src.natural || src.high || src.techno || src.codex);
+            return !!src[opt.source];
+        };
 
 
         const FABULA_MAGIC_DISCIPLINES = ['Arcanismo','Quimerismo','Elementalismo','Entropismo','Ritualismo','Espiritualismo'];
@@ -1784,6 +1915,7 @@
 
         const initialFabulaPcData = {
             id: '', system: 'fabula', type: 'pc',
+            suplementos: { ...FABULA_DEFAULT_SUPPLEMENTS },
             bio: { nome: '', jogador: '', genero: '', identidade: '', tema: '', origem: '', tracos: '', imagem: '' },
             nivel: 5, experiencia: 0, zenites: 0,
             atributos: {
@@ -1814,13 +1946,26 @@
                 mnemosfera: { nome: '', classe: '', nivel: 1, poderes: [], poderHeroico: '' },
                 receitas: { maxIngredientes: '', ingredientes: { amargo: '', salgado: '', azedo: '', doce: '', umami: '' }, combinacoes: '', notas: '' },
                 projetos: { lista: [] },
-                anotacoes: { regras: '', notas: '' }
+                anotacoes: { regras: '', notas: '' },
+                peculiaridade: { nome:'', origem:'', efeito:'', notas:'' },
+                armaPersonalizada: { lista: [] },
+                recursosClasse: { lista: [] },
+                acampamento: { atividades:[{nome:'',alvo:'',efeito:''},{nome:'',alvo:'',efeito:''}], beneficios:[] },
+                jardim: { magissementeAtual:'', germinacao:0, conhecidas:[] },
+                invocacoes: { mananciais:{agua:false,ar:false,fogo:false,raio:false,terra:false}, lista:[] },
+                comercio: { atual:0, max:0, assentamentos:[] },
+                materiais: { lista:[] },
+                poderZero: { lista:[] },
+                tecnosferas: { lista:[] },
+                veiculo: { nome:'', tipo:'', estrutura:'', passageiros:'', modulos:[], notas:'' }
             }
         };
 
         const normalizeFabulaPcData = (item) => {
             const clone = JSON.parse(JSON.stringify(item));
             if (clone.system !== 'fabula' || clone.type !== 'pc') return clone;
+            clone.suplementos = { ...FABULA_DEFAULT_SUPPLEMENTS, ...(clone.suplementos || {}) };
+            clone.suplementos.basico = true;
             clone.bio = { ...initialFabulaPcData.bio, ...(clone.bio || {}) };
             clone.atributos = { ...JSON.parse(JSON.stringify(initialFabulaPcData.atributos)), ...(clone.atributos || {}) };
             Object.keys(initialFabulaPcData.atributos).forEach(k => clone.atributos[k] = { ...initialFabulaPcData.atributos[k], ...(clone.atributos[k] || {}) });
@@ -1850,6 +1995,29 @@
             clone.extras.projetos = { ...initialFabulaPcData.extras.projetos, ...(clone.extras.projetos || {}) };
             clone.extras.projetos.lista = Array.isArray(clone.extras.projetos.lista) ? clone.extras.projetos.lista.map(p => ({ nome:'', descricao:'', custoMaterial:0, progressoAtual:0, progressoNecessario:1, materialEspecial:'', defeito:'', ...(p || {}) })) : [];
             clone.extras.anotacoes = { ...initialFabulaPcData.extras.anotacoes, ...(clone.extras.anotacoes || {}) };
+            clone.extras.peculiaridade = { ...initialFabulaPcData.extras.peculiaridade, ...(clone.extras.peculiaridade || {}) };
+            clone.extras.armaPersonalizada = { ...initialFabulaPcData.extras.armaPersonalizada, ...(clone.extras.armaPersonalizada || {}) };
+            clone.extras.armaPersonalizada.lista = Array.isArray(clone.extras.armaPersonalizada.lista) ? clone.extras.armaPersonalizada.lista : [];
+            clone.extras.recursosClasse = { ...initialFabulaPcData.extras.recursosClasse, ...(clone.extras.recursosClasse || {}) };
+            clone.extras.recursosClasse.lista = Array.isArray(clone.extras.recursosClasse.lista) ? clone.extras.recursosClasse.lista : [];
+            clone.extras.acampamento = { ...initialFabulaPcData.extras.acampamento, ...(clone.extras.acampamento || {}) };
+            clone.extras.acampamento.atividades = Array.isArray(clone.extras.acampamento.atividades) ? clone.extras.acampamento.atividades : JSON.parse(JSON.stringify(initialFabulaPcData.extras.acampamento.atividades));
+            clone.extras.acampamento.beneficios = Array.isArray(clone.extras.acampamento.beneficios) ? clone.extras.acampamento.beneficios : [];
+            clone.extras.jardim = { ...initialFabulaPcData.extras.jardim, ...(clone.extras.jardim || {}) };
+            clone.extras.jardim.conhecidas = Array.isArray(clone.extras.jardim.conhecidas) ? clone.extras.jardim.conhecidas : [];
+            clone.extras.invocacoes = { ...initialFabulaPcData.extras.invocacoes, ...(clone.extras.invocacoes || {}) };
+            clone.extras.invocacoes.mananciais = { ...initialFabulaPcData.extras.invocacoes.mananciais, ...(clone.extras.invocacoes.mananciais || {}) };
+            clone.extras.invocacoes.lista = Array.isArray(clone.extras.invocacoes.lista) ? clone.extras.invocacoes.lista : [];
+            clone.extras.comercio = { ...initialFabulaPcData.extras.comercio, ...(clone.extras.comercio || {}) };
+            clone.extras.comercio.assentamentos = Array.isArray(clone.extras.comercio.assentamentos) ? clone.extras.comercio.assentamentos : [];
+            clone.extras.materiais = { ...initialFabulaPcData.extras.materiais, ...(clone.extras.materiais || {}) };
+            clone.extras.materiais.lista = Array.isArray(clone.extras.materiais.lista) ? clone.extras.materiais.lista : [];
+            clone.extras.poderZero = { ...initialFabulaPcData.extras.poderZero, ...(clone.extras.poderZero || {}) };
+            clone.extras.poderZero.lista = Array.isArray(clone.extras.poderZero.lista) ? clone.extras.poderZero.lista : [];
+            clone.extras.tecnosferas = { ...initialFabulaPcData.extras.tecnosferas, ...(clone.extras.tecnosferas || {}) };
+            clone.extras.tecnosferas.lista = Array.isArray(clone.extras.tecnosferas.lista) ? clone.extras.tecnosferas.lista : [];
+            clone.extras.veiculo = { ...initialFabulaPcData.extras.veiculo, ...(clone.extras.veiculo || {}) };
+            clone.extras.veiculo.modulos = Array.isArray(clone.extras.veiculo.modulos) ? clone.extras.veiculo.modulos : [];
             return clone;
         };
 
@@ -2014,7 +2182,7 @@
             while (clone.cartasSina.length < 2) clone.cartasSina.push({carta:'',usada:false});
             clone.armas = Array.isArray(clone.armas) ? clone.armas.map(a=>({nome:'',dano:'',municaoAtual:'',municaoMax:'',recarga:'',notas:'',...(a||{})})) : [];
             clone.inventario = Array.isArray(clone.inventario) ? clone.inventario.map(i=>{const it={nome:'',quantidade:1,notas:'',...(i||{})}; if(it.qtd !== undefined && (i?.quantidade === undefined || i?.quantidade === null)) it.quantidade=Number(it.qtd||0); delete it.qtd; return it;}) : [];
-            clone.montaria = { ...initialSom6PcData.montaria, ...(clone.montaria || {}) }; if ((clone.montaria.vigor === undefined || clone.montaria.vigor === null) && clone.montaria.resistencia !== undefined) clone.montaria.vigor = Number(clone.montaria.resistencia || 0); clone.montaria.itens = Array.isArray(clone.montaria.itens) ? clone.montaria.itens.map(x=>({nome:'',...(typeof x==='string'?{nome:x}:(x||{}))})) : [];
+            clone.montaria = { ...initialSom6PcData.montaria, ...(clone.montaria || {}) }; if ((clone.montaria.vigor === undefined || clone.montaria.vigor === null) && clone.montaria.resistencia !== undefined) clone.montaria.vigor = Number(clone.montaria.resistencia || 0); clone.montaria.vigor = Math.max(0, Math.min(5, Number(clone.montaria.vigor || 0))); clone.montaria.resistencia = clone.montaria.vigor; clone.montaria.potencia = Math.max(0, Math.min(5, Number(clone.montaria.potencia || 0))); clone.montaria.itens = Array.isArray(clone.montaria.itens) ? clone.montaria.itens.map(x=>({nome:'',...(typeof x==='string'?{nome:x}:(x||{}))})) : [];
             clone.nivel = Math.max(1, Math.min(6, Number(clone.nivel || 1)));
             clone.xp = Number(clone.xp || 0); clone.dinheiro = Number(clone.dinheiro ?? 150); clone.recompensa = Number(clone.recompensa || 0);
             return { ...JSON.parse(JSON.stringify(initialSom6PcData)), ...clone, bio:clone.bio, atributos:clone.atributos, status:clone.status, antecedentes:clone.antecedentes, tormento:clone.tormento, reputacao:clone.reputacao, montaria:clone.montaria, habilidades:clone.habilidades, cartasSina:clone.cartasSina, armas:clone.armas, inventario:clone.inventario };
@@ -2245,7 +2413,7 @@
                 if(hab.length){ text += `\n✨ HABILIDADES\n\n`; hab.forEach(h=>text += `• ${safe(h.nome,'Habilidade')}${hasText(h.desc)?` — ${compactText(h.desc)}`:''}\n`); }
                 text += `\n🎭 TORMENTO & REPUTAÇÃO\n\nTormento: ${safe(item.tormento?.tipo)}${hasText(item.tormento?.desc)?` — ${compactText(item.tormento.desc)}`:''}\nReputação: ${safe(item.reputacao?.titulo,'Neutra')} (${Number(item.reputacao?.valor||0)>0?'+':''}${safe(item.reputacao?.valor,0)})${hasText(item.reputacao?.notas)?` — ${compactText(item.reputacao.notas)}`:''}\n`;
                 const cards=(item.cartasSina||[]).filter(c=>hasText(c?.carta)); if(cards.length){ text += `\n🃏 CARTAS DE SINA\n\n`; cards.forEach((c,i)=>text += `• Carta ${i+1}: ${c.usada?'Usada':'Disponível'}${hasText(c.carta)?` — ${c.carta}`:''}\n`); }
-                if(item.montaria?.ativa){ const m=item.montaria; text += `\n🐎 MONTARIA\n\n${safe(m.nome,'Sem nome')} (${safe(m.tipo,'Montaria')}) | Potência ${safe(m.potencia,0)} | Resistência ${safe(m.resistencia,0)} | PV ${safe(m.pvAtual,0)}/${safe(m.pvMax,0)} | Fidelidade ${safe(m.fidelidade,0)}\n`; if(hasText(m.notas)) text += `${compactText(m.notas)}\n`; }
+                if(item.montaria?.ativa){ const m=item.montaria; text += `\n🐎 MONTARIA\n\n${safe(m.nome,'Sem nome')} (${safe(m.tipo,'Montaria')}) | Potência ${safe(m.potencia,0)} | Vigor ${safe(m.vigor,m.resistencia||0)} | PV ${safe(m.pvAtual,0)}/${safe(m.pvMax,0)} | Fidelidade ${safe(m.fidelidade,0)}\n`; if(hasText(m.notas)) text += `${compactText(m.notas)}\n`; }
                 if(hasText(item.anotacoes)) text += `\n📝 ANOTAÇÕES\n\n${compactText(item.anotacoes)}\n`;
                 return text.trim();
             }
@@ -2647,6 +2815,57 @@
         function FabulaNotasPanel({ data, updateField }) { const n=data.extras?.anotacoes||{}; return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="fabula-pill-title">📝 Anotações Extras</div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Regras opcionais / peculiaridades</h3></div><div className="fabula-list-card-body"><textarea value={n.regras||''} onChange={e=>updateField('extras.anotacoes.regras',e.target.value)} rows="8" className="w-full border rounded p-2"/></div></div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Anotações</h3></div><div className="fabula-list-card-body"><textarea value={n.notas||''} onChange={e=>updateField('extras.anotacoes.notas',e.target.value)} rows="10" className="w-full border rounded p-2"/></div></div></div>; }
 
 
+        function FabulaPeculiaridadePanel({ data, updateField }) {
+            const p=data.extras?.peculiaridade||{};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div><div className="fabula-pill-title">💠 Peculiaridade</div><p className="text-xs text-gray-500 mt-2">Registre somente os dados necessários da opção usada pelo personagem.</p></div><div className="fabula-list-card"><div className="fabula-list-card-body grid grid-cols-1 md:grid-cols-2 gap-3"><label><span className="fabula-input-label">Nome</span><input value={p.nome||''} onChange={e=>updateField('extras.peculiaridade.nome',e.target.value)} className="w-full border rounded p-2"/></label><label><span className="fabula-input-label">Fonte / Livro</span><input value={p.origem||''} onChange={e=>updateField('extras.peculiaridade.origem',e.target.value)} className="w-full border rounded p-2" placeholder="Natural Fantasy, High Fantasy..."/></label><label className="md:col-span-2"><span className="fabula-input-label">Efeito / resumo</span><textarea value={p.efeito||''} onChange={e=>updateField('extras.peculiaridade.efeito',e.target.value)} rows="5" className="w-full border rounded p-2"/></label><label className="md:col-span-2"><span className="fabula-input-label">Observações</span><textarea value={p.notas||''} onChange={e=>updateField('extras.peculiaridade.notas',e.target.value)} rows="3" className="w-full border rounded p-2"/></label></div></div></div>;
+        }
+        function FabulaArmasPersonalizadasPanel({ data, updateField }) {
+            const lista=data.extras?.armaPersonalizada?.lista||[]; const set=v=>updateField('extras.armaPersonalizada.lista',v);
+            const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',categoria:'',alcance:'Corpo a corpo',teste:'',dano:'',tipoDano:'',caracteristicas:'',...(a[i]||{}),[k]:v};set(a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between gap-3 items-center"><div><div className="fabula-pill-title">⚔️ Armas Personalizadas</div><p className="text-xs text-gray-500 mt-2">Estrutura livre para registrar as armas criadas com as regras do suplemento usado.</p></div><button className="fabula-action-btn" onClick={()=>set([...lista,{nome:'',categoria:'',alcance:'Corpo a corpo',teste:'',dano:'',tipoDano:'',caracteristicas:''}])}>+ Arma</button></div><div className="fabula-two-col-grid">{lista.map((a,i)=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head flex gap-2"><input value={a.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold" placeholder="Nome da arma"/><button onClick={()=>set(lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><div className="fabula-list-card-body grid grid-cols-2 gap-2"><label><span className="fabula-input-label">Categoria</span><input value={a.categoria||''} onChange={e=>patch(i,'categoria',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Alcance</span><input value={a.alcance||''} onChange={e=>patch(i,'alcance',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Precisão / Teste</span><input value={a.teste||''} onChange={e=>patch(i,'teste',e.target.value)} className="w-full border rounded p-2 text-xs" placeholder="DES + VIG +1"/></label><label><span className="fabula-input-label">Dano</span><input value={a.dano||''} onChange={e=>patch(i,'dano',e.target.value)} className="w-full border rounded p-2 text-xs" placeholder="RA + 10"/></label><label><span className="fabula-input-label">Tipo de dano</span><input value={a.tipoDano||''} onChange={e=>patch(i,'tipoDano',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Características</span><input value={a.caracteristicas||''} onChange={e=>patch(i,'caracteristicas',e.target.value)} className="w-full border rounded p-2 text-xs"/></label></div></div>)}</div>{lista.length===0&&<div className="text-xs text-gray-400 italic text-center border border-dashed rounded p-5">Nenhuma arma personalizada registrada.</div>}</div>;
+        }
+        function FabulaRecursosClassePanel({ data, updateField }) {
+            const lista=data.extras?.recursosClasse?.lista||[]; const set=v=>updateField('extras.recursosClasse.lista',v);
+            const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',atual:0,max:0,notas:'',...(a[i]||{}),[k]:v};set(a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between items-center gap-3"><div><div className="fabula-pill-title">🎛️ Recursos de Classe</div><p className="text-xs text-gray-500 mt-2">Use apenas para classes que realmente precisem acompanhar pontos, cargas, cartas ou outros recursos.</p></div><button className="fabula-action-btn" onClick={()=>set([...lista,{nome:'',atual:0,max:0,notas:''}])}>+ Recurso</button></div><div className="grid sm:grid-cols-2 gap-3">{lista.map((r,i)=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head flex gap-2"><input value={r.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold" placeholder="Nome do recurso"/><button onClick={()=>set(lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><div className="fabula-list-card-body"><div className="grid grid-cols-2 gap-2"><label><span className="fabula-input-label">Atual</span><input type="number" value={r.atual??0} onChange={e=>patch(i,'atual',Number(e.target.value))} className="w-full border rounded p-2"/></label><label><span className="fabula-input-label">Máximo</span><input type="number" value={r.max??0} onChange={e=>patch(i,'max',Number(e.target.value))} className="w-full border rounded p-2"/></label></div><textarea value={r.notas||''} onChange={e=>patch(i,'notas',e.target.value)} rows="2" className="mt-2 w-full border rounded p-2 text-xs" placeholder="Quando ganha, gasta ou reinicia..."/></div></div>)}</div></div>;
+        }
+        function FabulaAcampamentoPanel({ data, updateField }) {
+            const ex=data.extras?.acampamento||{atividades:[],beneficios:[]}; const atos=ex.atividades||[]; const bens=ex.beneficios||[];
+            const patchAt=(i,k,v)=>{const a=JSON.parse(JSON.stringify(atos));a[i]={nome:'',alvo:'',efeito:'',...(a[i]||{}),[k]:v};updateField('extras.acampamento.atividades',a);};
+            const patchBen=(i,k,v)=>{const a=JSON.parse(JSON.stringify(bens));a[i]={nome:'',usado:false,...(a[i]||{}),[k]:v};updateField('extras.acampamento.beneficios',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div><div className="fabula-pill-title">🌙 Atividades de Acampamento</div><p className="text-xs text-gray-500 mt-2">Natural Fantasy: registre as duas atividades escolhidas e os benefícios que ainda estão disponíveis antes do próximo descanso.</p></div><div className="grid md:grid-cols-2 gap-3">{[0,1].map(i=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head font-bold text-teal-900">Atividade {i+1}</div><div className="fabula-list-card-body space-y-2"><input value={atos[i]?.nome||''} onChange={e=>patchAt(i,'nome',e.target.value)} className="w-full border rounded p-2 font-bold" placeholder="Nome da atividade"/><input value={atos[i]?.alvo||''} onChange={e=>patchAt(i,'alvo',e.target.value)} className="w-full border rounded p-2 text-xs" placeholder="Alvo"/><textarea value={atos[i]?.efeito||''} onChange={e=>patchAt(i,'efeito',e.target.value)} rows="3" className="w-full border rounded p-2 text-xs" placeholder="Resumo do benefício"/></div></div>)}</div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between"><div><h3 className="font-title font-bold text-teal-900">Benefícios ativos</h3><p className="text-[10px] text-gray-500">Marque quando o benefício de uso único tiver sido gasto.</p></div><button className="fabula-action-btn" onClick={()=>updateField('extras.acampamento.beneficios',[...bens,{nome:'',usado:false}])}>+ Benefício</button></div><div className="fabula-list-card-body space-y-2">{bens.map((b,i)=><div key={i} className="flex gap-2 items-center border rounded p-2"><input type="checkbox" checked={!!b.usado} onChange={e=>patchBen(i,'usado',e.target.checked)}/><input value={b.nome||''} onChange={e=>patchBen(i,'nome',e.target.value)} className={`flex-1 border rounded p-2 text-xs ${b.usado?'line-through opacity-60':''}`} placeholder="Benefício até o próximo descanso"/><button onClick={()=>updateField('extras.acampamento.beneficios',bens.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div>)}</div></div></div>;
+        }
+        function FabulaJardimPanel({ data, updateField }) {
+            const j=data.extras?.jardim||{}; const lista=j.conhecidas||[]; const g=Math.max(0,Math.min(4,Number(j.germinacao)||0));
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div><div className="fabula-pill-title">🌱 Jardim & Magissementes</div><p className="text-xs text-gray-500 mt-2">Painel compacto para Floralista: magissemente atual e relógio de germinação com quatro seções.</p></div><div className="fabula-list-card"><div className="fabula-list-card-body grid md:grid-cols-[1fr_220px] gap-4 items-center"><label><span className="fabula-input-label">Magissemente ativa</span><input value={j.magissementeAtual||''} onChange={e=>updateField('extras.jardim.magissementeAtual',e.target.value)} className="w-full border rounded p-2" placeholder="Nome da magissemente"/></label><div><div className="fabula-input-label">Relógio de germinação</div><div className="flex gap-2">{[1,2,3,4].map(n=><button type="button" key={n} onClick={()=>updateField('extras.jardim.germinacao',g===n?0:n)} className={`w-10 h-10 rounded-full border-2 font-bold ${g>=n?'bg-teal-700 text-white border-teal-800':'bg-white border-teal-300 text-teal-800'}`}>{g>=n?'●':'○'}</button>)}</div></div></div></div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between"><h3 className="font-title font-bold text-teal-900">Magissementes conhecidas</h3><button className="fabula-action-btn" onClick={()=>updateField('extras.jardim.conhecidas',[...lista,{nome:'',efeito:''}])}>+ Magissemente</button></div><div className="fabula-list-card-body fabula-two-col-grid">{lista.map((m,i)=><div key={i} className="fabula-power-row"><div className="flex gap-2"><input value={m.nome||''} onChange={e=>{const a=JSON.parse(JSON.stringify(lista));a[i]={...a[i],nome:e.target.value};updateField('extras.jardim.conhecidas',a)}} className="flex-1 border rounded p-2 font-bold text-xs" placeholder="Nome"/><button onClick={()=>updateField('extras.jardim.conhecidas',lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><textarea value={m.efeito||''} onChange={e=>{const a=JSON.parse(JSON.stringify(lista));a[i]={...a[i],efeito:e.target.value};updateField('extras.jardim.conhecidas',a)}} rows="3" className="mt-2 w-full border rounded p-2 text-xs" placeholder="Resumo do efeito"/></div>)}</div></div></div>;
+        }
+        function FabulaInvocacoesPanel({ data, updateField }) {
+            const ex=data.extras?.invocacoes||{}; const mans=ex.mananciais||{}; const lista=ex.lista||[];
+            const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',manancial:'',tipo:'',efeito:'',...(a[i]||{}),[k]:v};updateField('extras.invocacoes.lista',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div><div className="fabula-pill-title">🌊 Invocações & Mananciais</div><p className="text-xs text-gray-500 mt-2">Natural Fantasy: acompanhe os mananciais disponíveis e registre suas invocações.</p></div><div className="fabula-list-card"><div className="fabula-list-card-head"><h3 className="font-title font-bold text-teal-900">Mananciais disponíveis</h3></div><div className="fabula-list-card-body grid grid-cols-2 sm:grid-cols-5 gap-2">{[['agua','💧 Água'],['ar','🌬️ Ar'],['fogo','🔥 Fogo'],['raio','⚡ Raio'],['terra','🪨 Terra']].map(([k,n])=><label key={k} className="fabula-check-card min-h-0"><input type="checkbox" checked={!!mans[k]} onChange={e=>updateField(`extras.invocacoes.mananciais.${k}`,e.target.checked)}/><div className="fabula-check-text">{n}</div></label>)}</div></div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between"><h3 className="font-title font-bold text-teal-900">Invocações conhecidas</h3><button className="fabula-action-btn" onClick={()=>updateField('extras.invocacoes.lista',[...lista,{nome:'',manancial:'',tipo:'',efeito:''}])}>+ Invocação</button></div><div className="fabula-list-card-body fabula-two-col-grid">{lista.map((x,i)=><div key={i} className="fabula-power-row space-y-2"><div className="flex gap-2"><input value={x.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold text-xs" placeholder="Nome"/><button onClick={()=>updateField('extras.invocacoes.lista',lista.filter((_,n)=>n!==i))} className="fabula-remove-btn">×</button></div><div className="grid grid-cols-2 gap-2"><input value={x.manancial||''} onChange={e=>patch(i,'manancial',e.target.value)} className="border rounded p-2 text-xs" placeholder="Manancial"/><input value={x.tipo||''} onChange={e=>patch(i,'tipo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Tipo"/></div><textarea value={x.efeito||''} onChange={e=>patch(i,'efeito',e.target.value)} rows="3" className="w-full border rounded p-2 text-xs" placeholder="Efeito / lembrete"/></div>)}</div></div></div>;
+        }
+        function FabulaComercioPanel({ data, updateField }) {
+            const c=data.extras?.comercio||{}; const lista=c.assentamentos||[];
+            const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',prosperidade:0,notas:'',...(a[i]||{}),[k]:v};updateField('extras.comercio.assentamentos',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div><div className="fabula-pill-title">💰 Comércio</div><p className="text-xs text-gray-500 mt-2">Natural Fantasy: Pontos de Comércio e prosperidade de assentamentos importantes.</p></div><div className="fabula-track-grid"><div className="fabula-track-box"><div className="fabula-track-title">Pontos de Comércio</div><div className="grid grid-cols-2 gap-2 mt-2"><input type="number" value={c.atual??0} onChange={e=>updateField('extras.comercio.atual',Number(e.target.value))}/><input type="number" value={c.max??0} onChange={e=>updateField('extras.comercio.max',Number(e.target.value))}/></div><div className="grid grid-cols-2 text-[9px] text-gray-500"><span>Atual</span><span>Máx.</span></div></div></div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between"><h3 className="font-title font-bold text-teal-900">Assentamentos</h3><button className="fabula-action-btn" onClick={()=>updateField('extras.comercio.assentamentos',[...lista,{nome:'',prosperidade:0,notas:''}])}>+ Assentamento</button></div><div className="fabula-list-card-body space-y-2">{lista.map((s,i)=><div key={i} className="grid md:grid-cols-[1fr_130px_2fr_38px] gap-2 items-end"><label><span className="fabula-input-label">Nome</span><input value={s.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Prosperidade</span><input type="number" value={s.prosperidade??0} onChange={e=>patch(i,'prosperidade',Number(e.target.value))} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Notas</span><input value={s.notas||''} onChange={e=>patch(i,'notas',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><button onClick={()=>updateField('extras.comercio.assentamentos',lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div>)}</div></div></div>;
+        }
+        function FabulaMateriaisPanel({ data, updateField }) {
+            const lista=data.extras?.materiais?.lista||[]; const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',quantidade:1,valor:0,uso:'',...(a[i]||{}),[k]:v};updateField('extras.materiais.lista',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between items-center gap-3"><div><div className="fabula-pill-title">🔨 Materiais & Fabricação</div><p className="text-xs text-gray-500 mt-2">Natural Fantasy: materiais são itens de uso único com valor definido pelo Mestre e podem ser aplicados à fabricação.</p></div><button className="fabula-action-btn" onClick={()=>updateField('extras.materiais.lista',[...lista,{nome:'',quantidade:1,valor:0,uso:''}])}>+ Material</button></div><div className="fabula-list-card"><div className="fabula-list-card-body space-y-2">{lista.map((m,i)=><div key={i} className="grid grid-cols-1 md:grid-cols-[1fr_90px_120px_1.5fr_38px] gap-2 items-end"><label><span className="fabula-input-label">Material</span><input value={m.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Qtd.</span><input type="number" min="0" value={m.quantidade??1} onChange={e=>patch(i,'quantidade',Number(e.target.value))} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Valor (z)</span><input type="number" min="0" value={m.valor??0} onChange={e=>patch(i,'valor',Number(e.target.value))} className="w-full border rounded p-2 text-xs"/></label><label><span className="fabula-input-label">Uso possível</span><input value={m.uso||''} onChange={e=>patch(i,'uso',e.target.value)} className="w-full border rounded p-2 text-xs"/></label><button onClick={()=>updateField('extras.materiais.lista',lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div>)}</div></div></div>;
+        }
+        function FabulaPoderZeroPanel({ data, updateField }) {
+            const lista=data.extras?.poderZero?.lista||[]; const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',gatilho:'',efeito:'',notas:'',...(a[i]||{}),[k]:v};updateField('extras.poderZero.lista',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between items-center"><div><div className="fabula-pill-title">💥 Poderes Zero</div><p className="text-xs text-gray-500 mt-2">High Fantasy: registre somente os poderes escolhidos, sem reproduzir o catálogo do livro.</p></div><button className="fabula-action-btn" onClick={()=>updateField('extras.poderZero.lista',[...lista,{nome:'',gatilho:'',efeito:'',notas:''}])}>+ Poder Zero</button></div><div className="fabula-two-col-grid">{lista.map((z,i)=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head flex gap-2"><input value={z.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold" placeholder="Nome"/><button onClick={()=>updateField('extras.poderZero.lista',lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><div className="fabula-list-card-body space-y-2"><input value={z.gatilho||''} onChange={e=>patch(i,'gatilho',e.target.value)} className="w-full border rounded p-2 text-xs" placeholder="Gatilho / condição"/><textarea value={z.efeito||''} onChange={e=>patch(i,'efeito',e.target.value)} rows="4" className="w-full border rounded p-2 text-xs" placeholder="Efeito"/><textarea value={z.notas||''} onChange={e=>patch(i,'notas',e.target.value)} rows="2" className="w-full border rounded p-2 text-xs" placeholder="Notas"/></div></div>)}</div></div>;
+        }
+        function FabulaTecnosferasPanel({ data, updateField }) {
+            const lista=data.extras?.tecnosferas?.lista||[]; const patch=(i,k,v)=>{const a=JSON.parse(JSON.stringify(lista));a[i]={nome:'',tipo:'',equipamento:'',efeito:'',...(a[i]||{}),[k]:v};updateField('extras.tecnosferas.lista',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="flex justify-between items-center"><div><div className="fabula-pill-title">💿 Tecnosferas</div><p className="text-xs text-gray-500 mt-2">Techno Fantasy: registre as tecnosferas relevantes e onde estão instaladas.</p></div><button className="fabula-action-btn" onClick={()=>updateField('extras.tecnosferas.lista',[...lista,{nome:'',tipo:'',equipamento:'',efeito:''}])}>+ Tecnosfera</button></div><div className="fabula-two-col-grid">{lista.map((t,i)=><div key={i} className="fabula-list-card"><div className="fabula-list-card-head flex gap-2"><input value={t.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold"/><button onClick={()=>updateField('extras.tecnosferas.lista',lista.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><div className="fabula-list-card-body space-y-2"><div className="grid grid-cols-2 gap-2"><input value={t.tipo||''} onChange={e=>patch(i,'tipo',e.target.value)} className="border rounded p-2 text-xs" placeholder="Tipo"/><input value={t.equipamento||''} onChange={e=>patch(i,'equipamento',e.target.value)} className="border rounded p-2 text-xs" placeholder="Equipamento"/></div><textarea value={t.efeito||''} onChange={e=>patch(i,'efeito',e.target.value)} rows="3" className="w-full border rounded p-2 text-xs" placeholder="Efeito / poderes"/></div></div>)}</div></div>;
+        }
+        function FabulaVeiculoPanel({ data, updateField }) {
+            const v=data.extras?.veiculo||{}; const mods=v.modulos||[]; const patch=(i,k,val)=>{const a=JSON.parse(JSON.stringify(mods));a[i]={nome:'',efeito:'',...(a[i]||{}),[k]:val};updateField('extras.veiculo.modulos',a);};
+            return <div className="space-y-4 animate-fade-in-up fabula-subpanel"><div className="fabula-pill-title">🚀 Veículo</div><div className="fabula-list-card"><div className="fabula-list-card-body grid md:grid-cols-2 gap-3"><label><span className="fabula-input-label">Nome</span><input value={v.nome||''} onChange={e=>updateField('extras.veiculo.nome',e.target.value)} className="w-full border rounded p-2"/></label><label><span className="fabula-input-label">Tipo</span><input value={v.tipo||''} onChange={e=>updateField('extras.veiculo.tipo',e.target.value)} className="w-full border rounded p-2"/></label><label><span className="fabula-input-label">Estrutura / recurso</span><input value={v.estrutura||''} onChange={e=>updateField('extras.veiculo.estrutura',e.target.value)} className="w-full border rounded p-2"/></label><label><span className="fabula-input-label">Passageiros</span><input value={v.passageiros||''} onChange={e=>updateField('extras.veiculo.passageiros',e.target.value)} className="w-full border rounded p-2"/></label><label className="md:col-span-2"><span className="fabula-input-label">Notas</span><textarea value={v.notas||''} onChange={e=>updateField('extras.veiculo.notas',e.target.value)} rows="3" className="w-full border rounded p-2"/></label></div></div><div className="fabula-list-card"><div className="fabula-list-card-head flex justify-between"><h3 className="font-title font-bold text-teal-900">Módulos</h3><button className="fabula-action-btn" onClick={()=>updateField('extras.veiculo.modulos',[...mods,{nome:'',efeito:''}])}>+ Módulo</button></div><div className="fabula-list-card-body fabula-two-col-grid">{mods.map((m,i)=><div key={i} className="fabula-power-row"><div className="flex gap-2"><input value={m.nome||''} onChange={e=>patch(i,'nome',e.target.value)} className="flex-1 border rounded p-2 font-bold text-xs"/><button onClick={()=>updateField('extras.veiculo.modulos',mods.filter((_,x)=>x!==i))} className="fabula-remove-btn">×</button></div><textarea value={m.efeito||''} onChange={e=>patch(i,'efeito',e.target.value)} rows="2" className="mt-2 w-full border rounded p-2 text-xs"/></div>)}</div></div></div>;
+        }
+
         const FabulaThreatList = ({ title, path, items, add, remove, update, move, spell=false }) => (
             <details className="fabula-threat-details">
                 <summary><span>{title}</span><span>{items.length} registro{items.length===1?'':'s'}</span></summary>
@@ -2712,6 +2931,7 @@
             const [fabulaTab, setFabulaTab] = useState('perfil');
             const [som6Tab, setSom6Tab] = useState('perfil');
             const [showFabulaExtras, setShowFabulaExtras] = useState(false);
+            const [fabulaCreateSupplements, setFabulaCreateSupplements] = useState({ ...FABULA_DEFAULT_SUPPLEMENTS });
             const [showGuideModal, setShowGuideModal] = useState(false);
             const [guideTab, setGuideTab] = useState('inicio');
 
@@ -2946,7 +3166,7 @@
             };
 
             const exportFullBackup = () => {
-                const payload = { pjLiteBackup: true, version: '0.6.9v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
+                const payload = { pjLiteBackup: true, version: '0.7.0v Alpha', schemaVersion: SCHEMA_VERSION, exportedAt: new Date().toISOString(), characters: getSavedCharacters(), threats: getSavedThreats(), history: getHistory() };
                 const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
@@ -3130,6 +3350,31 @@
                 }
             };
             
+            const getSelectedFabulaSupplements = () => ({ ...FABULA_DEFAULT_SUPPLEMENTS, ...(fabulaCreateSupplements || {}), basico:true });
+            const toggleFabulaCreateSupplement = (id) => {
+                if (id === 'basico') return;
+                setFabulaCreateSupplements(prev => ({ ...FABULA_DEFAULT_SUPPLEMENTS, ...(prev || {}), [id]: !prev?.[id], basico:true }));
+            };
+            const setFabulaSupplementEnabled = (id, enabled) => {
+                if (id === 'basico') return;
+                const nextSupplements = { ...FABULA_DEFAULT_SUPPLEMENTS, ...(data.suplementos || {}), [id]: !!enabled, basico:true };
+                const unlockedIds = FABULA_EXTRA_OPTIONS.filter(opt => isFabulaExtraUnlocked(opt, nextSupplements)).map(opt => opt.id);
+                const currentExtraId = fabulaTab.startsWith('extra-') ? fabulaTab.replace('extra-','') : null;
+                if (currentExtraId && !unlockedIds.includes(currentExtraId)) setFabulaTab('perfil');
+                setData(prev => {
+                    const next = JSON.parse(JSON.stringify(prev));
+                    next.suplementos = { ...FABULA_DEFAULT_SUPPLEMENTS, ...(next.suplementos || {}), [id]: !!enabled, basico:true };
+                    const stillUnlocked = FABULA_EXTRA_OPTIONS.filter(opt => isFabulaExtraUnlocked(opt, next.suplementos)).map(opt => opt.id);
+                    next.extrasAtivos = (next.extrasAtivos || []).filter(extraId => stillUnlocked.includes(extraId));
+                    return next;
+                });
+            };
+            const loadFabulaTemplateWithSupplements = (modelo) => {
+                const clone = JSON.parse(JSON.stringify(modelo));
+                clone.suplementos = getSelectedFabulaSupplements();
+                loadTemplate(clone);
+            };
+
             const loadTemplate = (modelo) => {
                 let templateData = normalizeMetaItem(modelo);
                 templateData = normalizeDndPcData(templateData);
@@ -3480,12 +3725,12 @@
                                 <div className={`px-4 ${newsCollapsed ? 'py-2' : 'py-3'} flex items-center justify-between gap-3`}>
                                     <div className="min-w-0">
                                         <div className="font-title font-bold text-[#922610] flex items-center gap-2">
-                                            <span>✨ v0.6.9 Alpha — fichas mais bonitas, compactas e fáceis de usar</span>
+                                            <span>✨ v0.7.0 Alpha — uma nova fase para o PJ Lite</span>
                                             {newsCollapsed && <span className="hidden sm:inline text-[10px] font-body font-bold uppercase tracking-widest text-[#922610]/70">minimizado</span>}
                                         </div>
                                         {!newsCollapsed && (
                                             <div className="mt-1 space-y-2">
-                                                <div className="text-xs text-gray-700 space-y-1.5"><p>A <strong>v0.6.9 Alpha</strong> é focada em identidade visual, organização e consulta rápida sem perder o estilo Lite.</p><p><strong>Dragonbane:</strong> layout de PC reequilibrado, perícias em duas colunas e mais espaço para Habilidades & Magias. <strong>D&D 5e:</strong> visual inspirado na ficha clássica e Itens Sincronizados. <strong>Fabula Ultima:</strong> atributos com dados visuais, magias e habilidades mais compactas, reordenação, consultas rápidas de conjuração/rituais/projetos e Ameaças/PNJs reorganizados. <strong>O Som das Seis:</strong> ficha compacta, montaria separada e tema próprio.</p></div>
+                                                <div className="text-xs text-gray-700 space-y-1.5"><p>A <strong>v0.7.0 Alpha</strong> marca a consolidação das grandes melhorias visuais e de experiência do PJ Lite, mantendo a proposta leve.</p><p><strong>Guias:</strong> conteúdo ampliado e reorganizado para iniciantes. <strong>Fabula Ultima:</strong> materiais modulares por suplemento, extras liberados apenas quando necessários e revisão geral dos recursos. <strong>O Som das Seis:</strong> ficha revisada, habilidades mais compactas e organizáveis, melhor leitura e integração consolidada. <strong>Dragonbane e D&amp;D 5e:</strong> preservam os layouts refinados e os recursos adicionados na linha 0.6.</p></div>
                                                 <a href="https://t.me/boost/Baianoviado" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-xs font-bold text-sky-700 hover:text-sky-900 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-full px-3 py-1.5 shadow-sm transition-colors">
                                                     <span>✈</span> Acompanhe anúncios e próximas novidades no Telegram ↗
                                                 </a>
@@ -3493,7 +3738,7 @@
                                         )}
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
-                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">v0.6.9 • alpha</span>}
+                                        {!newsCollapsed && <span className="hidden md:inline bg-[#922610] text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest">v0.7.0 • alpha</span>}
                                         <button onClick={() => setNewsCollapsed(v => !v)} className="bg-white/80 hover:bg-white text-[#922610] border border-[#c46b58] rounded px-2.5 py-1 text-xs font-bold shadow-sm" title={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'} aria-label={newsCollapsed ? 'Expandir novidades' : 'Minimizar novidades'}>
                                             {newsCollapsed ? '＋' : '−'}
                                         </button>
@@ -3734,7 +3979,7 @@
                                             </div>
                                         </div>
 
-                                        <div onClick={() => { setShowSystemModal(false); setShowFabulaModelModal(true); }} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
+                                        <div onClick={() => { setShowSystemModal(false); setFabulaCreateSupplements({ ...FABULA_DEFAULT_SUPPLEMENTS }); setShowFabulaModelModal(true); }} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
                                             <div className="w-14 h-14 bg-teal-700 group-hover:bg-teal-800 text-white rounded flex items-center justify-center font-bold font-title text-xl shadow-inner transition-colors">FU</div>
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2"><h3 className="font-title font-bold text-gray-900 group-hover:text-teal-800 text-lg transition-colors">Fabula Ultima</h3><span className="bg-teal-100 text-teal-800 text-[9px] font-bold uppercase px-2 py-0.5 rounded">Integrado</span></div>
@@ -3745,7 +3990,7 @@
                                         <div onClick={() => { setShowSystemModal(false); setShowSom6ModelModal(true); }} className="bg-white border-2 border-gray-300 hover:border-red-900 rounded p-4 cursor-pointer hover:shadow-lg transition-all flex items-center gap-4 group">
                                             <div className="w-14 h-14 bg-red-900 group-hover:bg-red-950 text-amber-50 rounded flex items-center justify-center font-bold font-title text-xl shadow-inner transition-colors">S6</div>
                                             <div className="flex-1">
-                                                <div className="flex items-center gap-2"><h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">O Som das Seis</h3><span className="bg-amber-100 text-red-900 text-[9px] font-bold uppercase px-2 py-0.5 rounded">Teste 0.6.9</span></div>
+                                                <div className="flex items-center gap-2"><h3 className="font-title font-bold text-gray-900 group-hover:text-red-900 text-lg transition-colors">O Som das Seis</h3><span className="bg-amber-100 text-red-900 text-[9px] font-bold uppercase px-2 py-0.5 rounded">Integrado 0.7.0</span></div>
                                                 <p className="text-xs text-gray-500">{createTarget === 'pc' ? 'Faroeste • personagem, Sina e montaria' : 'PDJs simplificados por Nível de Poder'}</p>
                                             </div>
                                         </div>
@@ -3759,7 +4004,7 @@
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
                                 <div className="bg-[#f8edd7] rounded-sm shadow-2xl w-full max-w-3xl border-2 border-red-900 overflow-hidden flex flex-col max-h-[90vh] animate-fade-in-up">
                                     <div className="bg-red-950 text-amber-50 p-3 flex justify-between items-center shrink-0">
-                                        <div><h2 className="font-title font-bold text-lg">Criar em O Som das Seis</h2><p className="text-[10px] text-amber-100">Teste avançado do sistema no PJ Lite</p></div>
+                                        <div><h2 className="font-title font-bold text-lg">Criar em O Som das Seis</h2><p className="text-[10px] text-amber-100">Integração consolidada na linha 0.7 Alpha</p></div>
                                         <button onClick={() => { setShowSom6ModelModal(false); setCreateTarget(null); }} className="text-amber-100 hover:text-white text-2xl font-bold px-2 leading-none">&times;</button>
                                     </div>
                                     <div className="p-6 flex-1 overflow-y-auto space-y-6">
@@ -3787,11 +4032,15 @@
                                     </div>
                                     <div className="p-6 bg-gray-100 flex-1 overflow-y-auto space-y-6">
                                         {createTarget === 'pc' ? <>
-                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Personagem em Branco</h3>
-                                                <div onClick={() => loadTemplate(initialFabulaPcData)} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-teal-700 text-white rounded flex items-center justify-center text-xl">👤</div><div><h3 className="font-bold text-sm">Novo Personagem</h3><p className="text-xs text-gray-500">Comece uma ficha de Fabula Ultima do zero.</p></div></div>
+                                            <div>
+                                                <div className="flex items-end justify-between gap-3 border-b-2 border-gray-300 pb-2 mb-3"><div><h3 className="font-title font-bold text-gray-700">1. Materiais usados pela ficha</h3><p className="text-[10px] text-gray-500 mt-1">O Livro Básico fica sempre ativo. Marque apenas os suplementos que este personagem realmente usará.</p></div><span className="text-[10px] font-bold text-teal-800 bg-teal-100 px-2 py-1 rounded-full">modo Lite</span></div>
+                                                <div className="grid sm:grid-cols-2 gap-2">{FABULA_SUPPLEMENT_OPTIONS.map(src=>{const checked=src.locked || !!fabulaCreateSupplements?.[src.id]; return <button type="button" key={src.id} disabled={!!src.locked} aria-pressed={checked} onClick={()=>!src.locked&&toggleFabulaCreateSupplement(src.id)} className={`fabula-supplement-card ${checked?'active':''} ${src.locked?'locked':''}`}><span className="fabula-supplement-icon">{src.icon}</span><span className="min-w-0 text-left"><span className="flex items-center gap-2"><strong className="text-sm">{src.nome}</strong>{src.locked&&<span className="fabula-supplement-status">sempre</span>}</span><span className="block text-[10px] opacity-70 mt-1">{src.desc}</span></span><span className="fabula-supplement-check" aria-hidden="true">{checked?'✓':'＋'}</span></button>})}</div>
                                             </div>
-                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Personagens Prontos • Press Start</h3>
-                                                <div className="grid sm:grid-cols-2 gap-3">{MODELOS_FABULA_PC.map((m,i)=><div key={i} onClick={()=>loadTemplate(m)} className="bg-white border-2 border-teal-200 hover:border-teal-700 rounded p-3 cursor-pointer hover:shadow-md"><div className="font-bold text-teal-900">{m.bio.nome}</div><div className="text-[10px] text-gray-500">{m.bio.identidade}</div><div className="text-[10px] mt-1">{m.bio.origem} • Tema: {m.bio.tema}</div></div>)}</div>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">2. Criar ficha</h3>
+                                                <div onClick={() => loadFabulaTemplateWithSupplements(initialFabulaPcData)} className="bg-white border-2 border-gray-300 hover:border-teal-700 rounded p-4 cursor-pointer flex items-center gap-4"><div className="w-12 h-12 bg-teal-700 text-white rounded flex items-center justify-center text-xl">👤</div><div className="flex-1"><h3 className="font-bold text-sm">Novo Personagem</h3><p className="text-xs text-gray-500">Cria uma ficha em branco liberando somente os módulos dos livros selecionados.</p><div className="flex flex-wrap gap-1.5 mt-2">{FABULA_SUPPLEMENT_OPTIONS.filter(src=>src.locked||fabulaCreateSupplements?.[src.id]).map(src=><span key={src.id} className="fabula-material-icon" title={src.nome}>{src.icon}</span>)}</div></div></div>
+                                            </div>
+                                            <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Personagens Prontos • Press Start</h3><p className="text-[10px] text-gray-500 mb-2">Os modelos continuam usando seus dados originais, mas também recebem os suplementos marcados acima.</p>
+                                                <div className="grid sm:grid-cols-2 gap-3">{MODELOS_FABULA_PC.map((m,i)=><div key={i} onClick={()=>loadFabulaTemplateWithSupplements(m)} className="bg-white border-2 border-teal-200 hover:border-teal-700 rounded p-3 cursor-pointer hover:shadow-md"><div className="font-bold text-teal-900">{m.bio.nome}</div><div className="text-[10px] text-gray-500">{m.bio.identidade}</div><div className="text-[10px] mt-1">{m.bio.origem} • Tema: {m.bio.tema}</div></div>)}</div>
                                             </div>
                                         </> : <>
                                             <div><h3 className="font-title font-bold text-gray-700 border-b-2 border-gray-300 pb-1 mb-3">Ameaça / PNJ em Branco</h3>
@@ -4038,7 +4287,7 @@
                             <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100] p-4 transition-opacity">
                                 <div className="bg-white rounded-sm shadow-2xl w-full max-w-4xl border-2 border-gray-800 overflow-hidden animate-fade-in-up flex flex-col">
                                     <div className="bg-gray-800 text-white p-3 flex justify-between items-center shrink-0">
-                                        <h2 className="font-title font-bold text-lg uppercase">Guias e Tutoriais</h2>
+                                        <div><h2 className="font-title font-bold text-lg uppercase">Guias e Tutoriais</h2><div className="text-[9px] text-gray-300 font-bold uppercase tracking-widest">PJ Lite v0.7.0 Alpha</div></div>
                                         <button onClick={() => setShowGuideModal(false)} className="text-gray-400 hover:text-white text-2xl font-bold px-2">&times;</button>
                                     </div>
                                     <div className="flex bg-gray-200 border-b border-gray-300 shrink-0 overflow-x-auto">
@@ -4059,6 +4308,7 @@
                                                     <p className="text-sm text-slate-200">O PJ Lite é uma ficha digital para organizar personagens sem transformar a mesa em um programa complicado. Você pode preencher aos poucos, salvar no navegador e usar os guias abaixo sempre que tiver dúvida.</p>
                                                 </div>
                                                 <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4"><h3 className="font-bold text-emerald-900 mb-2">🧭 Caminho mais simples</h3><p className="text-xs"><strong>Novo Personagem → escolha o sistema → identidade → números principais → habilidades/equipamentos → Salvar.</strong> O restante pode ser preenchido quando realmente aparecer em jogo.</p></div>
+                                                <div className="bg-sky-50 border border-sky-200 rounded-lg p-4"><h3 className="font-bold text-sky-900 mb-2">🗺️ Como se orientar na interface</h3><div className="grid sm:grid-cols-3 gap-2 text-xs"><div><strong>Topo</strong><br/>Tema, guias, código e backup.</div><div><strong>Lista de fichas</strong><br/>Buscar, filtrar, favoritar, duplicar e abrir.</div><div><strong>Dentro da ficha</strong><br/>Abas, campos principais e recursos específicos do sistema.</div></div></div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                     <div className="bg-white border rounded-lg p-4"><strong>1. Crie ou use um modelo</strong><p className="text-xs mt-1">Clique em <strong>Novo Personagem</strong> e escolha o sistema. Se houver um modelo pronto, use-o como exemplo para entender onde cada informação costuma ficar; depois altere o que precisar.</p></div>
                                                     <div className="bg-white border rounded-lg p-4"><strong>2. Preencha só o necessário primeiro</strong><p className="text-xs mt-1">Nome/conceito, atributos e recursos principais vêm antes de detalhes. Habilidades, magias, inventário e anotações podem ser completados aos poucos sem atrapalhar o uso da ficha.</p></div>
@@ -4181,39 +4431,41 @@
 
                                         {guideTab === 'fabula' && (
                                             <div className="space-y-5">
-                                                <div className="bg-teal-50 border border-teal-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-teal-700 mb-1">Compatibilidade consolidada • Alpha</div><h3 className="font-title font-bold text-teal-900 mb-2">✨ Fabula Ultima — personagem passo a passo</h3><p>A ficha foi organizada para funcionar como um menu de JRPG: comece pelo conceito, avance pelos valores principais e só então habilite fichas extras se o personagem realmente precisar.</p></div>
+                                                <div className="bg-teal-50 border border-teal-300 rounded p-4"><div className="text-[10px] font-bold uppercase text-teal-700 mb-1">v0.7.0 Alpha • recursos modulares</div><h3 className="font-title font-bold text-teal-900 mb-2">✨ Fabula Ultima — personagem passo a passo</h3><p>A ficha foi organizada para funcionar como um menu de JRPG. Ao criar o personagem, escolha primeiro quais livros ele usará; o PJ Lite libera somente os módulos compatíveis, mantendo o restante escondido.</p></div>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    <div className="bg-white border rounded p-4"><strong>1. Perfil & conceito</strong><p className="text-xs mt-1">Comece por Nome, Jogador, Identidade, Tema, Origem, Gênero e Traços. Adicione o retrato por <strong>Upload ou URL</strong> e, só depois, registre os Laços que realmente importam para a história.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>1. Escolha os materiais</strong><p className="text-xs mt-1">Na criação da ficha, o <strong>Livro Básico</strong> fica sempre ativo. Marque Natural Fantasy, High Fantasy, Techno Fantasy e/ou Codex Extra apenas se este personagem usar opções desses livros. Você pode mudar isso depois em <strong>＋ Fichas Extras</strong>; os ícones ao lado das abas mostram rapidamente quais materiais estão ativos. <strong>Arcanos pertencem ao Livro Básico</strong>, então essa ficha extra continua disponível mesmo sem selecionar suplementos.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>2. Atributos & condições</strong><p className="text-xs mt-1">Escolha os dados de DES, AST, VIG e VON. O formato visual acompanha d6/d8/d10/d12; <strong>Base</strong> representa o dado normal e <strong>Atual</strong> o valor temporário. Marque condições somente quando estiverem ativas.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>3. Recursos & defesas</strong><p className="text-xs mt-1">Preencha PV, PM, PI, Pontos de Fabula, Defesa, Defesa Mágica, Iniciativa, Nível, EXP e Zênites. Esses são os campos que você mais consulta durante a sessão.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>4. Equipamentos & PI</strong><p className="text-xs mt-1">Registre itens equipados e use a Mochila para o restante. A <strong>Consulta rápida de PI</strong> lembra os consumíveis comuns sem misturar PI com o inventário físico.</p></div>
                                                     <div className="bg-white border rounded p-4"><strong>5. Classes, poderes e ordem</strong><p className="text-xs mt-1">Adicione cada Classe, nível e benefícios. Poderes e Poderes Heroicos podem ser <strong>reordenados com ↑/↓</strong> e, em telas largas, aparecem em duas colunas para reduzir o tamanho da ficha.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>6. Extras só quando precisar</strong><p className="text-xs mt-1">Em <strong>＋ Fichas Extras</strong>, habilite Magia & Rituais, Arcanos, Mnemosfera, Receitas, Projetos ou Anotações. Ocultar um extra não apaga seus dados.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Extras só quando precisar</strong><p className="text-xs mt-1">Em <strong>＋ Fichas Extras</strong>, aparecem apenas os módulos liberados pelos materiais escolhidos. Natural Fantasy pode liberar Jardim, Receitas, Invocações, Comércio, Acampamento e Materiais; outros Atlas liberam seus próprios módulos. Ocultar um extra não apaga seus dados.</p></div>
                                                 </div>
-                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">🧭 Ordem rápida para uma ficha nova</h3><p className="text-xs">Conceito → Atributos → PV/PM/PI → Classes → Equipamento → Extras → Laços → Revisão → Salvar.</p><p className="text-xs text-gray-500">Se estiver aprendendo o sistema, os modelos prontos são uma boa referência de como os campos se conectam.</p></div>
+                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">🧭 Ordem rápida para uma ficha nova</h3><p className="text-xs">Materiais → Conceito → Atributos → PV/PM/PI → Classes → Equipamento → Extras necessários → Laços → Revisão → Salvar.</p><p className="text-xs text-gray-500">Se estiver aprendendo o sistema, os modelos prontos são uma boa referência de como os campos se conectam.</p></div>
                                                 <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📘 Entendendo os recursos principais</h3><p className="text-xs"><strong>PV</strong> acompanham a condição física do personagem, <strong>PM</strong> alimentam várias capacidades e <strong>PI</strong> representam uma reserva abstrata de consumíveis e utilidades. A ficha mantém esses valores separados para que você possa atualizar apenas o recurso usado.</p><p className="text-xs"><strong>Pontos de Fabula</strong>, nível, EXP e Zênites têm funções diferentes; evite colocar tudo no mesmo campo ou usar PI como inventário comum.</p></div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3"><div className="bg-violet-50 border border-violet-200 rounded p-4"><h3 className="font-bold text-violet-900 mb-2">🔮 Magia & Rituais</h3><p className="text-xs">Escreva as <strong>Disciplinas</strong> livremente no campo superior. Nos feitiços, registre PM, Alvos, Duração e efeito; marque <strong>⚡ Ofensivo</strong> quando houver Teste de Magia. A ficha mantém consultas rápidas de conjuração e rituais e permite reordenar feitiços/rituais com ↑/↓.</p></div><div className="bg-cyan-50 border border-cyan-200 rounded p-4"><h3 className="font-bold text-cyan-900 mb-2">👾 Ameaças / PNJs</h3><p className="text-xs">A ficha de ameaça usa blocos separados para identidade, atributos, recursos/defesas, afinidades e ataques. Feitiços, Poderes, Outras Ações e Regras Especiais ficam recolhíveis e podem ser reordenados, mantendo a leitura próxima de um stat block sem esconder campos importantes.</p></div></div>
-                                                <div className="bg-teal-50 border border-teal-200 rounded p-4"><h3 className="font-bold text-teal-900 mb-2">🌱 Primeiro personagem em Fabula Ultima?</h3><p className="text-xs">Comece com poucas classes e poderes já escolhidos no livro e habilite apenas as Fichas Extras de que realmente precisar. A consulta rápida de PI na aba Equipamentos existe justamente para evitar procurar a tabela toda vez durante a sessão.</p></div><div className="bg-amber-50 border border-amber-200 rounded p-4"><h3 className="font-bold text-amber-900 mb-2">🛠️ Projetos de Inventor</h3><p className="text-xs">Se o personagem puder iniciar Projetos, habilite a ficha extra <strong>Projetos</strong>. Ela registra invenção, custo material, progresso, material especial e defeito. A consulta rápida resume Potência, Área e Uso, mas as decisões finais continuam pertencendo ao Mestre.</p></div>
+                                                <div className="bg-teal-50 border border-teal-200 rounded p-4"><h3 className="font-bold text-teal-900 mb-2">📚 Materiais e módulos</h3><p className="text-xs mb-2">O <strong>Livro Básico</strong> fica sempre ativo e mantém Arcanos, Magia & Rituais, Projetos e os recursos centrais. Suplementos apenas liberam módulos adicionais; desmarcar um livro esconde os módulos exclusivos sem apagar o que você já preencheu.</p><div className="grid sm:grid-cols-2 gap-2 text-[11px]"><div className="border rounded p-2 bg-white"><strong>🌿 Natural Fantasy</strong><br/>Acampamento, Jardim, Receitas, Invocações, Comércio e Materiais/Fabricação.</div><div className="border rounded p-2 bg-white"><strong>✨ High Fantasy</strong><br/>Poderes Zero e opções avançadas ligadas às classes e peculiaridades.</div><div className="border rounded p-2 bg-white"><strong>⚙️ Techno Fantasy</strong><br/>Tecnosferas, Mnemosfera e módulos tecnológicos/veiculares.</div><div className="border rounded p-2 bg-white"><strong>🩸 Codex Extra</strong><br/>Recursos especializados para classes e opções adicionais.</div></div></div><div className="bg-amber-50 border border-amber-200 rounded p-4"><h3 className="font-bold text-amber-900 mb-2">🛠️ Projetos de Inventor</h3><p className="text-xs">Projetos pertencem ao conjunto base da ficha. O módulo registra invenção, custo material, progresso, material especial e defeito. A consulta rápida serve de apoio, mas as decisões finais continuam pertencendo ao Mestre.</p></div>
                                                 <div className="p-4 bg-teal-50 border border-teal-300 rounded"><h3 className="font-title font-bold text-teal-900 mb-2">Material oficial de Fabula Ultima</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o Livro Básico. Consulte as regras completas e apoie a publicação oficial brasileira:</p><a href="https://jamboeditora.com.br/produto/fabula-ultima-livro-basico/" target="_blank" rel="noopener noreferrer" className="inline-block bg-teal-800 hover:bg-teal-700 text-white px-4 py-2 rounded font-bold text-xs">Obter Fabula Ultima — Livro Básico na Jambô ↗</a></div>
                                             </div>
                                         )}
 
                                         {guideTab === 'som6' && (
                                             <div className="space-y-5">
-                                                <div className="bg-[#f8edd7] border border-red-900 rounded p-4"><div className="text-[10px] font-bold uppercase text-red-800 mb-1">v0.6.9 Alpha • Velho Oeste</div><h3 className="font-title font-bold text-red-950 mb-2">🤠 O Som das Seis — começando a ficha</h3><p className="text-xs">A proposta da ficha é manter o sistema rápido: registrar os números, Tormento, Cartas de Sina e equipamento sem transformar o PJ Lite em um VTT ou rolador. A tela principal reúne quase tudo em uma única folha, e a Montaria fica separada para não poluir a consulta.</p></div>
+                                                <div className="bg-[#f8edd7] border border-red-900 rounded p-4"><div className="text-[10px] font-bold uppercase text-red-800 mb-1">v0.7.0 Alpha • integração consolidada</div><h3 className="font-title font-bold text-red-950 mb-2">🤠 O Som das Seis — guia rápido e completo</h3><p className="text-xs">A ficha foi pensada para manter a consulta rápida do sistema: quase tudo fica em uma única tela, enquanto a Montaria permanece em aba própria. Comece pelo essencial e complete detalhes conforme eles realmente entrarem em jogo.</p></div>
+                                                <div className="bg-amber-50 border border-amber-300 rounded p-4"><h3 className="font-bold text-amber-950 mb-2">🧭 Ordem recomendada</h3><p className="text-xs"><strong>Conceito → Atributos → Antecedentes → Vida/Defesa/Iniciativa → Tormento → Habilidades → Equipamento → Reputação/Cartas de Sina → Montaria (se houver) → Salvar.</strong></p></div>
                                                 <div className="grid sm:grid-cols-2 gap-3">
-                                                    <div className="bg-white border rounded p-4"><strong>1. Conceito do personagem</strong><p className="text-xs mt-1">Comece pelo nome, jogador, apelido, aparência e retrato. Pense em quem essa pessoa era antes de virar protagonista no Velho Oeste: um pistoleiro, um ex-soldado, uma médica itinerante, um apostador ou alguém perseguido pelo passado.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Distribua os valores entre Físico, Intelecto, Coragem e Agilidade. Eles influenciam a forma como a personagem resiste, age e encara perigos. Se ainda estiver aprendendo, preencha primeiro os valores-base e refine o resto depois.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>3. Antecedentes</strong><p className="text-xs mt-1">Combate, Labuta, Negócios, Montaria, Tradição, Exploração, Roubo e Medicina funcionam como áreas de experiência. No 1º nível, distribua <strong>4 pontos</strong> entre eles, com máximo de 2 em um mesmo Antecedente. Eles ajudam a contar de onde o personagem veio.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>4. Recursos da ficha</strong><p className="text-xs mt-1">Preencha PV, Defesa, Iniciativa, Ações, Dinheiro, Recompensa, Nível e XP. Como parte do sistema depende da mesa e das escolhas da Juíza, o PJ Lite deixa esses campos editáveis em vez de forçar automação.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>5. Habilidades</strong><p className="text-xs mt-1">No 1º nível, a personagem começa com duas Habilidades. Cadastre o nome e um resumo do efeito para facilitar a consulta durante a sessão. Sempre que possível, escreva em poucas linhas o gatilho e o benefício.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>6. Tormento & Cartas de Sina</strong><p className="text-xs mt-1">O Tormento representa uma cicatriz, dever, vício, segredo ou trauma. Quando isso complica a história, a Juíza pode conceder Cartas de Sina. A ficha acomoda as duas cartas máximas da sessão e permite marcar se já foram usadas.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>7. Armas & inventário</strong><p className="text-xs mt-1">Registre armas com dano, munição e recarga. O inventário foi mantido compacto para combinar com o espírito do sistema: leve o que realmente importa para a cena, sem transformar a ficha em planilha.</p></div>
-                                                    <div className="bg-white border rounded p-4"><strong>8. Montaria</strong><p className="text-xs mt-1">Se a personagem tiver cavalo ou outra montaria, use a aba própria. Ela registra Potência, Vigor, Vida, Defesa, Dano, Fidelidade e itens carregados, seguindo a lógica da segunda página da ficha editável.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>1. Conceito & retrato</strong><p className="text-xs mt-1">Preencha nome, jogador, apelido, aparência e passado. O retrato aceita Upload ou URL. Não precisa escrever uma biografia longa: uma ou duas ideias fortes já ajudam a interpretar o personagem.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>2. Atributos</strong><p className="text-xs mt-1">Físico, Agilidade, Intelecto e Coragem ficam em marcadores visuais. Clique nos pontos para ajustar rapidamente e use os valores definidos pela criação do personagem.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>3. Antecedentes</strong><p className="text-xs mt-1">Combate, Labuta, Negócios, Montaria, Tradição, Exploração, Roubo e Medicina registram experiências anteriores. No 1º nível, distribua <strong>4 pontos</strong>, com máximo de 2 em um mesmo Antecedente.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>4. Recursos principais</strong><p className="text-xs mt-1">Vida, Defesa, Iniciativa, Ações, Dinheiro, Recompensa, Nível e XP ficam editáveis. O PJ Lite evita automações rígidas para não impedir ajustes da Juíza ou regras da mesa.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>5. Tormento</strong><p className="text-xs mt-1">Escolha o tipo e descreva de forma curta como ele afeta a personagem. Pense no Tormento como algo que pode entrar em cena e complicar decisões, não apenas como texto de fundo.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>6. Habilidades</strong><p className="text-xs mt-1">No 1º nível, registre as duas Habilidades iniciais. Na v0.7 elas aparecem em <strong>duas colunas no desktop</strong> quando houver espaço e podem ser reorganizadas com <strong>↑/↓</strong>. Escreva o gatilho e o efeito em poucas linhas.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>7. Equipamento</strong><p className="text-xs mt-1">Nas armas, registre dano, munição, recarga e modificações importantes. Outros itens ficam logo abaixo. Priorize o que precisa ser consultado durante a sessão.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>8. Reputação & Cartas de Sina</strong><p className="text-xs mt-1">Reputação guarda valor e título. As Cartas de Sina possuem dois espaços por sessão e podem ser marcadas como usadas, evitando perder o controle no meio da cena.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>9. Montaria</strong><p className="text-xs mt-1">Ative somente se o personagem realmente tiver uma montaria. Potência e Vigor são marcados pelos quadrados clicáveis da ficha; Vida, Defesa, Dano e Fidelidade podem ser anotados normalmente. A aba também registra tipo, itens carregados e observações.</p></div>
+                                                    <div className="bg-white border rounded p-4"><strong>10. Salvar e compartilhar</strong><p className="text-xs mt-1">Use <strong>Salvar</strong> para criar histórico, <strong>Ficha Chat</strong> para mandar um resumo ao grupo e ZIP/JSON para backup completo.</p></div>
                                                 </div>
-                                                <div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900 mb-2">📈 Progressão e uso em mesa</h3><p className="text-xs">Registre Nível e XP na ficha. A consulta rápida mostra os marcos de 0, 10, 20, 30, 45 e 60 XP e os bônus indicados no livro.</p><p className="text-xs">No fim de cada sessão, o livro sugere até cinco perguntas para conceder XP, ligadas a sobrevivência, dinheiro, passado, reputação e ajudar alguém. A Ficha Chat também pode ser usada para mandar rapidamente o resumo do personagem ao grupo ou à Juíza.</p></div>
-                                                <div className="bg-red-50 border border-red-200 rounded p-4"><h3 className="font-bold text-red-950 mb-2">☠ PDJs</h3><p className="text-xs">Os PDJs foram mantidos propositalmente simples. Escolha o Nível de Poder (NP 1–6), registre PV, Defesa, Ações, bônus de ataque/iniciativa, armas e habilidades. Isso deixa a consulta rápida para a Juíza sem transformar todo inimigo em uma ficha de jogador completa.</p></div>
-                                                <div className="p-4 bg-[#f8edd7] border border-red-900 rounded"><h3 className="font-title font-bold text-red-950 mb-2">Material original de O Som das Seis</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o livro. Para consultar o material original e apoiar o sistema, use a página oficial do jogo:</p><a href="https://www.rpgplanet.com.br/o-som-das-seis" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-900 hover:bg-red-950 text-amber-50 px-4 py-2 rounded font-bold text-xs">Abrir página oficial de O Som das Seis ↗</a></div>
+                                                <div className="grid md:grid-cols-2 gap-3"><div className="bg-white border rounded p-4 space-y-2"><h3 className="font-bold text-gray-900">📈 Progressão</h3><p className="text-xs">A consulta rápida mantém os marcos de XP e bônus em um bloco recolhível, deixando a ficha limpa quando você não precisa consultá-los.</p></div><div className="bg-red-50 border border-red-200 rounded p-4"><h3 className="font-bold text-red-950 mb-2">☠ PDJs</h3><p className="text-xs">Escolha NP 1–6 e registre apenas PV, Defesa, Ações, bônus, armas, habilidades e notas necessárias. A proposta é funcionar como bloco rápido da Juíza, não como uma segunda ficha de personagem completa.</p></div></div>
+                                                <div className="p-4 bg-[#f8edd7] border border-red-900 rounded"><h3 className="font-title font-bold text-red-950 mb-2">Material original de O Som das Seis</h3><p className="text-xs mb-3">O PJ Lite é uma ferramenta independente e não substitui o livro. Consulte o material original para regras completas e exemplos:</p><a href="https://www.rpgplanet.com.br/o-som-das-seis" target="_blank" rel="noopener noreferrer" className="inline-block bg-red-900 hover:bg-red-950 text-amber-50 px-4 py-2 rounded font-bold text-xs">Abrir página oficial de O Som das Seis ↗</a></div>
                                                 <div className="bg-stone-100 border rounded p-4 text-xs"><strong>Crédito das regras:</strong> O Som das Seis, por Ramon Mineiro. O livro informa que as regras estão sob Creative Commons Atribuição-CompartilhaIgual 4.0 Internacional. Esta ficha é uma adaptação independente no PJ Lite.</div>
                                             </div>
                                         )}
@@ -4287,7 +4539,7 @@
                                 <SVGIcons.ArrowLeft /> <span className="hidden sm:inline">Voltar</span>
                             </button>
                             <span className="font-title font-bold text-lg md:text-xl tracking-wider uppercase">
-                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : isFabula ? (data.type === 'pc' ? 'FABULA ULTIMA • PERSONAGEM • INTEGRADO' : 'FABULA ULTIMA • AMEAÇA / PNJ • INTEGRADO') : isSom6 ? (data.type === 'pc' ? 'O SOM DAS SEIS • PERSONAGEM • EM TESTE' : 'O SOM DAS SEIS • PDJ • EM TESTE') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
+                                {isDnd ? (data.type === 'pc' ? 'D&D 5e - Personagem • EM ADAPTAÇÃO' : 'D&D 5e - Bestiário • EM ADAPTAÇÃO') : isFabula ? (data.type === 'pc' ? 'FABULA ULTIMA • PERSONAGEM • INTEGRADO' : 'FABULA ULTIMA • AMEAÇA / PNJ • INTEGRADO') : isSom6 ? (data.type === 'pc' ? 'O SOM DAS SEIS • PERSONAGEM • INTEGRADO' : 'O SOM DAS SEIS • PDJ • INTEGRADO') : (data.type === 'pc' ? 'DRAGONBANE' : data.type === 'pnj' ? 'PNJ (DB)' : 'AMEAÇA (DB)')}
                             </span>
                         </div>
                         <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end items-center">
@@ -4347,9 +4599,12 @@
                                         {id:'perfil',label:'👤 Perfil & Status'}, {id:'combate',label:'🎒 Equipamentos'}, {id:'classes',label:'✨ Classes'},
                                         ...(data.extrasAtivos || []).map(id => ({id:`extra-${id}`, label:`${FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.icon || '📄'} ${FABULA_EXTRA_OPTIONS.find(x=>x.id===id)?.nome || id}`}))
                                     ].map(tab => <button key={tab.id} onClick={() => setFabulaTab(tab.id)} className={`fabula-tab-btn ${fabulaTab===tab.id?'active':''}`}>{tab.label}</button>)}
-                                    <button onClick={() => setShowFabulaExtras(true)} className="ml-auto fabula-soft-btn">＋ Fichas Extras</button>
+                                    <div className="ml-auto flex items-center gap-2">
+                                        <div className="fabula-material-icons" aria-label="Materiais habilitados">{FABULA_SUPPLEMENT_OPTIONS.filter(src=>src.locked||data.suplementos?.[src.id]).map(src=><span key={src.id} className="fabula-material-icon" title={src.nome} aria-label={src.nome}>{src.icon}</span>)}</div>
+                                        <button onClick={() => setShowFabulaExtras(true)} className="fabula-soft-btn">＋ Fichas Extras</button>
+                                    </div>
                                 </div>
-                                <div className="md:hidden flex justify-end"><button onClick={() => setShowFabulaExtras(true)} className="px-3 py-2 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">＋ Fichas Extras</button></div>
+                                <div className="md:hidden flex items-center justify-between gap-3"><div className="fabula-material-icons" aria-label="Materiais habilitados">{FABULA_SUPPLEMENT_OPTIONS.filter(src=>src.locked||data.suplementos?.[src.id]).map(src=><span key={src.id} className="fabula-material-icon" title={src.nome}>{src.icon}</span>)}</div><button onClick={() => setShowFabulaExtras(true)} className="px-3 py-2 rounded text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">＋ Fichas Extras</button></div>
 
                                 {fabulaTab === 'perfil' && (
                                     <div className="fabula-profile-layout animate-fade-in-up">
@@ -4472,27 +4727,38 @@
                                 {fabulaTab === 'extra-receitas' && <FabulaReceitasPanel data={data} updateField={updateField} />}
                                 {fabulaTab === 'extra-projetos' && <FabulaProjetosPanel data={data} updateField={updateField} />}
                                 {fabulaTab === 'extra-anotacoes' && <FabulaNotasPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-peculiaridade' && <FabulaPeculiaridadePanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-armaPersonalizada' && <FabulaArmasPersonalizadasPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-recursosClasse' && <FabulaRecursosClassePanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-acampamento' && <FabulaAcampamentoPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-jardim' && <FabulaJardimPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-invocacoes' && <FabulaInvocacoesPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-comercio' && <FabulaComercioPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-materiais' && <FabulaMateriaisPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-poderZero' && <FabulaPoderZeroPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-tecnosferas' && <FabulaTecnosferasPanel data={data} updateField={updateField} />}
+                                {fabulaTab === 'extra-veiculo' && <FabulaVeiculoPanel data={data} updateField={updateField} />}
 
                                 <div className="mt-8 rounded border border-teal-200 bg-teal-50 p-3 text-[10px] text-teal-900">Compatibilidade com Fabula Ultima — interface independente e não oficial do PJ Lite, organizada para consulta e gerenciamento de fichas.</div>
                             </div>
 
                             {showFabulaExtras && ReactDOM.createPortal(
-                                <div className="fixed inset-0 z-[150] bg-black/60 p-4 flex items-center justify-center"><div className="bg-white w-full max-w-lg rounded-lg shadow-2xl border-2 border-teal-700 overflow-hidden"><div className="bg-teal-800 text-white p-3 flex justify-between"><div><h3 className="font-title font-bold">Fichas Extras</h3><p className="text-[10px] text-teal-100">Ative só o que este personagem precisa.</p></div><button onClick={()=>setShowFabulaExtras(false)} className="text-2xl">×</button></div><div className="p-4 space-y-2">{FABULA_EXTRA_OPTIONS.map(opt=>{const active=(data.extrasAtivos||[]).includes(opt.id);return <label key={opt.id} className={`flex items-start gap-3 border-2 rounded p-3 cursor-pointer ${active?'border-teal-600 bg-teal-50':'border-gray-200'}`}><input type="checkbox" checked={active} onChange={e=>{let arr=[...(data.extrasAtivos||[])]; if(e.target.checked){if(!arr.includes(opt.id))arr.push(opt.id)}else arr=arr.filter(x=>x!==opt.id); updateField('extrasAtivos',arr); if(e.target.checked)setFabulaTab(`extra-${opt.id}`); else if(fabulaTab===`extra-${opt.id}`)setFabulaTab('perfil')}} className="mt-1"/><div><div className="font-bold text-sm">{opt.icon} {opt.nome}</div><div className="text-xs text-gray-500">{opt.desc}</div></div></label>})}<div className="pt-2 flex justify-end"><button onClick={()=>setShowFabulaExtras(false)} className="bg-teal-800 text-white px-4 py-2 rounded font-bold text-xs">Concluir</button></div></div></div></div>, document.body
+                                <div className="fixed inset-0 z-[150] bg-black/60 p-4 flex items-center justify-center"><div className="bg-white w-full max-w-2xl rounded-lg shadow-2xl border-2 border-teal-700 overflow-hidden max-h-[90vh] flex flex-col"><div className="bg-teal-800 text-white p-3 flex justify-between shrink-0"><div><h3 className="font-title font-bold">Fichas Extras & Materiais</h3><p className="text-[10px] text-teal-100">Mude os suplementos quando precisar; dados de módulos ocultos não são apagados.</p></div><button onClick={()=>setShowFabulaExtras(false)} className="text-2xl">×</button></div><div className="p-4 space-y-4 overflow-y-auto"><div><h4 className="font-title font-bold text-teal-900 mb-1">📚 Materiais habilitados</h4><p className="text-[10px] text-gray-500 mb-3">Clique em um suplemento para ativar ou desativar. O Livro Básico permanece sempre ligado.</p><div className="grid sm:grid-cols-2 gap-2">{FABULA_SUPPLEMENT_OPTIONS.map(src=>{const checked=src.locked||!!data.suplementos?.[src.id];return <button type="button" key={src.id} disabled={!!src.locked} aria-pressed={checked} onClick={()=>!src.locked&&setFabulaSupplementEnabled(src.id,!checked)} className={`fabula-supplement-card ${checked?'active':''} ${src.locked?'locked':''}`}><span className="fabula-supplement-icon">{src.icon}</span><span className="min-w-0 text-left"><span className="flex items-center gap-2"><strong className="text-xs">{src.nome}</strong>{src.locked&&<span className="fabula-supplement-status">sempre</span>}</span><span className="block text-[9px] opacity-70 mt-1">{src.desc}</span></span><span className="fabula-supplement-check" aria-hidden="true">{checked?'✓':'＋'}</span></button>})}</div></div><div className="border-t pt-4"><h4 className="font-title font-bold text-teal-900 mb-1">＋ Fichas Extras disponíveis</h4><p className="text-[10px] text-gray-500 mb-2">Extras do Livro Básico, como Arcanos, Magia & Rituais e Projetos, ficam disponíveis independentemente dos suplementos.</p><div className="space-y-2">{FABULA_EXTRA_OPTIONS.filter(opt=>isFabulaExtraUnlocked(opt,data.suplementos)||(data.extrasAtivos||[]).includes(opt.id)).map(opt=>{const active=(data.extrasAtivos||[]).includes(opt.id);return <label key={opt.id} className={`flex items-start gap-3 border-2 rounded p-3 cursor-pointer ${active?'border-teal-600 bg-teal-50':'border-gray-200'}`}><input type="checkbox" checked={active} onChange={e=>{let arr=[...(data.extrasAtivos||[])]; if(e.target.checked){if(!arr.includes(opt.id))arr.push(opt.id)}else arr=arr.filter(x=>x!==opt.id); updateField('extrasAtivos',arr); if(e.target.checked)setFabulaTab(`extra-${opt.id}`); else if(fabulaTab===`extra-${opt.id}`)setFabulaTab('perfil')}} className="mt-1"/><div><div className="font-bold text-sm">{opt.icon} {opt.nome}</div><div className="text-xs text-gray-500">{opt.desc}</div></div></label>})}</div></div><div className="pt-2 flex justify-end"><button onClick={()=>setShowFabulaExtras(false)} className="bg-teal-800 text-white px-4 py-2 rounded font-bold text-xs">Concluir</button></div></div></div></div>, document.body
                             )}
                         </div>
                     )}
 
-                    {/* O Som das Seis — Personagem (teste linha 0.6) */}
+                    {/* O Som das Seis — Personagem (integração linha 0.7) */}
                     {isSom6 && data.type === 'pc' && (
                         <div className="som6-paper">
                             <div className="pj-mobile-tabs flex overflow-x-auto bg-red-950 text-amber-50 border-b border-red-900 sticky top-0 z-20 shadow-sm">
                                 {[['perfil','Ficha'],['montaria','Montaria']].map(([id,label])=><button key={id} onClick={()=>setSom6Tab(id)} className={`shrink-0 px-5 py-3 text-[10px] font-bold uppercase border-b-4 ${som6Tab===id?'border-amber-300 bg-red-900':'border-transparent opacity-75'}`}>{label}</button>)}
                             </div>
                             <div className="p-3 md:p-5">
-                                {som6Tab!=='montaria' && <div className="som6-sheet max-w-5xl mx-auto space-y-3 animate-fade-in-up">
+                                {som6Tab!=='montaria' && <div className="som6-sheet max-w-6xl mx-auto space-y-3 animate-fade-in-up">
                                     <div className="flex items-end justify-between gap-3 px-1">
                                         <div className="som6-logo text-3xl sm:text-5xl">O Som das Seis</div>
-                                        <div className="text-[9px] font-bold uppercase tracking-widest text-red-900 text-right">Ficha em teste • linha 0.6</div>
+                                        <div className="text-[9px] font-bold uppercase tracking-widest text-red-900 text-right">Ficha integrada • v0.7 Alpha</div>
                                     </div>
 
                                     <div className="som6-frame som6-frame-cut">
@@ -4519,7 +4785,7 @@
                                         </div>
                                     </div>
 
-                                    <div className="grid lg:grid-cols-[0.88fr_1.42fr] gap-3 items-stretch">
+                                    <div className="grid lg:grid-cols-[0.9fr_1.5fr] gap-4 items-start">
                                         <div className="space-y-3">
                                             <div className="grid grid-cols-[1fr_92px] gap-3">
                                                 <div className="som6-frame som6-frame-cut">
@@ -4555,8 +4821,8 @@
 
                                             <div className="som6-frame som6-frame-cut h-full">
                                                 <div className="som6-cream rounded-xl p-3 h-full">
-                                                    <div className="flex justify-between items-center gap-2 mb-2"><div className="font-serif font-black text-lg">habilidades</div><button onClick={()=>updateField('habilidades',[...(data.habilidades||[]),{nome:'',desc:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋ habilidade</button></div>
-                                                    <div className="space-y-2">{(data.habilidades||[]).map((h,i)=><div key={i} className="grid grid-cols-[1fr_auto] gap-1 som6-table-row rounded p-2"><div><input list="som6-habs" value={h.nome||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],nome:e.target.value};updateField('habilidades',x)}} className="w-full border rounded som6-mini-input text-xs font-black" placeholder={`Habilidade ${i+1}`}/>{i===0&&<datalist id="som6-habs">{SOM6_HABILIDADES.map(n=><option key={n} value={n}/>)}</datalist>}<textarea rows="2" value={h.desc||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],desc:e.target.value};updateField('habilidades',x)}} className="w-full border rounded p-1.5 mt-1 text-[11px] som6-compact-textarea" placeholder="Resumo do efeito"/></div><button onClick={()=>updateField('habilidades',(data.habilidades||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black px-1 self-start" title="Remover">×</button></div>)}</div>
+                                                    <div className="flex flex-wrap justify-between items-center gap-2 mb-2"><div><div className="font-serif font-black text-lg">habilidades</div><div className="som6-help-chip mt-1">2 iniciais • arraste a ordem com ↑ ↓</div></div><button type="button" onClick={()=>updateField('habilidades',[...(data.habilidades||[]),{nome:'',desc:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋ habilidade</button></div>
+                                                    <div className="som6-skill-grid">{(data.habilidades||[]).map((h,i)=><div key={i} className="som6-skill-card grid grid-cols-[1fr_28px] gap-2"><div className="min-w-0"><input list="som6-habs" value={h.nome||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],nome:e.target.value};updateField('habilidades',x)}} className="w-full border rounded som6-mini-input text-xs font-black" placeholder={`Habilidade ${i+1}`}/>{i===0&&<datalist id="som6-habs">{SOM6_HABILIDADES.map(n=><option key={n} value={n}/>)}</datalist>}<textarea rows="3" value={h.desc||''} onChange={e=>{const x=[...(data.habilidades||[])];x[i]={...x[i],desc:e.target.value};updateField('habilidades',x)}} className="w-full border rounded p-1.5 mt-1 text-[11px] som6-compact-textarea" placeholder="Gatilho e resumo do efeito"/></div><div className="som6-order-col"><button type="button" disabled={i===0} onClick={()=>moveArrayItem('habilidades',i,-1)} className="som6-order-btn" title="Mover para cima">↑</button><button type="button" disabled={i===(data.habilidades||[]).length-1} onClick={()=>moveArrayItem('habilidades',i,1)} className="som6-order-btn" title="Mover para baixo">↓</button><button type="button" onClick={()=>updateField('habilidades',(data.habilidades||[]).filter((_,j)=>j!==i))} className="som6-order-btn !text-red-800" title="Remover">×</button></div></div>)}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -4583,15 +4849,15 @@
                                     </div>
 
                                     <details className="som6-section rounded-lg"><summary className="cursor-pointer p-3 text-xs font-bold som6-title">📈 Consulta de progressão</summary><div className="px-3 pb-3 grid sm:grid-cols-2 md:grid-cols-3 gap-1 text-[10px]">{SOM6_LEVELS.map(x=><div key={x.nivel} className="border rounded bg-white p-2"><strong>Nv.{x.nivel} — {x.xp} XP</strong><br/>{x.bonus}</div>)}</div></details>
-                                    <div className="text-[9px] text-stone-500 text-center pt-1">O Som das Seis — regras por Ramon Mineiro • integração em teste no PJ Lite • regras sob CC BY-SA 4.0 conforme o livro.</div>
+                                    <div className="text-[9px] text-stone-500 text-center pt-1">O Som das Seis — regras por Ramon Mineiro • integração PJ Lite v0.7 Alpha • regras sob CC BY-SA 4.0 conforme o livro.</div>
                                 </div>}
 
-                                {som6Tab==='montaria' && <div className="som6-sheet max-w-5xl mx-auto space-y-3 animate-fade-in-up">
+                                {som6Tab==='montaria' && <div className="som6-sheet max-w-6xl mx-auto space-y-3 animate-fade-in-up">
                                     <div className="flex items-end justify-between gap-3 px-1"><div className="som6-logo text-3xl sm:text-5xl">Seu Cavalo</div><label className="text-xs font-bold flex items-center gap-2"><input type="checkbox" checked={!!data.montaria?.ativa} onChange={e=>updateField('montaria.ativa',e.target.checked)}/> possui montaria</label></div>
                                     {!data.montaria?.ativa ? <div className="som6-section rounded-xl p-6 text-center"><div className="text-3xl mb-2">🐎</div><div className="font-title font-bold som6-title">Nenhuma montaria ativa</div><p className="text-xs text-stone-600 mt-1">Marque “possui montaria” para abrir a ficha do animal.</p></div> : <>
-                                        <div className="som6-frame som6-frame-cut"><div className="grid grid-cols-[1fr_120px] gap-2"><div className="som6-stat-box"><div className="font-serif font-black">nome</div><input value={data.montaria?.nome||''} onChange={e=>updateField('montaria.nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 font-bold"/></div><div className="som6-stat-box"><div className="font-serif font-black">fidelidade</div><input type="number" min="0" max="4" value={data.montaria?.fidelidade??0} onChange={e=>updateField('montaria.fidelidade',Math.max(0,Math.min(4,Number(e.target.value))))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></div></div></div>
+                                        <div className="som6-frame som6-frame-cut"><div className="grid grid-cols-1 sm:grid-cols-[1fr_150px_110px] gap-2"><div className="som6-stat-box"><div className="font-serif font-black">nome</div><input value={data.montaria?.nome||''} onChange={e=>updateField('montaria.nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 font-bold" placeholder="Nome da montaria"/></div><div className="som6-stat-box"><div className="font-serif font-black">tipo</div><input value={data.montaria?.tipo||'Cavalo'} onChange={e=>updateField('montaria.tipo',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-center font-bold" placeholder="Cavalo"/></div><div className="som6-stat-box"><div className="font-serif font-black">fidelidade</div><input type="number" min="0" max="4" value={data.montaria?.fidelidade??0} onChange={e=>updateField('montaria.fidelidade',Math.max(0,Math.min(4,Number(e.target.value))))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></div></div></div>
                                         <div className="grid lg:grid-cols-[.9fr_.75fr_1fr] gap-3">
-                                            <div className="som6-frame som6-frame-cut"><div className="space-y-4 py-2"><div className="flex items-center justify-between gap-2"><span className="font-serif font-black text-amber-50 text-lg">potência</span><Som6Pips value={data.montaria?.potencia||0} onChange={v=>updateField('montaria.potencia',v)} title="Potência"/></div><div className="flex items-center justify-between gap-2"><span className="font-serif font-black text-amber-50 text-lg">vigor</span><Som6Pips value={data.montaria?.vigor||0} onChange={v=>{updateField('montaria.vigor',v);updateField('montaria.resistencia',v)}} title="Vigor"/></div></div></div>
+                                            <div className="som6-frame som6-frame-cut"><div className="space-y-4 py-2"><div className="flex items-center justify-between gap-2"><div><span className="font-serif font-black text-amber-50 text-lg">potência</span><div className="text-[8px] text-amber-100/75">clique nos marcadores</div></div><Som6Pips value={data.montaria?.potencia||0} onChange={v=>updateField('montaria.potencia',v)} title="Potência"/></div><div className="flex items-center justify-between gap-2"><div><span className="font-serif font-black text-amber-50 text-lg">vigor</span><div className="text-[8px] text-amber-100/75">clique nos marcadores</div></div><Som6Pips value={data.montaria?.vigor||0} onChange={v=>updateField('montaria',{...(data.montaria||{}),vigor:v,resistencia:v})} title="Vigor"/></div></div></div>
                                             <div className="som6-frame som6-frame-cut"><div className="som6-stat-box space-y-2"><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">vida</span><div className="grid grid-cols-2 gap-1"><input type="number" value={data.montaria?.pvAtual??0} onChange={e=>updateField('montaria.pvAtual',Number(e.target.value))} className="border rounded som6-mini-input text-center"/><input type="number" value={data.montaria?.pvMax??0} onChange={e=>updateField('montaria.pvMax',Number(e.target.value))} className="border rounded som6-mini-input text-center"/></div></div><div className="text-[8px] text-right -mt-1">referência da ficha: 1d6 + Vigor</div><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">defesa</span><input type="number" value={data.montaria?.defesa??5} onChange={e=>updateField('montaria.defesa',Number(e.target.value))} className="border rounded som6-mini-input text-center"/></div><div className="text-[8px] text-right -mt-1">referência: 5 + Vigor</div><div className="grid grid-cols-[58px_1fr] items-center gap-2"><span className="font-serif font-black">dano</span><input value={data.montaria?.dano||''} onChange={e=>updateField('montaria.dano',e.target.value)} className="border rounded som6-mini-input text-center" placeholder="6 + Potência"/></div></div></div>
                                             <div className="som6-frame som6-frame-cut"><div className="som6-cream rounded-xl p-3"><div className="flex justify-between items-center"><div className="font-serif font-black">itens no cavalo</div><button onClick={()=>updateField('montaria.itens',[...(data.montaria?.itens||[]),{nome:''}])} className="bg-red-900 text-white rounded px-2 py-1 text-[10px] font-bold">＋</button></div><div className="space-y-1 mt-2">{(data.montaria?.itens||[]).map((it,i)=><div key={i} className="grid grid-cols-[1fr_22px] gap-1"><input value={it.nome||''} onChange={e=>{const x=[...(data.montaria?.itens||[])];x[i]={...x[i],nome:e.target.value};updateField('montaria.itens',x)}} className="border rounded som6-mini-input text-xs" placeholder="Item"/><button onClick={()=>updateField('montaria.itens',(data.montaria?.itens||[]).filter((_,j)=>j!==i))} className="text-red-800 font-black">×</button></div>)}</div></div></div>
                                         </div>
@@ -4612,7 +4878,7 @@
                         <div className="som6-paper p-3 md:p-5">
                             <div className="som6-sheet max-w-5xl mx-auto som6-frame som6-frame-cut">
                                 <div className="som6-cream rounded-xl p-3 space-y-3">
-                                    <div className="flex flex-wrap items-end justify-between gap-2"><div><div className="som6-logo text-2xl sm:text-3xl">PDJ</div><div className="text-[9px] font-bold uppercase text-red-900">O Som das Seis • ficha compacta</div></div><span className="text-[9px] text-stone-500">NP 1–6 • resultado 1 no d6 sempre falha</span></div>
+                                    <div className="flex flex-wrap items-end justify-between gap-2"><div><div className="som6-logo text-2xl sm:text-3xl">PDJ</div><div className="text-[9px] font-bold uppercase text-red-900">O Som das Seis • bloco rápido da Juíza</div></div><span className="text-[9px] text-stone-500">NP 1–6 • resultado 1 no d6 sempre falha</span></div>
                                     <div className="grid sm:grid-cols-[1.5fr_.7fr_80px] gap-2"><label><span className="som6-label">Nome</span><input value={data.nome||''} onChange={e=>updateField('nome',e.target.value)} className="w-full border rounded som6-mini-input mt-1 font-bold"/></label><label><span className="som6-label">Tipo</span><select value={data.tipoPdj||'Comum'} onChange={e=>updateField('tipoPdj',e.target.value)} className="w-full border rounded som6-mini-input mt-1 text-xs"><option>Comum</option><option>Importante</option></select></label><label><span className="som6-label">NP</span><input type="number" min="1" max="6" value={data.np||1} onChange={e=>updateField('np',Number(e.target.value))} className="w-full border rounded som6-mini-input mt-1 text-center font-black"/></label></div>
                                     <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">{[['status.pvAtual','PV'],['status.pvMax','PV Máx.'],['status.defesa','Def.'],['status.acoes','Ações'],['status.ataqueBonus','Ataque'],['status.iniciativaBonus','Inic.']].map(([path,label])=>{const k=path.split('.')[1];return <label key={path} className="border rounded bg-white p-1.5"><span className="som6-label">{label}</span><input type="number" value={data.status?.[k]??0} onChange={e=>updateField(path,Number(e.target.value))} className="w-full border-0 p-1 text-center font-bold"/></label>})}</div>
                                     <textarea rows="2" value={data.descricao||''} onChange={e=>updateField('descricao',e.target.value)} className="w-full border rounded p-2 text-xs som6-compact-textarea" placeholder="Descrição rápida do PDJ..."/>
@@ -5757,4 +6023,3 @@
     </script>
 </body>
 </html>
-    
