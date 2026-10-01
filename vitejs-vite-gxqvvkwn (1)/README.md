@@ -5,7 +5,7 @@ This template provides a minimal setup to get React working in Vite with HMR and
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/)
 
 ## React Compiler
 
@@ -17,7 +17,7 @@ If you are developing a production application, we recommend enabling type-aware
 
 ```json
 {
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "$schema": "https://oxc.rs/schema/oxlintrc.json",
   "plugins": ["react", "typescript", "oxc"],
   "options": {
     "typeAware": true
@@ -36,3 +36,5 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 PJ Lite produção: snapshot 0.9.1 atualizado com correção do retrato do PDF Dragonbane e créditos/links oficiais de Skyfall, 3DeT Victory e Ordem Paranormal.
 
 Deploy de produção solicitado após validação do snapshot corrigido.
+
+Nova tentativa manual de deploy de produção da 0.9.1 corrigida.
