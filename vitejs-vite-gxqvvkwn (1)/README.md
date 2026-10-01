@@ -34,3 +34,5 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 ---
 
 PJ Lite produção: snapshot 0.9.1 atualizado com correção do retrato do PDF Dragonbane e créditos/links oficiais de Skyfall, 3DeT Victory e Ordem Paranormal.
+
+Deploy de produção solicitado após validação do snapshot corrigido.
