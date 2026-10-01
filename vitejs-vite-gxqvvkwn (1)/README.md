@@ -9,27 +9,13 @@ Currently, two official plugins are available:
 
 ## React Compiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see this documentation.
 
 ## Expanding the Oxlint configuration
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`.
 
-```json
-{
-  "$schema": "https://oxc.rs/schema/oxlintrc.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+See the Oxlint rules documentation for the full list of rules and categories.
 
 ---
 
@@ -38,3 +24,5 @@ PJ Lite produção: snapshot 0.9.1 atualizado com correção do retrato do PDF D
 Deploy de produção solicitado após validação do snapshot corrigido.
 
 Nova tentativa manual de deploy de produção da 0.9.1 corrigida.
+
+Nova tentativa de publicação da correção do retrato Dragonbane em 01/10/2026.
