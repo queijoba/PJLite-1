@@ -30,3 +30,7 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+---
+
+PJ Lite produção: snapshot 0.9.1 atualizado com correção do retrato do PDF Dragonbane e créditos/links oficiais de Skyfall, 3DeT Victory e Ordem Paranormal.
