@@ -3,12 +3,16 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const SNAPSHOT='https://codeload.github.com/queijoba/litetester1/tar.gz/refs/heads/production-dist';
+// Snapshot oficial gerado pelo pipeline da base modular.
+// O parâmetro de versão evita que a Vercel reutilize um snapshot HTTP em cache
+// quando o branch production-dist recebe uma correção mantendo o mesmo nome.
+const RELEASE_BUILD='bdb3d88e38355e230add312031e164873842e400';
+const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/refs/heads/production-dist?release=${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
 
-console.log('PJ Lite: baixando snapshot oficial 0.9.1v Alpha...');
-const response=await fetch(SNAPSHOT,{redirect:'follow'});
+console.log(`PJ Lite: baixando snapshot oficial 0.9.1v Alpha (${RELEASE_BUILD.slice(0,8)})...`);
+const response=await fetch(SNAPSHOT,{redirect:'follow',cache:'no-store'});
 if(!response.ok) throw new Error(`Falha ao baixar snapshot (${response.status}).`);
 await writeFile(archive,Buffer.from(await response.arrayBuffer()));
 await rm(out,{recursive:true,force:true});
