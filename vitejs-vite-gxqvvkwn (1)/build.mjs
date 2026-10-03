@@ -6,7 +6,7 @@ import { join } from 'node:path';
 // Snapshot oficial gerado pelo pipeline da base modular.
 // O parâmetro de versão evita que a Vercel reutilize um snapshot HTTP em cache
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
-const RELEASE_BUILD='319f48f7e5da312303fffe1f18aa37b7472e7987';
+const RELEASE_BUILD='ebe805a62ab3054164f8b1f437ef60fcc87d2da6';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/refs/heads/production-dist?release=${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
