@@ -31,17 +31,17 @@ const pwaHead = [
   '    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
   '    <link rel="apple-touch-icon" href="/pjlite-icon-192.webp">',
   '    <script defer src="/pjlite-install.js"></script>'
-].join('\\n');
+].join('\n');
 
 const htmlPath = join(out, 'index.html');
 const html = await readFile(htmlPath, 'utf8');
-if (!/<\\/head>/i.test(html)) {
+if (!/<\/head>/i.test(html)) {
   throw new Error('Snapshot PJlite sem fechamento de <head>, PWA não injetada.');
 }
 if (/rel=["']manifest["']/i.test(html)) {
   throw new Error('Snapshot PJlite já tem manifesto; revise para evitar conflito.');
 }
-await writeFile(htmlPath, html.replace(/<\\/head>/i, pwaHead + '\\n</head>'), 'utf8');
+await writeFile(htmlPath, html.replace(/<\/head>/i, pwaHead + '\n</head>'), 'utf8');
 
 for (const filename of ['manifest.webmanifest', 'pjlite-install.js']) {
   await copyFile(new URL('./pwa/' + filename, import.meta.url), join(out, filename));
