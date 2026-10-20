@@ -14,7 +14,12 @@ const STATIC_FILES = [
   '/pjlite-icon-192.webp',
   '/pjlite-icon-512.webp',
   '/favicon.svg',
-  '/icons.svg'
+  '/icons.svg',
+  '/system-icons/3det.webp',
+  '/system-icons/dnd5e.webp',
+  '/system-icons/dragonbane.webp',
+  '/system-icons/fabula.webp',
+  '/system-icons/som6.webp'
 ];
 const SAFE_CROSS_ORIGINS = new Set([
   'https://cdn.tailwindcss.com',
