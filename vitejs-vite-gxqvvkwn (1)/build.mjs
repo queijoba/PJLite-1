@@ -1,4 +1,5 @@
-import { mkdir, rm, writeFile, readFile } from 'node:fs/promises';
+import { HE_ICON_ASSETS } from './pwa/he-icons.mjs';
+import { mkdir, rm, writeFile, readFile, copyFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -21,4 +22,33 @@ execFileSync('tar',['-xzf',archive,'-C',out,'--strip-components=1'],{stdio:'inhe
 const marker=await readFile(join(out,'.pjlite-release'),'utf8').catch(()=> '');
 if(!marker.includes('PJ Lite 0.9.5v Alpha')) throw new Error('Snapshot de produção não corresponde à 0.9.5v Alpha.');
 console.log(marker.trim());
+// O snapshot de produção é baixado acima. A camada PWA é mantida aqui
+// para não depender de alterações manuais na branch production-dist.
+const pwaHead = [
+  '    <link rel="manifest" href="/manifest.webmanifest">',
+  '    <meta name="mobile-web-app-capable" content="yes">',
+  '    <meta name="apple-mobile-web-app-capable" content="yes">',
+  '    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
+  '    <link rel="apple-touch-icon" href="/pjlite-icon-192.webp">',
+  '    <script defer src="/pjlite-install.js"></script>'
+].join('\n');
+
+const htmlPath = join(out, 'index.html');
+const html = await readFile(htmlPath, 'utf8');
+if (!/<\/head>/i.test(html)) {
+  throw new Error('Snapshot PJlite sem fechamento de <head>, PWA não injetada.');
+}
+if (/rel=["']manifest["']/i.test(html)) {
+  throw new Error('Snapshot PJlite já tem manifesto; revise para evitar conflito.');
+}
+await writeFile(htmlPath, html.replace(/<\/head>/i, pwaHead + '\n</head>'), 'utf8');
+
+for (const filename of ['manifest.webmanifest', 'pjlite-install.js']) {
+  await copyFile(new URL('./pwa/' + filename, import.meta.url), join(out, filename));
+}
+for (const {filename, base64} of HE_ICON_ASSETS) {
+  await writeFile(join(out, filename), Buffer.from(base64, 'base64'));
+}
+console.log('PJ Lite: PWA instalada no dist (manifesto, botão e ícones He).');
+
 console.log('PJ Lite: snapshot de produção pronto em dist/.');
