@@ -7,6 +7,8 @@ import { join } from 'node:path';
 // Snapshot oficial gerado pelo pipeline da base modular.
 // O parâmetro de versão evita que a Vercel reutilize um snapshot HTTP em cache
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
+// Testa o cache offline em uma simulação de queda de rede antes do deploy.
+execFileSync(process.execPath, ['pwa/test-offline.mjs'], {stdio: 'inherit'});
 const RELEASE_BUILD='d9d4a75d0874b61086c514eef1fb12674b6652db';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/refs/heads/production-dist?release=${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
@@ -30,7 +32,8 @@ const pwaHead = [
   '    <meta name="apple-mobile-web-app-capable" content="yes">',
   '    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">',
   '    <link rel="apple-touch-icon" href="/pjlite-icon-192.webp">',
-  '    <script defer src="/pjlite-install.js"></script>'
+  '    <script defer src="/pjlite-install.js"></script>',
+  '    <script defer src="/pjlite-offline.js"></script>'
 ].join('\n');
 
 const htmlPath = join(out, 'index.html');
@@ -43,12 +46,17 @@ if (/rel=["']manifest["']/i.test(html)) {
 }
 await writeFile(htmlPath, html.replace(/<\/head>/i, pwaHead + '\n</head>'), 'utf8');
 
-for (const filename of ['manifest.webmanifest', 'pjlite-install.js']) {
+for (const filename of ['manifest.webmanifest', 'pjlite-install.js', 'pjlite-offline.js']) {
   await copyFile(new URL('./pwa/' + filename, import.meta.url), join(out, filename));
 }
+const serviceWorkerSource = await readFile(new URL('./pwa/pjlite-sw.js', import.meta.url), 'utf8');
+await writeFile(join(out, 'pjlite-sw.js'), serviceWorkerSource.replace('__PJLITE_RELEASE__', RELEASE_BUILD.slice(0, 12)), 'utf8');
+execFileSync(process.execPath, ['--check', join(out, 'pjlite-sw.js')], {stdio:'inherit'});
+execFileSync(process.execPath, ['--check', join(out, 'pjlite-offline.js')], {stdio:'inherit'});
+
 for (const {filename, base64} of HE_ICON_ASSETS) {
   await writeFile(join(out, filename), Buffer.from(base64, 'base64'));
 }
-console.log('PJ Lite: PWA instalada no dist (manifesto, botão e ícones He).');
+console.log('PJ Lite: PWA e modo offline básico instalados no dist (arquivos, cache e ícones He).');
 
 console.log('PJ Lite: snapshot de produção pronto em dist/.');
