@@ -9,7 +9,7 @@ import { join } from 'node:path';
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
 // Testa o cache offline em uma simulação de queda de rede antes do deploy.
 execFileSync(process.execPath, ['pwa/test-offline.mjs'], {stdio: 'inherit'});
-const RELEASE_BUILD='d9d4a75d0874b61086c514eef1fb12674b6652db';
+const RELEASE_BUILD='07eaf89a2fd7c637e2f507066a433504216e900d';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/refs/heads/production-dist?release=${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
