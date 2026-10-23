@@ -22,7 +22,7 @@ await rm(out,{recursive:true,force:true});
 await mkdir(out,{recursive:true});
 execFileSync('tar',['-xzf',archive,'-C',out,'--strip-components=1'],{stdio:'inherit'});
 const marker=await readFile(join(out,'.pjlite-release'),'utf8').catch(()=> '');
-if(!marker.includes('PJ Lite 1.1.0v Alpha')) throw new Error('Snapshot de produção não corresponde à 1.1.0v Alpha.');
+if(!marker.includes('PJ Lite 1.1.0v Alpha') || !marker.includes('Source: 382e466b3cc11c762cdd162cd7736215ff32cbfb')) throw new Error('Snapshot de produção não corresponde à release Jornadas 1.1.0v Alpha validada.');
 console.log(marker.trim());
 // O snapshot de produção é baixado acima. A camada PWA é mantida aqui
 // para não depender de alterações manuais na branch production-dist.
