@@ -9,12 +9,12 @@ import { join } from 'node:path';
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
 // Testa o cache offline em uma simulação de queda de rede antes do deploy.
 execFileSync(process.execPath, ['pwa/test-offline.mjs'], {stdio: 'inherit'});
-const RELEASE_BUILD='8645c71abd9eb0da584ffa56938aec756dcc697f';
+const RELEASE_BUILD='97a165d30ff928cd2773778a274117336b25815b';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
 
-console.log(`PJ Lite: baixando snapshot oficial 1.1.0v Alpha (${RELEASE_BUILD.slice(0,8)})...`);
+console.log(`PJ Lite: baixando snapshot oficial 1.1.3v Alpha (${RELEASE_BUILD.slice(0,8)})...`);
 const response=await fetch(SNAPSHOT,{redirect:'follow',cache:'no-store'});
 if(!response.ok) throw new Error(`Falha ao baixar snapshot (${response.status}).`);
 await writeFile(archive,Buffer.from(await response.arrayBuffer()));
@@ -22,7 +22,7 @@ await rm(out,{recursive:true,force:true});
 await mkdir(out,{recursive:true});
 execFileSync('tar',['-xzf',archive,'-C',out,'--strip-components=1'],{stdio:'inherit'});
 const marker=await readFile(join(out,'.pjlite-release'),'utf8').catch(()=> '');
-if(!marker.includes('PJ Lite 1.1.0v Alpha') || !marker.includes('Source: 97c2771dd5c4d4185c1196c95174efdaf16b49e4')) throw new Error('Snapshot de produção não corresponde à release Jornadas 1.1.0v Alpha validada.');
+if(!marker.includes('PJ Lite 1.1.3v Alpha') || !marker.includes('Source: c7ea20d22bf1cc0c4d329d34a6ae2b347bbde5de')) throw new Error('Snapshot de produção não corresponde à release Jornadas 1.1.3v Alpha validada.');
 console.log(marker.trim());
 // O snapshot de produção é baixado acima. A camada PWA é mantida aqui
 // para não depender de alterações manuais na branch production-dist.
