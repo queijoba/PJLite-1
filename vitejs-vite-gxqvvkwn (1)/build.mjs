@@ -9,7 +9,7 @@ import { join } from 'node:path';
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
 // Testa o cache offline em uma simulação de queda de rede antes do deploy.
 execFileSync(process.execPath, ['pwa/test-offline.mjs'], {stdio: 'inherit'});
-const RELEASE_BUILD='ee626c277bd17188c31f56b1a3514cab838ccd77';
+const RELEASE_BUILD='e65bcb4cd9f68b5f50f8410c60a45f9ca1462842';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
@@ -24,9 +24,9 @@ execFileSync('tar',['-xzf',archive,'-C',out,'--strip-components=1'],{stdio:'inhe
 const marker=await readFile(join(out,'.pjlite-release'),'utf8').catch(()=> '');
 if(
  !marker.includes('PJ Lite 1.1.3v Alpha') ||
- !marker.includes('Source: 81bfd63400f2c577bde21088ce22306723679954') ||
- !marker.includes('Scope: Ordem Paranormal dossier and Hexatombe only')
-) throw new Error('Snapshot de produção não corresponde ao pacote isolado de Ordem Paranormal validado.');
+ !marker.includes('Source: eae1b7e9d128e9407b9092380f6a2c61338904e4') ||
+ !marker.includes('Scope: Ordem Paranormal bestiary Livro Basico e Sobrevivendo ao Horror only')
+) throw new Error('Snapshot de produção não corresponde ao bestiário de Ordem Paranormal validado.');
 console.log(marker.trim());
 // O snapshot de produção é baixado acima. A camada PWA é mantida aqui
 // para não depender de alterações manuais na branch production-dist.
