@@ -9,7 +9,7 @@ import { join } from 'node:path';
 // quando o branch production-dist recebe uma correção mantendo o mesmo nome.
 // Testa o cache offline em uma simulação de queda de rede antes do deploy.
 execFileSync(process.execPath, ['pwa/test-offline.mjs'], {stdio: 'inherit'});
-const RELEASE_BUILD='2c1171dd3fa1ea0e071cf407d1a902d09fda152d';
+const RELEASE_BUILD='b69e45166f2f2f6868c4c820f9a804747a973b19';
 const SNAPSHOT=`https://codeload.github.com/queijoba/litetester1/tar.gz/${RELEASE_BUILD}`;
 const archive=join(tmpdir(),'pjlite-production-dist.tar.gz');
 const out='dist';
@@ -24,7 +24,7 @@ execFileSync('tar',['-xzf',archive,'-C',out,'--strip-components=1'],{stdio:'inhe
 const marker=await readFile(join(out,'.pjlite-release'),'utf8').catch(()=> '');
 if(
  !marker.includes('PJ Lite 1.1.9v Alpha') ||
- !marker.includes('Source: 3e3e408715ffe0e8495296e5dbeccf3a4578a491')
+ !marker.includes('Source: 7e7d13c2a3434303ce19409ba986abddfd2ea5d2')
 ) throw new Error('Snapshot de produção não corresponde à versão 1.1.9 validada.');
 console.log(marker.trim());
 // O snapshot de produção é baixado acima. A camada PWA é mantida aqui
